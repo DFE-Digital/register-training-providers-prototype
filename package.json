@@ -2,7 +2,7 @@
   "name": "register-training-providers-prototype",
   "description": "Prototype for a ‘Register of training providers’ concept",
   "engines": {
-    "node": "22.13.1"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "govuk-prototype-kit dev",
