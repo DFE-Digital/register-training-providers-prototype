@@ -1,0 +1,86 @@
+{% extends "layouts/main.njk" %}
+
+{% set title = user.firstname + " " + user.lastname %}
+{% set caption = "Users" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/users"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ caption }}</span>
+      {{ title }}
+    </h1>
+
+    <p class="govuk-body">
+      <a href="/users/{{ user.id }}/delete" class="govuk-link">Remove user</a>
+    </p>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "First name"
+          },
+          value: {
+            text: user.firstname
+          },
+          actions: {
+            items: [
+              {
+                href: "/users/" + user.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "firstname"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Last name"
+          },
+          value: {
+            text: user.lastname
+          },
+          actions: {
+            items: [
+              {
+                href: "/users/" + user.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "lastname"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Email"
+          },
+          value: {
+            text: user.email
+          },
+          actions: {
+            items: [
+              {
+                href: "/users/" + user.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "email"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "layouts/main.njk" %}
+
+{% set title = "Check your answers" %}
+{% set caption = "Add user" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/users/new"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ caption }}</span>
+      {{ title }}
+    </h1>
+
+    <form action="/users/new/check-your-answers" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "First name"
+            },
+            value: {
+              text: user.firstname
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "firstname"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Last name"
+            },
+            value: {
+              text: user.lastname
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "lastname"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Email"
+            },
+            value: {
+              text: user.email
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "email"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Save user"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/users">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

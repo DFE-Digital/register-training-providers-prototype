@@ -1,0 +1,84 @@
+{% extends "layouts/main.njk" %}
+
+{% set title = "Personal details" %}
+{% set caption = "Add user" %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/users"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ caption }}</span>
+        {{ title }}
+      </h1>
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml
+        }
+      }) %}
+
+      {{ govukInput({
+        id: "firstname",
+        name: "user[firstname]",
+        label: {
+          text: "First name",
+          classes: "govuk-label--s"
+        },
+        value: user.firstname,
+        classes: "govuk-!-width-two-thirds"
+      }) }}
+
+      {{ govukInput({
+        id: "lastname",
+        name: "user[lastname]",
+        label: {
+          text: "Last name",
+          classes: "govuk-label--s"
+        },
+        value: user.lastname,
+        classes: "govuk-!-width-two-thirds"
+      }) }}
+
+      {{ govukInput({
+        id: "email",
+        name: "user[email]",
+        label: {
+          text: "Email address",
+          classes: "govuk-label--s"
+        },
+        value: user.email
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/users">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
