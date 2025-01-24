@@ -4,6 +4,8 @@ const { v4: uuid } = require('uuid')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkDelete('Users', null, {})
+
     await queryInterface.bulkInsert('Users', [
       {
         id: uuid(),
@@ -35,6 +37,6 @@ module.exports = {
     ], {})
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete('Users', null, {})
   },
 };
