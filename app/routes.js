@@ -6,12 +6,44 @@
 const govukPrototypeKit = require('govuk-prototype-kit')
 const router = govukPrototypeKit.requests.setupRouter()
 
+/// ------------------------------------------------------------------------ ///
+/// Flash messaging
+/// ------------------------------------------------------------------------ ///
+const flash = require('connect-flash')
+router.use(flash())
+
+/// ------------------------------------------------------------------------ ///
+/// Controller modules
+/// ------------------------------------------------------------------------ ///
 const userController = require('./controllers/users')
 
+/// ------------------------------------------------------------------------ ///
+// Authentication middleware
+/// ------------------------------------------------------------------------ ///
 const checkIsAuthenticated = (req, res, next) => {
   next()
 }
 
+/// ------------------------------------------------------------------------ ///
+/// ALL ROUTES
+/// ------------------------------------------------------------------------ ///
+router.all('*', (req, res, next) => {
+  res.locals.referrer = req.query.referrer
+  res.locals.query = req.query
+  res.locals.flash = req.flash('success') // pass through 'success' messages only
+  next()
+})
+
+/// ------------------------------------------------------------------------ ///
+/// HOMEPAGE ROUTE
+/// ------------------------------------------------------------------------ ///
+router.get('/', (req, res) => {
+  res.redirect('/users')
+})
+
+/// ------------------------------------------------------------------------ ///
+/// USER ROUTES
+/// ------------------------------------------------------------------------ ///
 router.get('/users/new', checkIsAuthenticated, userController.newUser_get)
 router.post('/users/new', checkIsAuthenticated, userController.newUser_post)
 
