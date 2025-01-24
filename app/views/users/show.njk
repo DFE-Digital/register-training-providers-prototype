@@ -1,6 +1,6 @@
 {% extends "layouts/main.njk" %}
 
-{% set title = user.firstname + " " + user.lastname %}
+{% set title = user.firstName + " " + user.lastName %}
 {% set caption = "Users" %}
 
 {% block beforeContent %}
@@ -31,14 +31,14 @@
             text: "First name"
           },
           value: {
-            text: user.firstname
+            text: user.firstName
           },
           actions: {
             items: [
               {
                 href: "/users/" + user.id + "/edit",
                 text: "Change",
-                visuallyHiddenText: "firstname"
+                visuallyHiddenText: "first name"
               }
             ]
           }
@@ -48,14 +48,14 @@
             text: "Last name"
           },
           value: {
-            text: user.lastname
+            text: user.lastName
           },
           actions: {
             items: [
               {
                 href: "/users/" + user.id + "/edit",
                 text: "Change",
-                visuallyHiddenText: "lastname"
+                visuallyHiddenText: "last name"
               }
             ]
           }

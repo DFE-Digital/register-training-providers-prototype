@@ -1,12 +1,17 @@
 {% extends "layouts/main.njk" %}
 
 {% set title = "Check your answers" %}
-{% set caption = "Add user" %}
+
+{% if currentUser %}
+  {% set caption = currentUser.firstName + " " + currentUser.lastName %}
+{% else %}
+  {% set caption = "Add user" %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({
   text: "Back",
-  href: "/users/new"
+  href: actions.back
 }) }}
 {% endblock %}
 
@@ -20,7 +25,7 @@
       {{ title }}
     </h1>
 
-    <form action="/users/new/check-your-answers" method="post" accept-charset="utf-8" novalidate>
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
       {{ govukSummaryList({
         rows: [
@@ -29,14 +34,14 @@
               text: "First name"
             },
             value: {
-              text: user.firstname
+              text: user.firstName
             },
             actions: {
               items: [
                 {
                   href: "#",
                   text: "Change",
-                  visuallyHiddenText: "firstname"
+                  visuallyHiddenText: "first name"
                 }
               ]
             }
@@ -46,14 +51,14 @@
               text: "Last name"
             },
             value: {
-              text: user.lastname
+              text: user.lastName
             },
             actions: {
               items: [
                 {
                   href: "#",
                   text: "Change",
-                  visuallyHiddenText: "lastname"
+                  visuallyHiddenText: "last name"
                 }
               ]
             }
@@ -85,7 +90,7 @@
     </form>
 
     <p class="govuk-body">
-      <a class="govuk-link" href="/users">Cancel</a>
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
     </p>
 
   </div>
