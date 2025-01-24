@@ -1,0 +1,39 @@
+{% extends "layouts/main.njk" %}
+
+{% set title = "Are you sure you want to remove " + user.firstname + " " + user.lastname + "?" %}
+{% set caption = "Remove user" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/users/" + user.id
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ caption }}</span>
+      {{ title }}
+    </h1>
+
+    <form action="/users/{{ user.id }}/delete" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukButton({
+        text: "Remove user",
+        classes: "govuk-button--warning"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/users/{{ user.id }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

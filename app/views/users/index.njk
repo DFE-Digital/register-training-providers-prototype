@@ -1,0 +1,49 @@
+{% extends "layouts/main.njk" %}
+
+{% set title = "Users" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      {{ title }}
+    </h1>
+
+    {{ govukButton({
+      text: "Add user",
+      href: "/users/new"
+    }) }}
+
+    {% if users.length %}
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
+            <th scope="col" class="govuk-table__header">Email</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for user in users %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <a class="govuk-link" href="/users/{{ user.id }}">
+                  {{ user.firstname }} {{ user.lastname }}
+                </a>
+              </td>
+              <td class="govuk-table__cell">
+                {{ user.email if user.email else "Not entered" }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="govuk-body">There are no users.</p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
