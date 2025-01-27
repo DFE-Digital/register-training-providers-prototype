@@ -1,14 +1,10 @@
-'use strict';
-
-const { v4: uuid } = require('uuid')
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Users', null, {})
 
     await queryInterface.bulkInsert('Users', [
       {
-        id: uuid(),
+        id: '3faa7586-951b-495c-9999-e5fc4367b507',
         firstName: 'Anne',
         lastName: 'Wilson',
         email: 'anne@example.com',
@@ -17,7 +13,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: uuid(),
+        id: '99c07212-6395-40b5-9776-9210645a5028',
         firstName: 'Mary',
         lastName: 'Lawson',
         email: 'mary@example.com',
@@ -26,7 +22,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: uuid(),
+        id: '354751f2-c5f7-483c-b9e4-b6103f50f970',
         firstName: 'Colin',
         lastName: 'Chapman',
         email: 'colin.chapman@education.gov.uk',
@@ -38,5 +34,5 @@ module.exports = {
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Users', null, {})
-  },
-};
+  }
+}
