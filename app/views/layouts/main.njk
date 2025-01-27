@@ -28,6 +28,16 @@
   }) }}
 
   {% include "_includes/phase-banner.njk" %}
+
+  {{ govukServiceNavigation({
+    navigation: [
+      {
+        text: "Users",
+        href: "/users",
+        active: primaryNavId == "users"
+      }
+    ]
+  }) }}
 {% endblock %}
 
 {% block footer %}
