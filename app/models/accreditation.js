@@ -15,11 +15,10 @@ module.exports = (sequelize) => {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        autoIncrement: true
+        primaryKey: true
       },
       provider_id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.UUID,
         allowNull: false
       },
       number: {
@@ -32,6 +31,20 @@ module.exports = (sequelize) => {
       },
       ends_on: {
         type: DataTypes.DATE
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: false
+      },
+      updated_at: {
+        type: DataTypes.DATE
+      },
+      updated_by: {
+        type: DataTypes.UUID
       }
     },
     {

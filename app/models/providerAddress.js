@@ -1,16 +1,16 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class ProviderContact extends Model {
+  class ProviderAddress extends Model {
     static associate(models) {
-      ProviderContact.belongsTo(models.Provider, {
+      ProviderAddress.belongsTo(models.Provider, {
         foreignKey: 'provider_id',
         as: 'provider'
       })
     }
   }
 
-  ProviderContact.init(
+  ProviderAddress.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -21,28 +21,40 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false
       },
-      first_name: {
+      address_1:  {
         type: DataTypes.STRING,
-        allowNull: false
+        validate: {
+          notEmpty: true
+        }
       },
-      last_name: {
+      address_2: {
+        type: DataTypes.STRING
+      },
+      address_3: {
+        type: DataTypes.STRING
+      },
+      town:  {
         type: DataTypes.STRING,
-        allowNull: false
+        validate: {
+          notEmpty: true
+        }
       },
-      email: {
+      county: {
+        type: DataTypes.STRING
+      },
+      postcode:  {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: true,
-          isEmail: true
+          is: /^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$/
         }
       },
-      telephone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          is: /^(\+44\s?|0)(?:\d\s?){9,10}$/
-        }
+      latitude: {
+        type: DataTypes.FLOAT
+      },
+      longitude: {
+        type: DataTypes.FLOAT
       },
       created_at: {
         type: DataTypes.DATE,
@@ -61,10 +73,10 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      modelName: 'ProviderContact',
-      tableName: 'provider_contacts'
+      modelName: 'ProviderAddress',
+      tableName: 'provider_addresses'
     }
   )
 
-  return ProviderContact
+  return ProviderAddress
 }

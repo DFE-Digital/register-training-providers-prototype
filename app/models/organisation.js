@@ -26,6 +26,20 @@ module.exports = (sequelize) => {
       organisation_type: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      created_by: {
+        type: DataTypes.UUID,
+        allowNull: false
+      },
+      updated_at: {
+        type: DataTypes.DATE
+      },
+      updated_by: {
+        type: DataTypes.UUID
       }
     },
     {
