@@ -8,14 +8,19 @@ module.exports = (sequelize) => {
         as: 'accreditations'
       })
 
-      Provider.hasMany(models.ProviderHistory, {
+      Provider.hasMany(models.ProviderAddress, {
         foreignKey: 'provider_id',
-        as: 'histories'
+        as: 'addresses'
       })
 
       Provider.hasMany(models.ProviderContact, {
         foreignKey: 'provider_id',
         as: 'contacts'
+      })
+
+      Provider.hasMany(models.ProviderHistory, {
+        foreignKey: 'provider_id',
+        as: 'histories'
       })
 
       Provider.belongsToMany(models.Provider, {

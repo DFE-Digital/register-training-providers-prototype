@@ -21,16 +21,16 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false
       },
-      address_1:  {
+      line_1:  {
         type: DataTypes.STRING,
         validate: {
           notEmpty: true
         }
       },
-      address_2: {
+      line_2: {
         type: DataTypes.STRING
       },
-      address_3: {
+      line_3: {
         type: DataTypes.STRING
       },
       town:  {

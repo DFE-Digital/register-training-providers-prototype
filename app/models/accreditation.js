@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'Accreditation',
-      tableName: 'accreditation'
+      tableName: 'accreditations'
     }
   )
 
