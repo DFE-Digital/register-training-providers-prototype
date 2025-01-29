@@ -36,7 +36,7 @@ const userController = require('./controllers/users')
 /// ------------------------------------------------------------------------ ///
 const checkIsAuthenticated = (req, res, next) => {
   // the signed in user
-  res.locals.passport = passport
+  req.session.passport = passport
   next()
 }
 
