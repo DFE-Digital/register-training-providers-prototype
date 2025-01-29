@@ -94,7 +94,9 @@ exports.newUserCheck_post = async (req, res) => {
     id: uuid(),
     firstName: req.session.data.user.firstName,
     lastName: req.session.data.user.lastName,
-    email: req.session.data.user.email
+    email: req.session.data.user.email,
+    createdAt: new Date(),
+    createdById: '354751f2-c5f7-483c-b9e4-b6103f50f970'
   })
 
   delete req.session.data.user
@@ -199,13 +201,15 @@ exports.editUserCheck_post = async (req, res) => {
   user.update({
     firstName: req.session.data.user.firstName,
     lastName: req.session.data.user.lastName,
-    email: req.session.data.user.email
+    email: req.session.data.user.email,
+    updatedAt: new Date(),
+    updatedById: '354751f2-c5f7-483c-b9e4-b6103f50f970'
   })
 
   delete req.session.data.user
 
   req.flash('success', 'User updated')
-  res.redirect('/users')
+  res.redirect(`/users/${req.params.userId}`)
 }
 
 exports.deleteUser_get = async (req, res) => {
