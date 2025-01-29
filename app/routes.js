@@ -13,15 +13,30 @@ const flash = require('connect-flash')
 router.use(flash())
 
 /// ------------------------------------------------------------------------ ///
+/// User authentication
+/// ------------------------------------------------------------------------ ///
+// TODO: Replace with Passport
+const passport = {
+  user: {
+    id: '3faa7586-951b-495c-9999-e5fc4367b507',
+    first_name: 'Colin',
+    last_name: 'Chapman',
+    email: 'colin.chapman@example.gov.uk'
+  }
+}
+
+/// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
 const providerController = require('./controllers/providers')
 const userController = require('./controllers/users')
 
 /// ------------------------------------------------------------------------ ///
-// Authentication middleware
+/// Authentication middleware
 /// ------------------------------------------------------------------------ ///
 const checkIsAuthenticated = (req, res, next) => {
+  // the signed in user
+  res.locals.passport = passport
   next()
 }
 
