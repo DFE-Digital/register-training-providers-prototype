@@ -5,7 +5,7 @@
 {% set title = "Provider details" %}
 
 {% if currentProvider %}
-  {% set caption = currentProvider.operating_name %}
+  {% set caption = currentProvider.operatingName %}
 {% else %}
   {% set caption = "Add provider" %}
 {% endif %}
@@ -44,38 +44,59 @@
       }) %}
 
         {{ govukInput({
-          id: "operating_name",
-          name: "provider[operating_name]",
+          id: "operatingName",
+          name: "provider[operatingName]",
           label: {
-            text: "First name",
+            text: "Operating name",
             classes: "govuk-label--s"
           },
-            errorMessage: errors | getErrorMessage("operating_name"),
-          value: provider.operating_name,
-          classes: "govuk-!-width-two-thirds"
+          hint: {
+            text: "This is the name the provider uses in public facing activities"
+          },
+          errorMessage: errors | getErrorMessage("operatingName"),
+          value: provider.operatingName
         }) }}
 
         {{ govukInput({
-          id: "legal_name",
-          name: "provider[legal_name]",
+          id: "legalName",
+          name: "provider[legalName]",
           label: {
-            text: "Last name",
+            text: "Legal name",
             classes: "govuk-label--s"
           },
-          errorMessage: errors | getErrorMessage("legal_name"),
-          value: provider.legal_name,
-          classes: "govuk-!-width-two-thirds"
+          hint: {
+            text: "This is the name the provider uses in official activities"
+          },
+          errorMessage: errors | getErrorMessage("legalName"),
+          value: provider.legalName
         }) }}
 
-        {{ govukInput({
-          id: "ukprn",
-          name: "provider[ukprn]",
-          label: {
-            text: "UK provider reference number (UKPRN)",
-            classes: "govuk-label--s"
+        {{ govukRadios({
+          id: "type",
+          name: "provider[type]",
+          fieldset: {
+            legend: {
+              text: "Provider type",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
           },
-          errorMessage: errors | getErrorMessage("ukprn"),
-          value: provider.ukprn
+          errorMessage: errors | getErrorMessage("type"),
+          value: provider.type,
+          items: [
+            {
+              value: "hei",
+              text: "Higher education institution (HEI)"
+            },
+            {
+              value: "scitt",
+              text: "School-centred initial teacher training (SCITT)"
+            },
+            {
+              value: "school",
+              text: "School"
+            }
+          ]
         }) }}
 
         {{ govukButton({

@@ -34,11 +34,11 @@
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
                 <a class="govuk-link" href="/providers/{{ provider.id }}">
-                  {{ provider.operating_name }}
+                  {{ provider.operatingName }}
                 </a>
               </td>
               <td class="govuk-table__cell">
-                {{ provider.legal_name if provider.legal_name.length else "Not entered" }}
+                {{ provider.legalName if provider.legalName.length else "Not entered" }}
               </td>
               <td class="govuk-table__cell">
                 {{ provider.ukprn if provider.ukprn else "Not entered" }}

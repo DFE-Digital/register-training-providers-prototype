@@ -2,7 +2,7 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = provider.name %}
+{% set title = provider.operatingName %}
 {% set caption = "Providers" %}
 
 {% block beforeContent %}
@@ -35,7 +35,7 @@
             text: "Operating name"
           },
           value: {
-            text: provider.operating_name
+            text: provider.operatingName
           },
           actions: {
             items: [
@@ -52,7 +52,7 @@
             text: "Legal name"
           },
           value: {
-            text: provider.legal_name if provider.legal_name.length else "Not entered"
+            text: provider.legalName if provider.legalName.length else "Not entered"
           },
           actions: {
             items: [
@@ -60,6 +60,23 @@
                 href: "/providers/" + provider.id + "/edit",
                 text: "Change",
                 visuallyHiddenText: "legal name"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Provider type"
+          },
+          value: {
+            text: provider.type if provider.type.length else "Not entered"
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "type"
               }
             ]
           }
@@ -77,6 +94,23 @@
                 href: "/providers/" + provider.id + "/edit",
                 text: "Change",
                 visuallyHiddenText: "UK provider reference number (UKPRN)"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Provider code"
+          },
+          value: {
+            text: provider.code
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "provider code"
               }
             ]
           }
