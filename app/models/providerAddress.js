@@ -32,17 +32,20 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'provider_id'
       },
-      line_1:  {
+      line1:  {
         type: DataTypes.STRING,
+        field: 'line_1',
         validate: {
           notEmpty: true
         }
       },
-      line_2: {
-        type: DataTypes.STRING
+      line2: {
+        type: DataTypes.STRING,
+        field: 'line_2'
       },
-      line_3: {
-        type: DataTypes.STRING
+      line3: {
+        type: DataTypes.STRING,
+        field: 'line_3'
       },
       town:  {
         type: DataTypes.STRING,
