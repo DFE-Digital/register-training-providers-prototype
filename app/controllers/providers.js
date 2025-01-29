@@ -3,6 +3,7 @@ const { Provider } = require('../models')
 
 exports.providersList = async (req, res) => {
   const providers = await Provider.findAll()
+  delete req.session.data.provider
   res.render('providers/index', { providers })
 }
 
@@ -25,19 +26,27 @@ exports.newProvider_get = async (req, res) => {
 exports.newProvider_post = async (req, res) => {
   const errors = []
 
-  if (!req.session.data.provider.firstName.length) {
+  if (!req.session.data.provider.operatingName.length) {
     const error = {}
-    error.fieldName = 'name'
-    error.href = '#name'
-    error.text = 'Enter a provider name'
+    error.fieldName = 'operatingName'
+    error.href = '#operatingName'
+    error.text = 'Enter an operating name'
     errors.push(error)
   }
 
-  if (!req.session.data.provider.ukprn.length) {
+  if (!req.session.data.provider.legalName.length) {
     const error = {}
-    error.fieldName = 'ukprn'
-    error.href = '#ukprn'
-    error.text = 'UK provider reference number (UKPRN)'
+    error.fieldName = 'legalName'
+    error.href = '#legalName'
+    error.text = 'Enter a legal name'
+    errors.push(error)
+  }
+
+  if (!req.session.data.provider.type) {
+    const error = {}
+    error.fieldName = 'type'
+    error.href = '#type'
+    error.text = 'Select a provider type'
     errors.push(error)
   }
 
@@ -70,8 +79,13 @@ exports.newProviderCheck_get = async (req, res) => {
 exports.newProviderCheck_post = async (req, res) => {
   const provider = await Provider.create({
     id: uuid(),
-    name: req.session.data.provider.name,
-    ukprn: req.session.data.provider.ukprn
+    operatingName: req.session.data.provider.operatingName,
+    legalName: req.session.data.provider.legalName,
+    type: req.session.data.provider.type,
+    code: 'O1A',
+    ukprn: 1234567,
+    createdAt: new Date(),
+    createdById: req.session.passport.user.id
   })
 
   delete req.session.data.provider
@@ -104,21 +118,29 @@ exports.editProvider_get = async (req, res) => {
 exports.editProvider_post = async (req, res) => {
   const errors = []
 
-  if (!req.session.data.provider.name.length) {
+  if (!req.session.data.provider.operatingName.length) {
     const error = {}
-    error.fieldName = 'name'
-    error.href = '#name'
-    error.text = 'Enter a provider name'
+    error.fieldName = 'operatingName'
+    error.href = '#operatingName'
+    error.text = 'Enter an operating name'
     errors.push(error)
   }
 
-  if (!req.session.data.provider.ukprn.length) {
+  if (!req.session.data.provider.legalName.length) {
     const error = {}
-    error.fieldName = 'ukprn'
-    error.href = '#ukprn'
-    error.text = 'Enter a UK provider reference number (UKPRN)'
+    error.fieldName = 'legalName'
+    error.href = '#legalName'
+    error.text = 'Enter a legal name'
     errors.push(error)
   }
+
+  // if (!req.session.data.provider.ukprn.length) {
+  //   const error = {}
+  //   error.fieldName = 'ukprn'
+  //   error.href = '#ukprn'
+  //   error.text = 'Enter a UK provider reference number (UKPRN)'
+  //   errors.push(error)
+  // }
 
   if (errors.length) {
     res.render('providers/edit', {
@@ -152,14 +174,19 @@ exports.editProviderCheck_get = async (req, res) => {
 exports.editProviderCheck_post = async (req, res) => {
   const provider = await Provider.findOne({ where: { id: req.params.providerId } })
   provider.update({
-    name: req.session.data.provider.name,
-    ukprn: req.session.data.provider.ukprn
+    operatingName: req.session.data.provider.operatingName,
+    legalName: req.session.data.provider.legalName,
+    type: req.session.data.provider.type,
+    code: 'O1A',
+    ukprn: 1234567,
+    updatedAt: new Date(),
+    updatedById: req.session.passport.user.id
   })
 
   delete req.session.data.provider
 
   req.flash('success', 'Provider updated')
-  res.redirect('/providers')
+  res.redirect(`/providers/${req.params.providerId}`)
 }
 
 exports.deleteProvider_get = async (req, res) => {
