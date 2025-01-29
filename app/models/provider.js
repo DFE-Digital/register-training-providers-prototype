@@ -36,6 +36,16 @@ module.exports = (sequelize) => {
         foreignKey: 'accredited_provider_id',
         otherKey: 'training_provider_id'
       })
+
+      Provider.belongsTo(models.User, {
+        foreignKey: 'created_by_id',
+        as: 'createdByUser'
+      })
+
+      Provider.belongsTo(models.User, {
+        foreignKey: 'updated_by_id',
+        as: 'updatedByUser'
+      })
     }
   }
 
@@ -86,14 +96,14 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false
       },
-      created_by: {
+      created_by_id: {
         type: DataTypes.UUID,
         allowNull: false
       },
       updated_at: {
         type: DataTypes.DATE
       },
-      updated_by: {
+      updated_by_id: {
         type: DataTypes.UUID
       }
     },

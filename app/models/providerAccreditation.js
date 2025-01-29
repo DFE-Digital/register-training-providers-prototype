@@ -7,6 +7,16 @@ module.exports = (sequelize) => {
         foreignKey: 'provider_id',
         as: 'provider'
       })
+
+      ProviderAccreditation.belongsTo(models.User, {
+        foreignKey: 'created_by_id',
+        as: 'createdByUser'
+      })
+
+      ProviderAccreditation.belongsTo(models.User, {
+        foreignKey: 'updated_by_id',
+        as: 'updatedByUser'
+      })
     }
   }
 

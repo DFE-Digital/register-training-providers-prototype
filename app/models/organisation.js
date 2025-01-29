@@ -8,7 +8,20 @@ module.exports = (sequelize) => {
     * The `models/index` file will call this method automatically.
     */
    static associate(models) {
-     // define association here
+    // Organisation.belongsTo(models.Provider, {
+    //   foreignKey: 'organisation_id',
+    //   as: 'organisation'
+    // })
+
+    Organisation.belongsTo(models.User, {
+      foreignKey: 'created_by_id',
+      as: 'createdByUser'
+    })
+
+    Organisation.belongsTo(models.User, {
+      foreignKey: 'updated_by_id',
+      as: 'updatedByUser'
+    })
    }
   }
 
@@ -31,14 +44,14 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false
       },
-      created_by: {
+      created_by_id: {
         type: DataTypes.UUID,
         allowNull: false
       },
       updated_at: {
         type: DataTypes.DATE
       },
-      updated_by: {
+      updated_by_id: {
         type: DataTypes.UUID
       }
     },
