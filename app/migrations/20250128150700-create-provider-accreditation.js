@@ -1,6 +1,6 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('accreditations', {
+    await queryInterface.createTable('provider_accreditations', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -26,19 +26,19 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      created_by: {
+      created_by_id: {
         type: Sequelize.UUID,
         allowNull: false
       },
       updated_at: {
         type: Sequelize.DATE
       },
-      updated_by: {
+      updated_by_id: {
         type: Sequelize.UUID
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('accreditations')
+    await queryInterface.dropTable('provider_accreditations')
   }
 }
