@@ -1,6 +1,6 @@
-const { Model } = require('sequelize')
+const { Model, DataTypes } = require('sequelize')
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
@@ -13,9 +13,16 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'first_name',
       validate: {
         notEmpty: true
       }
@@ -23,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'last_name',
       validate: {
         notEmpty: true
       }
@@ -40,10 +48,34 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'bat'
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      field: 'created_at'
+    },
+    createdById: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'created_by_id'
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      field: 'updated_at'
+    },
+    updatedById: {
+      type: DataTypes.UUID,
+      field: 'updated_by_id'
     }
   }, {
     sequelize,
     modelName: 'User',
+    tableName: 'users'
   })
 
   return User

@@ -1,14 +1,23 @@
 {
   "development": {
     "dialect": "sqlite",
-    "storage": "./app/database/development.sqlite3"
+    "storage": "./app/database/development.sqlite3",
+    "define": {
+      "underscored": true
+    }
   },
   "test": {
     "dialect": "sqlite",
-    "storage": "./app/database/test.sqlite3"
+    "storage": "./app/database/test.sqlite3",
+    "define": {
+      "underscored": true
+    }
   },
   "production": {
     "dialect": "sqlite",
-    "storage": "./app/database/production.sqlite3"
+    "storage": "./app/database/production.sqlite3",
+    "define": {
+      "underscored": true
+    }
   }
 }
