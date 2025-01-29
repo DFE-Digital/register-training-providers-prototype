@@ -32,13 +32,15 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      organisation_id: {
+      organisationId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'organisation_id'
       },
-      organisation_type: {
+      organisationType: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'organisation_type'
       },
       created_at: {
         type: DataTypes.DATE,

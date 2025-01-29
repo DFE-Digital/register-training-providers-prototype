@@ -32,27 +32,33 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      training_provider_id: {
+      trainingProviderId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'training_provider_id'
       },
-      accredited_provider_id: {
+      accreditedProviderId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'accredited_provider_id'
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        field: 'created_at'
       },
-      created_by_id: {
+      createdById: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'created_by_id'
       },
-      updated_at: {
-        type: DataTypes.DATE
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
       },
-      updated_by_id: {
-        type: DataTypes.UUID
+      updatedById: {
+        type: DataTypes.UUID,
+        field: 'updated_by_id'
       }
     },
     {

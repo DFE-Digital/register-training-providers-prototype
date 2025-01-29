@@ -27,9 +27,10 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      provider_id: {
+      providerId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'provider_id'
       },
       line_1:  {
         type: DataTypes.STRING,
@@ -66,19 +67,23 @@ module.exports = (sequelize) => {
       longitude: {
         type: DataTypes.FLOAT
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        field: 'created_at'
       },
-      created_by_id: {
+      createdById: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'created_by_id'
       },
-      updated_at: {
-        type: DataTypes.DATE
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
       },
-      updated_by_id: {
-        type: DataTypes.UUID
+      updatedById: {
+        type: DataTypes.UUID,
+        field: 'updated_by_id'
       }
     },
     {
