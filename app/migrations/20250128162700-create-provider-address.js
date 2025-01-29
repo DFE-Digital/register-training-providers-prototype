@@ -11,14 +11,14 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
-      address_1:  {
+      line_1:  {
         type: Sequelize.STRING,
         allowNull: false
       },
-      address_2: {
+      line_2: {
         type: Sequelize.STRING
       },
-      address_3: {
+      line_3: {
         type: Sequelize.STRING
       },
       town:  {
