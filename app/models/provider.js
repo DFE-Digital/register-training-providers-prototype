@@ -3,7 +3,7 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class Provider extends Model {
     static associate(models) {
-      Provider.hasMany(models.Accreditation, {
+      Provider.hasMany(models.ProviderAccreditation, {
         foreignKey: 'provider_id',
         as: 'accreditations'
       })
