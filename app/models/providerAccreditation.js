@@ -1,16 +1,16 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class Accreditation extends Model {
+  class ProviderAccreditation extends Model {
     static associate(models) {
-      Accreditation.belongsTo(models.Provider, {
+      ProviderAccreditation.belongsTo(models.Provider, {
         foreignKey: 'provider_id',
         as: 'provider'
       })
     }
   }
 
-  Accreditation.init(
+  ProviderAccreditation.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -36,23 +36,23 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false
       },
-      created_by: {
+      created_by_id: {
         type: DataTypes.UUID,
         allowNull: false
       },
       updated_at: {
         type: DataTypes.DATE
       },
-      updated_by: {
+      updated_by_id: {
         type: DataTypes.UUID
       }
     },
     {
       sequelize,
-      modelName: 'Accreditation',
-      tableName: 'accreditations'
+      modelName: 'ProviderAccreditation',
+      tableName: 'provider_accreditations'
     }
   )
 
-  return Accreditation
+  return ProviderAccreditation
 }
