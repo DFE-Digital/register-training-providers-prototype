@@ -18,13 +18,13 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE
       },
-      created_by: {
+      created_by_id: {
         type: Sequelize.UUID
       },
       updated_at: {
         type: Sequelize.DATE
       },
-      updated_by: {
+      updated_by_id: {
         type: Sequelize.UUID
       }
     })

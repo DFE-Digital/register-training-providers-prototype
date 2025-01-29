@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      created_by: {
+      created_by_id: {
         type: Sequelize.UUID,
         allowNull: false
       },
@@ -41,7 +41,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      updated_by: {
+      updated_by_id: {
         type: Sequelize.UUID,
         allowNull: false
       }
