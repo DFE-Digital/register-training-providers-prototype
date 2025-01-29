@@ -12,8 +12,7 @@ module.exports = {
         allowNull: false
       },
       legal_name: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       },
       type: {
         type: Sequelize.ENUM('hei', 'scitt', 'school')
