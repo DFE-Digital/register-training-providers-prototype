@@ -38,12 +38,10 @@ module.exports = {
         allowNull: false
       },
       updated_at: {
-        type: Sequelize.DATE,
-        allowNull: false
+        type: Sequelize.DATE
       },
       updated_by_id: {
-        type: Sequelize.UUID,
-        allowNull: false
+        type: Sequelize.UUID
       }
     })
   },
