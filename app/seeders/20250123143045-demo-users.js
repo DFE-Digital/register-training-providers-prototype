@@ -1,8 +1,9 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', null, {})
+    // Remove all entries from the 'users' table
+    await queryInterface.bulkDelete('users', null, {})
 
-    await queryInterface.bulkInsert('Users', [
+    await queryInterface.bulkInsert('users', [
       {
         id: '3faa7586-951b-495c-9999-e5fc4367b507',
         first_name: 'Anne',
@@ -36,6 +37,7 @@ module.exports = {
     ], {})
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', null, {})
+    // Remove all entries from the 'users' table
+    await queryInterface.bulkDelete('users', null, {})
   }
 }
