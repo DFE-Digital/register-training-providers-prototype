@@ -42,19 +42,23 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'organisation_type'
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        field: 'created_at'
       },
-      created_by_id: {
+      createdById: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        field: 'created_by_id'
       },
-      updated_at: {
-        type: DataTypes.DATE
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
       },
-      updated_by_id: {
-        type: DataTypes.UUID
+      updatedById: {
+        type: DataTypes.UUID,
+        field: 'updated_by_id'
       }
     },
     {

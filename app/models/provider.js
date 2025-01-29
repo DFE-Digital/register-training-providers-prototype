@@ -77,7 +77,7 @@ module.exports = (sequelize) => {
         unique: true,
         validate: {
           notEmpty: true,
-          is: /^1\d{7}$/
+          // is: /^1\d{7}$/
         }
       },
       code:  {
