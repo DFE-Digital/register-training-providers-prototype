@@ -1,0 +1,155 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Provider details" %}
+
+{% if currentProvider %}
+  {% set caption = currentProvider.operatingName %}
+{% else %}
+  {% set caption = "Add provider" %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ caption }}</span>
+        {{ title }}
+      </h1>
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml
+        }
+      }) %}
+
+        {{ govukInput({
+          id: "operatingName",
+          name: "provider[operatingName]",
+          label: {
+            text: "Operating name",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "This is the name the provider uses in public facing activities"
+          },
+          errorMessage: errors | getErrorMessage("operatingName"),
+          value: provider.operatingName
+        }) }}
+
+        {{ govukInput({
+          id: "legalName",
+          name: "provider[legalName]",
+          label: {
+            text: "Legal name",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "This is the name the provider uses in official activities"
+          },
+          errorMessage: errors | getErrorMessage("legalName"),
+          value: provider.legalName
+        }) }}
+
+        {{ govukInput({
+          id: "ukprn",
+          name: "provider[ukprn]",
+          label: {
+            text: "UK provider reference number (UKPRN)",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("ukprn"),
+          value: provider.ukprn,
+          classes: "govuk-!-width-one-quarter"
+        }) }}
+
+        {% if not currentProvider or provider.type == "school" %}
+          {{ govukInput({
+            id: "urn",
+            name: "provider[urn]",
+            label: {
+              text: "Unique reference number (URN)",
+              classes: "govuk-label--s"
+            },
+            errorMessage: errors | getErrorMessage("urn"),
+            value: provider.urn,
+            classes: "govuk-!-width-one-quarter"
+          }) }}
+        {% endif %}
+
+        {{ govukInput({
+          id: "code",
+          name: "provider[code]",
+          label: {
+            text: "Provider code",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("code"),
+          value: provider.code,
+          classes: "govuk-!-width-one-quarter"
+        }) }}
+
+        {{ govukRadios({
+          id: "type",
+          name: "provider[type]",
+          fieldset: {
+            legend: {
+              text: "Provider type",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          errorMessage: errors | getErrorMessage("type"),
+          value: provider.type,
+          items: [
+            {
+              value: "hei",
+              text: "Higher education institution (HEI)"
+            },
+            {
+              value: "scitt",
+              text: "School-centred initial teacher training (SCITT)"
+            },
+            {
+              value: "school",
+              text: "School"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

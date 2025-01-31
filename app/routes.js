@@ -13,14 +13,30 @@ const flash = require('connect-flash')
 router.use(flash())
 
 /// ------------------------------------------------------------------------ ///
+/// User authentication
+/// ------------------------------------------------------------------------ ///
+// TODO: Replace with Passport
+const passport = {
+  user: {
+    id: '3faa7586-951b-495c-9999-e5fc4367b507',
+    first_name: 'Colin',
+    last_name: 'Chapman',
+    email: 'colin.chapman@example.gov.uk'
+  }
+}
+
+/// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
+const providerController = require('./controllers/providers')
 const userController = require('./controllers/users')
 
 /// ------------------------------------------------------------------------ ///
-// Authentication middleware
+/// Authentication middleware
 /// ------------------------------------------------------------------------ ///
 const checkIsAuthenticated = (req, res, next) => {
+  // the signed in user
+  req.session.passport = passport
   next()
 }
 
@@ -38,7 +54,7 @@ router.all('*', (req, res, next) => {
 /// HOMEPAGE ROUTE
 /// ------------------------------------------------------------------------ ///
 router.get('/', (req, res) => {
-  res.redirect('/users')
+  res.redirect('/providers')
 })
 
 /// ------------------------------------------------------------------------ ///
@@ -62,5 +78,27 @@ router.post('/users/:userId/delete', checkIsAuthenticated, userController.delete
 router.get('/users/:userId', checkIsAuthenticated, userController.userDetails)
 
 router.get('/users', checkIsAuthenticated, userController.usersList)
+
+/// ------------------------------------------------------------------------ ///
+/// PROVIDER ROUTES
+/// ------------------------------------------------------------------------ ///
+router.get('/providers/new', checkIsAuthenticated, providerController.newProvider_get)
+router.post('/providers/new', checkIsAuthenticated, providerController.newProvider_post)
+
+router.get('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_get)
+router.post('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_post)
+
+router.get('/providers/:providerId/edit', checkIsAuthenticated, providerController.editProvider_get)
+router.post('/providers/:providerId/edit', checkIsAuthenticated, providerController.editProvider_post)
+
+router.get('/providers/:providerId/edit/check', checkIsAuthenticated, providerController.editProviderCheck_get)
+router.post('/providers/:providerId/edit/check', checkIsAuthenticated, providerController.editProviderCheck_post)
+
+router.get('/providers/:providerId/delete', checkIsAuthenticated, providerController.deleteProvider_get)
+router.post('/providers/:providerId/delete', checkIsAuthenticated, providerController.deleteProvider_post)
+
+router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
+
+router.get('/providers', checkIsAuthenticated, providerController.providersList)
 
 module.exports = router

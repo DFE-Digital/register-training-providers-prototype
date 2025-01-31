@@ -1,0 +1,248 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = provider.operatingName %}
+{% set caption = "Providers" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/providers"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ caption }}</span>
+      {{ title }}
+    </h1>
+
+    <p class="govuk-body">
+      <a href="/providers/{{ provider.id }}/delete" class="govuk-link">Remove provider</a>
+    </p>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "Operating name"
+          },
+          value: {
+            text: provider.operatingName
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "operating name"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Legal name"
+          },
+          value: {
+            text: provider.legalName if provider.legalName.length else "Not entered",
+            classes: "govuk-hint" if not provider.legalName.length
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "legal name"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Provider type"
+          },
+          value: {
+            text: provider.type if provider.type.length else "Not entered",
+            classes: "govuk-hint" if not provider.type.length
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "type"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "UK provider reference number (UKPRN)"
+          },
+          value: {
+            text: provider.ukprn
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "UK provider reference number (UKPRN)"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Unique reference number (URN)"
+          },
+          value: {
+            text: provider.urn if provider.urn.length else "Not entered",
+            classes: "govuk-hint" if not provider.urn.length
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "Unique reference number (URN)"
+              }
+            ]
+          }
+        } if provider.type == "school",
+        {
+          key: {
+            text: "Provider code"
+          },
+          value: {
+            text: provider.code
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "provider code"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
+
+    {{ govukButton({
+      text: "Add accreditation",
+      href: "#"
+    }) }}
+
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Addresses</h2>
+
+    {{ govukButton({
+      text: "Add address",
+      href: "#"
+    }) }}
+
+    {% if provider.addresses.length %}
+      {% for address in provider.addresses %}
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: "Address " + loop.index
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Delete",
+                  visuallyHiddenText: "address " + loop.index
+                },
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address " + loop.index
+                }
+              ]
+            }
+          },
+          rows: [
+            {
+              key: {
+                text: "Address line 1"
+              },
+              value: {
+                text: address.line1
+              }
+            },
+            {
+              key: {
+                text: "Address line 2"
+              },
+              value: {
+                text: address.line2
+              }
+            },
+            {
+              key: {
+                text: "Address line 3"
+              },
+              value: {
+                text: address.line3
+              }
+            },
+            {
+              key: {
+                text: "Town"
+              },
+              value: {
+                text: address.town
+              }
+            },
+            {
+              key: {
+                text: "County"
+              },
+              value: {
+                text: address.county
+              }
+            },
+            {
+              key: {
+                text: "Postcode"
+              },
+              value: {
+                text: address.postcode
+              }
+            }
+          ]
+        }) }}
+
+      {% endfor %}
+    {% else %}
+      <p class="govuk-body">
+        There are no addresses for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+      </p>
+    {% endif %}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Contacts</h2>
+
+    {{ govukButton({
+      text: "Add contact",
+      href: "#"
+    }) }}
+
+
+  </div>
+</div>
+
+{% endblock %}
