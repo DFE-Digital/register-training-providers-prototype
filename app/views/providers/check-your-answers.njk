@@ -115,7 +115,7 @@
                 }
               ]
             }
-          },
+          } if provider.type == "school",
           {
             key: {
               text: "Provider code"
@@ -131,6 +131,92 @@
                   visuallyHiddenText: "provider code"
                 }
               ]
+            }
+          }
+        ]
+      }) }}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Accredited provider number"
+            },
+            value: {
+              text: ""
+            }
+          },
+          {
+            key: {
+              text: "Date accreditation starts"
+            },
+            value: {
+              text: provider.address.line2
+            }
+          },
+          {
+            key: {
+              text: "Date accreditation ends"
+            },
+            value: {
+              text: provider.address.line3
+            }
+          }
+        ]
+      }) }}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-7">Address</h2>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Address line 1"
+            },
+            value: {
+              text: provider.address.line1
+            }
+          },
+          {
+            key: {
+              text: "Address line 2"
+            },
+            value: {
+              text: provider.address.line2
+            }
+          },
+          {
+            key: {
+              text: "Address line 3"
+            },
+            value: {
+              text: provider.address.line3
+            }
+          },
+          {
+            key: {
+              text: "Town"
+            },
+            value: {
+              text: provider.address.town
+            }
+          },
+          {
+            key: {
+              text: "County"
+            },
+            value: {
+              text: provider.address.county
+            }
+          },
+          {
+            key: {
+              text: "Postcode"
+            },
+            value: {
+              text: provider.address.postcode
             }
           }
         ]
