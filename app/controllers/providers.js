@@ -1,14 +1,54 @@
+const Pagination = require('../helpers/pagination')
 const { v4: uuid } = require('uuid')
-const { Provider } = require('../models')
+const { Provider, ProviderAddress, ProviderContact, ProviderAccreditation } = require('../models')
 
 exports.providersList = async (req, res) => {
-  const providers = await Provider.findAll()
+  const page = parseInt(req.query.page, 10) || 1
+  const limit = parseInt(req.query.limit, 10) || 50
+  const offset = (page - 1) * limit
+
+  // Get the total number of providers for pagination metadata
+  const totalCount = await Provider.count()
+
+  // Only fetch ONE page of providers
+  const providers = await Provider.findAll({
+    order: [['operatingName', 'ASC']],
+    limit,
+    offset
+  })
+
+  // Create your Pagination object
+  // using the chunk + the overall total count
+  const pagination = new Pagination(providers, totalCount, page, limit)
+
+  // Clear session provider data
   delete req.session.data.provider
-  res.render('providers/index', { providers })
+
+  res.render('providers/index', {
+    // Providers for *this* page
+    providers: pagination.getData(),
+    // The pagination metadata (pageItems, nextPage, etc.)
+    pagination
+  })
 }
 
 exports.providerDetails = async (req, res) => {
-  const provider = await Provider.findOne({ where: { id: req.params.providerId } })
+  const provider = await Provider.findByPk(req.params.providerId, {
+    include: [
+      {
+        model: ProviderAddress,
+        as: 'addresses' // Must match the alias defined in the association
+      },
+      {
+        model: ProviderContact,
+        as: 'contacts' // Must match the alias defined in the association
+      },
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations' // Must match the alias defined in the association
+      }
+    ]
+  })
   res.render('providers/show', { provider })
 }
 

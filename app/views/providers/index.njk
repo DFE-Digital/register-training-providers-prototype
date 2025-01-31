@@ -37,7 +37,7 @@
                   {{ provider.operatingName }}
                 </a>
               </td>
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell {{- ' govuk-hint' if not provider.legalName.length}}">
                 {{ provider.legalName if provider.legalName.length else "Not entered" }}
               </td>
               <td class="govuk-table__cell">
@@ -47,6 +47,8 @@
           {% endfor %}
         </tbody>
       </table>
+
+      {% include "_includes/pagination.njk" %}
     {% else %}
       <p class="govuk-body">There are no providers.</p>
     {% endif %}
