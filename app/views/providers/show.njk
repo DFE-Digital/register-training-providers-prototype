@@ -153,6 +153,87 @@
       href: "#"
     }) }}
 
+    {% if provider.addresses.length %}
+      {% for address in provider.addresses %}
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: "Address " + loop.index
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Delete",
+                  visuallyHiddenText: "address " + loop.index
+                },
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address " + loop.index
+                }
+              ]
+            }
+          },
+          rows: [
+            {
+              key: {
+                text: "Address line 1"
+              },
+              value: {
+                text: address.line1
+              }
+            },
+            {
+              key: {
+                text: "Address line 2"
+              },
+              value: {
+                text: address.line2
+              }
+            },
+            {
+              key: {
+                text: "Address line 3"
+              },
+              value: {
+                text: address.line3
+              }
+            },
+            {
+              key: {
+                text: "Town"
+              },
+              value: {
+                text: address.town
+              }
+            },
+            {
+              key: {
+                text: "County"
+              },
+              value: {
+                text: address.county
+              }
+            },
+            {
+              key: {
+                text: "Postcode"
+              },
+              value: {
+                text: address.postcode
+              }
+            }
+          ]
+        }) }}
+
+      {% endfor %}
+    {% else %}
+      <p class="govuk-body">
+        There are no addresses for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+      </p>
+    {% endif %}
+
     <h2 class="govuk-heading-m govuk-!-margin-top-7">Contacts</h2>
 
     {{ govukButton({
