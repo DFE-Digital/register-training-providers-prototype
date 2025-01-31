@@ -12,21 +12,26 @@ module.exports = {
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const providerAddresses = JSON.parse(rawData)
 
+      const createdAt = new Date()
+      const createdById = '354751f2-c5f7-483c-b9e4-b6103f50f970'
+
       // Map JSON keys to database column names
-      const formattedProviderAddresses = providerAddresses.map(providerAddress => ({
-        id: providerAddress.id,
-        provider_id: providerAddress.providerId,
-        line_1: providerAddress.line1, // JSON "line1" → DB "line_1"
-        line_2: providerAddress.line2, // JSON "line2" → DB "line_2"
-        line_3: providerAddress.line3, // JSON "line3" → DB "line_3"
-        town: providerAddress.town,// JSON "town" → DB "town"
-        county: providerAddress.county,// JSON "county" → DB "county"
-        postcode: providerAddress.postcode,// JSON "postcode" → DB "postcode"
-        latitude: providerAddress.latitude, // JSON "latitude" → DB "latitude"
-        longitude: providerAddress.longitude, // JSON "longitude" → DB "longitude"
-        created_at: new Date(),
-        created_by_id: '354751f2-c5f7-483c-b9e4-b6103f50f970' // Default user
-      }))
+      const formattedProviderAddresses = providerAddresses
+        .filter(providerAddress => providerAddress.line1 && providerAddress.town && providerAddress.postcode) // filter out addresses where line1, town, or postcode are null or undefined
+        .map(providerAddress => ({
+          id: providerAddress.id,
+          provider_id: providerAddress.providerId,
+          line_1: providerAddress.line1, // JSON "line1" → DB "line_1"
+          line_2: providerAddress.line2, // JSON "line2" → DB "line_2"
+          line_3: providerAddress.line3, // JSON "line3" → DB "line_3"
+          town: providerAddress.town,// JSON "town" → DB "town"
+          county: providerAddress.county,// JSON "county" → DB "county"
+          postcode: providerAddress.postcode,// JSON "postcode" → DB "postcode"
+          latitude: providerAddress.latitude, // JSON "latitude" → DB "latitude"
+          longitude: providerAddress.longitude, // JSON "longitude" → DB "longitude"
+          created_at: createdAt,
+          created_by_id: createdById // Default user
+        }))
 
       // Insert transformed data into the 'Users' table
       await queryInterface.bulkInsert('provider_addresses', formattedProviderAddresses, {})

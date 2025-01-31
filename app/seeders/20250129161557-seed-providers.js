@@ -12,6 +12,9 @@ module.exports = {
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const providers = JSON.parse(rawData)
 
+      const createdAt = new Date()
+      const createdById = '354751f2-c5f7-483c-b9e4-b6103f50f970'
+
       // Map JSON keys to database column names
       const formattedProviders = providers.map(provider => ({
         id: provider.id,
@@ -21,8 +24,8 @@ module.exports = {
         ukprn: provider.ukprn, // JSON "ukprn" → DB "ukprn"
         code: provider.code, // JSON "code" → DB "code"
         website: provider.website, // JSON "website" → DB "website"
-        created_at: new Date(),
-        created_by_id: '354751f2-c5f7-483c-b9e4-b6103f50f970' // Default user
+        created_at: createdAt,
+        created_by_id: createdById // Default user
       }))
 
       // Insert transformed data into the 'Users' table

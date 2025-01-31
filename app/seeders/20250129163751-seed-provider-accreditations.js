@@ -12,15 +12,20 @@ module.exports = {
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const providerAccreditations = JSON.parse(rawData)
 
+      const createdAt = new Date()
+      const createdById = '354751f2-c5f7-483c-b9e4-b6103f50f970'
+
       // Map JSON keys to database column names
-      const formattedProviderAccreditations = providerAccreditations.map(providerAccreditation => ({
-        id: providerAccreditation.id,
-        provider_id: providerAccreditation.providerId, // JSON "providerId" → DB "provider_id"
-        number: providerAccreditation.number,// JSON "number" → DB "number"
-        starts_on: providerAccreditation.startsOn, // JSON "startsOn" → DB "starts_on"
-        created_at: new Date(),
-        created_by_id: '354751f2-c5f7-483c-b9e4-b6103f50f970' // Default user
-      }))
+      const formattedProviderAccreditations = providerAccreditations
+        .filter(providerAccreditation => providerAccreditation.number) // filter out accreditations where number is null or undefined
+        .map(providerAccreditation => ({
+          id: providerAccreditation.id,
+          provider_id: providerAccreditation.providerId, // JSON "providerId" → DB "provider_id"
+          number: providerAccreditation.number,// JSON "number" → DB "number"
+          starts_on: providerAccreditation.startsOn, // JSON "startsOn" → DB "starts_on"
+          created_at: createdAt,
+          created_by_id: createdById // Default user
+        }))
 
       // Insert transformed data into the 'Users' table
       await queryInterface.bulkInsert('provider_accreditations', formattedProviderAccreditations, {})
