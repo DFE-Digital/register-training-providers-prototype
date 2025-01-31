@@ -30,8 +30,8 @@
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
       {{ govukRadios({
-        name: "is-accredited",
-        name: "isAccredited",
+        id: "isAccredited",
+        name: "provider[isAccredited]",
         fieldset: {
           legend: {
             html: headingHtml,
@@ -39,7 +39,7 @@
             classes: "govuk-fieldset__legend--l"
           }
         },
-        errorMessage: errors | getErrorMessage("type"),
+        errorMessage: errors | getErrorMessage("isAccredited"),
         value: provider.isAccredited,
         items: [
           {

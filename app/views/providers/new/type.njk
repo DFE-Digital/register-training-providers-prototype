@@ -49,11 +49,11 @@
           {
             value: "scitt",
             text: "School-centred initial teacher training (SCITT)"
-          },
+          } if provider.isAccredited == "yes",
           {
             value: "school",
             text: "School"
-          }
+          } if provider.isAccredited == "no"
         ]
       }) }}
 
