@@ -61,7 +61,7 @@
           id: "legalName",
           name: "provider[legalName]",
           label: {
-            text: "Legal name",
+            text: "Legal name" + (" (optiona)" if provider.type == "school"),
             classes: "govuk-label--s"
           },
           hint: {
