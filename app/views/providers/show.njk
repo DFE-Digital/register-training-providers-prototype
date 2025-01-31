@@ -102,6 +102,24 @@
         },
         {
           key: {
+            text: "Unique reference number (URN)"
+          },
+          value: {
+            text: provider.urn if provider.urn.length else "Not entered",
+            classes: "govuk-hint" if not provider.urn.length
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "Unique reference number (URN)"
+              }
+            ]
+          }
+        } if provider.type == "school",
+        {
+          key: {
             text: "Provider code"
           },
           value: {

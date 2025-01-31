@@ -71,6 +71,44 @@
           value: provider.legalName
         }) }}
 
+        {{ govukInput({
+          id: "ukprn",
+          name: "provider[ukprn]",
+          label: {
+            text: "UK provider reference number (UKPRN)",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("ukprn"),
+          value: provider.ukprn,
+          classes: "govuk-!-width-one-quarter"
+        }) }}
+
+        {% if not currentProvider or provider.type == "school" %}
+          {{ govukInput({
+            id: "urn",
+            name: "provider[urn]",
+            label: {
+              text: "Unique reference number (URN)",
+              classes: "govuk-label--s"
+            },
+            errorMessage: errors | getErrorMessage("urn"),
+            value: provider.urn,
+            classes: "govuk-!-width-one-quarter"
+          }) }}
+        {% endif %}
+
+        {{ govukInput({
+          id: "code",
+          name: "provider[code]",
+          label: {
+            text: "Provider code",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("code"),
+          value: provider.code,
+          classes: "govuk-!-width-one-quarter"
+        }) }}
+
         {{ govukRadios({
           id: "type",
           name: "provider[type]",

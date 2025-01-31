@@ -122,8 +122,8 @@ exports.newProviderCheck_post = async (req, res) => {
     operatingName: req.session.data.provider.operatingName,
     legalName: req.session.data.provider.legalName,
     type: req.session.data.provider.type,
-    code: 'O1A',
-    ukprn: 1234567,
+    code: req.session.data.provider.code,
+    ukprn: req.session.data.provider.ukprn,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })
@@ -135,7 +135,7 @@ exports.newProviderCheck_post = async (req, res) => {
 }
 
 exports.editProvider_get = async (req, res) => {
-  const currentProvider = await Provider.findOne({ where: { id: req.params.providerId } })
+  const currentProvider = await Provider.findByPk(req.params.providerId)
 
   let provider
   if (req.session.data.provider) {
@@ -198,7 +198,7 @@ exports.editProvider_post = async (req, res) => {
 }
 
 exports.editProviderCheck_get = async (req, res) => {
-  const currentProvider = await Provider.findOne({ where: { id: req.params.providerId } })
+  const currentProvider = await Provider.findByPk(req.params.providerId)
 
   res.render('providers/check-your-answers', {
     currentProvider,
@@ -212,13 +212,13 @@ exports.editProviderCheck_get = async (req, res) => {
 }
 
 exports.editProviderCheck_post = async (req, res) => {
-  const provider = await Provider.findOne({ where: { id: req.params.providerId } })
+  const provider = await Provider.findByPk(req.params.providerId)
   provider.update({
     operatingName: req.session.data.provider.operatingName,
     legalName: req.session.data.provider.legalName,
     type: req.session.data.provider.type,
-    code: 'O1A',
-    ukprn: 1234567,
+    // code: 'O1A',
+    // ukprn: 1234567,
     updatedAt: new Date(),
     updatedById: req.session.passport.user.id
   })
@@ -230,12 +230,12 @@ exports.editProviderCheck_post = async (req, res) => {
 }
 
 exports.deleteProvider_get = async (req, res) => {
-  const provider = await Provider.findOne({ where: { id: req.params.providerId } })
+  const provider = await Provider.findByPk(req.params.providerId)
   res.render('providers/delete', { provider })
 }
 
 exports.deleteProvider_post = async (req, res) => {
-  const provider = await Provider.findOne({ where: { id: req.params.providerId } })
+  const provider = await Provider.findByPk(req.params.providerId)
   provider.destroy()
 
   req.flash('success', 'Provider removed')
