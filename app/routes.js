@@ -82,8 +82,20 @@ router.get('/users', checkIsAuthenticated, userController.usersList)
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ROUTES
 /// ------------------------------------------------------------------------ ///
-router.get('/providers/new', checkIsAuthenticated, providerController.newProvider_get)
-router.post('/providers/new', checkIsAuthenticated, providerController.newProvider_post)
+router.get('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_get)
+router.post('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_post)
+
+router.get('/providers/new/type', checkIsAuthenticated, providerController.newProviderType_get)
+router.post('/providers/new/type', checkIsAuthenticated, providerController.newProviderType_post)
+
+router.get('/providers/new/details', checkIsAuthenticated, providerController.newProviderDetails_get)
+router.post('/providers/new/details', checkIsAuthenticated, providerController.newProviderDetails_post)
+
+router.get('/providers/new/accreditation', checkIsAuthenticated, providerController.newProviderAccreditation_get)
+router.post('/providers/new/accreditation', checkIsAuthenticated, providerController.newProviderAccreditation_post)
+
+router.get('/providers/new/address', checkIsAuthenticated, providerController.newProviderAddress_get)
+router.post('/providers/new/address', checkIsAuthenticated, providerController.newProviderAddress_post)
 
 router.get('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_get)
 router.post('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_post)
