@@ -52,8 +52,12 @@ exports.providerDetails = async (req, res) => {
   res.render('providers/show', { provider })
 }
 
-exports.newProvider_get = async (req, res) => {
-  res.render('providers/edit', {
+/// ------------------------------------------------------------------------ ///
+/// New provider
+/// ------------------------------------------------------------------------ ///
+
+exports.newProviderIsAccredited_get = async (req, res) => {
+  res.render('providers/new/is-accredited', {
     provider: req.session.data.provider,
     actions: {
       back: '/providers',
@@ -63,7 +67,65 @@ exports.newProvider_get = async (req, res) => {
   })
 }
 
-exports.newProvider_post = async (req, res) => {
+exports.newProviderIsAccredited_post = async (req, res) => {
+  const errors = []
+
+  if (errors.length) {
+    res.render('providers/new/is-accredited', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers',
+        cancel: '/providers',
+        save: '/providers/new'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/type')
+  }
+}
+
+exports.newProviderType_get = async (req, res) => {
+  res.render('providers/new/type', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new',
+      cancel: '/providers',
+      save: '/providers/new/type'
+    }
+  })
+}
+
+exports.newProviderType_post = async (req, res) => {
+  const errors = []
+
+  if (errors.length) {
+    res.render('providers/new/type', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers/new',
+        cancel: '/providers',
+        save: '/providers/new/type'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/details')
+  }
+}
+
+exports.newProviderDetails_get = async (req, res) => {
+  res.render('providers/edit', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new/type',
+      cancel: '/providers',
+      save: '/providers/new/details'
+    }
+  })
+}
+
+exports.newProviderDetails_post = async (req, res) => {
   const errors = []
 
   if (!req.session.data.provider.operatingName.length) {
@@ -95,9 +157,67 @@ exports.newProvider_post = async (req, res) => {
       provider: req.session.data.provider,
       errors,
       actions: {
-        back: '/providers',
+        back: '/providers/new/type',
         cancel: '/providers',
-        save: '/providers/new'
+        save: '/providers/new/details'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/accreditation')
+  }
+}
+
+exports.newProviderAccreditation_get = async (req, res) => {
+  res.render('providers/accreditation', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new/details',
+      cancel: '/providers',
+      save: '/providers/new/accreditation'
+    }
+  })
+}
+
+exports.newProviderAccreditation_post = async (req, res) => {
+  const errors = []
+
+  if (errors.length) {
+    res.render('providers/accreditation', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers/new/details',
+        cancel: '/providers',
+        save: '/providers/new/accreditation'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/address')
+  }
+}
+
+exports.newProviderAddress_get = async (req, res) => {
+  res.render('providers/address', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new/accreditation',
+      cancel: '/providers',
+      save: '/providers/new/address'
+    }
+  })
+}
+
+exports.newProviderAddress_post = async (req, res) => {
+  const errors = []
+
+  if (errors.length) {
+    res.render('providers/address', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers/new/accreditation',
+        cancel: '/providers',
+        save: '/providers/new/address'
       }
     })
   } else {
@@ -133,6 +253,10 @@ exports.newProviderCheck_post = async (req, res) => {
   req.flash('success', 'Provider added')
   res.redirect('/providers')
 }
+
+/// ------------------------------------------------------------------------ ///
+/// Edit provider
+/// ------------------------------------------------------------------------ ///
 
 exports.editProvider_get = async (req, res) => {
   const currentProvider = await Provider.findByPk(req.params.providerId)
@@ -228,6 +352,10 @@ exports.editProviderCheck_post = async (req, res) => {
   req.flash('success', 'Provider updated')
   res.redirect(`/providers/${req.params.providerId}`)
 }
+
+/// ------------------------------------------------------------------------ ///
+/// Delete provider
+/// ------------------------------------------------------------------------ ///
 
 exports.deleteProvider_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
