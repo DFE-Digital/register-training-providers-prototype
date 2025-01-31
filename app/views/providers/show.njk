@@ -52,7 +52,8 @@
             text: "Legal name"
           },
           value: {
-            text: provider.legalName if provider.legalName.length else "Not entered"
+            text: provider.legalName if provider.legalName.length else "Not entered",
+            classes: "govuk-hint" if not provider.legalName.length
           },
           actions: {
             items: [
@@ -69,7 +70,8 @@
             text: "Provider type"
           },
           value: {
-            text: provider.type if provider.type.length else "Not entered"
+            text: provider.type if provider.type.length else "Not entered",
+            classes: "govuk-hint" if not provider.type.length
           },
           actions: {
             items: [
@@ -117,6 +119,18 @@
         }
       ]
     }) }}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
+
+
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Addresses</h2>
+
+
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Contacts</h2>
+
+
 
   </div>
 </div>
