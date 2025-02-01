@@ -163,7 +163,11 @@ exports.newProviderDetails_post = async (req, res) => {
       }
     })
   } else {
-    res.redirect('/providers/new/accreditation')
+    if (req.session.data.provider.isAccredited == "yes") {
+      res.redirect('/providers/new/accreditation')
+    } else {
+      res.redirect('/providers/new/address')
+    }
   }
 }
 
@@ -197,10 +201,17 @@ exports.newProviderAccreditation_post = async (req, res) => {
 }
 
 exports.newProviderAddress_get = async (req, res) => {
+  let back
+  if (req.session.data.provider.isAccredited == "yes") {
+    back = '/providers/new/accreditation'
+  } else {
+    back = '/providers/new/details'
+  }
+
   res.render('providers/address', {
     provider: req.session.data.provider,
     actions: {
-      back: '/providers/new/accreditation',
+      back,
       cancel: '/providers',
       save: '/providers/new/address'
     }
@@ -211,11 +222,18 @@ exports.newProviderAddress_post = async (req, res) => {
   const errors = []
 
   if (errors.length) {
+    let back
+    if (req.session.data.provider.isAccredited == "yes") {
+      back = '/providers/new/accreditation'
+    } else {
+      back = '/providers/new/details'
+    }
+
     res.render('providers/address', {
       provider: req.session.data.provider,
       errors,
       actions: {
-        back: '/providers/new/accreditation',
+        back,
         cancel: '/providers',
         save: '/providers/new/address'
       }
