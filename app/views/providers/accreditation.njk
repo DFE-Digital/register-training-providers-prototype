@@ -45,7 +45,7 @@
 
         {{ govukInput({
           id: "number",
-          name: "provider[number]",
+          name: "provider[accreditation][number]",
           label: {
             text: "Accredited provider number",
             classes: "govuk-label--s"
@@ -56,7 +56,6 @@
         }) }}
 
         {{ govukDateInput({
-          id: "starts-on",
           fieldset: {
             legend: {
               text: "Date accreditation starts",
@@ -69,28 +68,30 @@
           },
           items: [
             {
-              name: "date",
+              id: "startsOn-day",
+              name: "provider[accreditation][startsOn][day]",
               label: "Day",
-              value: data.day,
+              value: provider.accreditation.startsOn.day,
               classes: "govuk-input--width-2"
             },
             {
-              name: "date",
+              id: "startsOn-month",
+              name: "provider[accreditation][startsOn][month]",
               label: "Month",
-              value: data.month,
+              value: provider.accreditation.startsOn.month,
               classes: "govuk-input--width-2"
             },
             {
-              name: "date",
+              id: "startsOn-year",
+              name: "provider[accreditation][startsOn][year]",
               label: "Year",
-              value: data.year,
+              value: provider.accreditation.startsOn.year,
               classes: "govuk-input--width-4"
             }
           ]
         }) }}
 
         {{ govukDateInput({
-          id: "ends-on",
           fieldset: {
             legend: {
               text: "Date accreditation ends (optional)",
@@ -103,21 +104,24 @@
           },
           items: [
             {
-              name: "date",
+              id: "endsOn-day",
+              name: "provider[accreditation][endsOn][day]",
               label: "Day",
-              value: data.day,
+              value: provider.accreditation["endsOn-day"],
               classes: "govuk-input--width-2"
             },
             {
-              name: "date",
+              id: "endsOn-month",
+              name: "provider[accreditation][endsOn][month]",
               label: "Month",
-              value: data.month,
+              value: provider.accreditation["endsOn-month"],
               classes: "govuk-input--width-2"
             },
             {
-              name: "date",
+              id: "endsOn-year",
+              name: "provider[accreditation][endsOn][year]",
               label: "Year",
-              value: data.year,
+              value: provider.accreditation["endsOn-year"],
               classes: "govuk-input--width-4"
             }
           ]
