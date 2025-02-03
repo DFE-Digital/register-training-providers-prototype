@@ -1,0 +1,62 @@
+<h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
+
+{{ govukButton({
+  text: "Add accreditation",
+  href: "#"
+}) }}
+
+{% if provider.accreditations.length %}
+  {% for accreditation in provider.accreditations %}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Accreditation " + loop.index
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Delete",
+              visuallyHiddenText: "accreditation " + loop.index
+            },
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "accreditation " + loop.index
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: {
+            text: "Accreditation number"
+          },
+          value: {
+            text: accreditation.number
+          }
+        },
+        {
+          key: {
+            text: "Date accreditation starts"
+          },
+          value: {
+            text: accreditation.startsOn | date('d MMMM yyyy')
+          }
+        },
+        {
+          key: {
+            text: "Date accreditation ends"
+          },
+          value: {
+            text: accreditation.endsOn | date('d MMMM yyyy') if accreditation.endsOn
+          }
+        }
+      ]
+    }) }}
+  {% endfor %}
+{% else %}
+  <p class="govuk-body">
+    There are no accreditations for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+  </p>
+{% endif %}

@@ -1,0 +1,62 @@
+<h2 class="govuk-heading-m govuk-!-margin-top-7">Contacts</h2>
+
+{{ govukButton({
+  text: "Add contact",
+  href: "#"
+}) }}
+
+{% if provider.contacts.length %}
+  {% for contact in provider.contacts %}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Contact " + loop.index
+        },
+        actions: {
+          items: [
+            {
+              href: "#",
+              text: "Delete",
+              visuallyHiddenText: "contact " + loop.index
+            },
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "contact " + loop.index
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: {
+            text: "Full name"
+          },
+          value: {
+            text: contact.fullName
+          }
+        },
+        {
+          key: {
+            text: "Email address"
+          },
+          value: {
+            text: contact.email
+          }
+        },
+        {
+          key: {
+            text: "Telephone"
+          },
+          value: {
+            text: contact.telephone
+          }
+        }
+      ]
+    }) }}
+  {% endfor %}
+{% else %}
+  <p class="govuk-body">
+    There are no contacts for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+  </p>
+{% endif %}
