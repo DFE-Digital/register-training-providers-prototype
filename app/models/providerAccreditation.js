@@ -36,12 +36,14 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      starts_on: {
+      startsOn: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        field: 'starts_on'
       },
-      ends_on: {
-        type: DataTypes.DATE
+      endsOn: {
+        type: DataTypes.DATE,
+        field: 'ends_on'
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -65,7 +67,8 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'ProviderAccreditation',
-      tableName: 'provider_accreditations'
+      tableName: 'provider_accreditations',
+      timestamps: false
     }
   )
 

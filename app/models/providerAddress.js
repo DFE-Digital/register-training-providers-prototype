@@ -92,7 +92,8 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'ProviderAddress',
-      tableName: 'provider_addresses'
+      tableName: 'provider_addresses',
+      timestamps: false
     }
   )
 

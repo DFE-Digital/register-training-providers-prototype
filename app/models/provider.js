@@ -77,8 +77,12 @@ module.exports = (sequelize) => {
         unique: true,
         validate: {
           notEmpty: true,
-          // is: /^1\d{7}$/
+          is: /^1\d{7}$/
         }
+      },
+      urn:  {
+        type: DataTypes.STRING,
+        unique: true
       },
       code:  {
         type: DataTypes.STRING,
@@ -117,7 +121,8 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'Provider',
-      tableName: 'providers'
+      tableName: 'providers',
+      timestamps: false
     }
   )
 
