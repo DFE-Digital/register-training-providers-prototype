@@ -136,12 +136,14 @@ exports.newProviderDetails_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.provider.legalName.length) {
-    const error = {}
-    error.fieldName = 'legalName'
-    error.href = '#legalName'
-    error.text = 'Enter a legal name'
-    errors.push(error)
+  if (req.session.data.provider?.type !== 'school') {
+    if (!req.session.data.provider.legalName.length) {
+      const error = {}
+      error.fieldName = 'legalName'
+      error.href = '#legalName'
+      error.text = 'Enter a legal name'
+      errors.push(error)
+    }
   }
 
   if (!req.session.data.provider.type) {
@@ -220,6 +222,40 @@ exports.newProviderAddress_get = async (req, res) => {
 
 exports.newProviderAddress_post = async (req, res) => {
   const errors = []
+
+  if (!req.session.data.provider.address.line1.length) {
+    const error = {}
+    error.fieldName = "address-line-1"
+    error.href = "#address-line-1"
+    error.text = "Enter address line 1"
+    errors.push(error)
+  }
+
+  if (!req.session.data.provider.address.town.length) {
+    const error = {}
+    error.fieldName = "address-town"
+    error.href = "#address-town"
+    error.text = "Enter a town or city"
+    errors.push(error)
+  }
+
+  if (!req.session.data.provider.address.postcode.length) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a postcode"
+    errors.push(error)
+  // } else if (
+  //   !validationHelper.isValidPostcode(
+  //     req.session.data.provider.address.postcode
+  //   )
+  // ) {
+  //   const error = {}
+  //   error.fieldName = "address-postcode"
+  //   error.href = "#address-postcode"
+  //   error.text = "Enter a real postcode"
+  //   errors.push(error)
+  }
 
   if (errors.length) {
     let back
