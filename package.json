@@ -17,6 +17,7 @@
     "connect-flash": "^0.1.1",
     "govuk-frontend": "^5.8.0",
     "govuk-prototype-kit": "^13.16.2",
+    "luxon": "^3.5.0",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7",
