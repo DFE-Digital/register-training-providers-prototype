@@ -1,6 +1,8 @@
 const govukPrototypeKit = require('govuk-prototype-kit')
 const addFilter = govukPrototypeKit.views.addFilter
 
+const { DateTime } = require('luxon')
+
 /* ------------------------------------------------------------------
 utility function to get an error for a component
 example: {{ errors | getErrorMessage('title') }}
@@ -43,4 +45,23 @@ addFilter('getProviderTypeLabel', (code) => {
   }
 
   return label
+})
+
+/* ------------------------------------------------------------------
+ date filter for use in Nunjucks
+ example: {{ params.date | date("DD/MM/YYYY") }}
+ outputs: 01/01/1970
+------------------------------------------------------------------ */
+addFilter('date', (timestamp, format = 'yyyy-LL-dd') => {
+  let datetime = DateTime.fromJSDate(timestamp, {
+    locale: 'en-GB'
+  }).toFormat(format)
+
+  if (datetime === 'Invalid DateTime') {
+    datetime = DateTime.fromISO(timestamp, {
+      locale: 'en-GB'
+    }).toFormat(format)
+  }
+
+  return datetime
 })
