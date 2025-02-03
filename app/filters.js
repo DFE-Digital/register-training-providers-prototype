@@ -49,19 +49,67 @@ addFilter('getProviderTypeLabel', (code) => {
 
 /* ------------------------------------------------------------------
  date filter for use in Nunjucks
- example: {{ params.date | date("DD/MM/YYYY") }}
- outputs: 01/01/1970
+ example: {{ params.date | govukDate }}
+ outputs: 1 January 1970
 ------------------------------------------------------------------ */
-addFilter('date', (timestamp, format = 'yyyy-LL-dd') => {
-  let datetime = DateTime.fromJSDate(timestamp, {
-    locale: 'en-GB'
-  }).toFormat(format)
+const govukDate = (timestamp) => {
+  const format = 'd MMMM yyyy'
+
+  let datetime = DateTime.fromJSDate(timestamp, { locale: 'en-GB' }).toFormat(format)
 
   if (datetime === 'Invalid DateTime') {
-    datetime = DateTime.fromISO(timestamp, {
-      locale: 'en-GB'
-    }).toFormat(format)
+    datetime = DateTime.fromISO(timestamp, { locale: 'en-GB' }).toFormat(format)
   }
 
   return datetime
-})
+}
+
+addFilter('govukDate', govukDate)
+
+/* ------------------------------------------------------------------
+ time filter for use in Nunjucks
+ example: {{ params.date | govukTime }}
+ outputs: 3:33pm
+------------------------------------------------------------------ */
+const govukTime = (timestamp) => {
+  let datetime = DateTime.fromJSDate(timestamp, { locale: 'en-GB' })
+
+  if (datetime === 'Invalid DateTime') {
+    datetime = DateTime.fromISO(timestamp, { locale: 'en-GB' })
+  }
+
+  const hour = datetime.toFormat('h:mm').replace(':00', '')
+  const meridiem = datetime.toFormat('a').toLowerCase()
+
+  let time = `${hour}${meridiem}`
+
+  if (time === '12am') {
+    time = '12am (midnight)'
+  } else if (time === '12pm') {
+    time = '12pm (midday)'
+  }
+
+  return time
+}
+
+addFilter('govukTime', govukTime)
+
+/* ------------------------------------------------------------------
+ datetime filter for use in Nunjucks
+ example: {{ params.date | govukDateTime }}
+ outputs: 1 January 1970 at 3:33pm
+ example: {{ params.date | govukDateTime("on") }}
+ outputs: 3:33pm on 1 January 1970
+------------------------------------------------------------------ */
+const govukDateTime = (timestamp, format = false) => {
+  if (timestamp === 'today' || timestamp === 'now') {
+    timestamp = DateTime.now().toString()
+  }
+
+  const date = govukDate(timestamp)
+  const time = govukTime(timestamp)
+
+  return format === 'on' ? `${time} on ${date}` : `${date} at ${time}`
+}
+
+addFilter('govukDateTime', govukDateTime)
