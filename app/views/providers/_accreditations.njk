@@ -49,7 +49,8 @@
             text: "Date accreditation ends"
           },
           value: {
-            text: accreditation.endsOn | date('d MMMM yyyy') if accreditation.endsOn
+            text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
+            classes: "govuk-hint" if not accreditation.endsOn
           }
         }
       ]

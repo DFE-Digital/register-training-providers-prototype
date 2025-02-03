@@ -53,7 +53,8 @@
               text: "Legal name"
             },
             value: {
-              text: provider.legalName
+              text: provider.legalName if provider.legalName else "Not entered",
+              classes: "govuk-hint" if not provider.legalName.length
             },
             actions: {
               items: [
@@ -179,6 +180,15 @@
             },
             value: {
               text: provider.address.line1
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address line 1"
+                }
+              ]
             }
           },
           {
@@ -187,6 +197,15 @@
             },
             value: {
               text: provider.address.line2
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address line 2"
+                }
+              ]
             }
           },
           {
@@ -195,6 +214,15 @@
             },
             value: {
               text: provider.address.line3
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address line 3"
+                }
+              ]
             }
           },
           {
@@ -203,6 +231,15 @@
             },
             value: {
               text: provider.address.town
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "town"
+                }
+              ]
             }
           },
           {
@@ -211,6 +248,15 @@
             },
             value: {
               text: provider.address.county
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "county"
+                }
+              ]
             }
           },
           {
@@ -219,6 +265,15 @@
             },
             value: {
               text: provider.address.postcode
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "postcode"
+                }
+              ]
             }
           }
         ]
