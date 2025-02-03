@@ -22,7 +22,7 @@ module.exports = {
           id: providerAccreditation.id,
           provider_id: providerAccreditation.providerId, // JSON "providerId" → DB "provider_id"
           number: providerAccreditation.number,// JSON "number" → DB "number"
-          starts_on: providerAccreditation.startsOn, // JSON "startsOn" → DB "starts_on"
+          starts_on: new Date(providerAccreditation.startsOn), // JSON "startsOn" → DB "starts_on"
           created_at: createdAt,
           created_by_id: createdById // Default user
         }))
