@@ -44,15 +44,15 @@
         items: [
           {
             value: "hei",
-            text: "Higher education institution (HEI)"
+            text: "hei" | getProviderTypeLabel
           },
           {
             value: "scitt",
-            text: "School-centred initial teacher training (SCITT)"
+            text: "scitt" | getProviderTypeLabel
           } if provider.isAccredited == "yes",
           {
             value: "school",
-            text: "School"
+            text: "school" | getProviderTypeLabel
           } if provider.isAccredited == "no"
         ]
       }) }}
