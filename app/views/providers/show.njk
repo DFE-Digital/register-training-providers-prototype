@@ -32,6 +32,24 @@
       rows: [
         {
           key: {
+            text: "Provider type"
+          },
+          value: {
+            text: provider.type | getProviderTypeLabel if provider.type.length else "Not entered",
+            classes: "govuk-hint" if not provider.type.length
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/edit",
+                text: "Change",
+                visuallyHiddenText: "type"
+              }
+            ]
+          } if 1==0
+        },
+        {
+          key: {
             text: "Operating name"
           },
           value: {
@@ -61,24 +79,6 @@
                 href: "/providers/" + provider.id + "/edit",
                 text: "Change",
                 visuallyHiddenText: "legal name"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Provider type"
-          },
-          value: {
-            text: provider.type | getProviderTypeLabel if provider.type.length else "Not entered",
-            classes: "govuk-hint" if not provider.type.length
-          },
-          actions: {
-            items: [
-              {
-                href: "/providers/" + provider.id + "/edit",
-                text: "Change",
-                visuallyHiddenText: "type"
               }
             ]
           }
