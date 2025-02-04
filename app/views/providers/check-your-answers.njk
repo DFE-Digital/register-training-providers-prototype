@@ -155,7 +155,7 @@
                 text: "Date accreditation starts"
               },
               value: {
-                text: ""
+                text: provider.accreditation.startsOn | isoDateFromDateInput | govukDate
               }
             },
             {
@@ -163,7 +163,8 @@
                 text: "Date accreditation ends"
               },
               value: {
-                text: ""
+                text: provider.accreditation.endsOn | isoDateFromDateInput | govukDate if provider.accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
+                classes: "govuk-hint" if provider.accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
               }
             }
           ]

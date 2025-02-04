@@ -51,7 +51,7 @@
             classes: "govuk-label--s"
           },
           hint: {
-            text: "This is the name the provider uses in public facing activities"
+            text: "The name the provider uses in public facing activities"
           },
           errorMessage: errors | getErrorMessage("operatingName"),
           value: provider.operatingName
@@ -65,7 +65,7 @@
             classes: "govuk-label--s"
           },
           hint: {
-            text: "This is the name the provider uses in official activities"
+            text: "The name the provider uses in official activities"
           },
           errorMessage: errors | getErrorMessage("legalName"),
           value: provider.legalName
@@ -78,11 +78,14 @@
             text: "UK provider reference number (UKPRN)",
             classes: "govuk-label--s"
           },
+          hint: {
+            text: "A unique 8 digit number allocated to providers by the UK register of learning providers"
+          },
           errorMessage: errors | getErrorMessage("ukprn"),
           value: provider.ukprn,
           classes: "govuk-!-width-one-quarter",
             formGroup: {
-              classes: "govuk-!-margin-bottom-2"
+              classes: "govuk-!-margin-bottom-4"
             }
         }) }}
 
@@ -98,11 +101,14 @@
               text: "Unique reference number (URN)",
               classes: "govuk-label--s"
             },
+            hint: {
+              text: "A unique 5 or 6 digit number used by the UK government to identify educational establishments in the United Kingdom"
+            },
             errorMessage: errors | getErrorMessage("urn"),
             value: provider.urn,
             classes: "govuk-!-width-one-quarter",
             formGroup: {
-              classes: "govuk-!-margin-bottom-2"
+              classes: "govuk-!-margin-bottom-4"
             }
           }) }}
 
@@ -117,6 +123,9 @@
           label: {
             text: "Provider code",
             classes: "govuk-label--s"
+          },
+          hint: {
+            text: "A unique 3 digit alphanumeric code assigned by DfE to providers"
           },
           errorMessage: errors | getErrorMessage("code"),
           value: provider.code,
