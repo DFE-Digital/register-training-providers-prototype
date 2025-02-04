@@ -5,7 +5,7 @@
 {% set title = "Check your answers" %}
 
 {% if currentProvider %}
-  {% set caption = currentProvider.operating_name %}
+  {% set caption = currentProvider.operatingName %}
 {% else %}
   {% set caption = "Add provider" %}
 {% endif %}
@@ -112,7 +112,7 @@
                 {
                   href: "#",
                   text: "Change",
-                  visuallyHiddenText: "unique reference number"
+                  visuallyHiddenText: "unique reference number (URN)"
                 }
               ]
             }
