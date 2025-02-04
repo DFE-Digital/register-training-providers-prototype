@@ -1,4 +1,5 @@
 const Pagination = require('../helpers/pagination')
+const { isoDateFromDateInput } = require('../helpers/dates')
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderAddress, ProviderContact, ProviderAccreditation } = require('../models')
 
@@ -187,6 +188,25 @@ exports.newProviderAccreditation_get = async (req, res) => {
 exports.newProviderAccreditation_post = async (req, res) => {
   const errors = []
 
+  if (!req.session.data.provider.accreditation.number.length) {
+    const error = {}
+    error.fieldName = "number"
+    error.href = "#number"
+    error.text = "Enter accredited provider number"
+    errors.push(error)
+  }
+
+  if (!(req.session.data.provider.accreditation.startsOn?.day.length
+    && req.session.data.provider.accreditation.startsOn?.month.length
+    && req.session.data.provider.accreditation.startsOn?.year.length)
+  ) {
+    const error = {}
+    error.fieldName = "startsOn"
+    error.href = "#startsOn"
+    error.text = "Enter date accreditation starts"
+    errors.push(error)
+  }
+
   if (errors.length) {
     res.render('providers/accreditation', {
       provider: req.session.data.provider,
@@ -280,6 +300,12 @@ exports.newProviderAddress_post = async (req, res) => {
 }
 
 exports.newProviderCheck_get = async (req, res) => {
+
+  console.log(isoDateFromDateInput(req.session.data.provider.accreditation.startsOn));
+  console.log(isoDateFromDateInput(req.session.data.provider.accreditation.endsOn));
+
+  console.log(new Date(isoDateFromDateInput(req.session.data.provider.accreditation.startsOn)));
+
   res.render('providers/check-your-answers', {
     provider: req.session.data.provider,
     actions: {
@@ -291,21 +317,60 @@ exports.newProviderCheck_get = async (req, res) => {
 }
 
 exports.newProviderCheck_post = async (req, res) => {
-  const provider = await Provider.create({
-    id: uuid(),
+  const providerId = uuid()
+
+  await Provider.create({
+    id: providerId,
     operatingName: req.session.data.provider.operatingName,
     legalName: req.session.data.provider.legalName,
     type: req.session.data.provider.type,
     code: req.session.data.provider.code,
     ukprn: req.session.data.provider.ukprn,
+    urn: req.session.data.provider.urn ? req.session.data.provider.urn : null,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })
 
+  if (req.session.data.provider.accreditation) {
+    let startsOn = isoDateFromDateInput(req.session.data.provider.accreditation.startsOn)
+    startsOn = new Date(startsOn)
+
+    let endsOn = null
+    if (isoDateFromDateInput(req.session.data.provider.accreditation.endsOn) !== 'Invalid DateTime') {
+     endsOn =  isoDateFromDateInput(req.session.data.provider.accreditation.endsOn)
+     endsOn = new Date(endsOn)
+    }
+
+    await ProviderAccreditation.create({
+      id: uuid(),
+      providerId,
+      number: req.session.data.provider.accreditation.number,
+      startsOn,
+      endsOn,
+      createdAt: new Date(),
+      createdById: req.session.passport.user.id
+    })
+  }
+
+  if (req.session.data.provider.address) {
+    await ProviderAddress.create({
+      id: uuid(),
+      providerId,
+      line1: req.session.data.provider.address.line1,
+      line2: req.session.data.provider.address.line2 ? req.session.data.provider.address.line2 : null,
+      line3: req.session.data.provider.address.line3 ? req.session.data.provider.address.line3 : null,
+      town: req.session.data.provider.address.town,
+      county: req.session.data.provider.address.county ? req.session.data.provider.address.county : null,
+      postcode: req.session.data.provider.address.postcode,
+      createdAt: new Date(),
+      createdById: req.session.passport.user.id
+    })
+  }
+
   delete req.session.data.provider
 
   req.flash('success', 'Provider added')
-  res.redirect('/providers')
+  res.redirect(`/providers`)
 }
 
 /// ------------------------------------------------------------------------ ///
