@@ -1,7 +1,7 @@
 const govukPrototypeKit = require('govuk-prototype-kit')
 const addFilter = govukPrototypeKit.views.addFilter
 
-const { DateTime } = require('luxon')
+const { govukDate, govukDateTime, govukTime, isoDateFromDateInput } = require('./helpers/dates.js')
 
 /* ------------------------------------------------------------------
 utility function to get an error for a component
@@ -52,18 +52,6 @@ addFilter('getProviderTypeLabel', (code) => {
  example: {{ params.date | govukDate }}
  outputs: 1 January 1970
 ------------------------------------------------------------------ */
-const govukDate = (timestamp) => {
-  const format = 'd MMMM yyyy'
-
-  let datetime = DateTime.fromJSDate(timestamp, { locale: 'en-GB' }).toFormat(format)
-
-  if (datetime === 'Invalid DateTime') {
-    datetime = DateTime.fromISO(timestamp, { locale: 'en-GB' }).toFormat(format)
-  }
-
-  return datetime
-}
-
 addFilter('govukDate', govukDate)
 
 /* ------------------------------------------------------------------
@@ -71,27 +59,6 @@ addFilter('govukDate', govukDate)
  example: {{ params.date | govukTime }}
  outputs: 3:33pm
 ------------------------------------------------------------------ */
-const govukTime = (timestamp) => {
-  let datetime = DateTime.fromJSDate(timestamp, { locale: 'en-GB' })
-
-  if (datetime === 'Invalid DateTime') {
-    datetime = DateTime.fromISO(timestamp, { locale: 'en-GB' })
-  }
-
-  const hour = datetime.toFormat('h:mm').replace(':00', '')
-  const meridiem = datetime.toFormat('a').toLowerCase()
-
-  let time = `${hour}${meridiem}`
-
-  if (time === '12am') {
-    time = '12am (midnight)'
-  } else if (time === '12pm') {
-    time = '12pm (midday)'
-  }
-
-  return time
-}
-
 addFilter('govukTime', govukTime)
 
 /* ------------------------------------------------------------------
@@ -101,15 +68,11 @@ addFilter('govukTime', govukTime)
  example: {{ params.date | govukDateTime("on") }}
  outputs: 3:33pm on 1 January 1970
 ------------------------------------------------------------------ */
-const govukDateTime = (timestamp, format = false) => {
-  if (timestamp === 'today' || timestamp === 'now') {
-    timestamp = DateTime.now().toString()
-  }
-
-  const date = govukDate(timestamp)
-  const time = govukTime(timestamp)
-
-  return format === 'on' ? `${time} on ${date}` : `${date} at ${time}`
-}
-
 addFilter('govukDateTime', govukDateTime)
+
+/* ------------------------------------------------------------------
+ date input filter for use in Nunjucks
+ example: {{ params.dateObject | isoDateFromDateInput }}
+ outputs: 1970-01-01
+------------------------------------------------------------------ */
+addFilter('isoDateFromDateInput', isoDateFromDateInput)
