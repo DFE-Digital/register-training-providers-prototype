@@ -33,7 +33,7 @@ module.exports = {
           created_by_id: createdById // Default user
         }))
 
-      // Insert transformed data into the 'Users' table
+      // Insert transformed data into the 'provider_addresses' table
       await queryInterface.bulkInsert('provider_addresses', formattedProviderAddresses, {})
     } catch (error) {
       console.error('Provider address seeding error:', error);

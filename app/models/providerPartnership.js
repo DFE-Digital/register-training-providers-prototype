@@ -64,7 +64,8 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'ProviderPartnership',
-      tableName: 'provider_partnerships'
+      tableName: 'provider_partnerships',
+      timestamps: false
     }
   )
 

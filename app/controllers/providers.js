@@ -1,4 +1,5 @@
 const Pagination = require('../helpers/pagination')
+const { isoDateFromDateInput } = require('../helpers/dates')
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderAddress, ProviderContact, ProviderAccreditation } = require('../models')
 
@@ -52,8 +53,12 @@ exports.providerDetails = async (req, res) => {
   res.render('providers/show', { provider })
 }
 
-exports.newProvider_get = async (req, res) => {
-  res.render('providers/edit', {
+/// ------------------------------------------------------------------------ ///
+/// New provider
+/// ------------------------------------------------------------------------ ///
+
+exports.newProviderIsAccredited_get = async (req, res) => {
+  res.render('providers/new/is-accredited', {
     provider: req.session.data.provider,
     actions: {
       back: '/providers',
@@ -63,7 +68,65 @@ exports.newProvider_get = async (req, res) => {
   })
 }
 
-exports.newProvider_post = async (req, res) => {
+exports.newProviderIsAccredited_post = async (req, res) => {
+  const errors = []
+
+  if (errors.length) {
+    res.render('providers/new/is-accredited', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers',
+        cancel: '/providers',
+        save: '/providers/new'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/type')
+  }
+}
+
+exports.newProviderType_get = async (req, res) => {
+  res.render('providers/new/type', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new',
+      cancel: '/providers',
+      save: '/providers/new/type'
+    }
+  })
+}
+
+exports.newProviderType_post = async (req, res) => {
+  const errors = []
+
+  if (errors.length) {
+    res.render('providers/new/type', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers/new',
+        cancel: '/providers',
+        save: '/providers/new/type'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/details')
+  }
+}
+
+exports.newProviderDetails_get = async (req, res) => {
+  res.render('providers/edit', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new/type',
+      cancel: '/providers',
+      save: '/providers/new/details'
+    }
+  })
+}
+
+exports.newProviderDetails_post = async (req, res) => {
   const errors = []
 
   if (!req.session.data.provider.operatingName.length) {
@@ -74,12 +137,14 @@ exports.newProvider_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.provider.legalName.length) {
-    const error = {}
-    error.fieldName = 'legalName'
-    error.href = '#legalName'
-    error.text = 'Enter a legal name'
-    errors.push(error)
+  if (req.session.data.provider?.type !== 'school') {
+    if (!req.session.data.provider.legalName.length) {
+      const error = {}
+      error.fieldName = 'legalName'
+      error.href = '#legalName'
+      error.text = 'Enter a legal name'
+      errors.push(error)
+    }
   }
 
   if (!req.session.data.provider.type) {
@@ -95,9 +160,138 @@ exports.newProvider_post = async (req, res) => {
       provider: req.session.data.provider,
       errors,
       actions: {
-        back: '/providers',
+        back: '/providers/new/type',
         cancel: '/providers',
-        save: '/providers/new'
+        save: '/providers/new/details'
+      }
+    })
+  } else {
+    if (req.session.data.provider.isAccredited == "yes") {
+      res.redirect('/providers/new/accreditation')
+    } else {
+      res.redirect('/providers/new/address')
+    }
+  }
+}
+
+exports.newProviderAccreditation_get = async (req, res) => {
+  res.render('providers/accreditation', {
+    provider: req.session.data.provider,
+    actions: {
+      back: '/providers/new/details',
+      cancel: '/providers',
+      save: '/providers/new/accreditation'
+    }
+  })
+}
+
+exports.newProviderAccreditation_post = async (req, res) => {
+  const errors = []
+
+  if (!req.session.data.provider.accreditation.number.length) {
+    const error = {}
+    error.fieldName = "number"
+    error.href = "#number"
+    error.text = "Enter accredited provider number"
+    errors.push(error)
+  }
+
+  if (!(req.session.data.provider.accreditation.startsOn?.day.length
+    && req.session.data.provider.accreditation.startsOn?.month.length
+    && req.session.data.provider.accreditation.startsOn?.year.length)
+  ) {
+    const error = {}
+    error.fieldName = "startsOn"
+    error.href = "#startsOn"
+    error.text = "Enter date accreditation starts"
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    res.render('providers/accreditation', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back: '/providers/new/details',
+        cancel: '/providers',
+        save: '/providers/new/accreditation'
+      }
+    })
+  } else {
+    res.redirect('/providers/new/address')
+  }
+}
+
+exports.newProviderAddress_get = async (req, res) => {
+  let back
+  if (req.session.data.provider.isAccredited == "yes") {
+    back = '/providers/new/accreditation'
+  } else {
+    back = '/providers/new/details'
+  }
+
+  res.render('providers/address', {
+    provider: req.session.data.provider,
+    actions: {
+      back,
+      cancel: '/providers',
+      save: '/providers/new/address'
+    }
+  })
+}
+
+exports.newProviderAddress_post = async (req, res) => {
+  const errors = []
+
+  if (!req.session.data.provider.address.line1.length) {
+    const error = {}
+    error.fieldName = "address-line-1"
+    error.href = "#address-line-1"
+    error.text = "Enter address line 1"
+    errors.push(error)
+  }
+
+  if (!req.session.data.provider.address.town.length) {
+    const error = {}
+    error.fieldName = "address-town"
+    error.href = "#address-town"
+    error.text = "Enter a town or city"
+    errors.push(error)
+  }
+
+  if (!req.session.data.provider.address.postcode.length) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a postcode"
+    errors.push(error)
+  // } else if (
+  //   !validationHelper.isValidPostcode(
+  //     req.session.data.provider.address.postcode
+  //   )
+  // ) {
+  //   const error = {}
+  //   error.fieldName = "address-postcode"
+  //   error.href = "#address-postcode"
+  //   error.text = "Enter a real postcode"
+  //   errors.push(error)
+  }
+
+  if (errors.length) {
+    let back
+    if (req.session.data.provider.isAccredited == "yes") {
+      back = '/providers/new/accreditation'
+    } else {
+      back = '/providers/new/details'
+    }
+
+    res.render('providers/address', {
+      provider: req.session.data.provider,
+      errors,
+      actions: {
+        back,
+        cancel: '/providers',
+        save: '/providers/new/address'
       }
     })
   } else {
@@ -106,6 +300,12 @@ exports.newProvider_post = async (req, res) => {
 }
 
 exports.newProviderCheck_get = async (req, res) => {
+
+  console.log(isoDateFromDateInput(req.session.data.provider.accreditation.startsOn));
+  console.log(isoDateFromDateInput(req.session.data.provider.accreditation.endsOn));
+
+  console.log(new Date(isoDateFromDateInput(req.session.data.provider.accreditation.startsOn)));
+
   res.render('providers/check-your-answers', {
     provider: req.session.data.provider,
     actions: {
@@ -117,22 +317,65 @@ exports.newProviderCheck_get = async (req, res) => {
 }
 
 exports.newProviderCheck_post = async (req, res) => {
-  const provider = await Provider.create({
-    id: uuid(),
+  const providerId = uuid()
+
+  await Provider.create({
+    id: providerId,
     operatingName: req.session.data.provider.operatingName,
     legalName: req.session.data.provider.legalName,
     type: req.session.data.provider.type,
     code: req.session.data.provider.code,
     ukprn: req.session.data.provider.ukprn,
+    urn: req.session.data.provider.urn ? req.session.data.provider.urn : null,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })
 
+  if (req.session.data.provider.accreditation) {
+    let startsOn = isoDateFromDateInput(req.session.data.provider.accreditation.startsOn)
+    startsOn = new Date(startsOn)
+
+    let endsOn = null
+    if (isoDateFromDateInput(req.session.data.provider.accreditation.endsOn) !== 'Invalid DateTime') {
+     endsOn =  isoDateFromDateInput(req.session.data.provider.accreditation.endsOn)
+     endsOn = new Date(endsOn)
+    }
+
+    await ProviderAccreditation.create({
+      id: uuid(),
+      providerId,
+      number: req.session.data.provider.accreditation.number,
+      startsOn,
+      endsOn,
+      createdAt: new Date(),
+      createdById: req.session.passport.user.id
+    })
+  }
+
+  if (req.session.data.provider.address) {
+    await ProviderAddress.create({
+      id: uuid(),
+      providerId,
+      line1: req.session.data.provider.address.line1,
+      line2: req.session.data.provider.address.line2 ? req.session.data.provider.address.line2 : null,
+      line3: req.session.data.provider.address.line3 ? req.session.data.provider.address.line3 : null,
+      town: req.session.data.provider.address.town,
+      county: req.session.data.provider.address.county ? req.session.data.provider.address.county : null,
+      postcode: req.session.data.provider.address.postcode,
+      createdAt: new Date(),
+      createdById: req.session.passport.user.id
+    })
+  }
+
   delete req.session.data.provider
 
   req.flash('success', 'Provider added')
-  res.redirect('/providers')
+  res.redirect(`/providers`)
 }
+
+/// ------------------------------------------------------------------------ ///
+/// Edit provider
+/// ------------------------------------------------------------------------ ///
 
 exports.editProvider_get = async (req, res) => {
   const currentProvider = await Provider.findByPk(req.params.providerId)
@@ -228,6 +471,10 @@ exports.editProviderCheck_post = async (req, res) => {
   req.flash('success', 'Provider updated')
   res.redirect(`/providers/${req.params.providerId}`)
 }
+
+/// ------------------------------------------------------------------------ ///
+/// Delete provider
+/// ------------------------------------------------------------------------ ///
 
 exports.deleteProvider_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)

@@ -71,7 +71,8 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'ProviderHistory',
-      tableName: 'provider_histories'
+      tableName: 'provider_histories',
+      timestamps: false
     }
   )
 

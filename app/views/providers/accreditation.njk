@@ -1,0 +1,149 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Accreditation details" %}
+
+{% if currentProvider %}
+  {% set caption = currentProvider.operatingName %}
+{% else %}
+  {% set caption = "Add provider" %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ caption }}</span>
+        {{ title }}
+      </h1>
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml
+        }
+      }) %}
+
+        {{ govukInput({
+          id: "number",
+          name: "provider[accreditation][number]",
+          label: {
+            text: "Accredited provider number",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "A unique 4 digit code assigned by DfE to accredited providers"
+          },
+          errorMessage: errors | getErrorMessage("number"),
+          value: provider.number,
+          classes: "govuk-!-width-one-quarter"
+        }) }}
+
+        {{ govukDateInput({
+          fieldset: {
+            legend: {
+              text: "Date accreditation starts",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: "For example, 1 9 2024"
+          },
+          items: [
+            {
+              id: "startsOn-day",
+              name: "provider[accreditation][startsOn][day]",
+              label: "Day",
+              value: provider.accreditation.startsOn.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
+            },
+            {
+              id: "startsOn-month",
+              name: "provider[accreditation][startsOn][month]",
+              label: "Month",
+              value: provider.accreditation.startsOn.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
+            },
+            {
+              id: "startsOn-year",
+              name: "provider[accreditation][startsOn][year]",
+              label: "Year",
+              value: provider.accreditation.startsOn.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
+            }
+          ],
+          errorMessage: errors | getErrorMessage("startsOn")
+        }) }}
+
+        {{ govukDateInput({
+          fieldset: {
+            legend: {
+              text: "Date accreditation ends (optional)",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: "For example, 31 8 2026"
+          },
+          items: [
+            {
+              id: "endsOn-day",
+              name: "provider[accreditation][endsOn][day]",
+              label: "Day",
+              value: provider.accreditation["endsOn-day"],
+              classes: "govuk-input--width-2"
+            },
+            {
+              id: "endsOn-month",
+              name: "provider[accreditation][endsOn][month]",
+              label: "Month",
+              value: provider.accreditation["endsOn-month"],
+              classes: "govuk-input--width-2"
+            },
+            {
+              id: "endsOn-year",
+              name: "provider[accreditation][endsOn][year]",
+              label: "Year",
+              value: provider.accreditation["endsOn-year"],
+              classes: "govuk-input--width-4"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

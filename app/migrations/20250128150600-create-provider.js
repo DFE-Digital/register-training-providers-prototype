@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      urn: {
+        type: Sequelize.STRING
+      },
       code: {
         type: Sequelize.STRING,
         allowNull: false

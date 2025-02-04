@@ -5,7 +5,7 @@
 {% set title = "Check your answers" %}
 
 {% if currentProvider %}
-  {% set caption = currentProvider.operating_name %}
+  {% set caption = currentProvider.operatingName %}
 {% else %}
   {% set caption = "Add provider" %}
 {% endif %}
@@ -53,7 +53,8 @@
               text: "Legal name"
             },
             value: {
-              text: provider.legalName
+              text: provider.legalName if provider.legalName else "Not entered",
+              classes: "govuk-hint" if not provider.legalName.length
             },
             actions: {
               items: [
@@ -70,7 +71,7 @@
               text: "Provider type"
             },
             value: {
-              text: provider.type
+              text: provider.type | getProviderTypeLabel
             },
             actions: {
               items: [
@@ -111,11 +112,11 @@
                 {
                   href: "#",
                   text: "Change",
-                  visuallyHiddenText: "unique reference number"
+                  visuallyHiddenText: "unique reference number (URN)"
                 }
               ]
             }
-          },
+          } if provider.type == "school",
           {
             key: {
               text: "Provider code"
@@ -129,6 +130,149 @@
                   href: "#",
                   text: "Change",
                   visuallyHiddenText: "provider code"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {% if provider.isAccredited == "yes" %}
+        <h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
+
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Accredited provider number"
+              },
+              value: {
+                text: provider.accreditation.number
+              }
+            },
+            {
+              key: {
+                text: "Date accreditation starts"
+              },
+              value: {
+                text: provider.accreditation.startsOn | isoDateFromDateInput | govukDate
+              }
+            },
+            {
+              key: {
+                text: "Date accreditation ends"
+              },
+              value: {
+                text: provider.accreditation.endsOn | isoDateFromDateInput | govukDate if provider.accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
+                classes: "govuk-hint" if provider.accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+              }
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-7">Address</h2>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Address line 1"
+            },
+            value: {
+              text: provider.address.line1
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address line 1"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Address line 2"
+            },
+            value: {
+              text: provider.address.line2
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address line 2"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Address line 3"
+            },
+            value: {
+              text: provider.address.line3
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "address line 3"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Town"
+            },
+            value: {
+              text: provider.address.town
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "town"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "County"
+            },
+            value: {
+              text: provider.address.county
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "county"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Postcode"
+            },
+            value: {
+              text: provider.address.postcode
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "postcode"
                 }
               ]
             }

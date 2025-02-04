@@ -70,7 +70,7 @@
             text: "Provider type"
           },
           value: {
-            text: provider.type if provider.type.length else "Not entered",
+            text: provider.type | getProviderTypeLabel if provider.type.length else "Not entered",
             classes: "govuk-hint" if not provider.type.length
           },
           actions: {
@@ -138,109 +138,11 @@
       ]
     }) }}
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
+    {% include "./_accreditations.njk" %}
 
-    {{ govukButton({
-      text: "Add accreditation",
-      href: "#"
-    }) }}
+    {% include "./_addresses.njk" %}
 
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-7">Addresses</h2>
-
-    {{ govukButton({
-      text: "Add address",
-      href: "#"
-    }) }}
-
-    {% if provider.addresses.length %}
-      {% for address in provider.addresses %}
-        {{ govukSummaryList({
-          card: {
-            title: {
-              text: "Address " + loop.index
-            },
-            actions: {
-              items: [
-                {
-                  href: "#",
-                  text: "Delete",
-                  visuallyHiddenText: "address " + loop.index
-                },
-                {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: "address " + loop.index
-                }
-              ]
-            }
-          },
-          rows: [
-            {
-              key: {
-                text: "Address line 1"
-              },
-              value: {
-                text: address.line1
-              }
-            },
-            {
-              key: {
-                text: "Address line 2"
-              },
-              value: {
-                text: address.line2
-              }
-            },
-            {
-              key: {
-                text: "Address line 3"
-              },
-              value: {
-                text: address.line3
-              }
-            },
-            {
-              key: {
-                text: "Town"
-              },
-              value: {
-                text: address.town
-              }
-            },
-            {
-              key: {
-                text: "County"
-              },
-              value: {
-                text: address.county
-              }
-            },
-            {
-              key: {
-                text: "Postcode"
-              },
-              value: {
-                text: address.postcode
-              }
-            }
-          ]
-        }) }}
-
-      {% endfor %}
-    {% else %}
-      <p class="govuk-body">
-        There are no addresses for {{ provider.operatingName if provider.operatingName else "this provider" }}.
-      </p>
-    {% endif %}
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-7">Contacts</h2>
-
-    {{ govukButton({
-      text: "Add contact",
-      href: "#"
-    }) }}
-
+    {% include "./_contacts.njk" %}
 
   </div>
 </div>
