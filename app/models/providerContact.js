@@ -4,17 +4,17 @@ module.exports = (sequelize) => {
   class ProviderContact extends Model {
     static associate(models) {
       ProviderContact.belongsTo(models.Provider, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'provider'
       })
 
       ProviderContact.belongsTo(models.User, {
-        foreignKey: 'created_by_id',
+        foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
       ProviderContact.belongsTo(models.User, {
-        foreignKey: 'updated_by_id',
+        foreignKey: 'updatedById',
         as: 'updatedByUser'
       })
     }

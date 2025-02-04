@@ -4,46 +4,46 @@ module.exports = (sequelize) => {
   class Provider extends Model {
     static associate(models) {
       Provider.hasMany(models.ProviderAccreditation, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'accreditations'
       })
 
       Provider.hasMany(models.ProviderAddress, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'addresses'
       })
 
       Provider.hasMany(models.ProviderContact, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'contacts'
       })
 
       Provider.hasMany(models.ProviderHistory, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'histories'
       })
 
       Provider.belongsToMany(models.Provider, {
         through: models.ProviderPartnership,
         as: 'trainingPartnerships',
-        foreignKey: 'training_provider_id',
-        otherKey: 'accredited_provider_id'
+        foreignKey: 'trainingProviderId',
+        otherKey: 'accreditedProviderId'
       })
 
       Provider.belongsToMany(models.Provider, {
         through: models.ProviderPartnership,
         as: 'accreditedPartnerships',
-        foreignKey: 'accredited_provider_id',
-        otherKey: 'training_provider_id'
+        foreignKey: 'accreditedProviderId',
+        otherKey: 'trainingProviderId'
       })
 
       Provider.belongsTo(models.User, {
-        foreignKey: 'created_by_id',
+        foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
       Provider.belongsTo(models.User, {
-        foreignKey: 'updated_by_id',
+        foreignKey: 'updatedById',
         as: 'updatedByUser'
       })
     }
