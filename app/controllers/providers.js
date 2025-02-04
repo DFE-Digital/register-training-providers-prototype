@@ -1,5 +1,6 @@
 const Pagination = require('../helpers/pagination')
 const { isoDateFromDateInput } = require('../helpers/dates')
+const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderAddress, ProviderContact, ProviderAccreditation } = require('../models')
 
@@ -34,6 +35,9 @@ exports.providersList = async (req, res) => {
 }
 
 exports.providerDetails = async (req, res) => {
+  // Clear session provider data
+  delete req.session.data.provider
+
   const provider = await Provider.findByPk(req.params.providerId, {
     include: [
       {
@@ -265,16 +269,12 @@ exports.newProviderAddress_post = async (req, res) => {
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
     errors.push(error)
-  // } else if (
-  //   !validationHelper.isValidPostcode(
-  //     req.session.data.provider.address.postcode
-  //   )
-  // ) {
-  //   const error = {}
-  //   error.fieldName = "address-postcode"
-  //   error.href = "#address-postcode"
-  //   error.text = "Enter a real postcode"
-  //   errors.push(error)
+  } else if (!isValidPostcode(req.session.data.provider.address.postcode)) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a real postcode"
+    errors.push(error)
   }
 
   if (errors.length) {
@@ -300,13 +300,7 @@ exports.newProviderAddress_post = async (req, res) => {
 }
 
 exports.newProviderCheck_get = async (req, res) => {
-
-  console.log(isoDateFromDateInput(req.session.data.provider.accreditation.startsOn));
-  console.log(isoDateFromDateInput(req.session.data.provider.accreditation.endsOn));
-
-  console.log(new Date(isoDateFromDateInput(req.session.data.provider.accreditation.startsOn)));
-
-  res.render('providers/check-your-answers', {
+  res.render('providers/new/check-your-answers', {
     provider: req.session.data.provider,
     actions: {
       back: `/providers/new`,
@@ -382,16 +376,21 @@ exports.editProvider_get = async (req, res) => {
 
   let provider
   if (req.session.data.provider) {
-    provider = req.session.data.provider
+    provider = {...currentProvider.dataValues, ...req.session.data.provider}
   } else {
     provider = currentProvider
+  }
+
+  let back = `/providers/${req.params.providerId}`
+  if (req.query.referrer === 'check') {
+    back = `/providers/${req.params.providerId}/edit/check`
   }
 
   res.render('providers/edit', {
     currentProvider,
     provider,
     actions: {
-      back: `/providers/${req.params.providerId}`,
+      back,
       cancel: `/providers/${req.params.providerId}`,
       save: `/providers/${req.params.providerId}/edit`
     }
@@ -399,6 +398,9 @@ exports.editProvider_get = async (req, res) => {
 }
 
 exports.editProvider_post = async (req, res) => {
+  const currentProvider = await Provider.findByPk(req.params.providerId)
+  const provider = {...currentProvider.dataValues, ...req.session.data.provider}
+
   const errors = []
 
   if (!req.session.data.provider.operatingName.length) {
@@ -417,20 +419,43 @@ exports.editProvider_post = async (req, res) => {
     errors.push(error)
   }
 
-  // if (!req.session.data.provider.ukprn.length) {
-  //   const error = {}
-  //   error.fieldName = 'ukprn'
-  //   error.href = '#ukprn'
-  //   error.text = 'Enter a UK provider reference number (UKPRN)'
-  //   errors.push(error)
-  // }
+  if (!req.session.data.provider.ukprn.length) {
+    const error = {}
+    error.fieldName = 'ukprn'
+    error.href = '#ukprn'
+    error.text = 'Enter a UK provider reference number (UKPRN)'
+    errors.push(error)
+  }
+
+  if (provider.type === 'school') {
+    if (!req.session.data.provider.urn.length) {
+      const error = {}
+      error.fieldName = 'urn'
+      error.href = '#urn'
+      error.text = 'Enter a unique reference number (URN)'
+      errors.push(error)
+    }
+  }
+
+  if (!req.session.data.provider.code.length) {
+    const error = {}
+    error.fieldName = 'code'
+    error.href = '#code'
+    error.text = 'Enter a provider code'
+    errors.push(error)
+  }
 
   if (errors.length) {
+    let back = `/providers/${req.params.providerId}`
+    if (req.query.referrer === 'check') {
+      back = `/providers/${req.params.providerId}/edit/check`
+    }
+
     res.render('providers/edit', {
-      provider: req.session.data.provider,
+      provider,
       errors,
       actions: {
-        back: `/providers/${req.params.providerId}`,
+        back,
         cancel: `/providers/${req.params.providerId}`,
         save: `/providers/${req.params.providerId}/edit`
       }
@@ -442,10 +467,11 @@ exports.editProvider_post = async (req, res) => {
 
 exports.editProviderCheck_get = async (req, res) => {
   const currentProvider = await Provider.findByPk(req.params.providerId)
+  const provider = {...currentProvider.dataValues, ...req.session.data.provider}
 
-  res.render('providers/check-your-answers', {
+  res.render('providers/edit/check-your-answers', {
     currentProvider,
-    provider: req.session.data.provider,
+    provider,
     actions: {
       back: `/providers/${req.params.providerId}/edit`,
       cancel: `/providers/${req.params.providerId}`,
@@ -459,9 +485,10 @@ exports.editProviderCheck_post = async (req, res) => {
   provider.update({
     operatingName: req.session.data.provider.operatingName,
     legalName: req.session.data.provider.legalName,
-    type: req.session.data.provider.type,
-    // code: 'O1A',
-    // ukprn: 1234567,
+    // type: req.session.data.provider.type,
+    code: req.session.data.provider.code,
+    ukprn: req.session.data.provider.ukprn,
+    urn: req.session.data.provider.urn ? req.session.data.provider.urn : null,
     updatedAt: new Date(),
     updatedById: req.session.passport.user.id
   })
