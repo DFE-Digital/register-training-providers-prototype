@@ -34,7 +34,7 @@ addFilter('getProviderTypeLabel', (code) => {
 
   switch (code) {
     case 'hei':
-      label = 'Higher education institution'
+      label = 'Higher education institution (HEI)'
       break
     case 'scitt':
       label = 'School-centred initial teacher training (SCITT)'
