@@ -23,6 +23,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      urn: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       code: {
         type: Sequelize.STRING,
         allowNull: false

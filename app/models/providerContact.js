@@ -4,17 +4,17 @@ module.exports = (sequelize) => {
   class ProviderContact extends Model {
     static associate(models) {
       ProviderContact.belongsTo(models.Provider, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'provider'
       })
 
       ProviderContact.belongsTo(models.User, {
-        foreignKey: 'created_by_id',
+        foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
       ProviderContact.belongsTo(models.User, {
-        foreignKey: 'updated_by_id',
+        foreignKey: 'updatedById',
         as: 'updatedByUser'
       })
     }
@@ -32,13 +32,15 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'provider_id'
       },
-      first_name: {
+      firstName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'first_name'
       },
-      last_name: {
+      lastName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'last_name'
       },
       email: {
         type: DataTypes.STRING,

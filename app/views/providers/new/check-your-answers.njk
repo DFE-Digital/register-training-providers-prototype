@@ -3,12 +3,7 @@
 {% set primaryNavId = "providers" %}
 
 {% set title = "Check your answers" %}
-
-{% if currentProvider %}
-  {% set caption = currentProvider.operatingName %}
-{% else %}
-  {% set caption = "Add provider" %}
-{% endif %}
+{% set caption = "Add provider" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -31,6 +26,23 @@
 
       {{ govukSummaryList({
         rows: [
+          {
+            key: {
+              text: "Provider type"
+            },
+            value: {
+              text: provider.type | getProviderTypeLabel
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "provider type"
+                }
+              ]
+            }
+          },
           {
             key: {
               text: "Operating name"
@@ -62,23 +74,6 @@
                   href: "#",
                   text: "Change",
                   visuallyHiddenText: "legal name"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Provider type"
-            },
-            value: {
-              text: provider.type | getProviderTypeLabel
-            },
-            actions: {
-              items: [
-                {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: "provider type"
                 }
               ]
             }

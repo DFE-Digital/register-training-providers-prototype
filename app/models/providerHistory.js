@@ -4,17 +4,17 @@ module.exports = (sequelize) => {
   class ProviderHistory extends Model {
     static associate(models) {
       ProviderHistory.belongsTo(models.Provider, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'provider'
       })
 
       ProviderHistory.belongsTo(models.User, {
-        foreignKey: 'created_by_id',
+        foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
       ProviderHistory.belongsTo(models.User, {
-        foreignKey: 'updated_by_id',
+        foreignKey: 'updatedById',
         as: 'updatedByUser'
       })
     }
@@ -42,6 +42,10 @@ module.exports = (sequelize) => {
         field: 'legal_name'
       },
       ukprn: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      urn: {
         type: DataTypes.STRING,
         allowNull: false
       },

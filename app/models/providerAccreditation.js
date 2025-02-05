@@ -4,17 +4,17 @@ module.exports = (sequelize) => {
   class ProviderAccreditation extends Model {
     static associate(models) {
       ProviderAccreditation.belongsTo(models.Provider, {
-        foreignKey: 'provider_id',
+        foreignKey: 'providerId',
         as: 'provider'
       })
 
       ProviderAccreditation.belongsTo(models.User, {
-        foreignKey: 'created_by_id',
+        foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
       ProviderAccreditation.belongsTo(models.User, {
-        foreignKey: 'updated_by_id',
+        foreignKey: 'updatedById',
         as: 'updatedByUser'
       })
     }

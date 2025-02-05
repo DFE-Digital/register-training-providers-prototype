@@ -91,9 +91,15 @@ const isoDateFromDateInput = (object, namePrefix) => {
   }
 }
 
+const isValidDate = (value) => {
+  const date = new Date(value)
+  return date instanceof Date && !isNaN(date)
+}
+
 module.exports = {
   govukDate,
   govukDateTime,
   govukTime,
-  isoDateFromDateInput
+  isoDateFromDateInput,
+  isValidDate
 }
