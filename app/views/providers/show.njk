@@ -138,7 +138,9 @@
       ]
     }) }}
 
-    {% include "./_accreditations.njk" %}
+    {% if provider.type in ["hei","scitt"] %}
+      {% include "./_accreditations.njk" %}
+    {% endif %}
 
     {% include "./_addresses.njk" %}
 
