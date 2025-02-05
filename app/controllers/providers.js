@@ -411,12 +411,14 @@ exports.editProvider_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.provider.legalName.length) {
-    const error = {}
-    error.fieldName = 'legalName'
-    error.href = '#legalName'
-    error.text = 'Enter a legal name'
-    errors.push(error)
+  if (['hei','scitt'].includes(provider.type)) {
+    if (!req.session.data.provider.legalName.length) {
+      const error = {}
+      error.fieldName = 'legalName'
+      error.href = '#legalName'
+      error.text = 'Enter a legal name'
+      errors.push(error)
+    }
   }
 
   if (!req.session.data.provider.ukprn.length) {
