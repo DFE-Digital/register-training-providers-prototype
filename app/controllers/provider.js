@@ -234,7 +234,7 @@ exports.newProviderAddress_get = async (req, res) => {
     back = '/providers/new/details'
   }
 
-  res.render('providers/address', {
+  res.render('providers/new/address', {
     provider: req.session.data.provider,
     actions: {
       back,
@@ -285,7 +285,7 @@ exports.newProviderAddress_post = async (req, res) => {
       back = '/providers/new/details'
     }
 
-    res.render('providers/address', {
+    res.render('providers/new/address', {
       provider: req.session.data.provider,
       errors,
       actions: {
