@@ -73,21 +73,21 @@
               id: "startsOn-day",
               name: "accreditation[startsOn][day]",
               label: "Day",
-              value: accreditation.startsOn.day,
+              value: accreditation.startsOn | getDay or accreditation.startsOn.day,
               classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
             },
             {
               id: "startsOn-month",
               name: "accreditation[startsOn][month]",
               label: "Month",
-              value: accreditation.startsOn.month,
+              value: accreditation.startsOn | getMonth or accreditation.startsOn.month,
               classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
             },
             {
               id: "startsOn-year",
               name: "accreditation[startsOn][year]",
               label: "Year",
-              value: accreditation.startsOn.year,
+              value: accreditation.startsOn | getYear or accreditation.startsOn.year,
               classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
             }
           ],
@@ -110,22 +110,22 @@
               id: "endsOn-day",
               name: "accreditation[endsOn][day]",
               label: "Day",
-              value: accreditation["endsOn-day"],
-              classes: "govuk-input--width-2"
+              value: accreditation.endsOn | getDay or accreditation.endsOn.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             },
             {
               id: "endsOn-month",
               name: "accreditation[endsOn][month]",
               label: "Month",
-              value: accreditation["endsOn-month"],
-              classes: "govuk-input--width-2"
+              value: accreditation.endsOn | getMonth or accreditation.endsOn.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             },
             {
               id: "endsOn-year",
               name: "accreditation[endsOn][year]",
               label: "Year",
-              value: accreditation["endsOn-year"],
-              classes: "govuk-input--width-4"
+              value: accreditation.endsOn | getYear or accreditation.endsOn.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             }
           ]
         }) }}
