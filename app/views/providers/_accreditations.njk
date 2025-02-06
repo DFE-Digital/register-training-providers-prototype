@@ -2,7 +2,7 @@
 
 {{ govukButton({
   text: "Add accreditation",
-  href: "#"
+  href: actions.accreditation.new
 }) }}
 
 {% if provider.accreditations.length %}
@@ -15,12 +15,12 @@
         actions: {
           items: [
             {
-              href: "#",
-              text: "Delete",
+              href: actions.accreditation.delete + "/" + accreditation.id + "/delete",
+              text: "Remove",
               visuallyHiddenText: "accreditation " + loop.index
             },
             {
-              href: "#",
+              href: actions.accreditation.change + "/" + accreditation.id + "/edit",
               text: "Change",
               visuallyHiddenText: "accreditation " + loop.index
             }
