@@ -2,7 +2,7 @@
 
 {{ govukButton({
   text: "Add address",
-  href: "#"
+  href: actions.address.new
 }) }}
 
 {% if provider.addresses.length %}
@@ -15,12 +15,12 @@
         actions: {
           items: [
             {
-              href: "#",
-              text: "Delete",
+              href: actions.address.delete + "/" + address.id + "/delete",
+              text: "Remove",
               visuallyHiddenText: "address " + loop.index
             },
             {
-              href: "#",
+              href: actions.address.change + "/" + address.id + "/edit",
               text: "Change",
               visuallyHiddenText: "address " + loop.index
             }

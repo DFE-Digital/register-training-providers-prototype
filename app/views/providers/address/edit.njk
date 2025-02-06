@@ -1,0 +1,134 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Address" %}
+
+{% if currentAddress %}
+  {% set caption = provider.operatingName %}
+{% else %}
+  {% set caption = "Add address - " + provider.operatingName %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+        {{ govukInput({
+          id: "address-line-1",
+          name: "address[line1]",
+          label: {
+            text: "Address line 1",
+            classes: "govuk-label--s"
+          },
+          autocomplete: "address-line1",
+          errorMessage: errors | getErrorMessage("address-line-1"),
+          value: address.line1
+        }) }}
+
+        {{ govukInput({
+          id: "address-line-2",
+          name: "address[line2]",
+          label: {
+            text: "Address line 2 (optional)",
+            classes: "govuk-label--s"
+          },
+          autocomplete: "address-line2",
+          errorMessage: errors | getErrorMessage("address-line-2"),
+          value: address.line2
+        }) }}
+
+        {{ govukInput({
+          id: "address-line-3",
+          name: "address[line3]",
+          label: {
+            text: "Address line 3 (optional)",
+            classes: "govuk-label--s"
+          },
+          autocomplete: "address-line3",
+          errorMessage: errors | getErrorMessage("address-line-3"),
+          value: address.line3
+        }) }}
+
+        {{ govukInput({
+          id: "address-town",
+          name: "address[town]",
+          label: {
+            text: "Town or city",
+            classes: "govuk-label--s"
+          },
+          classes: "govuk-!-width-two-thirds",
+          autocomplete: "address-level2",
+          errorMessage: errors | getErrorMessage("address-town"),
+          value: address.town
+        }) }}
+
+        {{ govukInput({
+          id: "address-county",
+          name: "address[county]",
+          label: {
+            text: "County (optional)",
+            classes: "govuk-label--s"
+          },
+          classes: "govuk-!-width-two-thirds",
+          errorMessage: errors | getErrorMessage("address-county"),
+          value: address.county
+        }) }}
+
+        {{ govukInput({
+          id: "address-postcode",
+          name: "address[postcode]",
+          label: {
+            text: "Postcode",
+            classes: "govuk-label--s"
+          },
+          classes: "govuk-input--width-10",
+          autocomplete: "postal-code",
+          errorMessage: errors | getErrorMessage("address-postcode"),
+          value: address.postcode
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
