@@ -29,6 +29,7 @@ const passport = {
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
 const providerController = require('./controllers/provider')
+const providerAccreditationController = require('./controllers/providerAccreditation')
 const providerAddressController = require('./controllers/providerAddress')
 const userController = require('./controllers/user')
 
@@ -81,6 +82,29 @@ router.get('/users/:userId', checkIsAuthenticated, userController.userDetails)
 router.get('/users', checkIsAuthenticated, userController.usersList)
 
 /// ------------------------------------------------------------------------ ///
+/// PROVIDER ACCREDITATION ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/providers/:providerId/accreditations/new', checkIsAuthenticated, providerAccreditationController.newProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/new', checkIsAuthenticated, providerAccreditationController.newProviderAccreditation_post)
+
+router.get('/providers/:providerId/accreditations/new/check', checkIsAuthenticated, providerAccreditationController.newProviderAccreditationCheck_get)
+router.post('/providers/:providerId/accreditations/new/check', checkIsAuthenticated, providerAccreditationController.newProviderAccreditationCheck_post)
+
+router.get('/providers/:providerId/accreditations/:accreditationId/edit', checkIsAuthenticated, providerAccreditationController.editProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/edit', checkIsAuthenticated, providerAccreditationController.editProviderAccreditation_post)
+
+router.get('/providers/:providerId/accreditations/:accreditationId/edit/check', checkIsAuthenticated, providerAccreditationController.editProviderAccreditationCheck_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/edit/check', checkIsAuthenticated, providerAccreditationController.editProviderAccreditationCheck_post)
+
+router.get('/providers/:providerId/accreditations/:accreditationId/delete', checkIsAuthenticated, providerAccreditationController.deleteProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/delete', checkIsAuthenticated, providerAccreditationController.deleteProviderAccreditation_post)
+
+router.get('/providers/:providerId/accreditations/:accreditationId', checkIsAuthenticated, providerAccreditationController.providerAccreditationDetails)
+
+router.get('/providers/:providerId/accreditations', checkIsAuthenticated, providerAccreditationController.providerAccreditationsList)
+
+/// ------------------------------------------------------------------------ ///
 /// PROVIDER ADDRESS ROUTES
 /// ------------------------------------------------------------------------ ///
 
@@ -102,7 +126,6 @@ router.post('/providers/:providerId/addresses/:addressId/delete', checkIsAuthent
 router.get('/providers/:providerId/addresses/:addressId', checkIsAuthenticated, providerAddressController.providerAddressDetails)
 
 router.get('/providers/:providerId/addresses', checkIsAuthenticated, providerAddressController.providerAddressesList)
-
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ROUTES
