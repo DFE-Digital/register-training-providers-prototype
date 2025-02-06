@@ -17,7 +17,7 @@ exports.providerAddressesList = async (req, res) => {
   })
 
   // Only fetch ONE page of addresses
-  const providerAddresses = await ProviderAddress.findAll({
+  const addresses = await address.findAll({
     where: { providerId: req.params.providerId },
     order: [['id', 'ASC']],
     limit,
@@ -26,10 +26,10 @@ exports.providerAddressesList = async (req, res) => {
 
   // Create your Pagination object
   // using the chunk + the overall total count
-  const pagination = new Pagination(providerAddresses, totalCount, page, limit)
+  const pagination = new Pagination(addresses, totalCount, page, limit)
 
-  // Clear session provider data
-  delete req.session.data.provider
+  // Clear session address data
+  delete req.session.data.address
 
   res.render('providers/addresses/index', {
     // Addresses for *this* page
@@ -44,10 +44,10 @@ exports.providerAddressesList = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.providerAddressDetails = async (req, res) => {
-  // Clear session provider data
-  delete req.session.data.provider
+  // Clear session address data
+  delete req.session.data.address
 
-  const providerAddress = await ProviderAddress.findByPk(req.params.addressId, {
+  const address = await ProviderAddress.findByPk(req.params.addressId, {
     include: [
       {
         model: Provider,
@@ -55,7 +55,7 @@ exports.providerAddressDetails = async (req, res) => {
       }
     ]
   })
-  res.render('providers/addresses/show', { providerAddress })
+  res.render('providers/addresses/show', { address })
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -277,17 +277,17 @@ exports.editProviderAddressCheck_get = async (req, res) => {
 }
 
 exports.editProviderAddressCheck_post = async (req, res) => {
-const address = await ProviderAddress.findByPk(req.params.addressId)
-await address.update({
-  line1: req.session.data.address.line1,
-  line2: req.session.data.address.line2.length ? req.session.data.address.line2 : null,
-  line3: req.session.data.address.line3.length ? req.session.data.address.line3 : null,
-  town: req.session.data.address.town,
-  county: req.session.data.address.county.length ? req.session.data.address.county : null,
-  postcode: req.session.data.address.postcode,
-  updatedAt: new Date(),
-  updatedById: req.session.passport.user.id
-})
+  const address = await ProviderAddress.findByPk(req.params.addressId)
+  await address.update({
+    line1: req.session.data.address.line1,
+    line2: req.session.data.address.line2.length ? req.session.data.address.line2 : null,
+    line3: req.session.data.address.line3.length ? req.session.data.address.line3 : null,
+    town: req.session.data.address.town,
+    county: req.session.data.address.county.length ? req.session.data.address.county : null,
+    postcode: req.session.data.address.postcode,
+    updatedAt: new Date(),
+    updatedById: req.session.passport.user.id
+  })
 
   delete req.session.data.address
 
