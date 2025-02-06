@@ -28,8 +28,9 @@ const passport = {
 /// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
-const providerController = require('./controllers/providers')
-const userController = require('./controllers/users')
+const providerController = require('./controllers/provider')
+const providerAddressController = require('./controllers/providerAddress')
+const userController = require('./controllers/user')
 
 /// ------------------------------------------------------------------------ ///
 /// Authentication middleware
@@ -78,6 +79,30 @@ router.post('/users/:userId/delete', checkIsAuthenticated, userController.delete
 router.get('/users/:userId', checkIsAuthenticated, userController.userDetails)
 
 router.get('/users', checkIsAuthenticated, userController.usersList)
+
+/// ------------------------------------------------------------------------ ///
+/// PROVIDER ADDRESS ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newProviderAddress_get)
+router.post('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newProviderAddress_post)
+
+router.get('/providers/:providerId/addresses/new/check', checkIsAuthenticated, providerAddressController.newProviderAddressCheck_get)
+router.post('/providers/:providerId/addresses/new/check', checkIsAuthenticated, providerAddressController.newProviderAddressCheck_post)
+
+router.get('/providers/:providerId/addresses/:addressId/edit', checkIsAuthenticated, providerAddressController.editProviderAddress_get)
+router.post('/providers/:providerId/addresses/:addressId/edit', checkIsAuthenticated, providerAddressController.editProviderAddress_post)
+
+router.get('/providers/:providerId/addresses/:addressId/edit/check', checkIsAuthenticated, providerAddressController.editProviderAddressCheck_get)
+router.post('/providers/:providerId/addresses/:addressId/edit/check', checkIsAuthenticated, providerAddressController.editProviderAddressCheck_post)
+
+router.get('/providers/:providerId/addresses/:addressId/delete', checkIsAuthenticated, providerAddressController.deleteProviderAddress_get)
+router.post('/providers/:providerId/addresses/:addressId/delete', checkIsAuthenticated, providerAddressController.deleteProviderAddress_post)
+
+router.get('/providers/:providerId/addresses/:addressId', checkIsAuthenticated, providerAddressController.providerAddressDetails)
+
+router.get('/providers/:providerId/addresses', checkIsAuthenticated, providerAddressController.providerAddressesList)
+
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ROUTES
