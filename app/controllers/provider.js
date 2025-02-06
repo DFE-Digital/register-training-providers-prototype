@@ -54,7 +54,16 @@ exports.providerDetails = async (req, res) => {
       }
     ]
   })
-  res.render('providers/show', { provider })
+  res.render('providers/show', {
+    provider,
+    actions: {
+      address: {
+        change: `/providers/${req.params.providerId}/addresses`,
+        delete: `/providers/${req.params.providerId}/addresses`,
+        new: `/providers/${req.params.providerId}/addresses/new`
+      }
+    }
+   })
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -320,7 +329,7 @@ exports.newProviderCheck_post = async (req, res) => {
     type: req.session.data.provider.type,
     code: req.session.data.provider.code,
     ukprn: req.session.data.provider.ukprn,
-    urn: req.session.data.provider.urn ? req.session.data.provider.urn : null,
+    urn: req.session.data.provider.urn.length ? req.session.data.provider.urn : null,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })
@@ -351,10 +360,10 @@ exports.newProviderCheck_post = async (req, res) => {
       id: uuid(),
       providerId,
       line1: req.session.data.provider.address.line1,
-      line2: req.session.data.provider.address.line2 ? req.session.data.provider.address.line2 : null,
-      line3: req.session.data.provider.address.line3 ? req.session.data.provider.address.line3 : null,
+      line2: req.session.data.provider.address.line2.length ? req.session.data.provider.address.line2 : null,
+      line3: req.session.data.provider.address.line3.length ? req.session.data.provider.address.line3 : null,
       town: req.session.data.provider.address.town,
-      county: req.session.data.provider.address.county ? req.session.data.provider.address.county : null,
+      county: req.session.data.provider.address.county.length ? req.session.data.provider.address.county : null,
       postcode: req.session.data.provider.address.postcode,
       createdAt: new Date(),
       createdById: req.session.passport.user.id
@@ -484,7 +493,7 @@ exports.editProviderCheck_get = async (req, res) => {
 
 exports.editProviderCheck_post = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
-  provider.update({
+  await provider.update({
     operatingName: req.session.data.provider.operatingName,
     legalName: req.session.data.provider.legalName,
     // type: req.session.data.provider.type,
