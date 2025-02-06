@@ -1,7 +1,15 @@
 const govukPrototypeKit = require('govuk-prototype-kit')
 const addFilter = govukPrototypeKit.views.addFilter
 
-const { govukDate, govukDateTime, govukTime, isoDateFromDateInput } = require('./helpers/dates.js')
+const {
+  govukDate,
+  govukDateTime,
+  govukTime,
+  isoDateFromDateInput,
+  getDateParts,
+  getDay,
+  getMonth,
+  getYear } = require('./helpers/dates.js')
 
 /* ------------------------------------------------------------------
 utility function to get an error for a component
@@ -76,3 +84,31 @@ addFilter('govukDateTime', govukDateTime)
  outputs: 1970-01-01
 ------------------------------------------------------------------ */
 addFilter('isoDateFromDateInput', isoDateFromDateInput)
+
+/* ------------------------------------------------------------------
+get date part filter for use in Nunjucks
+ example: {{ '1970-01-01' | getDateParts }}
+ outputs: { day: 1, month: 1, year: 1970 }
+------------------------------------------------------------------ */
+addFilter('getDateParts', getDateParts)
+
+/* ------------------------------------------------------------------
+ get day filter for use in Nunjucks
+ example: {{ '1970-01-01' | getDay }}
+ outputs: 1
+------------------------------------------------------------------ */
+addFilter('getDay', getDay)
+
+/* ------------------------------------------------------------------
+ get month filter for use in Nunjucks
+ example: {{ '1970-01-01' | getMonth }}
+ outputs: 1
+------------------------------------------------------------------ */
+addFilter('getMonth', getMonth)
+
+/* ------------------------------------------------------------------
+ get year filter for use in Nunjucks
+ example: {{ '1970-01-01' | getYear }}
+ outputs: 1970
+------------------------------------------------------------------ */
+addFilter('getYear', getYear)
