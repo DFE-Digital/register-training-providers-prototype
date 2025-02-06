@@ -96,10 +96,54 @@ const isValidDate = (value) => {
   return date instanceof Date && !isNaN(date)
 }
 
+// Single function returning day, month, and year as an object:
+const getDateParts = (timestamp) => {
+  if (!isValidDate(timestamp)) {
+    return null
+  }
+
+  const date = new Date(timestamp)
+
+  return {
+    day: date.getDate(),
+    month: date.getMonth() + 1, // getMonth() is zero-based
+    year: date.getFullYear()
+  }
+}
+
+// Individual helper functions:
+const getDay = (timestamp) => {
+  if (!isValidDate(timestamp)) {
+    return null
+  }
+
+  return new Date(timestamp).getDate()
+}
+
+const getMonth = (timestamp) => {
+  if (!isValidDate(timestamp)) {
+    return null
+  }
+
+  return new Date(timestamp).getMonth() + 1 // getMonth() is zero-based
+}
+
+const getYear = (timestamp) => {
+  if (!isValidDate(timestamp)) {
+    return null
+  }
+
+  return new Date(timestamp).getFullYear()
+}
+
 module.exports = {
   govukDate,
   govukDateTime,
   govukTime,
   isoDateFromDateInput,
-  isValidDate
+  isValidDate,
+  getDateParts,
+  getDay,
+  getMonth,
+  getYear
 }
