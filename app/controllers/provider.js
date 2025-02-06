@@ -25,6 +25,8 @@ exports.providersList = async (req, res) => {
 
   // Clear session provider data
   delete req.session.data.provider
+  delete req.session.data.accreditation
+  delete req.session.data.address
 
   res.render('providers/index', {
     // Providers for *this* page
@@ -37,6 +39,8 @@ exports.providersList = async (req, res) => {
 exports.providerDetails = async (req, res) => {
   // Clear session provider data
   delete req.session.data.provider
+  delete req.session.data.accreditation
+  delete req.session.data.address
 
   const provider = await Provider.findByPk(req.params.providerId, {
     include: [
