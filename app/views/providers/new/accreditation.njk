@@ -54,7 +54,7 @@
             text: "A unique 4 digit code assigned by DfE to accredited providers"
           },
           errorMessage: errors | getErrorMessage("number"),
-          value: provider.number,
+          value: provider.accreditation.number,
           classes: "govuk-!-width-one-quarter"
         }) }}
 
@@ -111,22 +111,22 @@
               id: "endsOn-day",
               name: "provider[accreditation][endsOn][day]",
               label: "Day",
-              value: provider.accreditation["endsOn-day"],
-              classes: "govuk-input--width-2"
+              value: provider.accreditation.endsOn.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             },
             {
               id: "endsOn-month",
               name: "provider[accreditation][endsOn][month]",
               label: "Month",
-              value: provider.accreditation["endsOn-month"],
-              classes: "govuk-input--width-2"
+              value: provider.accreditation.endsOn.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             },
             {
               id: "endsOn-year",
               name: "provider[accreditation][endsOn][year]",
               label: "Year",
-              value: provider.accreditation["endsOn-year"],
-              classes: "govuk-input--width-4"
+              value: provider.accreditation.endsOn.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             }
           ]
         }) }}

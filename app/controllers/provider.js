@@ -25,6 +25,8 @@ exports.providersList = async (req, res) => {
 
   // Clear session provider data
   delete req.session.data.provider
+  delete req.session.data.accreditation
+  delete req.session.data.address
 
   res.render('providers/index', {
     // Providers for *this* page
@@ -37,6 +39,8 @@ exports.providersList = async (req, res) => {
 exports.providerDetails = async (req, res) => {
   // Clear session provider data
   delete req.session.data.provider
+  delete req.session.data.accreditation
+  delete req.session.data.address
 
   const provider = await Provider.findByPk(req.params.providerId, {
     include: [
@@ -61,6 +65,11 @@ exports.providerDetails = async (req, res) => {
         change: `/providers/${req.params.providerId}/addresses`,
         delete: `/providers/${req.params.providerId}/addresses`,
         new: `/providers/${req.params.providerId}/addresses/new`
+      },
+      accreditation: {
+        change: `/providers/${req.params.providerId}/accreditations`,
+        delete: `/providers/${req.params.providerId}/accreditations`,
+        new: `/providers/${req.params.providerId}/accreditations/new`
       }
     }
    })
@@ -188,7 +197,7 @@ exports.newProviderDetails_post = async (req, res) => {
 }
 
 exports.newProviderAccreditation_get = async (req, res) => {
-  res.render('providers/accreditation', {
+  res.render('providers/new/accreditation', {
     provider: req.session.data.provider,
     actions: {
       back: '/providers/new/details',
@@ -205,7 +214,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
-    error.text = "Enter accredited provider number"
+    error.text = "Enter an accredited provider number"
     errors.push(error)
   }
 
@@ -221,7 +230,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
   }
 
   if (errors.length) {
-    res.render('providers/accreditation', {
+    res.render('providers/new/accreditation', {
       provider: req.session.data.provider,
       errors,
       actions: {
