@@ -1,0 +1,104 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Contact details" %}
+
+{% if currentContact %}
+  {% set caption = provider.operatingName %}
+{% else %}
+  {% set caption = "Add contact - " + provider.operatingName %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+        {{ govukInput({
+          id: "firstName",
+          name: "contact[firstName]",
+          label: {
+            text: "First name",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("firstName"),
+          value: contact.firstName
+        }) }}
+
+        {{ govukInput({
+          id: "lastName",
+          name: "contact[lastName]",
+          label: {
+            text: "Last name",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("lastName"),
+          value: contact.lastName
+        }) }}
+
+        {{ govukInput({
+          id: "email",
+          name: "contact[email]",
+          label: {
+            text: "Email address",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("email"),
+          value: contact.email
+        }) }}
+
+        {{ govukInput({
+          id: "telephone",
+          name: "contact[telephone]",
+          label: {
+            text: "Telephone",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("telephone"),
+          value: contact.telephone
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
