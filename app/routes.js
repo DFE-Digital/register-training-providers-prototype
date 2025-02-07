@@ -31,6 +31,7 @@ const passport = {
 const providerController = require('./controllers/provider')
 const providerAccreditationController = require('./controllers/providerAccreditation')
 const providerAddressController = require('./controllers/providerAddress')
+const providerContactController = require('./controllers/providerContact')
 const userController = require('./controllers/user')
 
 /// ------------------------------------------------------------------------ ///
@@ -103,6 +104,29 @@ router.post('/providers/:providerId/accreditations/:accreditationId/delete', che
 router.get('/providers/:providerId/accreditations/:accreditationId', checkIsAuthenticated, providerAccreditationController.providerAccreditationDetails)
 
 router.get('/providers/:providerId/accreditations', checkIsAuthenticated, providerAccreditationController.providerAccreditationsList)
+
+/// ------------------------------------------------------------------------ ///
+/// PROVIDER CONTACT ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/providers/:providerId/contacts/new', checkIsAuthenticated, providerContactController.newProviderContact_get)
+router.post('/providers/:providerId/contacts/new', checkIsAuthenticated, providerContactController.newProviderContact_post)
+
+router.get('/providers/:providerId/contacts/new/check', checkIsAuthenticated, providerContactController.newProviderContactCheck_get)
+router.post('/providers/:providerId/contacts/new/check', checkIsAuthenticated, providerContactController.newProviderContactCheck_post)
+
+router.get('/providers/:providerId/contacts/:contactId/edit', checkIsAuthenticated, providerContactController.editProviderContact_get)
+router.post('/providers/:providerId/contacts/:contactId/edit', checkIsAuthenticated, providerContactController.editProviderContact_post)
+
+router.get('/providers/:providerId/contacts/:contactId/edit/check', checkIsAuthenticated, providerContactController.editProviderContactCheck_get)
+router.post('/providers/:providerId/contacts/:contactId/edit/check', checkIsAuthenticated, providerContactController.editProviderContactCheck_post)
+
+router.get('/providers/:providerId/contacts/:contactId/delete', checkIsAuthenticated, providerContactController.deleteProviderContact_get)
+router.post('/providers/:providerId/contacts/:contactId/delete', checkIsAuthenticated, providerContactController.deleteProviderContact_post)
+
+router.get('/providers/:providerId/contacts/:contactId', checkIsAuthenticated, providerContactController.providerContactDetails)
+
+router.get('/providers/:providerId/contacts', checkIsAuthenticated, providerContactController.providerContactsList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ADDRESS ROUTES

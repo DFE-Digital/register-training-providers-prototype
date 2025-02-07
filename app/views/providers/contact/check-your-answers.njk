@@ -4,10 +4,10 @@
 
 {% set title = "Check your answers" %}
 
-{% if currentAccreditation %}
+{% if currentContact %}
   {% set caption = provider.operatingName %}
 {% else %}
-  {% set caption = "Add accreditation - " + provider.operatingName %}
+  {% set caption = "Add contact - " + provider.operatingName %}
 {% endif %}
 
 {% block beforeContent %}
@@ -33,52 +33,70 @@
         rows: [
           {
             key: {
-              text: "Accredited provider number"
+              text: "First name"
             },
             value: {
-              text: accreditation.number
+              text: contact.firstName
             },
             actions: {
               items: [
                 {
                   href: actions.change + "?referrer=check",
                   text: "Change",
-                  visuallyHiddenText: "accredited provider number"
+                  visuallyHiddenText: "first name"
                 }
               ]
             }
           },
           {
             key: {
-              text: "Date accreditation starts"
+              text: "Last name"
             },
             value: {
-              text: accreditation.startsOn | isoDateFromDateInput | govukDate
+              text: contact.lastName
             },
             actions: {
               items: [
                 {
                   href: actions.change + "?referrer=check",
                   text: "Change",
-                  visuallyHiddenText: "date accreditation starts"
+                  visuallyHiddenText: "last name"
                 }
               ]
             }
           },
           {
             key: {
-              text: "Date accreditation ends"
+              text: "Email address"
             },
             value: {
-              text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
-              classes: "govuk-hint" if accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+              text: contact.email if contact.email.length else "Not entered",
+              classes: "govuk-hint" if not contact.email.length
             },
             actions: {
               items: [
                 {
                   href: actions.change + "?referrer=check",
                   text: "Change",
-                  visuallyHiddenText: "date accreditation ends"
+                  visuallyHiddenText: "email address"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Telephone"
+            },
+            value: {
+              text: contact.telephone if contact.telephone.length else "Not entered",
+              classes: "govuk-hint" if not contact.telephone.length
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "telephone"
                 }
               ]
             }
@@ -87,7 +105,7 @@
       }) }}
 
       {{ govukButton({
-        text: "Save accreditation"
+        text: "Save contact"
       }) }}
 
     </form>

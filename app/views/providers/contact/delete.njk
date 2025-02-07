@@ -2,8 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Are you sure you want to remove " + provider.operatingName + "’s accreditation?" %}
-{% set caption = "Remove accreditation" %}
+{% set title = "Are you sure you want to remove " + provider.operatingName + "’s contact?" %}
+{% set caption = "Remove contact" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -24,10 +24,8 @@
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
 
-      {# TODO: Show aaccreditation being deleted #}
-
       {{ govukButton({
-        text: "Remove accreditation",
+        text: "Remove contact",
         classes: "govuk-button--warning"
       }) }}
 

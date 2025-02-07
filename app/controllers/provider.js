@@ -70,6 +70,11 @@ exports.providerDetails = async (req, res) => {
         change: `/providers/${req.params.providerId}/accreditations`,
         delete: `/providers/${req.params.providerId}/accreditations`,
         new: `/providers/${req.params.providerId}/accreditations/new`
+      },
+      contact: {
+        change: `/providers/${req.params.providerId}/contacts`,
+        delete: `/providers/${req.params.providerId}/contacts`,
+        new: `/providers/${req.params.providerId}/contacts/new`
       }
     }
    })
