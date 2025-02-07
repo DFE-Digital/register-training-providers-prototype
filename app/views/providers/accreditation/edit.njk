@@ -110,21 +110,21 @@
               id: "endsOn-day",
               name: "accreditation[endsOn][day]",
               label: "Day",
-              value: accreditation.endsOn | getDay or accreditation.endsOn.day,
+              value: (accreditation.endsOn | getDay if accreditation.endsOn) or accreditation.endsOn.day,
               classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             },
             {
               id: "endsOn-month",
               name: "accreditation[endsOn][month]",
               label: "Month",
-              value: accreditation.endsOn | getMonth or accreditation.endsOn.month,
+              value: (accreditation.endsOn | getMonth if accreditation.endsOn) or accreditation.endsOn.month,
               classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             },
             {
               id: "endsOn-year",
               name: "accreditation[endsOn][year]",
               label: "Year",
-              value: accreditation.endsOn | getYear or accreditation.endsOn.year,
+              value: (accreditation.endsOn | getYear if accreditation.endsOn) or accreditation.endsOn.year,
               classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
             }
           ]
