@@ -30,61 +30,61 @@
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
       {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Accredited provider number"
-              },
-              value: {
-                text: accreditation.number
-              },
-              actions: {
-                items: [
-                  {
-                    href: actions.change + "?referrer=check",
-                    text: "Change",
-                    visuallyHiddenText: "accredited provider number"
-                  }
-                ]
-              }
+        rows: [
+          {
+            key: {
+              text: "Accredited provider number"
             },
-            {
-              key: {
-                text: "Date accreditation starts"
-              },
-              value: {
-                text: accreditation.startsOn | isoDateFromDateInput | govukDate
-              },
-              actions: {
-                items: [
-                  {
-                    href: actions.change + "?referrer=check",
-                    text: "Change",
-                    visuallyHiddenText: "date accreditation starts"
-                  }
-                ]
-              }
+            value: {
+              text: accreditation.number
             },
-            {
-              key: {
-                text: "Date accreditation ends"
-              },
-              value: {
-                text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
-                classes: "govuk-hint" if accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
-              },
-              actions: {
-                items: [
-                  {
-                    href: actions.change + "?referrer=check",
-                    text: "Change",
-                    visuallyHiddenText: "date accreditation ends"
-                  }
-                ]
-              }
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "accredited provider number"
+                }
+              ]
             }
-          ]
-        }) }}
+          },
+          {
+            key: {
+              text: "Date accreditation starts"
+            },
+            value: {
+              text: accreditation.startsOn | isoDateFromDateInput | govukDate
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "date accreditation starts"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Date accreditation ends"
+            },
+            value: {
+              text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
+              classes: "govuk-hint" if accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "date accreditation ends"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
 
       {{ govukButton({
         text: "Save accreditation"
