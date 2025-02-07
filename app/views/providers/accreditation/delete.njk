@@ -3,7 +3,7 @@
 {% set primaryNavId = "providers" %}
 
 {% set title = "Are you sure you want to remove " + provider.operatingName + "’s accreditation?" %}
-{% set caption = "Remove provider accreditation" %}
+{% set caption = "Remove accreditation" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -27,7 +27,7 @@
       {# TODO: Show address being deleted #}
 
       {{ govukButton({
-        text: "Remove provider accreditation",
+        text: "Remove accreditation",
         classes: "govuk-button--warning"
       }) }}
 
