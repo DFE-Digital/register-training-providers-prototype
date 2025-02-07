@@ -2,7 +2,7 @@
 
 {{ govukButton({
   text: "Add contact",
-  href: "#"
+  href: actions.contact.new
 }) }}
 
 {% if provider.contacts.length %}
@@ -15,12 +15,12 @@
         actions: {
           items: [
             {
-              href: "#",
-              text: "Delete",
+              href: actions.contact.delete + "/" + contact.id + "/delete",
+              text: "Remove",
               visuallyHiddenText: "contact " + loop.index
             },
             {
-              href: "#",
+              href: actions.contact.change + "/" + contact.id + "/edit",
               text: "Change",
               visuallyHiddenText: "contact " + loop.index
             }
@@ -30,10 +30,18 @@
       rows: [
         {
           key: {
-            text: "Full name"
+            text: "First name"
           },
           value: {
-            text: contact.fullName
+            text: contact.firstName
+          }
+        },
+        {
+          key: {
+            text: "Last name"
+          },
+          value: {
+            text: contact.lastName
           }
         },
         {
