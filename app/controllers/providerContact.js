@@ -100,6 +100,22 @@ exports.newProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
+  if (!req.session.data.contact.email.length) {
+    const error = {}
+    error.fieldName = "email"
+    error.href = "#email"
+    error.text = "Enter an email address"
+    errors.push(error)
+  }
+
+  if (!req.session.data.contact.telephone.length) {
+    const error = {}
+    error.fieldName = "telephone"
+    error.href = "#telephone"
+    error.text = "Enter a telephone number"
+    errors.push(error)
+  }
+
   if (errors.length) {
     let back = `/providers/${req.params.providerId}`
     if (req.query.referrer === 'check') {
@@ -141,8 +157,8 @@ exports.newProviderContactCheck_post = async (req, res) => {
     providerId: req.params.providerId,
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,
-    email: req.session.data.contact.email,
-    telephone: req.session.data.contact.telephone,
+    email: req.session.data.contact.email.length ? req.session.data.contact.email : null,
+    telephone: req.session.data.contact.telephone.length ? req.session.data.contact.telephone : null,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })
@@ -207,6 +223,22 @@ exports.editProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
+  if (!req.session.data.contact.email.length) {
+    const error = {}
+    error.fieldName = "email"
+    error.href = "#email"
+    error.text = "Enter an email address"
+    errors.push(error)
+  }
+
+  if (!req.session.data.contact.telephone.length) {
+    const error = {}
+    error.fieldName = "telephone"
+    error.href = "#telephone"
+    error.text = "Enter a telephone number"
+    errors.push(error)
+  }
+
   if (errors.length) {
     let back = `/providers/${req.params.providerId}`
     if (req.query.referrer === 'check') {
@@ -251,8 +283,8 @@ exports.editProviderContactCheck_post = async (req, res) => {
   await contact.update({
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,
-    email: req.session.data.contact.email,
-    telephone: req.session.data.contact.telephone,
+    email: req.session.data.contact.email.length ? req.session.data.contact.email : null,
+    telephone: req.session.data.contact.telephone.length ? req.session.data.contact.telephone : null,
     updatedAt: new Date(),
     updatedById: req.session.passport.user.id
   })
