@@ -49,7 +49,8 @@
             text: "Email address"
           },
           value: {
-            text: contact.email
+            text: contact.email if contact.email.length else "Not entered",
+            classes: "govuk-hint" if not contact.email.length
           }
         },
         {
@@ -57,7 +58,8 @@
             text: "Telephone"
           },
           value: {
-            text: contact.telephone
+            text: contact.telephone if contact.telephone.length else "Not entered",
+            classes: "govuk-hint" if not contact.telephone.length
           }
         }
       ]

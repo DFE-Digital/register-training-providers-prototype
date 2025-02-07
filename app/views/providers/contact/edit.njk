@@ -50,7 +50,8 @@
             classes: "govuk-label--s"
           },
           errorMessage: errors | getErrorMessage("firstName"),
-          value: contact.firstName
+          value: contact.firstName,
+          classes: "govuk-!-width-two-thirds"
         }) }}
 
         {{ govukInput({
@@ -61,7 +62,8 @@
             classes: "govuk-label--s"
           },
           errorMessage: errors | getErrorMessage("lastName"),
-          value: contact.lastName
+          value: contact.lastName,
+          classes: "govuk-!-width-two-thirds"
         }) }}
 
         {{ govukInput({
@@ -83,7 +85,8 @@
             classes: "govuk-label--s"
           },
           errorMessage: errors | getErrorMessage("telephone"),
-          value: contact.telephone
+          value: contact.telephone,
+          classes: "govuk-!-width-one-half"
         }) }}
 
         {{ govukButton({
