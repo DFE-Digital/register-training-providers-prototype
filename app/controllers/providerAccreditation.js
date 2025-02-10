@@ -40,11 +40,11 @@ exports.providerAccreditationsList = async (req, res) => {
 }
 
 /// ------------------------------------------------------------------------ ///
-/// Show single provider accreditataion
+/// Show single provider accreditation
 /// ------------------------------------------------------------------------ ///
 
 exports.providerAccreditationDetails = async (req, res) => {
-  // Clear session provider data
+  // Clear session accreditation data
   delete req.session.data.accreditation
 
   const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId, {
