@@ -108,12 +108,205 @@ exports.providerPartnershipDetails = async (req, res) => {
 /// New provider partnership
 /// ------------------------------------------------------------------------ ///
 
+exports.newProviderPartnership_get = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+
+  let back = `/providers/${req.params.providerId}`
+  if (req.query.referrer === 'check') {
+    back = `/providers/${req.params.providerId}/partnerships/new/check`
+  }
+
+  res.render('providers/partnership/edit', {
+    provider,
+    partnership: req.session.data.partnership,
+    actions: {
+      back,
+      cancel: `/providers/${req.params.providerId}`,
+      save: `/providers/${req.params.providerId}/partnerships/new`
+    }
+  })
+}
+
+exports.newProviderPartnership_post = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+  const errors = []
+
+  if (!req.session.data.partnership.number.length) {
+    const error = {}
+    error.fieldName = "number"
+    error.href = "#number"
+    error.text = "Enter an accredited provider number"
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    let back = `/providers/${req.params.providerId}`
+    if (req.query.referrer === 'check') {
+      back = `/providers/${req.params.providerId}/partnerships/new/check`
+    }
+
+    res.render('providers/partnership/edit', {
+      provider,
+      partnership: req.session.data.partnership,
+      errors,
+      actions: {
+        back,
+        cancel: `/providers/${req.params.providerId}`,
+        save: `/providers/${req.params.providerId}/partnerships/new`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${req.params.providerId}/partnerships/new/check`)
+  }
+}
+
+exports.newProviderPartnershipCheck_get = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+  res.render('providers/partnership/check-your-answers', {
+    provider,
+    partnership: req.session.data.partnership,
+    actions: {
+      back: `/providers/${req.params.providerId}/partnerships/new`,
+      cancel: `/providers/${req.params.providerId}`,
+      change: `/providers/${req.params.providerId}/partnerships/new`,
+      save: `/providers/${req.params.providerId}/partnerships/new/check`
+    }
+  })
+}
+
+exports.newProviderPartnershipCheck_post = async (req, res) => {
+  await ProviderPartnership.create({
+    id: uuid(),
+    createdAt: new Date(),
+    createdById: req.session.passport.user.id
+  })
+
+  delete req.session.data.partnership
+
+  req.flash('success', 'Partnership added')
+  res.redirect(`/providers/${req.params.providerId}`)
+}
 
 /// ------------------------------------------------------------------------ ///
 /// Edit provider partnership
 /// ------------------------------------------------------------------------ ///
 
+exports.editProviderPartnership_get = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+  const currentPartnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+
+  let partnership
+  if (req.session.data?.partnership) {
+    partnership = req.session.data.partnership
+  } else {
+    partnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+  }
+
+  let back = `/providers/${req.params.providerId}`
+  if (req.query.referrer === 'check') {
+    back = `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit/check`
+  }
+
+  res.render('providers/partnership/edit', {
+    provider,
+    currentPartnership,
+    partnership,
+    actions: {
+      back,
+      cancel: `/providers/${req.params.providerId}`,
+      save: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit`
+    }
+  })
+}
+
+exports.editProviderPartnership_post = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+  const currentPartnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+
+  const errors = []
+
+  if (!req.session.data.partnership.number.length) {
+    const error = {}
+    error.fieldName = "number"
+    error.href = "#number"
+    error.text = "Enter an accredited provider number"
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    let back = `/providers/${req.params.providerId}`
+    if (req.query.referrer === 'check') {
+      back = `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit/check`
+    }
+
+    res.render('providers/partnership/edit', {
+      provider,
+      currentPartnership,
+      partnership: req.session.data.partnership,
+      errors,
+      actions: {
+        back,
+        cancel: `/providers/${req.params.providerId}`,
+        save: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit/check`)
+  }
+}
+
+exports.editProviderPartnershipCheck_get = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+  const currentPartnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+
+  res.render('providers/partnership/check-your-answers', {
+    provider,
+    currentPartnership,
+    partnership: req.session.data.partnership,
+    actions: {
+      back: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit`,
+      cancel: `/providers/${req.params.providerId}`,
+      change: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit`,
+      save: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/edit/check`
+    }
+  })
+}
+
+exports.editProviderPartnershipCheck_post = async (req, res) => {
+  const partnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+  await partnership.update({
+    updatedAt: new Date(),
+    updatedById: req.session.passport.user.id
+  })
+
+  delete req.session.data.partnership
+
+  req.flash('success', 'Partnership updated')
+  res.redirect(`/providers/${req.params.providerId}`)
+}
 
 /// ------------------------------------------------------------------------ ///
-/// Remove provider partnership
+/// Delete provider partnership
 /// ------------------------------------------------------------------------ ///
+
+exports.deleteProviderPartnership_get = async (req, res) => {
+  const provider = await Provider.findByPk(req.params.providerId)
+  const partnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+  res.render('providers/partnership/delete', {
+    provider,
+    partnership,
+    actions: {
+      back: `/providers/${req.params.providerId}`,
+      cancel: `/providers/${req.params.providerId}`,
+      save: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/delete`
+    }
+  })
+}
+
+exports.deleteProviderPartnership_post = async (req, res) => {
+  const partnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+  await partnership.destroy()
+
+  req.flash('success', 'Partnership removed')
+  res.redirect(`/providers/${req.params.providerId}`)
+}
