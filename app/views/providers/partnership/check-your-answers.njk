@@ -1,0 +1,44 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Check your answers" %}
+
+{% if currentPartnership %}
+  {% set caption = provider.operatingName %}
+{% else %}
+  {% set caption = "Add partnership - " + provider.operatingName %}
+{% endif %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+
+
+      {{ govukButton({
+        text: "Save partnership"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
