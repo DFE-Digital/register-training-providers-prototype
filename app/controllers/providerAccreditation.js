@@ -292,10 +292,10 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
 
 exports.deleteProviderAccreditation_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
-  const accreditataion = await ProviderAccreditation.findByPk(req.params.accreditationId)
+  const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
   res.render('providers/accreditation/delete', {
     provider,
-    accreditataion,
+    accreditation,
     actions: {
       back: `/providers/${req.params.providerId}`,
       cancel: `/providers/${req.params.providerId}`,
