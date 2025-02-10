@@ -25,14 +25,14 @@ module.exports = (sequelize) => {
 
       Provider.belongsToMany(models.Provider, {
         through: models.ProviderPartnership,
-        as: 'trainingPartnerships',
+        as: 'accreditedPartnerships',
         foreignKey: 'trainingProviderId',
         otherKey: 'accreditedProviderId'
       })
 
       Provider.belongsToMany(models.Provider, {
         through: models.ProviderPartnership,
-        as: 'accreditedPartnerships',
+        as: 'trainingPartnerships',
         foreignKey: 'accreditedProviderId',
         otherKey: 'trainingProviderId'
       })
