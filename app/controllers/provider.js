@@ -9,7 +9,7 @@ const {
   ProviderAccreditation
 } = require('../models')
 
-const { Op } = require('sequelize')
+const { Op, literal } = require('sequelize')
 
 exports.providersList = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1
@@ -582,4 +582,96 @@ exports.deleteProvider_post = async (req, res) => {
 
   req.flash('success', 'Provider removed')
   res.redirect('/providers')
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Autocomplete data
+/// ------------------------------------------------------------------------ ///
+
+exports.accreditedProviderSuggestions_json = async (req, res) => {
+  req.headers['Access-Control-Allow-Origin'] = true
+
+  const query = req.query.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: true, // ensures an INNER JOIN
+        where: {
+          startsOn: { [Op.lte]: today },         // started on or before today
+          [Op.or]: [
+            { endsOn: null },                    // no end date
+            { endsOn: { [Op.gte]: today } }      // ends on or after today
+          ]
+        }
+      }
+    ],
+    order: [['operatingName', 'ASC']]
+  })
+
+  res.json(providers)
+}
+
+exports.trainingProviderSuggestions_json = async (req, res) => {
+  req.headers['Access-Control-Allow-Origin'] = true
+
+  const query = req.query.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: false, // LEFT JOIN instead of INNER JOIN
+        attributes: [],
+        where: {
+          // Only match *current* accreditations
+          startsOn: { [Op.lte]: today },
+          [Op.or]: [
+            { endsOn: null },
+            { endsOn: { [Op.gte]: today } }
+          ]
+        }
+      }
+    ],
+    group: ['Provider.id'],
+    having: literal('COUNT("accreditations"."id") = 0'), // Only keep if no valid accreditations
+    order: [['operatingName', 'ASC']]
+  })
+
+  res.json(providers)
 }
