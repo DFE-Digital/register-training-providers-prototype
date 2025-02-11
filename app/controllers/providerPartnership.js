@@ -91,7 +91,8 @@ exports.providerPartnershipsList = async (req, res) => {
 
 exports.providerPartnershipDetails = async (req, res) => {
   // Clear session partnership data
-  delete req.session.data.partnership
+  delete req.session.data.search
+  delete req.session.data.provider
 
   const partnership = await ProviderPartnership.findByPk(req.params.partnershipId, {
     include: [
@@ -116,7 +117,7 @@ exports.newProviderPartnership_get = async (req, res) => {
     back = `/providers/${req.params.providerId}/partnerships/new/check`
   }
 
-  res.render('providers/partnership/edit', {
+  res.render('providers/partnership/find', {
     provider,
     partnership: req.session.data.partnership,
     actions: {
@@ -131,11 +132,11 @@ exports.newProviderPartnership_post = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
   const errors = []
 
-  if (!req.session.data.partnership.number.length) {
+  if (!req.session.data.search.length) {
     const error = {}
-    error.fieldName = "number"
-    error.href = "#number"
-    error.text = "Enter an accredited provider number"
+    error.fieldName = "provider-autocomplete"
+    error.href = "#provider-autocomplete"
+    error.text = "Enter a provider name, UKPRN, URN or postcode"
     errors.push(error)
   }
 
@@ -145,9 +146,8 @@ exports.newProviderPartnership_post = async (req, res) => {
       back = `/providers/${req.params.providerId}/partnerships/new/check`
     }
 
-    res.render('providers/partnership/edit', {
+    res.render('providers/partnership/find', {
       provider,
-      partnership: req.session.data.partnership,
       errors,
       actions: {
         back,
@@ -162,9 +162,10 @@ exports.newProviderPartnership_post = async (req, res) => {
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
+  const partner = await Provider.findByPk(req.session.data.provider.id)
   res.render('providers/partnership/check-your-answers', {
     provider,
-    partnership: req.session.data.partnership,
+    partner,
     actions: {
       back: `/providers/${req.params.providerId}/partnerships/new`,
       cancel: `/providers/${req.params.providerId}`,
@@ -177,11 +178,14 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
 exports.newProviderPartnershipCheck_post = async (req, res) => {
   await ProviderPartnership.create({
     id: uuid(),
+    accreditedProviderId: req.params.providerId,
+    trainingProviderId: req.session.data.provider.id,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })
 
-  delete req.session.data.partnership
+  delete req.session.data.search
+  delete req.session.data.provider
 
   req.flash('success', 'Partnership added')
   res.redirect(`/providers/${req.params.providerId}`)

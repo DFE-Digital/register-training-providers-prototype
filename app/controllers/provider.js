@@ -48,6 +48,7 @@ exports.providerDetails = async (req, res) => {
   delete req.session.data.provider
   delete req.session.data.accreditation
   delete req.session.data.address
+  delete req.session.data.search
 
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
@@ -86,11 +87,7 @@ exports.providerDetails = async (req, res) => {
       },
       {
         model: Provider,
-        as: 'trainingPartnerships'
-      },
-      {
-        model: Provider,
-        as: 'accreditedPartnerships'
+        as: isAccredited ? 'trainingPartnerships' : 'accreditedPartnerships'
       }
     ]
   })
