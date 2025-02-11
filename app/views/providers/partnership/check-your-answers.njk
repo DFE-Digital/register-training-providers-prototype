@@ -18,7 +18,6 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
@@ -26,7 +25,115 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Provider type"
+            },
+            value: {
+              text: partner.type | getProviderTypeLabel if partner.type.length else "Not entered",
+              classes: "govuk-hint" if not partner.type.length
+            },
+            actions: {
+              items: [
+                {
+                  href: "/providers/" + provider.id + "/partnerships/new",
+                  text: "Change",
+                  visuallyHiddenText: "type"
+                }
+              ]
+            } if 1==0
+          },
+          {
+            key: {
+              text: "Operating name"
+            },
+            value: {
+              text: partner.operatingName
+            },
+            actions: {
+              items: [
+                {
+                  href: "/providers/" + provider.id + "/partnerships/new",
+                  text: "Change",
+                  visuallyHiddenText: "operating name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Legal name"
+            },
+            value: {
+              text: partner.legalName if partner.legalName.length else "Not entered",
+              classes: "govuk-hint" if not partner.legalName.length
+            },
+            actions: {
+              items: [
+                {
+                  href: "/providers/" + provider.id + "/partnerships/new",
+                  text: "Change",
+                  visuallyHiddenText: "legal name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "UK provider reference number (UKPRN)"
+            },
+            value: {
+              text: partner.ukprn
+            },
+            actions: {
+              items: [
+                {
+                  href: "/providers/" + provider.id + "/partnerships/new",
+                  text: "Change",
+                  visuallyHiddenText: "UK provider reference number (UKPRN)"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Unique reference number (URN)"
+            },
+            value: {
+              text: partner.urn if partner.urn.length else "Not entered",
+              classes: "govuk-hint" if not partner.urn.length
+            },
+            actions: {
+              items: [
+                {
+                  href: "/providers/" + provider.id + "/partnerships/new",
+                  text: "Change",
+                  visuallyHiddenText: "Unique reference number (URN)"
+                }
+              ]
+            }
+          } if partner.type == "school",
+          {
+            key: {
+              text: "Provider code"
+            },
+            value: {
+              text: partner.code
+            },
+            actions: {
+              items: [
+                {
+                  href: "/providers/" + provider.id + "/partnerships/new",
+                  text: "Change",
+                  visuallyHiddenText: "provider code"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
 
       {{ govukButton({
         text: "Save partnership"
