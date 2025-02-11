@@ -178,6 +178,7 @@ router.get('/providers/:providerId/partnerships', checkIsAuthenticated, provider
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ROUTES
 /// ------------------------------------------------------------------------ ///
+
 router.get('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_get)
 router.post('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_post)
 
@@ -208,5 +209,17 @@ router.post('/providers/:providerId/delete', checkIsAuthenticated, providerContr
 router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
 
 router.get('/providers', checkIsAuthenticated, providerController.providersList)
+
+/// ------------------------------------------------------------------------ ///
+/// AUTOCOMPLETE ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/accredited-provider-suggestions', providerController.accreditedProviderSuggestions_json)
+
+router.get('/training-provider-suggestions', providerController.trainingProviderSuggestions_json)
+
+/// ------------------------------------------------------------------------ ///
+///
+/// ------------------------------------------------------------------------ ///
 
 module.exports = router
