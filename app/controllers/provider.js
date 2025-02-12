@@ -1,4 +1,5 @@
 const Pagination = require('../helpers/pagination')
+const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/dates')
 const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
@@ -53,23 +54,8 @@ exports.providerDetails = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
 
-  // set a date for use in determining if the provider is accredited
-  const now = new Date()
-
-  // find all valid accreditations for the provider
-  const accreditationCount = await ProviderAccreditation.count({
-    where: {
-      providerId,
-      startsOn: { [Op.lte]: now },
-      [Op.or]: [
-        { endsOn: null },
-        { endsOn: { [Op.gte]: now } }
-      ]
-    }
-  })
-
   // calculate if the provider is accredited
-  const isAccredited = ((accreditationCount > 0)) // true|false
+  const isAccredited = await isAccreditedProvider({ providerId })
 
   const provider = await Provider.findByPk(providerId, {
     include: [

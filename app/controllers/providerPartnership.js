@@ -1,6 +1,7 @@
 const Pagination = require('../helpers/pagination')
+const { isAccreditedProvider } = require('../helpers/accreditation')
 const { v4: uuid } = require('uuid')
-const { Provider, ProviderAccreditation, ProviderPartnership } = require('../models')
+const { Provider, ProviderPartnership } = require('../models')
 const { Op } = require('sequelize')
 
 /// ------------------------------------------------------------------------ ///
@@ -18,23 +19,8 @@ exports.providerPartnershipsList = async (req, res) => {
   // get the current provider
   const provider = await Provider.findByPk(providerId)
 
-  // set a date for use in determining if the provider is accredited
-  const now = new Date()
-
-  // find all valid accreditations for the provider
-  const accreditationCount = await ProviderAccreditation.count({
-    where: {
-      providerId,
-      startsOn: { [Op.lte]: now },
-      [Op.or]: [
-        { endsOn: null },
-        { endsOn: { [Op.gte]: now } }
-      ]
-    }
-  })
-
   // calculate if the provider is accredited
-  const isAccredited = ((accreditationCount > 0)) // true|false
+  const isAccredited = await isAccreditedProvider({ providerId })
 
   // Get the total number of partnerships for pagination metadata
   const totalCount = await ProviderPartnership.count({
@@ -116,23 +102,8 @@ exports.newProviderPartnership_get = async (req, res) => {
   // get the current provider
   const provider = await Provider.findByPk(providerId)
 
-  // set a date for use in determining if the provider is accredited
-  const now = new Date()
-
-  // find all valid accreditations for the provider
-  const accreditationCount = await ProviderAccreditation.count({
-    where: {
-      providerId,
-      startsOn: { [Op.lte]: now },
-      [Op.or]: [
-        { endsOn: null },
-        { endsOn: { [Op.gte]: now } }
-      ]
-    }
-  })
-
   // calculate if the provider is accredited
-  const isAccredited = ((accreditationCount > 0)) // true|false
+  const isAccredited = await isAccreditedProvider({ providerId })
 
   let back = `/providers/${req.params.providerId}`
   if (req.query.referrer === 'check') {
@@ -157,23 +128,8 @@ exports.newProviderPartnership_post = async (req, res) => {
   // get the current provider
   const provider = await Provider.findByPk(providerId)
 
-  // set a date for use in determining if the provider is accredited
-  const now = new Date()
-
-  // find all valid accreditations for the provider
-  const accreditationCount = await ProviderAccreditation.count({
-    where: {
-      providerId,
-      startsOn: { [Op.lte]: now },
-      [Op.or]: [
-        { endsOn: null },
-        { endsOn: { [Op.gte]: now } }
-      ]
-    }
-  })
-
   // calculate if the provider is accredited
-  const isAccredited = ((accreditationCount > 0)) // true|false
+  const isAccredited = await isAccreditedProvider({ providerId })
 
   const errors = []
 
@@ -225,23 +181,8 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
 
-  // set a date for use in determining if the provider is accredited
-  const now = new Date()
-
-  // find all valid accreditations for the provider
-  const accreditationCount = await ProviderAccreditation.count({
-    where: {
-      providerId,
-      startsOn: { [Op.lte]: now },
-      [Op.or]: [
-        { endsOn: null },
-        { endsOn: { [Op.gte]: now } }
-      ]
-    }
-  })
-
   // calculate if the provider is accredited
-  const isAccredited = ((accreditationCount > 0)) // true|false
+  const isAccredited = await isAccreditedProvider({ providerId })
 
   if (isAccredited) {
     // if the provider is accredited, the partner provider is the training provider
