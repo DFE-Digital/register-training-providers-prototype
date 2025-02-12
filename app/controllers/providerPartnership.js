@@ -76,19 +76,45 @@ exports.providerPartnershipsList = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.providerPartnershipDetails = async (req, res) => {
-  // Clear session partnership data
-  delete req.session.data.search
+  // clear session partnership data
   delete req.session.data.provider
+  delete req.session.data.search
 
-  const partnership = await ProviderPartnership.findByPk(req.params.partnershipId, {
+  // get the provider and partnership IDs from the request
+  const { providerId, partnershipId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
+  const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
       {
         model: Provider,
-        as: 'provider'
+        as: 'trainingProvider'
+      },
+      {
+        model: Provider,
+        as: 'accreditedProvider'
       }
     ]
   })
-  res.render('providers/partnership/show', { partnership })
+
+  console.log(partnership);
+
+
+  res.render('providers/partnership/show', {
+    provider,
+    partnership,
+    isAccredited,
+    actions: {
+      back: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}`,
+      delete: `/providers/${providerId}/partnerships/${partnershipId}/delete`
+    }
+  })
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -105,9 +131,9 @@ exports.newProviderPartnership_get = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/partnerships/new/check`
+    back = `/providers/${providerId}/partnerships/new/check`
   }
 
   res.render('providers/partnership/find', {
@@ -115,8 +141,8 @@ exports.newProviderPartnership_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/partnerships/new`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/partnerships/new`
     }
   })
 }
@@ -142,9 +168,9 @@ exports.newProviderPartnership_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/partnerships/new/check`
+      back = `/providers/${providerId}/partnerships/new/check`
     }
 
     res.render('providers/partnership/find', {
@@ -153,26 +179,28 @@ exports.newProviderPartnership_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/partnerships/new`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/partnerships/new`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/partnerships/new/check`)
+    res.redirect(`/providers/${providerId}/partnerships/new/check`)
   }
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  // get the provider and partnership IDs from the request
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
   const partner = await Provider.findByPk(req.session.data.provider.id)
   res.render('providers/partnership/check-your-answers', {
     provider,
     partner,
     actions: {
-      back: `/providers/${req.params.providerId}/partnerships/new`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/partnerships/new`,
-      save: `/providers/${req.params.providerId}/partnerships/new/check`
+      back: `/providers/${providerId}/partnerships/new`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/partnerships/new`,
+      save: `/providers/${providerId}/partnerships/new/check`
     }
   })
 }
@@ -208,7 +236,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   delete req.session.data.provider
 
   req.flash('success', 'Partnership added')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -216,23 +244,27 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteProviderPartnership_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const partnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+  // get the provider and partnership IDs from the request
+  const { providerId, partnershipId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const partnership = await ProviderPartnership.findByPk(partnershipId)
   res.render('providers/partnership/delete', {
     provider,
     partnership,
     actions: {
-      back: `/providers/${req.params.providerId}`,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/partnerships/${req.params.partnershipId}/delete`
+      back: `/providers/${providerId}/partnerships/${partnershipId}`,
+      cancel: `/providers/${providerId}/partnerships/${partnershipId}`,
+      save: `/providers/${providerId}/partnerships/${partnershipId}/delete`
     }
   })
 }
 
 exports.deleteProviderPartnership_post = async (req, res) => {
-  const partnership = await ProviderPartnership.findByPk(req.params.partnershipId)
+  // get the provider and partnership IDs from the request
+  const { providerId, partnershipId } = req.params
+  const partnership = await ProviderPartnership.findByPk(partnershipId)
   await partnership.destroy()
 
   req.flash('success', 'Partnership removed')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${providerId}`)
 }
