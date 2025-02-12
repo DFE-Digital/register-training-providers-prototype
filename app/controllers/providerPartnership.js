@@ -110,7 +110,29 @@ exports.providerPartnershipDetails = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.newProviderPartnership_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // set a date for use in determining if the provider is accredited
+  const now = new Date()
+
+  // find all valid accreditations for the provider
+  const accreditationCount = await ProviderAccreditation.count({
+    where: {
+      providerId,
+      startsOn: { [Op.lte]: now },
+      [Op.or]: [
+        { endsOn: null },
+        { endsOn: { [Op.gte]: now } }
+      ]
+    }
+  })
+
+  // calculate if the provider is accredited
+  const isAccredited = ((accreditationCount > 0)) // true|false
 
   let back = `/providers/${req.params.providerId}`
   if (req.query.referrer === 'check') {
@@ -119,7 +141,7 @@ exports.newProviderPartnership_get = async (req, res) => {
 
   res.render('providers/partnership/find', {
     provider,
-    partnership: req.session.data.partnership,
+    isAccredited,
     actions: {
       back,
       cancel: `/providers/${req.params.providerId}`,
@@ -129,7 +151,30 @@ exports.newProviderPartnership_get = async (req, res) => {
 }
 
 exports.newProviderPartnership_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // set a date for use in determining if the provider is accredited
+  const now = new Date()
+
+  // find all valid accreditations for the provider
+  const accreditationCount = await ProviderAccreditation.count({
+    where: {
+      providerId,
+      startsOn: { [Op.lte]: now },
+      [Op.or]: [
+        { endsOn: null },
+        { endsOn: { [Op.gte]: now } }
+      ]
+    }
+  })
+
+  // calculate if the provider is accredited
+  const isAccredited = ((accreditationCount > 0)) // true|false
+
   const errors = []
 
   if (!req.session.data.search.length) {
@@ -148,6 +193,7 @@ exports.newProviderPartnership_post = async (req, res) => {
 
     res.render('providers/partnership/find', {
       provider,
+      isAccredited,
       errors,
       actions: {
         back,
@@ -176,13 +222,46 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
 }
 
 exports.newProviderPartnershipCheck_post = async (req, res) => {
-  await ProviderPartnership.create({
-    id: uuid(),
-    accreditedProviderId: req.params.providerId,
-    trainingProviderId: req.session.data.provider.id,
-    createdAt: new Date(),
-    createdById: req.session.passport.user.id
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // set a date for use in determining if the provider is accredited
+  const now = new Date()
+
+  // find all valid accreditations for the provider
+  const accreditationCount = await ProviderAccreditation.count({
+    where: {
+      providerId,
+      startsOn: { [Op.lte]: now },
+      [Op.or]: [
+        { endsOn: null },
+        { endsOn: { [Op.gte]: now } }
+      ]
+    }
   })
+
+  // calculate if the provider is accredited
+  const isAccredited = ((accreditationCount > 0)) // true|false
+
+  if (isAccredited) {
+    // if the provider is accredited, the partner provider is the training provider
+    await ProviderPartnership.create({
+      id: uuid(),
+      accreditedProviderId: providerId,
+      trainingProviderId: req.session.data.provider.id,
+      createdAt: new Date(),
+      createdById: req.session.passport.user.id
+    })
+  } else {
+    // if the provider is not accredited, the partner provider is the accredited provider
+    await ProviderPartnership.create({
+      id: uuid(),
+      accreditedProviderId: req.session.data.provider.id,
+      trainingProviderId: providerId,
+      createdAt: new Date(),
+      createdById: req.session.passport.user.id
+    })
+  }
 
   delete req.session.data.search
   delete req.session.data.provider

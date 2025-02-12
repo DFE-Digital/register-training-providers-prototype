@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Call your endpoint with ?query=...
-      fetch('/training-provider-suggestions?search=' + encodeURIComponent(query))
+      // Call your endpoint with ?search=...
+      fetch('/{{ "training-provider-suggestions" if isAccredited else "accredited-provider-suggestions" }}?search=' + encodeURIComponent(query))
         .then(response => response.json())
         .then(providers => {
           // providers: [ { id, operatingName, legalName, ukprn, urn }, ... ]
