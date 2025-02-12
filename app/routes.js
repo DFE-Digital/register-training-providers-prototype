@@ -32,6 +32,7 @@ const providerController = require('./controllers/provider')
 const providerAccreditationController = require('./controllers/providerAccreditation')
 const providerAddressController = require('./controllers/providerAddress')
 const providerContactController = require('./controllers/providerContact')
+const providerPartnershipController = require('./controllers/providerPartnership')
 const userController = require('./controllers/user')
 
 /// ------------------------------------------------------------------------ ///
@@ -152,8 +153,26 @@ router.get('/providers/:providerId/addresses/:addressId', checkIsAuthenticated, 
 router.get('/providers/:providerId/addresses', checkIsAuthenticated, providerAddressController.providerAddressesList)
 
 /// ------------------------------------------------------------------------ ///
+/// PROVIDER PARTNERSHIP ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/providers/:providerId/partnerships/new', checkIsAuthenticated, providerPartnershipController.newProviderPartnership_get)
+router.post('/providers/:providerId/partnerships/new', checkIsAuthenticated, providerPartnershipController.newProviderPartnership_post)
+
+router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
+router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
+
+router.get('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_post)
+
+router.get('/providers/:providerId/partnerships/:partnershipId', checkIsAuthenticated, providerPartnershipController.providerPartnershipDetails)
+
+router.get('/providers/:providerId/partnerships', checkIsAuthenticated, providerPartnershipController.providerPartnershipsList)
+
+/// ------------------------------------------------------------------------ ///
 /// PROVIDER ROUTES
 /// ------------------------------------------------------------------------ ///
+
 router.get('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_get)
 router.post('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_post)
 
@@ -184,5 +203,17 @@ router.post('/providers/:providerId/delete', checkIsAuthenticated, providerContr
 router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
 
 router.get('/providers', checkIsAuthenticated, providerController.providersList)
+
+/// ------------------------------------------------------------------------ ///
+/// AUTOCOMPLETE ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/accredited-provider-suggestions', providerController.accreditedProviderSuggestions_json)
+
+router.get('/training-provider-suggestions', providerController.trainingProviderSuggestions_json)
+
+/// ------------------------------------------------------------------------ ///
+///
+/// ------------------------------------------------------------------------ ///
 
 module.exports = router

@@ -1,0 +1,161 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Enter a provider name, UKPRN, URN or postcode" %}
+
+{% if currentPartnership %}
+  {% set caption = provider.operatingName %}
+{% else %}
+  {% set caption = "Add partnership - " + provider.operatingName %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form id="provider-search" action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+      {# Hidden field to store the provider ID #}
+      <input type="hidden" id="selected-provider-id" name="provider[id]" value="{{ data.provider.id | default('') }}">
+
+      <div class="govuk-form-group {{- ' govuk-form-group--error' if (errors | getErrorMessage('provider'))}}">
+        <label class="govuk-label govuk-label--l" for="provider-autocomplete">
+          <span class="govuk-caption-l">{{ caption }} </span>
+          {{ title }}
+        </label>
+        <div id="provider-autocomplete-container" class="govuk-body"></div>
+      </div>
+
+      {% set helpText %}
+        <p class="govuk-body">
+          {# If you cannot find the provider, it may be because the provider: #}
+          Something helpful goes here
+        </p>
+        {# <ul class="govuk-list govuk-list--bullet">
+          <li>
+            is not a training provider
+          </li>
+          <li>
+            has not been added to the service
+          </li>
+        </ul> #}
+      {% endset %}
+
+      {{ govukDetails({
+        summaryText: "I cannot find the provider",
+        html: helpText
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block pageScripts %}
+<script src="/public/javascripts/vendor/accessible-autocomplete.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let providerMap = []; // store providers for potential auto-match on submit
+
+  accessibleAutocomplete({
+    element: document.querySelector('#provider-autocomplete-container'),
+    id: 'provider-autocomplete',
+    name: 'search', // <--- Use 'search' as the name of the generated input
+    defaultValue: '{{ data["search"] | default("") }}', // re-populate typed text
+    source: function (query, populateResults) {
+      // If user hasn't typed anything, return no suggestions
+      if (!query || query.length < 3) {
+        populateResults([]);
+        return;
+      }
+
+      // Call your endpoint with ?search=...
+      fetch('/{{ "training-provider-suggestions" if isAccredited else "accredited-provider-suggestions" }}?search=' + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(providers => {
+          // providers: [ { id, operatingName, legalName, ukprn, urn }, ... ]
+
+          // 1) Build a map that associates a display label with the provider object
+          providerMap = providers.map(provider => {
+            const namePart = provider.operatingName || provider.legalName || '(no name)';
+            const ukprnPart = provider.ukprn ? ` (UKPRN: ${provider.ukprn})` : '';
+            const displayLabel = `${namePart}${ukprnPart}`;
+
+            return {
+              label: displayLabel,
+              ...provider // keep the original fields, including provider.id
+            };
+          });
+
+          // 2) Pass an array of just the labels to populateResults
+          const labelArray = providerMap.map(item => item.label);
+          populateResults(labelArray);
+        })
+        .catch(err => {
+          console.error(err);
+          populateResults([]);
+        });
+    },
+
+    // Fired when the user confirms a suggestion (click, Enter, or Tab)
+    onConfirm: function (confirmedLabel) {
+      const selectedProvider = providerMap.find(p => p.label === confirmedLabel);
+      // If found, store the provider's ID in the hidden field
+      if (selectedProvider) {
+        document.getElementById('selected-provider-id').value = selectedProvider.id;
+      } else {
+        document.getElementById('selected-provider-id').value = '';
+      }
+    }
+  });
+
+  // 3) Optional: auto-match on form submission if user typed something but never confirmed
+  const form = document.getElementById('provider-search');
+  form.addEventListener('submit', function (event) {
+    // If the user has already picked a suggestion, the hidden input will have a value
+    const hiddenField = document.getElementById('selected-provider-id');
+    if (hiddenField.value) {
+      return; // we already have a confirmed selection, do nothing
+    }
+
+    // Otherwise, try to see if the typed text exactly matches one suggestion
+    const typedValue = document.getElementById('provider-autocomplete').value;
+    if (typedValue && providerMap.length > 0) {
+      const matchedProvider = providerMap.find(p => p.label === typedValue);
+      if (matchedProvider) {
+        hiddenField.value = matchedProvider.id;
+      }
+      // If there's no exact match, hiddenField stays blank
+    }
+  });
+});
+</script>
+{% endblock %}

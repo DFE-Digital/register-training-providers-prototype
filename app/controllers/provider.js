@@ -1,8 +1,16 @@
 const Pagination = require('../helpers/pagination')
+const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/dates')
 const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
-const { Provider, ProviderAddress, ProviderContact, ProviderAccreditation } = require('../models')
+const {
+  Provider,
+  ProviderAddress,
+  ProviderContact,
+  ProviderAccreditation
+} = require('../models')
+
+const { Op, literal } = require('sequelize')
 
 exports.providersList = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1
@@ -41,40 +49,58 @@ exports.providerDetails = async (req, res) => {
   delete req.session.data.provider
   delete req.session.data.accreditation
   delete req.session.data.address
+  delete req.session.data.search
 
-  const provider = await Provider.findByPk(req.params.providerId, {
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
+  const provider = await Provider.findByPk(providerId, {
     include: [
       {
         model: ProviderAddress,
-        as: 'addresses' // Must match the alias defined in the association
+        as: 'addresses'
       },
       {
         model: ProviderContact,
-        as: 'contacts' // Must match the alias defined in the association
+        as: 'contacts'
       },
       {
         model: ProviderAccreditation,
-        as: 'accreditations' // Must match the alias defined in the association
+        as: 'accreditations'
+      },
+      {
+        model: Provider,
+        as: isAccredited ? 'trainingPartnerships' : 'accreditedPartnerships'
       }
     ]
   })
+
   res.render('providers/show', {
     provider,
+    isAccredited,
     actions: {
       address: {
-        change: `/providers/${req.params.providerId}/addresses`,
-        delete: `/providers/${req.params.providerId}/addresses`,
-        new: `/providers/${req.params.providerId}/addresses/new`
+        change: `/providers/${providerId}/addresses`,
+        delete: `/providers/${providerId}/addresses`,
+        new: `/providers/${providerId}/addresses/new`
       },
       accreditation: {
-        change: `/providers/${req.params.providerId}/accreditations`,
-        delete: `/providers/${req.params.providerId}/accreditations`,
-        new: `/providers/${req.params.providerId}/accreditations/new`
+        change: `/providers/${providerId}/accreditations`,
+        delete: `/providers/${providerId}/accreditations`,
+        new: `/providers/${providerId}/accreditations/new`
       },
       contact: {
-        change: `/providers/${req.params.providerId}/contacts`,
-        delete: `/providers/${req.params.providerId}/contacts`,
-        new: `/providers/${req.params.providerId}/contacts/new`
+        change: `/providers/${providerId}/contacts`,
+        delete: `/providers/${providerId}/contacts`,
+        new: `/providers/${providerId}/contacts/new`
+      },
+      partnership: {
+        change: `/providers/${providerId}/partnerships`,
+        delete: `/providers/${providerId}/partnerships`,
+        new: `/providers/${providerId}/partnerships/new`
       }
     }
    })
@@ -539,4 +565,96 @@ exports.deleteProvider_post = async (req, res) => {
 
   req.flash('success', 'Provider removed')
   res.redirect('/providers')
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Autocomplete data
+/// ------------------------------------------------------------------------ ///
+
+exports.accreditedProviderSuggestions_json = async (req, res) => {
+  req.headers['Access-Control-Allow-Origin'] = true
+
+  const query = req.query.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: true, // ensures an INNER JOIN
+        where: {
+          startsOn: { [Op.lte]: today },         // started on or before today
+          [Op.or]: [
+            { endsOn: null },                    // no end date
+            { endsOn: { [Op.gte]: today } }      // ends on or after today
+          ]
+        }
+      }
+    ],
+    order: [['operatingName', 'ASC']]
+  })
+
+  res.json(providers)
+}
+
+exports.trainingProviderSuggestions_json = async (req, res) => {
+  req.headers['Access-Control-Allow-Origin'] = true
+
+  const query = req.query.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: false, // LEFT JOIN instead of INNER JOIN
+        attributes: [],
+        where: {
+          // Only match *current* accreditations
+          startsOn: { [Op.lte]: today },
+          [Op.or]: [
+            { endsOn: null },
+            { endsOn: { [Op.gte]: today } }
+          ]
+        }
+      }
+    ],
+    group: ['Provider.id'],
+    having: literal('COUNT("accreditations"."id") = 0'), // Only keep if no valid accreditations
+    order: [['operatingName', 'ASC']]
+  })
+
+  res.json(providers)
 }
