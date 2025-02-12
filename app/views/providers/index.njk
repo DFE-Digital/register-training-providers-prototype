@@ -2,7 +2,7 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Providers" %}
+{% set title = "Providers (" + pagination.totalCount + ")" %}
 
 {% block content %}
 
@@ -11,9 +11,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">
-      {{ title }}
-    </h1>
+    {% include "_includes/page-heading.njk" %}
 
     {{ govukButton({
       text: "Add provider",
