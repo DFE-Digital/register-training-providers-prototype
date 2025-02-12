@@ -12,16 +12,48 @@ const {
 
 const { Op, literal } = require('sequelize')
 
+/// ------------------------------------------------------------------------ ///
+/// List provider
+/// ------------------------------------------------------------------------ ///
+
 exports.providersList = async (req, res) => {
+  // clear session data
+  delete req.session.data.provider
+  delete req.session.data.accreditation
+  delete req.session.data.address
+  delete req.session.data.contact
+
+  // search
+  const keywords = req.session.data.keywords || ''
+  const hasSearch = !!((keywords))
+
+  // variables for use in pagination
   const page = parseInt(req.query.page, 10) || 1
-  const limit = parseInt(req.query.limit, 10) || 50
+  const limit = parseInt(req.query.limit, 10) || 25
   const offset = (page - 1) * limit
 
   // Get the total number of providers for pagination metadata
-  const totalCount = await Provider.count()
+  const totalCount = await Provider.count({
+    where: {
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${keywords}%` } },
+        { legalName: { [Op.like]: `%${keywords}%` } },
+        { ukprn: { [Op.like]: `%${keywords}%` } },
+        { urn: { [Op.like]: `%${keywords}%` } }
+      ]
+    }
+  })
 
   // Only fetch ONE page of providers
   const providers = await Provider.findAll({
+    where: {
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${keywords}%` } },
+        { legalName: { [Op.like]: `%${keywords}%` } },
+        { ukprn: { [Op.like]: `%${keywords}%` } },
+        { urn: { [Op.like]: `%${keywords}%` } }
+      ]
+    },
     order: [['operatingName', 'ASC']],
     limit,
     offset
@@ -31,18 +63,40 @@ exports.providersList = async (req, res) => {
   // using the chunk + the overall total count
   const pagination = new Pagination(providers, totalCount, page, limit)
 
-  // Clear session provider data
-  delete req.session.data.provider
-  delete req.session.data.accreditation
-  delete req.session.data.address
-
   res.render('providers/index', {
     // Providers for *this* page
     providers: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    pagination,
+    keywords,
+    actions: {
+      new: '/providers/new/',
+      view: '/providers',
+      filters: {
+        apply: '/providers',
+        remove: '/providers/remove-all-filters'
+      },
+      search: {
+        find: '/providers',
+        remove: '/providers/remove-keyword-search'
+      }
+    }
   })
 }
+
+exports.removeAllFilters = (req, res) => {
+  delete req.session.data.filters
+  res.redirect('/providers')
+}
+
+exports.removeKeywordSearch = (req, res) => {
+  delete req.session.data.keywords
+  res.redirect('/providers')
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Show provider
+/// ------------------------------------------------------------------------ ///
 
 exports.providerDetails = async (req, res) => {
   // Clear session provider data
