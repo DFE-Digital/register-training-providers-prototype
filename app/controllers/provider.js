@@ -1,7 +1,8 @@
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { isoDateFromDateInput } = require('../helpers/dates')
+const { isoDateFromDateInput } = require('../helpers/date')
 const { isValidPostcode } = require('../helpers/validation')
+const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { v4: uuid } = require('uuid')
 const {
   Provider,
@@ -12,37 +13,251 @@ const {
 
 const { Op, literal } = require('sequelize')
 
+const getCheckboxValues = (name, data) => {
+  return name && (Array.isArray(name)
+    ? name
+    : [name].filter((name) => {
+        return name !== '_unchecked'
+      })) || data && (Array.isArray(data) ? data : [data])
+}
+
+const removeFilter = (value, data) => {
+  // do this check because if coming from overview page for example,
+  // the query/param will be a string value, not an array containing a string
+  if (Array.isArray(data)) {
+    return data.filter(item => item !== value)
+  } else {
+    return null
+  }
+}
+
+/// ------------------------------------------------------------------------ ///
+/// List provider
+/// ------------------------------------------------------------------------ ///
+
 exports.providersList = async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1
-  const limit = parseInt(req.query.limit, 10) || 50
-  const offset = (page - 1) * limit
-
-  // Get the total number of providers for pagination metadata
-  const totalCount = await Provider.count()
-
-  // Only fetch ONE page of providers
-  const providers = await Provider.findAll({
-    order: [['operatingName', 'ASC']],
-    limit,
-    offset
-  })
-
-  // Create your Pagination object
-  // using the chunk + the overall total count
-  const pagination = new Pagination(providers, totalCount, page, limit)
-
-  // Clear session provider data
+  // clear session data
   delete req.session.data.provider
   delete req.session.data.accreditation
   delete req.session.data.address
+  delete req.session.data.contact
+
+  // variables for use in pagination
+  const page = parseInt(req.query.page, 10) || 1
+  const limit = parseInt(req.query.limit, 10) || 25
+  const offset = (page - 1) * limit
+
+  // search
+  const keywords = req.session.data.keywords || ''
+  const hasSearch = !!((keywords))
+
+  // filters
+  const providerType = null
+  const accreditationType = null
+
+  let providerTypes
+  if (req.session.data.filters?.providerType) {
+    providerTypes = getCheckboxValues(providerType, req.session.data.filters.providerType)
+  }
+
+  let accreditationTypes
+  if (req.session.data.filters?.accreditationType) {
+    accreditationTypes = getCheckboxValues(accreditationType, req.session.data.filters.accreditationType)
+  }
+
+  const hasFilters = !!((providerTypes?.length > 0) || (accreditationTypes?.length > 0))
+
+  let selectedFilters = null
+
+  if (hasFilters) {
+    selectedFilters = {
+      categories: []
+    }
+
+    if (providerTypes?.length) {
+      selectedFilters.categories.push({
+        heading: { text: 'Provider type' },
+        items: providerTypes.map((providerType) => {
+          return {
+            text: getProviderTypeLabel(providerType),
+            href: `/providers/remove-provider-type-filter/${providerType}`
+          }
+        })
+      })
+    }
+
+    if (accreditationTypes?.length) {
+      selectedFilters.categories.push({
+        heading: { text: 'Accreditation type' },
+        items: accreditationTypes.map((accreditationType) => {
+          return {
+            text: getAccreditationTypeLabel(accreditationType),
+            href: `/providers/remove-accreditation-type-filter/${accreditationType}`
+          }
+        })
+      })
+    }
+  }
+
+  let selectedProviderType = []
+  if (req.session.data.filters?.providerType) {
+    selectedProviderType = req.session.data.filters.providerType
+  }
+
+  let selectedAccreditationType = []
+  if (req.session.data.filters?.accreditationType) {
+    selectedAccreditationType = req.session.data.filters.accreditationType
+  }
+
+  // build the WHERE conditions
+  const whereClause = {
+    [Op.and]: [
+      // first, apply the keyword match (an OR across multiple columns)
+      {
+        [Op.or]: [
+          { operatingName: { [Op.like]: `%${keywords}%` } },
+          { legalName: { [Op.like]: `%${keywords}%` } },
+          { ukprn: { [Op.like]: `%${keywords}%` } },
+          { urn: { [Op.like]: `%${keywords}%` } }
+        ]
+      }
+    ]
+  }
+
+  // if there's a provider type filter, add it as another condition in the AND array
+  if (selectedProviderType.length > 0) {
+    whereClause[Op.and].push({ type: { [Op.in]: selectedProviderType } })
+  }
+
+  // Now set up an include for ProviderAccreditation
+  //
+  // Assume that "current" means:
+  //     endsOn is null OR endsOn > now
+  //
+  // The idea here is that “accredited” means having at least one valid accreditation,
+  // whereas “notAccredited” means no valid accreditation rows at all.
+  const today = new Date()
+
+  const include = [
+    {
+      model: ProviderAccreditation,
+      as: 'accreditations',
+      required: false, // false so that providers with no accreditations also come back
+      // We'll only consider "current" accreditations in this relation
+      attributes: ['id', 'startsOn', 'endsOn'],
+      where: {
+        startsOn: { [Op.lte]: today },
+        [Op.or]: [
+          { endsOn: null },
+          { endsOn: { [Op.gte]: today } }
+        ]
+      }
+    }
+  ]
+
+  // Apply accreditation filters if user has selected them
+  //
+  //  - If both "accredited" and "notAccredited" are selected, we want them all—so no extra filter.
+  //
+  //  - If only "accredited" is selected, we need providers who have at least one current accreditation row
+  //    => i.e. $accreditations.id$ != null
+  //
+  //  - If only "notAccredited" is selected, we need providers who have no current accreditation rows
+  //    => $accreditations.id$ = null
+  if (selectedAccreditationType.length === 1) {
+    if (selectedAccreditationType[0] === 'accredited') {
+      // Must have a matching accreditation
+      whereClause[Op.and].push({
+        '$accreditations.id$': { [Op.ne]: null }
+      })
+    } else if (selectedAccreditationType[0] === 'notAccredited') {
+      // Must NOT have a matching accreditation
+      whereClause[Op.and].push({
+        '$accreditations.id$': null
+      })
+    }
+  }
+  // If selectedAccreditationType includes both 'accredited' and 'notAccredited',
+  // we do nothing—because that means return everything.
+
+  // Get the total number of providers for pagination metadata
+  const totalCount = await Provider.count({
+    where: whereClause,
+    include,
+    subQuery: false
+  })
+
+  // Only fetch ONE page of providers
+  const providers = await Provider.findAll({
+    where: whereClause,
+    include,
+    order: [['operatingName', 'ASC']],
+    limit,
+    offset,
+    subQuery: false
+  })
+
+  // create the Pagination object
+  // using the chunk + the overall total count
+  const pagination = new Pagination(providers, totalCount, page, limit)
 
   res.render('providers/index', {
-    // Providers for *this* page
+    // providers for *this* page
     providers: pagination.getData(),
-    // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    // the pagination metadata (pageItems, nextPage, etc.)
+    pagination,
+    // the selected filters
+    selectedFilters,
+    // the search terms
+    keywords,
+    //
+    hasSearch,
+    //
+    hasFilters,
+    actions: {
+      new: '/providers/new/',
+      view: '/providers',
+      filters: {
+        apply: '/providers',
+        remove: '/providers/remove-all-filters'
+      },
+      search: {
+        find: '/providers',
+        remove: '/providers/remove-keyword-search'
+      }
+    }
   })
 }
+
+exports.removeProviderTypeFilter = (req, res) => {
+  req.session.data.filters.providerType = removeFilter(
+    req.params.providerType,
+    req.session.data.filters.providerType
+  )
+  res.redirect('/providers')
+}
+
+exports.removeAccreditationTypeFilter = (req, res) => {
+  req.session.data.filters.accreditationType = removeFilter(
+    req.params.accreditationType,
+    req.session.data.filters.accreditationType
+  )
+  res.redirect('/providers')
+}
+
+exports.removeAllFilters = (req, res) => {
+  delete req.session.data.filters
+  res.redirect('/providers')
+}
+
+exports.removeKeywordSearch = (req, res) => {
+  delete req.session.data.keywords
+  res.redirect('/providers')
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Show provider
+/// ------------------------------------------------------------------------ ///
 
 exports.providerDetails = async (req, res) => {
   // Clear session provider data
@@ -369,7 +584,7 @@ exports.newProviderCheck_post = async (req, res) => {
     type: req.session.data.provider.type,
     code: req.session.data.provider.code,
     ukprn: req.session.data.provider.ukprn,
-    urn: req.session.data.provider.urn.length ? req.session.data.provider.urn : null,
+    urn: req.session.data.provider.urn?.length ? req.session.data.provider.urn : null,
     createdAt: new Date(),
     createdById: req.session.passport.user.id
   })

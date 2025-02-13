@@ -1,4 +1,4 @@
-const { isoDateFromDateInput } = require('../helpers/dates')
+const { isoDateFromDateInput } = require('../helpers/date')
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderAccreditation } = require('../models')
 

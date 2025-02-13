@@ -9,7 +9,12 @@ const {
   getDateParts,
   getDay,
   getMonth,
-  getYear } = require('./helpers/dates.js')
+  getYear } = require('./helpers/date')
+
+const {
+  getAccreditationTypeLabel,
+  getProviderTypeLabel
+} = require('./helpers/content')
 
 /* ------------------------------------------------------------------
 utility function to get an error for a component
@@ -30,30 +35,17 @@ addFilter('getErrorMessage', (array, fieldName) => {
 
 /* ------------------------------------------------------------------
 utility function to get provider type label
-example: {{ "scitt" | getProviderTypeLabel() }}
+example: {{ "scitt" | getProviderTypeLabel }}
 outputs: "School-centred initial teacher training (SCITT)"
 ------------------------------------------------------------------ */
-addFilter('getProviderTypeLabel', (code) => {
-  if (!code) {
-    return null
-  }
+addFilter('getProviderTypeLabel', getProviderTypeLabel)
 
-  let label = code
-
-  switch (code) {
-    case 'hei':
-      label = 'Higher education institution (HEI)'
-      break
-    case 'scitt':
-      label = 'School-centred initial teacher training (SCITT)'
-      break
-    case 'school':
-      label = 'School'
-      break
-  }
-
-  return label
-})
+/* ------------------------------------------------------------------
+utility function to get accreditation type label
+example: {{ "notAccredited" | getAccreditationTypeLabel }}
+outputs: "Not accredited"
+------------------------------------------------------------------ */
+addFilter('getAccreditationTypeLabel', getAccreditationTypeLabel)
 
 /* ------------------------------------------------------------------
  date filter for use in Nunjucks

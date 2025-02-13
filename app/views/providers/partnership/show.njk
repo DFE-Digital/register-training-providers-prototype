@@ -29,6 +29,10 @@
       <a class="govuk-link" href="{{ actions.delete }}">Remove partner</a>
     </p>
 
+    {% set operatingNameHtml %}
+      <a href="/providers/{{ partner.id }}" class="govuk-link">{{ partner.operatingName }}</a>
+    {% endset %}
+
     {{ govukSummaryList({
       rows: [
         {
@@ -54,7 +58,7 @@
             text: "Operating name"
           },
           value: {
-            text: partner.operatingName
+            html: operatingNameHtml
           }
         },
         {

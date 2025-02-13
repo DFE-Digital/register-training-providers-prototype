@@ -173,6 +173,13 @@ router.get('/providers/:providerId/partnerships', checkIsAuthenticated, provider
 /// PROVIDER ROUTES
 /// ------------------------------------------------------------------------ ///
 
+router.get('/providers/remove-provider-type-filter/:providerType', checkIsAuthenticated, providerController.removeProviderTypeFilter)
+router.get('/providers/remove-accreditation-type-filter/:accreditationType', checkIsAuthenticated, providerController.removeAccreditationTypeFilter)
+
+router.get('/providers/remove-all-filters', checkIsAuthenticated, providerController.removeAllFilters)
+
+router.get('/providers/remove-keyword-search', checkIsAuthenticated, providerController.removeKeywordSearch)
+
 router.get('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_get)
 router.post('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_post)
 
