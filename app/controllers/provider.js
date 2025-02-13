@@ -2,6 +2,7 @@ const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { isValidPostcode } = require('../helpers/validation')
+const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { v4: uuid } = require('uuid')
 const {
   Provider,
@@ -78,7 +79,7 @@ exports.providersList = async (req, res) => {
         heading: { text: 'Provider type' },
         items: providerTypes.map((providerType) => {
           return {
-            text: providerType, // TODO: getProviderTypeLabel
+            text: getProviderTypeLabel(providerType),
             href: `/providers/remove-provider-type-filter/${providerType}`
           }
         })
@@ -90,7 +91,7 @@ exports.providersList = async (req, res) => {
         heading: { text: 'Accreditation type' },
         items: accreditationTypes.map((accreditationType) => {
           return {
-            text: accreditationType, // TODO: getAccreditationTypeLabel
+            text: getAccreditationTypeLabel(accreditationType),
             href: `/providers/remove-accreditation-type-filter/${accreditationType}`
           }
         })
