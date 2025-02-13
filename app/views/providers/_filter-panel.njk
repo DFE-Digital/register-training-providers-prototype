@@ -1,5 +1,61 @@
 {% set filterOptionsHtml %}
+{{ govukCheckboxes({
+  id: "filters-provider-type",
+  name: "filters[providerType]",
+  fieldset: {
+    legend: {
+      text: "Provider type",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  formGroup: {
+    classes: "app-filter__group"
+  },
+  classes: "govuk-checkboxes--small",
+  values: data.filters.providerType,
+  items: [
+    {
+      value: "hei",
+      text: "hei" | getProviderTypeLabel
+    },
+    {
+      value: "scitt",
+      text: "scitt" | getProviderTypeLabel
+    },
+    {
+      value: "school",
+      text: "school" | getProviderTypeLabel
+    }
+  ]
+}) }}
 
+{{ govukCheckboxes({
+  id: "filters-accreditation-type",
+  name: "filters[accreditationType]",
+  fieldset: {
+    legend: {
+      text: "Accreditation type",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  formGroup: {
+    classes: "app-filter__group"
+  },
+  classes: "govuk-checkboxes--small",
+  values: data.filters.accreditationType,
+  items: [
+    {
+      value: "accredited",
+      text: "Accredited"
+    },
+    {
+      value: "notAccredited",
+      text: "Not accredited"
+    }
+  ]
+}) }}
 {% endset %}
 
 <div class="app-filter">
