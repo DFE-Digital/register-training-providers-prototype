@@ -301,10 +301,10 @@ exports.editProviderContactCheck_post = async (req, res) => {
 
 exports.deleteProviderContact_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
-  const accreditataion = await ProviderContact.findByPk(req.params.contactId)
+  const contact = await ProviderContact.findByPk(req.params.contactId)
   res.render('providers/contact/delete', {
     provider,
-    accreditataion,
+    contact,
     actions: {
       back: `/providers/${req.params.providerId}`,
       cancel: `/providers/${req.params.providerId}`,
