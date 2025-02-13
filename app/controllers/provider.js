@@ -1,6 +1,6 @@
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { isoDateFromDateInput } = require('../helpers/dates')
+const { isoDateFromDateInput } = require('../helpers/date')
 const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
 const {

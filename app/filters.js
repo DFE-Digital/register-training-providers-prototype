@@ -9,7 +9,7 @@ const {
   getDateParts,
   getDay,
   getMonth,
-  getYear } = require('./helpers/dates.js')
+  getYear } = require('./helpers/date.js')
 
 /* ------------------------------------------------------------------
 utility function to get an error for a component
