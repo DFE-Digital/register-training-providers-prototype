@@ -3,7 +3,7 @@
 {% set primaryNavId = "providers" %}
 
 {% set title = "Are you sure you want to remove " + provider.operatingName + "’s address?" %}
-{% set caption = "Remove provider address" %}
+{% set caption = "Remove address" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -17,17 +17,67 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l">{{ caption }}</span>
-      {{ title }}
-    </h1>
+    {% include "_includes/page-heading.njk" %}
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
 
-      {# TODO: Show address being deleted #}
+      <p class="govuk-body">Address being removed:</p>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Address line 1"
+            },
+            value: {
+              text: address.line1
+            }
+          },
+          {
+            key: {
+              text: "Address line 2"
+            },
+            value: {
+              text: address.line2
+            }
+          },
+          {
+            key: {
+              text: "Address line 3"
+            },
+            value: {
+              text: address.line3
+            }
+          },
+          {
+            key: {
+              text: "Town"
+            },
+            value: {
+              text: address.town
+            }
+          },
+          {
+            key: {
+              text: "County"
+            },
+            value: {
+              text: address.county
+            }
+          },
+          {
+            key: {
+              text: "Postcode"
+            },
+            value: {
+              text: address.postcode
+            }
+          }
+        ]
+      }) }}
 
       {{ govukButton({
-        text: "Remove provider address",
+        text: "Remove address",
         classes: "govuk-button--warning"
       }) }}
 

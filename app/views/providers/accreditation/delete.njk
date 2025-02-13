@@ -17,14 +17,41 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l">{{ caption }}</span>
-      {{ title }}
-    </h1>
+    {% include "_includes/page-heading.njk" %}
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
 
-      {# TODO: Show aaccreditation being deleted #}
+      <p class="govuk-body">Accreditation being removed:</p>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Accredited provider number"
+            },
+            value: {
+              text: accreditation.number
+            }
+          },
+          {
+            key: {
+              text: "Date accreditation starts"
+            },
+            value: {
+              text: accreditation.startsOn | govukDate
+            }
+          },
+          {
+            key: {
+              text: "Date accreditation ends"
+            },
+            value: {
+              text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
+              classes: "govuk-hint" if accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+            }
+          }
+        ]
+      }) }}
 
       {{ govukButton({
         text: "Remove accreditation",
