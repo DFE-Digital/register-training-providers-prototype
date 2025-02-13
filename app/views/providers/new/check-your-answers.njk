@@ -143,6 +143,15 @@
               },
               value: {
                 text: provider.accreditation.number
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "accredited provider number"
+                  }
+                ]
               }
             },
             {
@@ -151,6 +160,15 @@
               },
               value: {
                 text: provider.accreditation.startsOn | isoDateFromDateInput | govukDate
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "date accreditation starts"
+                  }
+                ]
               }
             },
             {
@@ -160,6 +178,15 @@
               value: {
                 text: provider.accreditation.endsOn | isoDateFromDateInput | govukDate if provider.accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
                 classes: "govuk-hint" if provider.accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "date accreditation ends"
+                  }
+                ]
               }
             }
           ]
