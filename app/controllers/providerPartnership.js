@@ -247,10 +247,25 @@ exports.deleteProviderPartnership_get = async (req, res) => {
   // get the provider and partnership IDs from the request
   const { providerId, partnershipId } = req.params
   const provider = await Provider.findByPk(providerId)
-  const partnership = await ProviderPartnership.findByPk(partnershipId)
+  const partnership = await ProviderPartnership.findByPk(partnershipId, {
+    include: [
+      {
+        model: Provider,
+        as: 'trainingProvider'
+      },
+      {
+        model: Provider,
+        as: 'accreditedProvider'
+      }
+    ]
+  })
+
+  const isAccredited = await isAccreditedProvider({ providerId })
+
   res.render('providers/partnership/delete', {
     provider,
     partnership,
+    isAccredited,
     actions: {
       back: `/providers/${providerId}/partnerships/${partnershipId}`,
       cancel: `/providers/${providerId}/partnerships/${partnershipId}`,
