@@ -7,7 +7,9 @@ const env = process.env.NODE_ENV || 'development'
 const config = require(__dirname + '/../config/config.json')[env]
 const db = {}
 
-config.logging = (msg) => console.log(`[Sequelize]: ${msg}`)
+if (env === 'development') {
+  config.logging = (msg) => console.log(`[Sequelize]: ${msg}`)
+}
 
 let sequelize
 if (config.use_env_variable) {
