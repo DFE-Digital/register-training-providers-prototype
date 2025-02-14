@@ -2,7 +2,7 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Are you sure you want to remove " + provider.operatingName + "’s accreditation?" %}
+{% set title = "Confirm you want to remove " + provider.operatingName + "’s accreditation" %}
 {% set caption = "Remove accreditation" %}
 
 {% block beforeContent %}
@@ -20,8 +20,6 @@
     {% include "_includes/page-heading.njk" %}
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
-
-      <p class="govuk-body">Accreditation being removed:</p>
 
       {{ govukSummaryList({
         rows: [
