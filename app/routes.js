@@ -133,8 +133,14 @@ router.get('/providers/:providerId/contacts', checkIsAuthenticated, providerCont
 /// PROVIDER ADDRESS ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newProviderAddress_get)
-router.post('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newProviderAddress_post)
+router.get('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newFindProviderAddress_get)
+router.post('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newFindProviderAddress_post)
+
+router.get('/providers/:providerId/addresses/new/select', checkIsAuthenticated, providerAddressController.newSelectProviderAddress_get)
+router.post('/providers/:providerId/addresses/new/select', checkIsAuthenticated, providerAddressController.newSelectProviderAddress_post)
+
+router.get('/providers/:providerId/addresses/new/enter', checkIsAuthenticated, providerAddressController.newEnterProviderAddress_get)
+router.post('/providers/:providerId/addresses/new/enter', checkIsAuthenticated, providerAddressController.newEnterProviderAddress_post)
 
 router.get('/providers/:providerId/addresses/new/check', checkIsAuthenticated, providerAddressController.newProviderAddressCheck_get)
 router.post('/providers/:providerId/addresses/new/check', checkIsAuthenticated, providerAddressController.newProviderAddressCheck_post)
