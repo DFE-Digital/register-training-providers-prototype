@@ -1,7 +1,7 @@
 const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderAddress } = require('../models')
-const { getAddresses } = require('../services/ordnanceSurveyPlaces')
+const { findByPostcode } = require('../services/ordnanceSurveyPlaces')
 
 const parseForGovukRadios = (addresses) => {
   // addresses: [
@@ -144,9 +144,10 @@ exports.newSelectProviderAddress_get = async (req, res) => {
 
   let addresses = []
   if (req.session.data.address.postcode?.length) {
-    addresses = await getAddresses({
-      postcode: req.session.data.address.postcode
-    })
+    addresses = await findByPostcode(
+      postcode = req.session.data.address.postcode,
+      building = req.session.data.address.building
+    )
 
     addresses = await parseForGovukRadios(addresses)
   }
@@ -171,9 +172,10 @@ exports.newSelectProviderAddress_post = async (req, res) => {
   if (errors.length) {
     let addresses = []
     if (req.session.data.address.postcode?.length) {
-      addresses = await getAddresses({
-        postcode: req.session.data.address.postcode
-      })
+      addresses = await findByPostcode(
+        postcode = req.session.data.address.postcode,
+        building = req.session.data.address.building
+      )
 
       addresses = await parseForGovukRadios(addresses)
     }
