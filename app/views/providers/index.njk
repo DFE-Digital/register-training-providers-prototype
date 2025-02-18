@@ -32,9 +32,10 @@
       <div class="app-action-bar__filter"></div>
     </div>
 
+    {% include "./_search-panel.njk" %}
+
     {% if providers.length %}
 
-      {% include "./_search-panel.njk" %}
 
       {% for provider in providers %}
 
