@@ -102,9 +102,6 @@ exports.providerPartnershipDetails = async (req, res) => {
     ]
   })
 
-  console.log(partnership);
-
-
   res.render('providers/partnership/show', {
     provider,
     partnership,
