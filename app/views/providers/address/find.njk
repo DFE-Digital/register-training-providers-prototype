@@ -1,0 +1,84 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Find address" %}
+{% set caption = "Add address - " + provider.operatingName %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+        {{ govukInput({
+          id: "address-postcode",
+          name: "address[postcode]",
+          label: {
+            text: "Postcode",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "For example, SW1P 3BT"
+          },
+          classes: "govuk-input--width-10",
+          autocomplete: "postal-code",
+          errorMessage: errors | getErrorMessage("address-postcode"),
+          value: address.postcode
+        }) }}
+
+        {# {{ govukInput({
+          id: "address-building",
+          name: "address[building]",
+          label: {
+            text: "Building number or name",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "For example, 15 or Sanctuary Buildings"
+          },
+          classes: "govuk-input--width-20",
+          errorMessage: errors | getErrorMessage("address-building"),
+          value: address.building
+        }) }} #}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
