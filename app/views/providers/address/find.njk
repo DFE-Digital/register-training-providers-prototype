@@ -53,7 +53,7 @@
           value: address.postcode
         }) }}
 
-        {# {{ govukInput({
+        {{ govukInput({
           id: "address-building",
           name: "address[building]",
           label: {
@@ -66,7 +66,7 @@
           classes: "govuk-input--width-20",
           errorMessage: errors | getErrorMessage("address-building"),
           value: address.building
-        }) }} #}
+        }) }}
 
         {{ govukButton({
           text: "Continue"
