@@ -1,23 +1,8 @@
-const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
+const { isValidPostcode } = require('../helpers/validation')
+const { parseOsPlacesData, parseForGovukRadios } = require('../helpers/address')
 const { Provider, ProviderAddress } = require('../models')
 const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
-
-const parseForGovukRadios = (addresses) => {
-  // addresses: [
-  //   { UPRN: "10091843700", ADDRESS: "DEPARTMENT OF EDUCATION, ..." },
-  //   { UPRN: "100023622080", ADDRESS: "THE ROYAL ANNIVERSARY TRUST, ..." },
-  //   ...
-  // ]
-
-  return addresses.map(address => {
-    return {
-      text: address.ADDRESS, // The label shown in the radio button
-      value: address.UPRN,   // The value that is submitted or processed
-      id: address.UPRN   // The value that is submitted or processed
-    }
-  })
-}
 
 /// ------------------------------------------------------------------------ ///
 /// List provider addresses
@@ -85,7 +70,7 @@ exports.newFindProviderAddress_get = async (req, res) => {
 
   res.render('providers/address/find', {
     provider,
-    address: req.session.data.address,
+    find: req.session.data.find,
     actions: {
       back: `/providers/${providerId}`,
       cancel: `/providers/${providerId}`,
@@ -99,14 +84,6 @@ exports.newFindProviderAddress_post = async (req, res) => {
   const provider = await Provider.findByPk(providerId)
   const errors = []
 
-  // if (!req.session.data.address.building.length) {
-  //   const error = {}
-  //   error.fieldName = "address-building"
-  //   error.href = "#address-building"
-  //   error.text = "Enter building number or name"
-  //   errors.push(error)
-  // }
-
   if (!req.session.data.find.postcode.length) {
     const error = {}
     error.fieldName = "address-postcode"
@@ -119,6 +96,14 @@ exports.newFindProviderAddress_post = async (req, res) => {
   //   error.fieldName = "address-postcode"
   //   error.href = "#address-postcode"
   //   error.text = "Enter a real postcode"
+  //   errors.push(error)
+  // }
+
+  // if (!req.session.data.find.building.length) {
+  //   const error = {}
+  //   error.fieldName = "address-building"
+  //   error.href = "#address-building"
+  //   error.text = "Enter building number or name"
   //   errors.push(error)
   // }
 
@@ -152,14 +137,21 @@ exports.newSelectProviderAddress_get = async (req, res) => {
     addresses = await parseForGovukRadios(addresses)
   }
 
+  let back = `/providers/${providerId}/addresses/new`
+  if (req.query.referrer === 'check') {
+    back = `/providers/${providerId}/addresses/new/check`
+  }
+
   res.render('providers/address/select', {
     provider,
     addresses,
     find: req.session.data.find,
     address: req.session.data.address,
     actions: {
-      back: `/providers/${providerId}/addresses/new`,
+      back,
       cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/addresses/new`,
+      enter: `/providers/${providerId}/addresses/new/enter`,
       save: `/providers/${providerId}/addresses/new/select`
     }
   })
@@ -181,6 +173,11 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       addresses = await parseForGovukRadios(addresses)
     }
 
+    let back = `/providers/${providerId}/addresses/new`
+    if (req.query.referrer === 'check') {
+      back = `/providers/${providerId}/addresses/new/check`
+    }
+
     res.render('providers/address/select', {
       provider,
       addresses,
@@ -188,8 +185,10 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       address: req.session.data.address,
       errors,
       actions: {
-        back: `/providers/${providerId}/addresses/new`,
+        back,
         cancel: `/providers/${providerId}`,
+        change: `/providers/${providerId}/addresses/new`,
+        enter: `/providers/${providerId}/addresses/new/enter`,
         save: `/providers/${providerId}/addresses/new/select`
       }
     })
@@ -264,103 +263,26 @@ exports.newEnterProviderAddress_post = async (req, res) => {
   }
 }
 
-// exports.newProviderAddress_get = async (req, res) => {
-//   const provider = await Provider.findByPk(req.params.providerId)
-
-//   let back = `/providers/${req.params.providerId}`
-//   if (req.query.referrer === 'check') {
-//     back = `/providers/${req.params.providerId}/addresses/new/check`
-//   }
-
-//   res.render('providers/address/edit', {
-//     provider,
-//     address: req.session.data.address,
-//     actions: {
-//       back,
-//       cancel: `/providers/${req.params.providerId}`,
-//       save: `/providers/${req.params.providerId}/addresses/new`
-//     }
-//   })
-// }
-
-// exports.newProviderAddress_post = async (req, res) => {
-//   const provider = await Provider.findByPk(req.params.providerId)
-//   const errors = []
-
-//   if (!req.session.data.address.line1.length) {
-//     const error = {}
-//     error.fieldName = "address-line-1"
-//     error.href = "#address-line-1"
-//     error.text = "Enter address line 1"
-//     errors.push(error)
-//   }
-
-//   if (!req.session.data.address.town.length) {
-//     const error = {}
-//     error.fieldName = "address-town"
-//     error.href = "#address-town"
-//     error.text = "Enter a town or city"
-//     errors.push(error)
-//   }
-
-//   if (!req.session.data.address.postcode.length) {
-//     const error = {}
-//     error.fieldName = "address-postcode"
-//     error.href = "#address-postcode"
-//     error.text = "Enter a postcode"
-//     errors.push(error)
-//   } else if (!isValidPostcode(req.session.data.address.postcode)) {
-//     const error = {}
-//     error.fieldName = "address-postcode"
-//     error.href = "#address-postcode"
-//     error.text = "Enter a real postcode"
-//     errors.push(error)
-//   }
-
-//   if (errors.length) {
-//     let back = `/providers/${req.params.providerId}`
-//     if (req.query.referrer === 'check') {
-//       back = `/providers/${req.params.providerId}/addresses/new/check`
-//     }
-
-//     res.render('providers/address/edit', {
-//       provider,
-//       address: req.session.data.address,
-//       errors,
-//       actions: {
-//         back,
-//         cancel: `/providers/${req.params.providerId}`,
-//         save: `/providers/${req.params.providerId}/addresses/new`
-//       }
-//     })
-//   } else {
-//     res.redirect(`/providers/${req.params.providerId}/addresses/new/check`)
-//   }
-// }
-
 exports.newProviderAddressCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
 
-  let address = {}
-  if (req.session.data.address.uprn) {
-    address = await findByUPRN(
-      uprn = req.session.data.address.uprn
+  if (req.session.data.find.uprn) {
+    const address = await findByUPRN(
+      uprn = req.session.data.find.uprn
     )
-  } else {
-    address = req.session.data.address
+
+    req.session.data.address = await parseOsPlacesData(address)[0]
   }
-
-  console.log('controller', address);
-
 
   res.render('providers/address/check-your-answers', {
     provider,
-    address,
+    address: req.session.data.address,
     actions: {
-      back: `/providers/${req.params.providerId}/addresses/new`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/addresses/new`,
-      save: `/providers/${req.params.providerId}/addresses/new/check`
+      back: `/providers/${providerId}/addresses/new/select`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/addresses/new/select`,
+      save: `/providers/${providerId}/addresses/new/check`
     }
   })
 }
@@ -379,6 +301,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
     createdById: req.session.passport.user.id
   })
 
+  delete req.session.data.find
   delete req.session.data.address
 
   req.flash('success', 'Address added')
