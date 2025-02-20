@@ -162,6 +162,14 @@ exports.newSelectProviderAddress_post = async (req, res) => {
   const provider = await Provider.findByPk(providerId)
   const errors = []
 
+  if (!req.session.data.find.uprn) {
+    const error = {}
+    error.fieldName = "address-uprn"
+    error.href = "#address-uprn"
+    error.text = "Select an address"
+    errors.push(error)
+  }
+
   if (errors.length) {
     let addresses = []
     if (req.session.data.find.postcode?.length) {
