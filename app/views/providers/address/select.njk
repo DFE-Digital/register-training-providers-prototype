@@ -2,14 +2,18 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set searchTerm = "SEARCH TERM" %}
+{% set searchTerms = "‘" + find.postcode + "’" %}
+
+{% if find.building.length %}
+  {% set searchTerms = searchTerms + " and ‘" + find.building + "’" %}
+{% endif %}
 
 {% if addresses.length == 0 %}
-  {% set title = "No results found for ‘" + searchTerm + "’" %}
+  {% set title = "No addresses found for " + searchTerms %}
 {% elif addresses.length == 1 %}
-  {% set title = "1 result found for ‘" + searchTerm + "’" %}
+  {% set title = "1 address found for " + searchTerms %}
 {% else %}
-  {% set title = addresses.length + " results found for ‘" + searchTerm + "’" %}
+  {% set title = addresses.length + " addresses found for " + searchTerms %}
 {% endif %}
 
 {% set caption = "Add address - " + provider.operatingName %}
@@ -51,7 +55,7 @@
       {% endset %}
 
       {{ govukRadios({
-        name: "",
+        name: "address[uprn]",
         fieldset: {
           legend: {
             html: headingHtml,
@@ -64,6 +68,7 @@
             html: beforeInputHtml
           }
         },
+        value: address.uprn,
         items: addresses
       }) }}
 

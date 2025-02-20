@@ -39,7 +39,7 @@
 
         {{ govukInput({
           id: "address-postcode",
-          name: "address[postcode]",
+          name: "find[postcode]",
           label: {
             text: "Postcode",
             classes: "govuk-label--s"
@@ -50,12 +50,12 @@
           classes: "govuk-input--width-10",
           autocomplete: "postal-code",
           errorMessage: errors | getErrorMessage("address-postcode"),
-          value: address.postcode
+          value: find.postcode
         }) }}
 
         {{ govukInput({
           id: "address-building",
-          name: "address[building]",
+          name: "find[building]",
           label: {
             text: "Building number or name",
             classes: "govuk-label--s"
@@ -65,11 +65,11 @@
           },
           classes: "govuk-input--width-20",
           errorMessage: errors | getErrorMessage("address-building"),
-          value: address.building
+          value: find.building
         }) }}
 
         {{ govukButton({
-          text: "Continue"
+          text: "Find address"
         }) }}
 
       {% endcall %}
