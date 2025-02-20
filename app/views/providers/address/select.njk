@@ -45,11 +45,11 @@
       {% set beforeInputHtml %}
         <p class="govuk-body">
         {% if addresses.length == 0 %}
-          <a class="govuk-link" href="{{ actions.back }}">Change your search</a>.
+          <a class="govuk-link" href="{{ actions.change }}">Change your search</a>.
         {% elif addresses.length > 25 %}
-          Showing the first 25 results. <a class="govuk-link" href="{{ actions.back }}">Try narrowing down your search</a> if the address you’re looking for is not listed.
+          Showing the first 25 results. <a class="govuk-link" href="{{ actions.change }}">Try narrowing down your search</a> if the address you’re looking for is not listed.
         {% else %}
-          <a class="govuk-link" href="{{ actions.back }}">Change your search</a> if the address you’re looking for is not listed.
+          <a class="govuk-link" href="{{ actions.change }}">Change your search</a> if the address you’re looking for is not listed.
         {% endif %}
         </p>
       {% endset %}
@@ -88,7 +88,7 @@
     </form>
 
     <p class="govuk-body">
-      <a class="govuk-link" href="{{ actions.manual }}">Enter address manually</a>
+      <a class="govuk-link" href="{{ actions.enter }}">Enter address manually</a>
     </p>
 
     <p class="govuk-body">
