@@ -55,7 +55,7 @@
       {% endset %}
 
       {{ govukRadios({
-        name: "address[uprn]",
+        name: "find[uprn]",
         fieldset: {
           legend: {
             html: headingHtml,
@@ -68,7 +68,7 @@
             html: beforeInputHtml
           }
         },
-        value: address.uprn,
+        value: find.uprn,
         items: addresses
       }) }}
 
