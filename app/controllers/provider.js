@@ -41,6 +41,7 @@ exports.providersList = async (req, res) => {
   delete req.session.data.accreditation
   delete req.session.data.address
   delete req.session.data.contact
+  delete req.session.data.find
 
   // variables for use in pagination
   const page = parseInt(req.query.page, 10) || 1
@@ -265,6 +266,8 @@ exports.providerDetails = async (req, res) => {
   delete req.session.data.accreditation
   delete req.session.data.address
   delete req.session.data.search
+  delete req.session.data.keywords
+  delete req.session.data.find
 
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
