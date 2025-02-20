@@ -41,6 +41,7 @@ exports.providersList = async (req, res) => {
   delete req.session.data.accreditation
   delete req.session.data.address
   delete req.session.data.contact
+  delete req.session.data.find
 
   // variables for use in pagination
   const page = parseInt(req.query.page, 10) || 1
@@ -265,6 +266,8 @@ exports.providerDetails = async (req, res) => {
   delete req.session.data.accreditation
   delete req.session.data.address
   delete req.session.data.search
+  delete req.session.data.keywords
+  delete req.session.data.find
 
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
@@ -272,40 +275,38 @@ exports.providerDetails = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
+  // 1) Fetch the main provider (and hasMany associations)
   const provider = await Provider.findByPk(providerId, {
     include: [
-      {
-        model: ProviderAddress,
-        as: 'addresses'
-      },
-      {
-        model: ProviderContact,
-        as: 'contacts'
-      },
-      {
-        model: ProviderAccreditation,
-        as: 'accreditations'
-      },
-      {
-        model: Provider,
-        as: isAccredited ? 'trainingPartnerships' : 'accreditedPartnerships'
-      }
+      { model: ProviderAccreditation, as: 'accreditations' },
+      { model: ProviderAddress, as: 'addresses' },
+      { model: ProviderContact, as: 'contacts' }
     ]
+  })
+
+  // 2) Fetch the accreditedPartnerships sorted
+  provider.accreditedPartnerships = await provider.getAccreditedPartnerships({
+    order: [['operatingName', 'ASC']]
+  })
+
+  // 3) Fetch the trainingPartnerships sorted
+  provider.trainingPartnerships = await provider.getTrainingPartnerships({
+    order: [['operatingName', 'ASC']]
   })
 
   res.render('providers/show', {
     provider,
     isAccredited,
     actions: {
-      address: {
-        change: `/providers/${providerId}/addresses`,
-        delete: `/providers/${providerId}/addresses`,
-        new: `/providers/${providerId}/addresses/new`
-      },
       accreditation: {
         change: `/providers/${providerId}/accreditations`,
         delete: `/providers/${providerId}/accreditations`,
         new: `/providers/${providerId}/accreditations/new`
+      },
+      address: {
+        change: `/providers/${providerId}/addresses`,
+        delete: `/providers/${providerId}/addresses`,
+        new: `/providers/${providerId}/addresses/new`
       },
       contact: {
         change: `/providers/${providerId}/contacts`,

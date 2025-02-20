@@ -1,0 +1,103 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set searchTerms = "‘" + find.postcode + "’" %}
+
+{% if find.building.length %}
+  {% set searchTerms = searchTerms + " and ‘" + find.building + "’" %}
+{% endif %}
+
+{% if addresses.length == 0 %}
+  {% set title = "No addresses found for " + searchTerms %}
+{% elif addresses.length == 1 %}
+  {% set title = "1 address found for " + searchTerms %}
+{% else %}
+  {% set title = addresses.length + " addresses found for " + searchTerms %}
+{% endif %}
+
+{% set caption = "Add address - " + provider.operatingName %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% set beforeInputHtml %}
+        <p class="govuk-body">
+        {% if addresses.length == 0 %}
+          <a class="govuk-link" href="{{ actions.change }}">Change your search</a>.
+        {% elif addresses.length > 25 %}
+          Showing the first 25 results. <a class="govuk-link" href="{{ actions.change }}">Try narrowing down your search</a> if the address you’re looking for is not listed.
+        {% else %}
+          <a class="govuk-link" href="{{ actions.change }}">Change your search</a> if the address you’re looking for is not listed.
+        {% endif %}
+        </p>
+      {% endset %}
+
+      {{ govukRadios({
+        id: "address-uprn",
+        name: "find[uprn]",
+        fieldset: {
+          legend: {
+            html: headingHtml,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        formGroup: {
+          beforeInputs: {
+            html: beforeInputHtml
+          }
+        },
+        value: find.uprn,
+        items: addresses,
+        errorMessage: errors | getErrorMessage("address-uprn")
+      }) }}
+
+      {# <div class="govuk-button-group"> #}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+        {# {{ govukButton({
+          text: "Enter address manually",
+          classes: "govuk-button--secondary"
+        }) }}
+
+      </div> #}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.enter }}">Enter address manually</a>
+    </p>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

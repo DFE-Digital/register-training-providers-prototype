@@ -1,6 +1,8 @@
-const { isValidPostcode } = require('../helpers/validation')
 const { v4: uuid } = require('uuid')
+const { isValidPostcode } = require('../helpers/validation')
+const { parseOsPlacesData, parseForGovukRadios } = require('../helpers/address')
 const { Provider, ProviderAddress } = require('../models')
+const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider addresses
@@ -62,27 +64,168 @@ exports.providerAddressDetails = async (req, res) => {
 /// New provider address
 /// ------------------------------------------------------------------------ ///
 
-exports.newProviderAddress_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+exports.newFindProviderAddress_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
 
-  let back = `/providers/${req.params.providerId}`
-  if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/addresses/new/check`
+  res.render('providers/address/find', {
+    provider,
+    find: req.session.data.find,
+    actions: {
+      back: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/addresses/new`
+    }
+  })
+}
+
+exports.newFindProviderAddress_post = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const errors = []
+
+  if (!req.session.data.find.postcode.length) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a postcode"
+    errors.push(error)
   }
+  // else if (!isValidPostcode(req.session.data.find.postcode)) {
+  //   const error = {}
+  //   error.fieldName = "address-postcode"
+  //   error.href = "#address-postcode"
+  //   error.text = "Enter a real postcode"
+  //   errors.push(error)
+  // }
+
+  // if (!req.session.data.find.building.length) {
+  //   const error = {}
+  //   error.fieldName = "address-building"
+  //   error.href = "#address-building"
+  //   error.text = "Enter building number or name"
+  //   errors.push(error)
+  // }
+
+  if (errors.length) {
+    res.render('providers/address/find', {
+      provider,
+      find: req.session.data.find,
+      errors,
+      actions: {
+        back: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/addresses/new`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${providerId}/addresses/new/select`)
+  }
+}
+
+exports.newSelectProviderAddress_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  let addresses = []
+  if (req.session.data.find.postcode?.length) {
+    addresses = await findByPostcode(
+      postcode = req.session.data.find.postcode,
+      building = req.session.data.find.building
+    )
+
+    addresses = await parseForGovukRadios(addresses)
+  }
+
+  let back = `/providers/${providerId}/addresses/new`
+  if (req.query.referrer === 'check') {
+    back = `/providers/${providerId}/addresses/new/check`
+  }
+
+  res.render('providers/address/select', {
+    provider,
+    addresses,
+    find: req.session.data.find,
+    address: req.session.data.address,
+    actions: {
+      back,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/addresses/new`,
+      enter: `/providers/${providerId}/addresses/new/enter`,
+      save: `/providers/${providerId}/addresses/new/select`
+    }
+  })
+}
+
+exports.newSelectProviderAddress_post = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const errors = []
+
+  if (!req.session.data.find.uprn) {
+    const error = {}
+    error.fieldName = "address-uprn"
+    error.href = "#address-uprn"
+    error.text = "Select an address"
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    let addresses = []
+    if (req.session.data.find.postcode?.length) {
+      addresses = await findByPostcode(
+        postcode = req.session.data.find.postcode,
+        building = req.session.data.find.building
+      )
+
+      addresses = await parseForGovukRadios(addresses)
+    }
+
+    let back = `/providers/${providerId}/addresses/new`
+    if (req.query.referrer === 'check') {
+      back = `/providers/${providerId}/addresses/new/check`
+    }
+
+    res.render('providers/address/select', {
+      provider,
+      addresses,
+      find: req.session.data.find,
+      address: req.session.data.address,
+      errors,
+      actions: {
+        back,
+        cancel: `/providers/${providerId}`,
+        change: `/providers/${providerId}/addresses/new`,
+        enter: `/providers/${providerId}/addresses/new/enter`,
+        save: `/providers/${providerId}/addresses/new/select`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${providerId}/addresses/new/check`)
+  }
+}
+
+exports.newEnterProviderAddress_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  // delete any selected address URPN as user is entering manually
+  delete req.session.data.find.uprn
 
   res.render('providers/address/edit', {
     provider,
     address: req.session.data.address,
     actions: {
-      back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/addresses/new`
+      back: `/providers/${providerId}/addresses/new/select`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/addresses/new/enter`
     }
   })
 }
 
-exports.newProviderAddress_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+exports.newEnterProviderAddress_post = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
   const errors = []
 
   if (!req.session.data.address.line1.length) {
@@ -116,36 +259,46 @@ exports.newProviderAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
-    if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/addresses/new/check`
-    }
-
     res.render('providers/address/edit', {
       provider,
       address: req.session.data.address,
       errors,
       actions: {
-        back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/addresses/new`
+        back: `/providers/${providerId}/addresses/new/select`,
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/addresses/new/enter`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/addresses/new/check`)
+    res.redirect(`/providers/${providerId}/addresses/new/check`)
   }
 }
 
 exports.newProviderAddressCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  if (req.session.data.find.uprn) {
+    const address = await findByUPRN(
+      uprn = req.session.data.find.uprn
+    )
+
+    req.session.data.address = await parseOsPlacesData(address)[0]
+  }
+
+  let back = `/providers/${providerId}/addresses/new/select`
+  if (!req.session.data.find.uprn) {
+    back = `/providers/${providerId}/addresses/new/enter`
+  }
+
   res.render('providers/address/check-your-answers', {
     provider,
     address: req.session.data.address,
     actions: {
-      back: `/providers/${req.params.providerId}/addresses/new`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/addresses/new`,
-      save: `/providers/${req.params.providerId}/addresses/new/check`
+      back,
+      cancel: `/providers/${providerId}`,
+      change: back,
+      save: `/providers/${providerId}/addresses/new/check`
     }
   })
 }
@@ -164,6 +317,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
     createdById: req.session.passport.user.id
   })
 
+  delete req.session.data.find
   delete req.session.data.address
 
   req.flash('success', 'Address added')

@@ -28,10 +28,10 @@
               {{ partnership.operatingName }}
             </a>
           </td>
-          <td class="govuk-table__cell {{- ' govuk-hint' if not provider.legalName.length}}">
+          <td class="govuk-table__cell {{- ' govuk-hint' if not partnership.legalName.length}}">
             {{ partnership.legalName if partnership.legalName.length else "Not entered" }}
           </td>
-          <td class="govuk-table__cell">
+          <td class="govuk-table__cell {{- ' govuk-hint' if not partnership.ukprn.length }}">
             {{ partnership.ukprn if partnership.ukprn else "Not entered" }}
           </td>
         </tr>
