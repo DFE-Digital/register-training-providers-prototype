@@ -125,9 +125,6 @@ const findByPostcode = async (postcode, building = null, options = {}) => {
     // Fetch data from OS Places API
     const response = await axios.get(url)
 
-    console.log(response.data);
-
-
     // Destructure the "results" array off the data
     const { results } = response.data
 
@@ -135,8 +132,6 @@ const findByPostcode = async (postcode, building = null, options = {}) => {
     let addresses = results.map(item => {
       return sanitiseAddress(item.DPA)
     })
-
-    console.log(addresses);
 
     // Filter addresses that match building details
     if (building?.length) {
@@ -175,10 +170,7 @@ const findByUPRN = async (uprn, options = {}) => {
     // Map over results and extract the DPA object from each item
     const address = results.map(item => {
       return sanitiseAddress(item.DPA)
-    })[0]
-
-    console.log('service', address);
-
+    })
 
     // Return the array of address objects
     return address
