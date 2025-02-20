@@ -201,6 +201,9 @@ exports.newEnterProviderAddress_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
 
+  // delete any selected address URPN as user is entering manually
+  delete req.session.data.find.uprn
+
   res.render('providers/address/edit', {
     provider,
     address: req.session.data.address,
@@ -275,13 +278,18 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     req.session.data.address = await parseOsPlacesData(address)[0]
   }
 
+  let back = `/providers/${providerId}/addresses/new/select`
+  if (!req.session.data.find.uprn) {
+    back = `/providers/${providerId}/addresses/new/enter`
+  }
+
   res.render('providers/address/check-your-answers', {
     provider,
     address: req.session.data.address,
     actions: {
-      back: `/providers/${providerId}/addresses/new/select`,
+      back,
       cancel: `/providers/${providerId}`,
-      change: `/providers/${providerId}/addresses/new/select`,
+      change: back,
       save: `/providers/${providerId}/addresses/new/check`
     }
   })
