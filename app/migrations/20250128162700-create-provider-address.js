@@ -11,6 +11,9 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
+      uprn: {
+        type: Sequelize.INTEGER
+      },
       line_1:  {
         type: Sequelize.STRING,
         allowNull: false
@@ -37,6 +40,9 @@ module.exports = {
       },
       longitude: {
         type: Sequelize.FLOAT
+      },
+      google_place_id: {
+        type: Sequelize.STRING
       },
       created_at: {
         type: Sequelize.DATE,
