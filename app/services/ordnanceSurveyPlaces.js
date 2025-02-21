@@ -175,7 +175,7 @@ const findByUPRN = async (uprn, options = {}) => {
     // Return the array of address objects
     return address
   } catch (error) {
-    console.error('Error fetching addresses:', error)
+    console.error('Error fetching address:', error)
     return {} // swallow the error and return an empty object
     // throw error
   }
