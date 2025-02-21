@@ -32,6 +32,9 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'provider_id'
       },
+      uprn: {
+        type: DataTypes.INTEGER
+      },
       line1:  {
         type: DataTypes.STRING,
         field: 'line_1',
@@ -69,6 +72,10 @@ module.exports = (sequelize) => {
       },
       longitude: {
         type: DataTypes.FLOAT
+      },
+      googlePlaceId: {
+        type: DataTypes.STRING,
+        field: 'google_place_id'
       },
       createdAt: {
         type: DataTypes.DATE,
