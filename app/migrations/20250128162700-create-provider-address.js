@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false
       },
       uprn: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       line_1:  {
         type: Sequelize.STRING,

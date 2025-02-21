@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
         field: 'provider_id'
       },
       uprn: {
-        type: DataTypes.INTEGER
+        type: DataTypes.STRING
       },
       line1:  {
         type: DataTypes.STRING,
