@@ -100,7 +100,7 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'ProviderAddress',
       tableName: 'provider_addresses',
-      timestamps: false
+      timestamps: true
     }
   )
 
