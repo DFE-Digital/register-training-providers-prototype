@@ -1,24 +1,58 @@
-const apiKey = process.env.GOOGLE_PLACES_API_KEY
-
+/**
+ * geocodeAddress
+ *
+ * Takes a single-line address string, calls the Google Geocoding API,
+ * and returns an object containing { latitude, longitude, placeId }.
+ *
+ * Throws an Error if:
+ * - The address is invalid.
+ * - The API call fails or returns no results.
+ *
+ * @param {string} addressString - The address to geocode
+ * @returns {Promise<{ latitude: number, longitude: number, placeId: string }>}
+ */
 const geocodeAddress = async (addressString) => {
-  // Call Google Geocoding API
-  // Encode the address string to make it URL-safe
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressString)}&key=${apiKey}`;
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  if (data.status !== 'OK' || !data.results.length) {
-    // Handle no results or API errors
-    console.error('Geocoding failed:', data);
-    return res.status(400).send('Could not geocode this address');
+  // Validate input
+  if (!addressString || !addressString.trim()) {
+    throw new Error("Cannot geocode an empty or invalid address string.")
   }
 
-  // Extract latitude, longitude, and place_id from the first result
-  const geocodedResult = data.results[0]
+  // Build request URL
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY
+  if (!apiKey) {
+    throw new Error("Google Places API key not set in environment variables.")
+  }
 
-  const { lat, lng } = geocodedResult.geometry.location
-  const placeId = geocodedResult.place_id
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?` +
+              `address=${encodeURIComponent(addressString)}&key=${apiKey}`
+
+  let geocodeResponse
+  try {
+    const response = await fetch(url)
+
+    // Network-level errors (bad response codes, etc.)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch geocoding data, HTTP status = ${response.status}`)
+    }
+
+    geocodeResponse = await response.json()
+  } catch (err) {
+    // Catch network or parsing errors
+    console.error("Error fetching geocode data:", err)
+    throw new Error("Error occurred while fetching geocode data.")
+  }
+
+  // Handle invalid data returned from Google
+  if (geocodeResponse.status !== "OK" || !geocodeResponse.results || !geocodeResponse.results.length) {
+    const reason = geocodeResponse.status || "UNKNOWN_REASON"
+    console.error(`Geocoding failed: status=${reason}`, geocodeResponse)
+    throw new Error(`Could not geocode this address. Reason: ${reason}`)
+  }
+
+  // Extract data from the first result
+  const firstResult = geocodeResponse.results[0]
+  const { lat, lng } = firstResult.geometry.location
+  const placeId = firstResult.place_id
 
   return { latitude: lat, longitude: lng, placeId }
 }
