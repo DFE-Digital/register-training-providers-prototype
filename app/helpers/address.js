@@ -69,7 +69,7 @@ const parseOsPlacesData = (addresses) => {
 
     // Construct final object
     return {
-      uprn: address.uprn || null,
+      uprn: address.UPRN || null,
       line1,
       line2,
       line3,
