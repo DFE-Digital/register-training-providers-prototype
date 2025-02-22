@@ -133,6 +133,33 @@
         ]
       }) }}
 
+      <h2 class="govuk-heading-m">Geolocation</h2>
+
+      {% if address.latitude and address.longitude %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Latitude"
+              },
+              value: {
+                text: address.latitude
+              }
+            },
+            {
+              key: {
+                text: "Longitude"
+              },
+              value: {
+                text: address.longitude
+              }
+            }
+          ]
+        }) }}
+      {% else %}
+        <p class="govuk-body">The address could not be geocoded.</p>
+      {% endif %}
+
       {{ govukButton({
         text: "Save address"
       }) }}
