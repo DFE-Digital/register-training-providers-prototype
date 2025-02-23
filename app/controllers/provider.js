@@ -1,6 +1,7 @@
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/date')
+const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { v4: uuid } = require('uuid')
@@ -576,53 +577,58 @@ exports.newProviderCheck_get = async (req, res) => {
 }
 
 exports.newProviderCheck_post = async (req, res) => {
+  const { provider } = req.session.data
+  const userId = req.session.passport.user.id
+
   const providerId = uuid()
 
   await Provider.create({
     id: providerId,
-    operatingName: req.session.data.provider.operatingName,
-    legalName: req.session.data.provider.legalName,
-    type: req.session.data.provider.type,
-    code: req.session.data.provider.code,
-    ukprn: req.session.data.provider.ukprn,
-    urn: req.session.data.provider.urn?.length ? req.session.data.provider.urn : null,
+    operatingName: provider.operatingName,
+    legalName: nullIfEmpty(provider.legalName),
+    type: provider.type,
+    code: provider.code,
+    ukprn: provider.ukprn,
+    urn: nullIfEmpty(provider.urn),
     createdAt: new Date(),
-    createdById: req.session.passport.user.id
+    createdById: userId
   })
 
-  if (req.session.data.provider.accreditation) {
-    let startsOn = isoDateFromDateInput(req.session.data.provider.accreditation.startsOn)
+  if (provider.accreditation) {
+    let startsOn = isoDateFromDateInput(provider.accreditation.startsOn)
     startsOn = new Date(startsOn)
 
     let endsOn = null
-    if (isoDateFromDateInput(req.session.data.provider.accreditation.endsOn) !== 'Invalid DateTime') {
-     endsOn =  isoDateFromDateInput(req.session.data.provider.accreditation.endsOn)
+    if (isoDateFromDateInput(provider.accreditation.endsOn) !== 'Invalid DateTime') {
+     endsOn =  isoDateFromDateInput(provider.accreditation.endsOn)
      endsOn = new Date(endsOn)
     }
 
     await ProviderAccreditation.create({
       id: uuid(),
       providerId,
-      number: req.session.data.provider.accreditation.number,
+      number: provider.accreditation.number,
       startsOn,
       endsOn,
       createdAt: new Date(),
-      createdById: req.session.passport.user.id
+      createdById: userId
     })
   }
 
-  if (req.session.data.provider.address) {
+  if (provider.address) {
+    // TODO: Geocode address
+
     await ProviderAddress.create({
       id: uuid(),
       providerId,
-      line1: req.session.data.provider.address.line1,
-      line2: req.session.data.provider.address.line2.length ? req.session.data.provider.address.line2 : null,
-      line3: req.session.data.provider.address.line3.length ? req.session.data.provider.address.line3 : null,
-      town: req.session.data.provider.address.town,
-      county: req.session.data.provider.address.county.length ? req.session.data.provider.address.county : null,
-      postcode: req.session.data.provider.address.postcode,
-      createdAt: new Date(),
-      createdById: req.session.passport.user.id
+      line1: provider.address.line1,
+      line2: nullIfEmpty(provider.address.line2),
+      line3: nullIfEmpty(provider.address.line3),
+      town: provider.address.town,
+      county: nullIfEmpty(provider.address.county),
+      postcode: provider.address.postcode,
+      createdById: userId,
+      updatedById: userId
     })
   }
 
