@@ -327,7 +327,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
     postcode: address.postcode,
     latitude: nullIfEmpty(address.latitude),
     longitude: nullIfEmpty(address.longitude),
-    googlePlaceId: nullIfEmpty(address.placeId),
+    googlePlaceId: nullIfEmpty(address.googlePlaceId),
     createdById: userId,
     updatedById: userId
   })

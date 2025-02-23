@@ -52,9 +52,9 @@ const geocodeAddress = async (addressString) => {
   // Extract data from the first result
   const firstResult = geocodeResponse.results[0]
   const { lat, lng } = firstResult.geometry.location
-  const placeId = firstResult.place_id
+  const googlePlaceId = firstResult.place_id
 
-  return { latitude: lat, longitude: lng, placeId }
+  return { latitude: lat, longitude: lng, googlePlaceId }
 }
 
 module.exports = {
