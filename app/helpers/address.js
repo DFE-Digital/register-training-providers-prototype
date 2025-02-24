@@ -69,7 +69,7 @@ const parseOsPlacesData = (addresses) => {
 
     // Construct final object
     return {
-      uprn: address.uprn || null,
+      uprn: address.UPRN || null,
       line1,
       line2,
       line3,
@@ -80,7 +80,19 @@ const parseOsPlacesData = (addresses) => {
   })
 }
 
+const parseAddressAsString = (data = {}) => {
+  const { line1, line2, line3, town, county, postcode } = data
+
+  // Keep only non-null, non-empty strings
+  const addressParts = [line1, line2, line3, town, county, postcode]
+    .filter(part => part && part.trim().length > 0)
+
+  // Create a single-line address
+  return addressParts.join(', ')
+}
+
 module.exports = {
   parseForGovukRadios,
-  parseOsPlacesData
+  parseOsPlacesData,
+  parseAddressAsString
 }

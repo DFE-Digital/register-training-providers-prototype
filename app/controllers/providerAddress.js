@@ -1,8 +1,10 @@
 const { v4: uuid } = require('uuid')
+const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
+const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode } = require('../helpers/validation')
-const { parseOsPlacesData, parseForGovukRadios } = require('../helpers/address')
 const { Provider, ProviderAddress } = require('../models')
 const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
+const { geocodeAddress } = require('../services/googleMaps')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider addresses
@@ -286,6 +288,12 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     req.session.data.address = await parseOsPlacesData(address)[0]
   }
 
+  // Geocode the address data
+  const addressString = parseAddressAsString(req.session.data.address)
+  const geocodes = await geocodeAddress(addressString)
+
+  req.session.data.address = {...req.session.data.address, ...geocodes}
+
   let back = `/providers/${providerId}/addresses/new/select`
   if (!req.session.data.find.uprn) {
     back = `/providers/${providerId}/addresses/new/enter`
@@ -304,17 +312,24 @@ exports.newProviderAddressCheck_get = async (req, res) => {
 }
 
 exports.newProviderAddressCheck_post = async (req, res) => {
+  const { address } = req.session.data
+  const userId = req.session.passport.user.id
+
   await ProviderAddress.create({
     id: uuid(),
     providerId: req.params.providerId,
-    line1: req.session.data.address.line1,
-    line2: req.session.data.address.line2.length ? req.session.data.address.line2 : null,
-    line3: req.session.data.address.line3.length ? req.session.data.address.line3 : null,
-    town: req.session.data.address.town,
-    county: req.session.data.address.county.length ? req.session.data.address.county : null,
-    postcode: req.session.data.address.postcode,
-    createdAt: new Date(),
-    createdById: req.session.passport.user.id
+    uprn: nullIfEmpty(address.uprn),
+    line1: address.line1,
+    line2: nullIfEmpty(address.line2),
+    line3: nullIfEmpty(address.line3),
+    town: address.town,
+    county: nullIfEmpty(address.county),
+    postcode: address.postcode,
+    latitude: nullIfEmpty(address.latitude),
+    longitude: nullIfEmpty(address.longitude),
+    googlePlaceId: nullIfEmpty(address.googlePlaceId),
+    createdById: userId,
+    updatedById: userId
   })
 
   delete req.session.data.find
