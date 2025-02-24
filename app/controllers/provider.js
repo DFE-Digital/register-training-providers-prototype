@@ -781,7 +781,7 @@ exports.newProviderCheck_get = async (req, res) => {
       uprn = find.uprn
     )
 
-    address = await parseOsPlacesData(address)[0]
+    address = parseOsPlacesData(address)
   }
   // Geocode the address data
   const addressString = parseAddressAsString(address)

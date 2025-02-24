@@ -279,20 +279,27 @@ exports.newEnterProviderAddress_post = async (req, res) => {
 exports.newProviderAddressCheck_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
+  const { find } = req.session.data
+  let { address } = req.session.data
 
-  if (req.session.data.find.uprn) {
-    const address = await findByUPRN(
-      uprn = req.session.data.find.uprn
+  console.log(find);
+
+
+  if (find.uprn) {
+    address = await findByUPRN(
+      uprn = find.uprn
     )
 
-    req.session.data.address = await parseOsPlacesData(address)[0]
+    address = parseOsPlacesData(address)
   }
-
   // Geocode the address data
-  const addressString = parseAddressAsString(req.session.data.address)
+  const addressString = parseAddressAsString(address)
   const geocodes = await geocodeAddress(addressString)
 
-  req.session.data.address = {...req.session.data.address, ...geocodes}
+  address = {...address, ...geocodes}
+
+  // put address into the session data for use later
+  req.session.data.address = address
 
   let back = `/providers/${providerId}/addresses/new/select`
   if (!req.session.data.find.uprn) {
