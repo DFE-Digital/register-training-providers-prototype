@@ -432,6 +432,12 @@ exports.editProviderAddressCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
   const currentAddress = await ProviderAddress.findByPk(req.params.addressId)
 
+  // Geocode the address data
+  const addressString = parseAddressAsString(req.session.data.address)
+  const geocodes = await geocodeAddress(addressString)
+
+  req.session.data.address = {...req.session.data.address, ...geocodes}
+
   res.render('providers/address/check-your-answers', {
     provider,
     currentAddress,
