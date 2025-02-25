@@ -495,83 +495,10 @@ exports.newProviderAccreditation_post = async (req, res) => {
   }
 }
 
-// exports.newProviderAddress_get = async (req, res) => {
-//   let back
-//   if (req.session.data.provider.isAccredited == "yes") {
-//     back = '/providers/new/accreditation'
-//   } else {
-//     back = '/providers/new/details'
-//   }
-
-//   res.render('providers/new/address', {
-//     provider: req.session.data.provider,
-//     actions: {
-//       back,
-//       cancel: '/providers',
-//       save: '/providers/new/address'
-//     }
-//   })
-// }
-
-// exports.newProviderAddress_post = async (req, res) => {
-//   const errors = []
-
-//   if (!req.session.data.provider.address.line1.length) {
-//     const error = {}
-//     error.fieldName = "address-line-1"
-//     error.href = "#address-line-1"
-//     error.text = "Enter address line 1"
-//     errors.push(error)
-//   }
-
-//   if (!req.session.data.provider.address.town.length) {
-//     const error = {}
-//     error.fieldName = "address-town"
-//     error.href = "#address-town"
-//     error.text = "Enter a town or city"
-//     errors.push(error)
-//   }
-
-//   if (!req.session.data.provider.address.postcode.length) {
-//     const error = {}
-//     error.fieldName = "address-postcode"
-//     error.href = "#address-postcode"
-//     error.text = "Enter a postcode"
-//     errors.push(error)
-//   } else if (!isValidPostcode(req.session.data.provider.address.postcode)) {
-//     const error = {}
-//     error.fieldName = "address-postcode"
-//     error.href = "#address-postcode"
-//     error.text = "Enter a real postcode"
-//     errors.push(error)
-//   }
-
-//   if (errors.length) {
-//     let back
-//     if (req.session.data.provider.isAccredited == "yes") {
-//       back = '/providers/new/accreditation'
-//     } else {
-//       back = '/providers/new/details'
-//     }
-
-//     res.render('providers/new/address', {
-//       provider: req.session.data.provider,
-//       errors,
-//       actions: {
-//         back,
-//         cancel: '/providers',
-//         save: '/providers/new/address'
-//       }
-//     })
-//   } else {
-//     res.redirect('/providers/new/check')
-//   }
-// }
-
 exports.newProviderFindAddress_get = async (req, res) => {
   const { find, provider } = req.session.data
 
-  res.render('providers/address/find', {
+  res.render('providers/new/address/find', {
     provider,
     find,
     actions: {
@@ -610,7 +537,7 @@ exports.newProviderFindAddress_post = async (req, res) => {
   // }
 
   if (errors.length) {
-    res.render('providers/address/find', {
+    res.render('providers/new/address/find', {
       provider,
       find,
       errors,
@@ -643,7 +570,7 @@ exports.newProviderSelectAddress_get = async (req, res) => {
     back = `/providers/new/check`
   }
 
-  res.render('providers/address/select', {
+  res.render('providers/new/address/select', {
     provider,
     addresses,
     find,
@@ -686,7 +613,7 @@ exports.newProviderSelectAddress_post = async (req, res) => {
       back = `/providers/new/check`
     }
 
-    res.render('providers/address/select', {
+    res.render('providers/new/address/select', {
       provider,
       addresses,
       find,
@@ -711,7 +638,7 @@ exports.newProviderEnterAddress_get = async (req, res) => {
   // delete any selected address URPN as user is entering manually
   delete req.session.data.find.uprn
 
-  res.render('providers/address/edit', {
+  res.render('providers/new/address/edit', {
     provider,
     address,
     actions: {
@@ -757,7 +684,7 @@ exports.newProviderEnterAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    res.render('providers/address/edit', {
+    res.render('providers/new/address/edit', {
       provider: provider,
       address: address,
       errors,
