@@ -498,11 +498,18 @@ exports.newProviderAccreditation_post = async (req, res) => {
 exports.newProviderFindAddress_get = async (req, res) => {
   const { find, provider } = req.session.data
 
+  let back
+  if (provider.isAccredited == "yes") {
+    back = '/providers/new/accreditation'
+  } else {
+    back = '/providers/new/details'
+  }
+
   res.render('providers/new/address/find', {
     provider,
     find,
     actions: {
-      back: `/providers`,
+      back,
       cancel: `/providers`,
       save: `/providers/new/address`
     }
@@ -537,12 +544,19 @@ exports.newProviderFindAddress_post = async (req, res) => {
   // }
 
   if (errors.length) {
+    let back
+    if (provider.isAccredited == "yes") {
+      back = '/providers/new/accreditation'
+    } else {
+      back = '/providers/new/details'
+    }
+
     res.render('providers/new/address/find', {
       provider,
       find,
       errors,
       actions: {
-        back: `/providers`,
+        back,
         cancel: `/providers`,
         save: `/providers/new/address`
       }
@@ -577,7 +591,7 @@ exports.newProviderSelectAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers/new/address`,
+      cancel: `/providers`,
       change: `/providers/new/address`,
       enter: `/providers/new/address/enter`,
       save: `/providers/new/address/select`
@@ -621,7 +635,7 @@ exports.newProviderSelectAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/new/address`,
+        cancel: `/providers`,
         change: `/providers/new/address`,
         enter: `/providers/new/address/enter`,
         save: `/providers/new/address/select`
@@ -719,11 +733,16 @@ exports.newProviderCheck_get = async (req, res) => {
   // put address into the session data for use later
   req.session.data.address = address
 
+  let back = `/providers/new/address/enter`
+  if (find.uprn) {
+    back = `/providers/new/address/select`
+  }
+
   res.render('providers/new/check-your-answers', {
     provider,
     address,
     actions: {
-      back: `/providers/new`,
+      back,
       cancel: `/providers`,
       change: `/providers/new`,
       save: `/providers/new/check`
