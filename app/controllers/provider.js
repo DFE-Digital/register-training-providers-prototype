@@ -202,6 +202,10 @@ exports.providersList = async (req, res) => {
     subQuery: false
   })
 
+  providers.forEach(provider => {
+    provider.isAccredited = provider.accreditations?.length > 0
+  })
+
   // create the Pagination object
   // using the chunk + the overall total count
   const pagination = new Pagination(providers, totalCount, page, limit)
