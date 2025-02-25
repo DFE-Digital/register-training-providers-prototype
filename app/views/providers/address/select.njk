@@ -74,18 +74,9 @@
         errorMessage: errors | getErrorMessage("address-uprn")
       }) }}
 
-      {# <div class="govuk-button-group"> #}
-
-        {{ govukButton({
-          text: "Continue"
-        }) }}
-
-        {# {{ govukButton({
-          text: "Enter address manually",
-          classes: "govuk-button--secondary"
-        }) }}
-
-      </div> #}
+      {{ govukButton({
+        text: "Continue"
+      }) }}
 
     </form>
 
