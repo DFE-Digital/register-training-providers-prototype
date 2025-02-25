@@ -1,17 +1,18 @@
-/* global $ */
-export const FilterToggleButton = class {
-  constructor (options) {
+export class FilterToggleButton {
+  constructor(options) {
     this.options = options
+    this.mq = window.matchMedia(this.options.bigModeMediaQuery)
     this.container = this.options.toggleButton.container
   }
 
-  setupResponsiveChecks () {
-    this.mq = window.matchMedia(this.options.bigModeMediaQuery)
-    this.mq.addListener($.proxy(this, 'checkMode'))
+  setupResponsiveChecks() {
+    // Preferred modern usage
+    this.mq.addEventListener('change', this.checkMode.bind(this))
+    // Make an initial check
     this.checkMode(this.mq)
   }
 
-  checkMode (mq) {
+  checkMode(mq) {
     if (mq.matches) {
       this.enableBigMode()
     } else {
@@ -19,74 +20,97 @@ export const FilterToggleButton = class {
     }
   }
 
-  enableBigMode () {
+  enableBigMode() {
     this.showMenu()
     this.removeMenuButton()
     this.removeCloseButton()
   }
 
-  enableSmallMode () {
-    this.options.filter.container.attr('tabindex', '-1')
+  enableSmallMode() {
+    this.options.filter.container.setAttribute('tabindex', '-1')
     this.hideMenu()
     this.addMenuButton()
     this.addCloseButton()
   }
 
-  addCloseButton () {
+  addCloseButton() {
     if (this.options.closeButton) {
-      this.closeButton = $(`<button class="app-filter__close" type="button">${this.options.closeButton.text}<span class="govuk-visually-hidden"> filter menu</span></button>`)
-      this.closeButton.on('click', $.proxy(this, 'onCloseClick'))
-      this.options.closeButton.container.append(this.closeButton)
+      this.closeButton = document.createElement('button')
+      this.closeButton.type = 'button'
+      this.closeButton.classList.add('app-filter__close')
+      this.closeButton.textContent = this.options.closeButton.text
+
+      // optionally add hidden text
+      const hiddenSpan = document.createElement('span')
+      hiddenSpan.classList.add('govuk-visually-hidden')
+      hiddenSpan.textContent = ' filter menu'
+      this.closeButton.appendChild(hiddenSpan)
+
+      this.closeButton.addEventListener('click', this.onCloseClick.bind(this))
+      this.options.closeButton.container.appendChild(this.closeButton)
     }
   }
 
-  onCloseClick () {
+  onCloseClick() {
     this.hideMenu()
-    this.menuButton.focus()
+    if (this.menuButton) {
+      this.menuButton.focus()
+    }
   }
 
-  removeCloseButton () {
+  removeCloseButton() {
     if (this.closeButton) {
       this.closeButton.remove()
       this.closeButton = null
     }
   }
 
-  addMenuButton () {
-    this.menuButton = $(`<button class="govuk-button ${this.options.toggleButton.classes}" type="button" aria-haspopup="true" aria-expanded="false">${this.options.toggleButton.showText}</button>`)
-    this.menuButton.on('click', $.proxy(this, 'onMenuButtonClick'))
-    this.options.toggleButton.container.append(this.menuButton)
+  addMenuButton() {
+    this.menuButton = document.createElement('button')
+    this.menuButton.type = 'button'
+    this.menuButton.classList.add('govuk-button')
+    // If you have multiple classes, just split them
+    this.options.toggleButton.classes.split(' ').forEach(cls => {
+      this.menuButton.classList.add(cls)
+    })
+    this.menuButton.setAttribute('aria-haspopup', 'true')
+    this.menuButton.setAttribute('aria-expanded', 'false')
+    this.menuButton.textContent = this.options.toggleButton.showText
+
+    this.menuButton.addEventListener('click', this.onMenuButtonClick.bind(this))
+    this.options.toggleButton.container.appendChild(this.menuButton)
   }
 
-  removeMenuButton () {
+  removeMenuButton() {
     if (this.menuButton) {
       this.menuButton.remove()
       this.menuButton = null
     }
   }
 
-  hideMenu () {
+  hideMenu() {
     if (this.menuButton) {
-      this.menuButton.attr('aria-expanded', 'false')
-      this.menuButton.text(this.options.toggleButton.showText)
+      this.menuButton.setAttribute('aria-expanded', 'false')
+      this.menuButton.textContent = this.options.toggleButton.showText
     }
-    this.options.filter.container.attr('hidden', true)
+    this.options.filter.container.setAttribute('hidden', '')
   }
 
-  showMenu () {
+  showMenu() {
     if (this.menuButton) {
-      this.menuButton.attr('aria-expanded', 'true')
-      this.menuButton.text(this.options.toggleButton.hideText)
+      this.menuButton.setAttribute('aria-expanded', 'true')
+      this.menuButton.textContent = this.options.toggleButton.hideText
     }
-    this.options.filter.container.removeAttr('hidden')
+    this.options.filter.container.removeAttribute('hidden')
   }
 
-  onMenuButtonClick () {
+  onMenuButtonClick() {
     this.toggle()
   }
 
-  toggle () {
-    if (this.menuButton.attr('aria-expanded') === 'false') {
+  toggle() {
+    const isExpanded = this.menuButton && this.menuButton.getAttribute('aria-expanded') === 'true'
+    if (!isExpanded) {
       this.showMenu()
       this.options.filter.container.focus()
     } else {
@@ -94,7 +118,7 @@ export const FilterToggleButton = class {
     }
   }
 
-  init () {
+  init() {
     this.setupResponsiveChecks()
     if (this.options.startHidden) {
       this.hideMenu()
