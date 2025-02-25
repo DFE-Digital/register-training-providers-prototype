@@ -279,20 +279,27 @@ exports.newEnterProviderAddress_post = async (req, res) => {
 exports.newProviderAddressCheck_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
+  const { find } = req.session.data
+  let { address } = req.session.data
 
-  if (req.session.data.find.uprn) {
-    const address = await findByUPRN(
-      uprn = req.session.data.find.uprn
+  console.log(find);
+
+
+  if (find.uprn) {
+    address = await findByUPRN(
+      uprn = find.uprn
     )
 
-    req.session.data.address = await parseOsPlacesData(address)[0]
+    address = parseOsPlacesData(address)
   }
-
   // Geocode the address data
-  const addressString = parseAddressAsString(req.session.data.address)
+  const addressString = parseAddressAsString(address)
   const geocodes = await geocodeAddress(addressString)
 
-  req.session.data.address = {...req.session.data.address, ...geocodes}
+  address = {...address, ...geocodes}
+
+  // put address into the session data for use later
+  req.session.data.address = address
 
   let back = `/providers/${providerId}/addresses/new/select`
   if (!req.session.data.find.uprn) {
@@ -372,11 +379,13 @@ exports.editProviderAddress_get = async (req, res) => {
 }
 
 exports.editProviderAddress_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentAddress = await ProviderAddress.findByPk(req.params.addressId)
+  const { addressId, providerId } = req.params
+  const { address } = req.session.data
+  const provider = await Provider.findByPk(providerId)
+  const currentAddress = await ProviderAddress.findByPk(addressId)
   const errors = []
 
-  if (!req.session.data.address.line1.length) {
+  if (!address.line1.length) {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
@@ -384,7 +393,7 @@ exports.editProviderAddress_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.address.town.length) {
+  if (!address.town.length) {
     const error = {}
     error.fieldName = "address-town"
     error.href = "#address-town"
@@ -392,13 +401,13 @@ exports.editProviderAddress_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.address.postcode.length) {
+  if (!address.postcode.length) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
     errors.push(error)
-  } else if (!isValidPostcode(req.session.data.address.postcode)) {
+  } else if (!isValidPostcode(address.postcode)) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
@@ -407,61 +416,81 @@ exports.editProviderAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit/check`
+      back = `/providers/${providerId}/addresses/${addressId}/edit/check`
     }
 
     res.render('providers/address/edit', {
       provider,
       currentAddress,
-      address: req.session.data.address,
+      address,
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/addresses/${addressId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit/check`)
+    res.redirect(`/providers/${providerId}/addresses/${addressId}/edit/check`)
   }
 }
 
 exports.editProviderAddressCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentAddress = await ProviderAddress.findByPk(req.params.addressId)
+  const { addressId, providerId } = req.params
+  let { address } = req.session.data
+
+  const provider = await Provider.findByPk(providerId)
+  const currentAddress = await ProviderAddress.findByPk(addressId)
+
+  // Geocode the address data
+  const addressString = parseAddressAsString(address)
+  const geocodes = await geocodeAddress(addressString)
+
+  address = {...address, ...geocodes}
+
+  // put address into the session data for use later
+  req.session.data.address = address
 
   res.render('providers/address/check-your-answers', {
     provider,
     currentAddress,
     address: req.session.data.address,
     actions: {
-      back: `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit`,
-      save: `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit/check`
+      back: `/providers/${providerId}/addresses/${addressId}/edit`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/addresses/${addressId}/edit`,
+      save: `/providers/${providerId}/addresses/${addressId}/edit/check`
     }
   })
 }
 
 exports.editProviderAddressCheck_post = async (req, res) => {
-  const address = await ProviderAddress.findByPk(req.params.addressId)
-  await address.update({
-    line1: req.session.data.address.line1,
-    line2: req.session.data.address.line2.length ? req.session.data.address.line2 : null,
-    line3: req.session.data.address.line3.length ? req.session.data.address.line3 : null,
-    town: req.session.data.address.town,
-    county: req.session.data.address.county.length ? req.session.data.address.county : null,
-    postcode: req.session.data.address.postcode,
-    updatedAt: new Date(),
-    updatedById: req.session.passport.user.id
+  const { addressId, providerId } = req.params
+  const { address } = req.session.data
+  const userId = req.session.passport.user.id
+
+  const currentAddress = await ProviderAddress.findByPk(addressId)
+
+  await currentAddress.update({
+    uprn: nullIfEmpty(address.uprn),
+    line1: address.line1,
+    line2: nullIfEmpty(address.line2),
+    line3: nullIfEmpty(address.line3),
+    town: address.town,
+    county: nullIfEmpty(address.county),
+    postcode: address.postcode,
+    latitude: nullIfEmpty(address.latitude),
+    longitude: nullIfEmpty(address.longitude),
+    googlePlaceId: nullIfEmpty(address.googlePlaceId),
+    updatedById: userId
   })
 
   delete req.session.data.address
 
   req.flash('success', 'Address updated')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///

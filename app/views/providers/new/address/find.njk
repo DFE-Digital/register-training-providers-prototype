@@ -2,7 +2,7 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Address" %}
+{% set title = "Find address" %}
 {% set caption = "Add provider" %}
 
 {% block pageTitle %}
@@ -37,15 +37,42 @@
         }
       }) %}
 
-        {% include "_includes/address-form.njk" %}
+        {{ govukInput({
+          id: "address-postcode",
+          name: "find[postcode]",
+          label: {
+            text: "Postcode",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "For example, SW1P 3BT"
+          },
+          classes: "govuk-input--width-10",
+          autocomplete: "postal-code",
+          errorMessage: errors | getErrorMessage("address-postcode"),
+          value: find.postcode
+        }) }}
+
+        {{ govukInput({
+          id: "address-building",
+          name: "find[building]",
+          label: {
+            text: "Building number or name (optional)",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "For example, 15 or Sanctuary Buildings"
+          },
+          classes: "govuk-input--width-20",
+          errorMessage: errors | getErrorMessage("address-building"),
+          value: find.building
+        }) }}
 
         {{ govukButton({
-          text: "Continue"
+          text: "Find address"
         }) }}
 
       {% endcall %}
-
-    </form>
 
     <p class="govuk-body">
       <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>

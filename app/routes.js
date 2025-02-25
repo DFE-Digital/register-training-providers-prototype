@@ -198,8 +198,14 @@ router.post('/providers/new/details', checkIsAuthenticated, providerController.n
 router.get('/providers/new/accreditation', checkIsAuthenticated, providerController.newProviderAccreditation_get)
 router.post('/providers/new/accreditation', checkIsAuthenticated, providerController.newProviderAccreditation_post)
 
-router.get('/providers/new/address', checkIsAuthenticated, providerController.newProviderAddress_get)
-router.post('/providers/new/address', checkIsAuthenticated, providerController.newProviderAddress_post)
+router.get('/providers/new/address', checkIsAuthenticated, providerController.newProviderFindAddress_get)
+router.post('/providers/new/address', checkIsAuthenticated, providerController.newProviderFindAddress_post)
+
+router.get('/providers/new/address/select', checkIsAuthenticated, providerController.newProviderSelectAddress_get)
+router.post('/providers/new/address/select', checkIsAuthenticated, providerController.newProviderSelectAddress_post)
+
+router.get('/providers/new/address/enter', checkIsAuthenticated, providerController.newProviderEnterAddress_get)
+router.post('/providers/new/address/enter', checkIsAuthenticated, providerController.newProviderEnterAddress_post)
 
 router.get('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_get)
 router.post('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_post)

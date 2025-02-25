@@ -16,7 +16,7 @@
   {% set title = addresses.length + " addresses found for " + searchTerms %}
 {% endif %}
 
-{% set caption = "Add address - " + provider.operatingName %}
+{% set caption = "Add provider" %}
 
 {% block pageTitle %}
   {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK

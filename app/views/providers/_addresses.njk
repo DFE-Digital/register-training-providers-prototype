@@ -18,6 +18,11 @@
               href: actions.address.delete + "/" + address.id + "/delete",
               text: "Remove",
               visuallyHiddenText: "address " + loop.index
+            },
+            {
+              href: actions.address.change + "/" + address.id + "/edit",
+              text: "Change",
+              visuallyHiddenText: "address " + loop.index
             }
           ]
         }
@@ -89,13 +94,6 @@
         }
       ]
     }) }}
-
-    {# ,
-    {
-      href: actions.address.change + "/" + address.id + "/edit",
-      text: "Change",
-      visuallyHiddenText: "address " + loop.index
-    } #}
   {% endfor %}
 {% else %}
   <p class="govuk-body">

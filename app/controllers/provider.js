@@ -1,10 +1,13 @@
+const { v4: uuid } = require('uuid')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
+const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
-const { v4: uuid } = require('uuid')
+const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
+const { geocodeAddress } = require('../services/googleMaps')
 const {
   Provider,
   ProviderAddress,
@@ -492,28 +495,179 @@ exports.newProviderAccreditation_post = async (req, res) => {
   }
 }
 
-exports.newProviderAddress_get = async (req, res) => {
+exports.newProviderFindAddress_get = async (req, res) => {
+  const { find, provider } = req.session.data
+
   let back
-  if (req.session.data.provider.isAccredited == "yes") {
+  if (provider.isAccredited == "yes") {
     back = '/providers/new/accreditation'
   } else {
     back = '/providers/new/details'
   }
 
-  res.render('providers/new/address', {
-    provider: req.session.data.provider,
+  res.render('providers/new/address/find', {
+    provider,
+    find,
     actions: {
       back,
-      cancel: '/providers',
-      save: '/providers/new/address'
+      cancel: `/providers`,
+      save: `/providers/new/address`
     }
   })
 }
 
-exports.newProviderAddress_post = async (req, res) => {
+exports.newProviderFindAddress_post = async (req, res) => {
+  const { find, provider } = req.session.data
   const errors = []
 
-  if (!req.session.data.provider.address.line1.length) {
+  if (!find.postcode.length) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a postcode"
+    errors.push(error)
+  }
+  // else if (!isValidPostcode(find.postcode)) {
+  //   const error = {}
+  //   error.fieldName = "address-postcode"
+  //   error.href = "#address-postcode"
+  //   error.text = "Enter a real postcode"
+  //   errors.push(error)
+  // }
+
+  // if (!find.building.length) {
+  //   const error = {}
+  //   error.fieldName = "address-building"
+  //   error.href = "#address-building"
+  //   error.text = "Enter building number or name"
+  //   errors.push(error)
+  // }
+
+  if (errors.length) {
+    let back
+    if (provider.isAccredited == "yes") {
+      back = '/providers/new/accreditation'
+    } else {
+      back = '/providers/new/details'
+    }
+
+    res.render('providers/new/address/find', {
+      provider,
+      find,
+      errors,
+      actions: {
+        back,
+        cancel: `/providers`,
+        save: `/providers/new/address`
+      }
+    })
+  } else {
+    res.redirect(`/providers/new/address/select`)
+  }
+}
+
+exports.newProviderSelectAddress_get = async (req, res) => {
+  const { address, find, provider } = req.session.data
+
+  let addresses = []
+  if (find.postcode?.length) {
+    addresses = await findByPostcode(
+      postcode = find.postcode,
+      building = find.building
+    )
+
+    addresses = await parseForGovukRadios(addresses)
+  }
+
+  let back = `/providers/new/address`
+  if (req.query.referrer === 'check') {
+    back = `/providers/new/check`
+  }
+
+  res.render('providers/new/address/select', {
+    provider,
+    addresses,
+    find,
+    address,
+    actions: {
+      back,
+      cancel: `/providers`,
+      change: `/providers/new/address`,
+      enter: `/providers/new/address/enter`,
+      save: `/providers/new/address/select`
+    }
+  })
+}
+
+exports.newProviderSelectAddress_post = async (req, res) => {
+  const { address, find, provider } = req.session.data
+  const errors = []
+
+  if (!find.uprn) {
+    const error = {}
+    error.fieldName = "address-uprn"
+    error.href = "#address-uprn"
+    error.text = "Select an address"
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    let addresses = []
+    if (find.postcode?.length) {
+      addresses = await findByPostcode(
+        postcode = find.postcode,
+        building = find.building
+      )
+
+      addresses = await parseForGovukRadios(addresses)
+    }
+
+    let back = `/providers/new/address`
+    if (req.query.referrer === 'check') {
+      back = `/providers/new/check`
+    }
+
+    res.render('providers/new/address/select', {
+      provider,
+      addresses,
+      find,
+      address,
+      errors,
+      actions: {
+        back,
+        cancel: `/providers`,
+        change: `/providers/new/address`,
+        enter: `/providers/new/address/enter`,
+        save: `/providers/new/address/select`
+      }
+    })
+  } else {
+    res.redirect(`/providers/new/check`)
+  }
+}
+
+exports.newProviderEnterAddress_get = async (req, res) => {
+  const { address, provider } = req.session.data
+
+  // delete any selected address URPN as user is entering manually
+  delete req.session.data.find.uprn
+
+  res.render('providers/new/address/edit', {
+    provider,
+    address,
+    actions: {
+      back: `/providers/new/address/select`,
+      cancel: `/providers`,
+      save: `/providers/new/address/enter`
+    }
+  })
+}
+
+exports.newProviderEnterAddress_post = async (req, res) => {
+  const { address, provider } = req.session.data
+  const errors = []
+
+  if (!address.line1.length) {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
@@ -521,7 +675,7 @@ exports.newProviderAddress_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.provider.address.town.length) {
+  if (!address.town.length) {
     const error = {}
     error.fieldName = "address-town"
     error.href = "#address-town"
@@ -529,13 +683,13 @@ exports.newProviderAddress_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.provider.address.postcode.length) {
+  if (!address.postcode.length) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
     errors.push(error)
-  } else if (!isValidPostcode(req.session.data.provider.address.postcode)) {
+  } else if (!isValidPostcode(address.postcode)) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
@@ -544,40 +698,60 @@ exports.newProviderAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back
-    if (req.session.data.provider.isAccredited == "yes") {
-      back = '/providers/new/accreditation'
-    } else {
-      back = '/providers/new/details'
-    }
-
-    res.render('providers/new/address', {
-      provider: req.session.data.provider,
+    res.render('providers/new/address/edit', {
+      provider: provider,
+      address: address,
       errors,
       actions: {
-        back,
-        cancel: '/providers',
-        save: '/providers/new/address'
+        back: `/providers/new/address/select`,
+        cancel: `/providers`,
+        save: `/providers/new/address/enter`
       }
     })
   } else {
-    res.redirect('/providers/new/check')
+    res.redirect(`/providers/new/check`)
   }
 }
 
 exports.newProviderCheck_get = async (req, res) => {
+  const { find, provider } = req.session.data
+  let { address } = req.session.data
+
+  if (find.uprn) {
+    address = await findByUPRN(
+      uprn = find.uprn
+    )
+
+    address = parseOsPlacesData(address)
+  }
+  // Geocode the address data
+  const addressString = parseAddressAsString(address)
+  const geocodes = await geocodeAddress(addressString)
+
+  address = {...address, ...geocodes}
+
+  // put address into the session data for use later
+  req.session.data.address = address
+
+  let back = `/providers/new/address/enter`
+  if (find.uprn) {
+    back = `/providers/new/address/select`
+  }
+
   res.render('providers/new/check-your-answers', {
-    provider: req.session.data.provider,
+    provider,
+    address,
     actions: {
-      back: `/providers/new`,
+      back,
       cancel: `/providers`,
+      change: `/providers/new`,
       save: `/providers/new/check`
     }
   })
 }
 
 exports.newProviderCheck_post = async (req, res) => {
-  const { provider } = req.session.data
+  const { address, provider } = req.session.data
   const userId = req.session.passport.user.id
 
   const providerId = uuid()
@@ -615,24 +789,26 @@ exports.newProviderCheck_post = async (req, res) => {
     })
   }
 
-  if (provider.address) {
-    // TODO: Geocode address
-
+  if (address) {
     await ProviderAddress.create({
       id: uuid(),
       providerId,
-      line1: provider.address.line1,
-      line2: nullIfEmpty(provider.address.line2),
-      line3: nullIfEmpty(provider.address.line3),
-      town: provider.address.town,
-      county: nullIfEmpty(provider.address.county),
-      postcode: provider.address.postcode,
+      line1: address.line1,
+      line2: nullIfEmpty(address.line2),
+      line3: nullIfEmpty(address.line3),
+      town: address.town,
+      county: nullIfEmpty(address.county),
+      postcode: address.postcode,
+      latitude: nullIfEmpty(address.latitude),
+      longitude: nullIfEmpty(address.longitude),
+      googlePlaceId: nullIfEmpty(address.googlePlaceId),
       createdById: userId,
       updatedById: userId
     })
   }
 
   delete req.session.data.provider
+  delete req.session.data.address
 
   req.flash('success', 'Provider added')
   res.redirect(`/providers`)

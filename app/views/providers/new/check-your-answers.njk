@@ -199,7 +199,7 @@
               text: "Address line 1"
             },
             value: {
-              text: provider.address.line1
+              text: address.line1
             },
             actions: {
               items: [
@@ -216,7 +216,7 @@
               text: "Address line 2"
             },
             value: {
-              text: provider.address.line2
+              text: address.line2
             },
             actions: {
               items: [
@@ -233,7 +233,7 @@
               text: "Address line 3"
             },
             value: {
-              text: provider.address.line3
+              text: address.line3
             },
             actions: {
               items: [
@@ -250,7 +250,7 @@
               text: "Town"
             },
             value: {
-              text: provider.address.town
+              text: address.town
             },
             actions: {
               items: [
@@ -267,7 +267,7 @@
               text: "County"
             },
             value: {
-              text: provider.address.county
+              text: address.county
             },
             actions: {
               items: [
@@ -284,7 +284,7 @@
               text: "Postcode"
             },
             value: {
-              text: provider.address.postcode
+              text: address.postcode
             },
             actions: {
               items: [
@@ -294,6 +294,29 @@
                   visuallyHiddenText: "postcode"
                 }
               ]
+            }
+          }
+        ]
+      }) }}
+
+      <h3 class="govuk-heading-s">Geolocation</h3>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Latitude"
+            },
+            value: {
+              text: address.latitude
+            }
+          },
+          {
+            key: {
+              text: "Longitude"
+            },
+            value: {
+              text: address.longitude
             }
           }
         ]

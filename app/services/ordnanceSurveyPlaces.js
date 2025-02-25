@@ -1,17 +1,42 @@
-const axios = require('axios')
 const inflection = require('inflection')
 
 const apiKey = process.env.OS_PLACES_API_KEY
 
-// Helper function: title case the text if not empty, otherwise return null
+/**
+ * Helper function: Converts text to Title Case if not empty, otherwise returns null.
+ */
 const titleCaseOrNull = (value) => {
-  return (value && value.trim().length > 0)
+  return value && value.trim().length > 0
     ? inflection.titleize(value.trim())
     : null
 }
 
+/**
+ * Performs a fetch request to the OS Places API and returns the `results` array.
+ * If the request fails or the response is not OK, logs an error and returns `[]`.
+ */
+const fetchOsPlacesData = async (url) => {
+  try {
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      console.error(`OS Places request failed with status: ${response.status}`)
+      return []
+    }
+
+    const data = await response.json()
+    return data.results || []
+  } catch (error) {
+    console.error('Error fetching data from OS Places:', error)
+    return [] // Swallow error and return empty array – or throw if you prefer.
+  }
+}
+
+/**
+ * Sanitizes a raw OS Places address object, converting fields to Title Case and
+ * constructing a single-line ADDRESS field.
+ */
 const sanitiseAddress = (data = {}) => {
-  // Destructure fields from data
   const {
     UPRN,
     UDPRN,
@@ -30,7 +55,7 @@ const sanitiseAddress = (data = {}) => {
     LNG
   } = data
 
-  // Sanitize each field
+  // Title-case relevant fields
   const orgName = titleCaseOrNull(ORGANISATION_NAME)
   const deptName = titleCaseOrNull(DEPARTMENT_NAME)
   const subBuilding = titleCaseOrNull(SUB_BUILDING_NAME)
@@ -43,8 +68,7 @@ const sanitiseAddress = (data = {}) => {
   const postTown = titleCaseOrNull(POST_TOWN)
   const postcode = POSTCODE?.trim() || null
 
-  // Construct the ADDRESS from sanitized fields,
-  // ignoring null or empty values
+  // Build a single-line address
   const addressParts = [
     orgName,
     deptName,
@@ -57,13 +81,8 @@ const sanitiseAddress = (data = {}) => {
     depLocality,
     postTown,
     postcode
-  ].filter(Boolean) // keep only non-null, non-empty
+  ].filter(Boolean)
 
-  // Create a single line address
-  // OS place data already has this, but it is not sanitised
-  const ADDRESS = addressParts.join(', ')
-
-  // Return a normalised address object
   return {
     UPRN,
     UDPRN,
@@ -78,107 +97,68 @@ const sanitiseAddress = (data = {}) => {
     DEPENDENT_LOCALITY: depLocality,
     POST_TOWN: postTown,
     POSTCODE: postcode,
-    ADDRESS,
+    ADDRESS: addressParts.join(', '),
     LATITUDE: LAT ?? null,
     LONGITUDE: LNG ?? null
   }
 }
 
-// Find places that match a free text search
-// https://docs.os.uk/os-apis/accessing-os-apis/os-places-api/getting-started-with-example-queries-using-node.js#running-a-find-query
+/**
+ * Finds places that match a free text search.
+ * @param {string} query - Free text search string.
+ * @param {object} options - Optional parameters, e.g. { maxresults: 25 }
+ * @returns {Promise<Array>} - An array of sanitized address objects.
+ */
 const find = async (query, options = {}) => {
   const maxresults = options.maxresults || 25
+  const url = `https://api.os.uk/search/places/v1/find?query=${encodeURIComponent(query)}&maxresults=${maxresults}&key=${apiKey}`
 
-  // Construct the URL to fetch OS Places data
-  const url = `https://api.os.uk/search/places/v1/find?query=${encodeURIComponent(query)}&maxresults=${maxresults}&key=${apiKey}`;
-
-  try {
-    // Fetch data from OS Places API
-    const response = await axios.get(url)
-
-    // Destructure the "results" array off the data
-    const { results } = response.data
-
-    // Map over results and extract the DPA object from each item
-    const addresses = results.map(item => {
-      return sanitiseAddress(item.DPA)
-    })
-
-    // Return the array of address objects
-    return addresses
-  } catch (error) {
-    console.error('Error fetching addresses:', error)
-    return [] // swallow the error and return an empty array
-    // throw error
-  }
+  const results = await fetchOsPlacesData(url)
+  return results.map(item => sanitiseAddress(item.DPA))
 }
 
-// Find places that match a full or partial postcode
-// https://docs.os.uk/os-apis/accessing-os-apis/os-places-api/getting-started-with-example-queries-using-node.js#running-a-postcode-query
+/**
+ * Finds places by postcode, optionally filtering by building name/number.
+ * @param {string} postcode - Full or partial postcode.
+ * @param {string|null} building - Building name/number to narrow results.
+ * @param {object} options - Optional parameters, e.g. { maxresults: 25 }
+ * @returns {Promise<Array>} - An array of sanitized address objects.
+ */
 const findByPostcode = async (postcode, building = null, options = {}) => {
   const maxresults = options.maxresults || 25
-
-  // Construct the URL to fetch OS Places data
   const url = `https://api.os.uk/search/places/v1/postcode?postcode=${encodeURIComponent(postcode)}&maxresults=${maxresults}&key=${apiKey}`
 
-  try {
-    // Fetch data from OS Places API
-    const response = await axios.get(url)
+  let addresses = (await fetchOsPlacesData(url)).map(item => sanitiseAddress(item.DPA))
 
-    // Destructure the "results" array off the data
-    const { results } = response.data
-
-    // Map over results and extract the DPA object from each item
-    let addresses = results.map(item => {
-      return sanitiseAddress(item.DPA)
+  // If building info is provided, filter results by BUILDING_NAME or BUILDING_NUMBER
+  if (building?.length) {
+    const query = building.toUpperCase()
+    addresses = addresses.filter(address => {
+      return (
+        address?.BUILDING_NAME?.includes(query) ||
+        address?.BUILDING_NUMBER?.includes(query)
+      )
     })
-
-    // Filter addresses that match building details
-    if (building?.length) {
-      const query = building.toUpperCase()
-
-      addresses = addresses.filter(address => {
-        return (
-          address?.BUILDING_NAME?.includes(query) ||
-          address?.BUILDING_NUMBER?.includes(query)
-        )
-      })
-    }
-
-    // Return the array of address objects
-    return addresses
-  } catch (error) {
-    console.error('Error fetching addresses:', error)
-    return [] // swallow the error and return an empty array
-    // throw error
   }
+
+  return addresses
 }
 
-// Get the address for a specific UPRN
-// https://docs.os.uk/os-apis/accessing-os-apis/os-places-api/getting-started-with-example-queries-using-node.js#running-a-uprn-query
-const findByUPRN = async (uprn, options = {}) => {
-  // Construct the URL to fetch OS Places data
-  const url = `https://api.os.uk/search/places/v1/uprn?uprn=${uprn}&key=${apiKey}`;
+/**
+ * Finds a single address by UPRN.
+ * @param {string} uprn
+ * @returns {Promise<Object|{}>} - A single sanitized address object or an empty object if not found.
+ */
+const findByUPRN = async (uprn) => {
+  const url = `https://api.os.uk/search/places/v1/uprn?uprn=${uprn}&key=${apiKey}`
 
-  try {
-    // Fetch data from OS Places API
-    const response = await axios.get(url)
-
-    // Destructure the "results" array off the data
-    const { results } = response.data
-
-    // Map over results and extract the DPA object from each item
-    const address = results.map(item => {
-      return sanitiseAddress(item.DPA)
-    })
-
-    // Return the array of address objects
-    return address
-  } catch (error) {
-    console.error('Error fetching address:', error)
-    return {} // swallow the error and return an empty object
-    // throw error
+  // This returns an array of results typically you’d expect only one for a single UPRN.
+  const results = await fetchOsPlacesData(url)
+  if (!results.length) {
+    return {}
   }
+
+  return sanitiseAddress(results[0].DPA)
 }
 
 module.exports = {
