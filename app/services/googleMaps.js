@@ -18,7 +18,7 @@ const geocodeAddress = async (addressString) => {
   }
 
   // Build request URL
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY
   if (!apiKey) {
     throw new Error("Google Places API key not set in environment variables.")
   }
