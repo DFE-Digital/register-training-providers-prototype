@@ -1,6 +1,6 @@
+const { v4: uuid } = require('uuid')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { v4: uuid } = require('uuid')
 const { Provider, ProviderPartnership } = require('../models')
 const { Op } = require('sequelize')
 
