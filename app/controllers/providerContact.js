@@ -1,6 +1,7 @@
 const { v4: uuid } = require('uuid')
-const Pagination = require('../helpers/pagination')
 const { Provider, ProviderContact } = require('../models')
+const { isAccreditedProvider } = require('../helpers/accreditation')
+const Pagination = require('../helpers/pagination')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider contacts
@@ -11,14 +12,23 @@ exports.providerContactsList = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 50
   const offset = (page - 1) * limit
 
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
   // Get the total number of contacts for pagination metadata
   const totalCount = await ProviderContact.count({
-    where: { providerId: req.params.providerId }
+    where: { providerId }
   })
 
   // Only fetch ONE page of contacts
   const contacts = await ProviderContact.findAll({
-    where: { providerId: req.params.providerId },
+    where: { providerId },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -31,7 +41,9 @@ exports.providerContactsList = async (req, res) => {
   // Clear session provider data
   delete req.session.data.contact
 
-  res.render('providers/contacts/index', {
+  res.render('providers/contact/index', {
+    provider,
+    isAccredited,
     // Contacts for *this* page
     contacts: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
@@ -55,7 +67,7 @@ exports.providerContactDetails = async (req, res) => {
       }
     ]
   })
-  res.render('providers/contacts/show', { contact })
+  res.render('providers/contact/show', { contact })
 }
 
 /// ------------------------------------------------------------------------ ///

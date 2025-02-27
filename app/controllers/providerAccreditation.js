@@ -1,7 +1,8 @@
 const { v4: uuid } = require('uuid')
-const Pagination = require('../helpers/pagination')
-const { isoDateFromDateInput } = require('../helpers/date')
 const { Provider, ProviderAccreditation } = require('../models')
+const Pagination = require('../helpers/pagination')
+const { isAccreditedProvider } = require('../helpers/accreditation')
+const { isoDateFromDateInput } = require('../helpers/date')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider accreditations
@@ -12,14 +13,23 @@ exports.providerAccreditationsList = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 50
   const offset = (page - 1) * limit
 
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
   // Get the total number of accreditations for pagination metadata
   const totalCount = await ProviderAccreditation.count({
-    where: { providerId: req.params.providerId }
+    where: { providerId }
   })
 
   // Only fetch ONE page of accreditations
   const accreditations = await ProviderAccreditation.findAll({
-    where: { providerId: req.params.providerId },
+    where: { providerId },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -32,7 +42,9 @@ exports.providerAccreditationsList = async (req, res) => {
   // Clear session provider data
   delete req.session.data.accreditation
 
-  res.render('providers/accreditations/index', {
+  res.render('providers/accreditation/index', {
+    provider,
+    isAccredited,
     // Accreditations for *this* page
     accreditations: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
@@ -56,7 +68,7 @@ exports.providerAccreditationDetails = async (req, res) => {
       }
     ]
   })
-  res.render('providers/accreditations/show', { accreditation })
+  res.render('providers/accreditation/show', { accreditation })
 }
 
 /// ------------------------------------------------------------------------ ///

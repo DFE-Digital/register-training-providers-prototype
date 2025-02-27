@@ -1,11 +1,12 @@
 const { v4: uuid } = require('uuid')
+const { Provider, ProviderAddress } = require('../models')
 const Pagination = require('../helpers/pagination')
+const { isAccreditedProvider } = require('../helpers/accreditation')
 const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
 const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode } = require('../helpers/validation')
-const { Provider, ProviderAddress } = require('../models')
-const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
 const { geocodeAddress } = require('../services/googleMaps')
+const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider addresses
@@ -16,14 +17,23 @@ exports.providerAddressesList = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 50
   const offset = (page - 1) * limit
 
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
   // Get the total number of addresses for pagination metadata
   const totalCount = await ProviderAddress.count({
-    where: { providerId: req.params.providerId }
+    where: { providerId }
   })
 
   // Only fetch ONE page of addresses
-  const addresses = await address.findAll({
-    where: { providerId: req.params.providerId },
+  const addresses = await ProviderAddress.findAll({
+    where: { providerId },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -36,7 +46,9 @@ exports.providerAddressesList = async (req, res) => {
   // Clear session address data
   delete req.session.data.address
 
-  res.render('providers/addresses/index', {
+  res.render('providers/address/index', {
+    provider,
+    isAccredited,
     // Addresses for *this* page
     addresses: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
@@ -60,7 +72,7 @@ exports.providerAddressDetails = async (req, res) => {
       }
     ]
   })
-  res.render('providers/addresses/show', { address })
+  res.render('providers/address/show', { address })
 }
 
 /// ------------------------------------------------------------------------ ///
