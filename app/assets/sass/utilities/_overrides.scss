@@ -9,3 +9,13 @@
 .govuk-phase-banner--no-border-bottom {
   border-bottom: 0;
 }
+
+.govuk-service-navigation {
+  &__container {
+    justify-content: space-between;
+  }
+
+  &__link {
+    font-weight: bold;
+  }
+}
