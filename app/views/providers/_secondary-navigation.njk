@@ -1,0 +1,30 @@
+{{ appSecondaryNavigation({
+  label: "Organisation navigation",
+  items: [
+    {
+      href: baseUrl,
+      text: "Details",
+      active: secondaryNavId == "details"
+    },
+    {
+      href: baseUrl + "/accreditations",
+      text: "Accreditations",
+      active: secondaryNavId == "accreditations"
+    },
+    {
+      href: baseUrl + "/addresses",
+      text: "Addresses",
+      active: secondaryNavId == "addresses"
+    },
+    {
+      href: baseUrl + "/contacts",
+      text: "Contacts",
+      active: secondaryNavId == "contacts"
+    },
+    {
+      href: baseUrl + "/partnerships",
+      text: "Partnerships",
+      active: secondaryNavId == "partnerships"
+    }
+  ]
+}) }}
