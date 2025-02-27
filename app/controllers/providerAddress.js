@@ -52,7 +52,10 @@ exports.providerAddressesList = async (req, res) => {
     // Addresses for *this* page
     addresses: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    pagination,
+    actions: {
+      new: `/providers/${providerId}/addresses/new`
+    }
   })
 }
 

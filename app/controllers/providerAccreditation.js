@@ -48,7 +48,10 @@ exports.providerAccreditationsList = async (req, res) => {
     // Accreditations for *this* page
     accreditations: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    pagination,
+    actions: {
+      new: `/providers/${providerId}/accreditations/new`
+    }
   })
 }
 

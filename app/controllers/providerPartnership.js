@@ -67,7 +67,10 @@ exports.providerPartnershipsList = async (req, res) => {
     // Partnerships for *this* page
     partnerships: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    pagination,
+    actions: {
+      new: `/providers/${providerId}/partnerships/new`
+    }
   })
 }
 

@@ -47,7 +47,10 @@ exports.providerContactsList = async (req, res) => {
     // Contacts for *this* page
     contacts: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    pagination,
+    actions: {
+      new: `/providers/${providerId}/contacts/new`
+    }
   })
 }
 
