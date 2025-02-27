@@ -1,6 +1,7 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "details" %}
 
 {% set title = provider.operatingName %}
 {% set caption = "Provider" %}
@@ -20,6 +21,20 @@
   <div class="govuk-grid-column-two-thirds">
 
     {% include "_includes/page-heading.njk" %}
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include "./_secondary-navigation.njk" %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m">Provider details</h2>
 
     <p class="govuk-body">
       <a href="/providers/{{ provider.id }}/delete" class="govuk-link">Remove provider</a>
@@ -142,16 +157,6 @@
         }
       ]
     }) }}
-
-    {% if provider.type in ["hei","scitt"] %}
-      {% include "./_accreditations.njk" %}
-    {% endif %}
-
-    {% include "./_addresses.njk" %}
-
-    {% include "./_contacts.njk" %}
-
-    {% include "./_partnerships.njk" %}
 
   </div>
 </div>
