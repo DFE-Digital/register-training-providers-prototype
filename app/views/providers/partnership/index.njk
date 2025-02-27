@@ -1,9 +1,17 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "partnerships" %}
 
-{% set title = "Partnerships" %}
-{% set caption = provider.operatingName %}
+{% set title = provider.operatingName %}
+{% set caption = "Provider" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/providers"
+}) }}
+{% endblock %}
 
 {% block content %}
 
@@ -14,9 +22,23 @@
 
     {% include "_includes/page-heading.njk" %}
 
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include "../_secondary-navigation.njk" %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m">Partnerships</h2>
+
     {{ govukButton({
       text: "Add partnership",
-      href: "#"
+      href: actions.new
     }) }}
 
     {% if partnerships.length %}

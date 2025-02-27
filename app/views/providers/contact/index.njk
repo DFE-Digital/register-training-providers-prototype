@@ -1,0 +1,113 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "contacts" %}
+
+{% set title = provider.operatingName %}
+{% set caption = "Provider" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/providers"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include "../_secondary-navigation.njk" %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m">Contacts</h2>
+
+    {{ govukButton({
+      text: "Add contact",
+      href: actions.new
+    }) }}
+
+    {% if contacts.length %}
+      {% for contact in contacts %}
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: "Contact " + loop.index
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.contact.delete + "/" + contact.id + "/delete",
+                  text: "Remove",
+                  visuallyHiddenText: "contact " + loop.index
+                },
+                {
+                  href: actions.contact.change + "/" + contact.id + "/edit",
+                  text: "Change",
+                  visuallyHiddenText: "contact " + loop.index
+                }
+              ]
+            }
+          },
+          rows: [
+            {
+              key: {
+                text: "First name"
+              },
+              value: {
+                text: contact.firstName
+              }
+            },
+            {
+              key: {
+                text: "Last name"
+              },
+              value: {
+                text: contact.lastName
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                text: contact.email if contact.email.length else "Not entered",
+                classes: "govuk-hint" if not contact.email.length
+              }
+            },
+            {
+              key: {
+                text: "Telephone"
+              },
+              value: {
+                text: contact.telephone if contact.telephone.length else "Not entered",
+                classes: "govuk-hint" if not contact.telephone.length
+              }
+            }
+          ]
+        }) }}
+      {% endfor %}
+    {% else %}
+      <p class="govuk-body">
+        There are no contacts for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+      </p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

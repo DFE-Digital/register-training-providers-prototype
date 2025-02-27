@@ -1,0 +1,104 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "accreditations" %}
+
+{% set title = provider.operatingName %}
+{% set caption = "Provider" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/providers"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include "../_secondary-navigation.njk" %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m">Accreditations</h2>
+
+    {{ govukButton({
+      text: "Add Accreditation",
+      href: actions.new
+    }) }}
+
+    {% if accreditations.length %}
+      {% for accreditation in accreditations %}
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: "Accreditation " + loop.index
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.accreditation.delete + "/" + accreditation.id + "/delete",
+                  text: "Remove",
+                  visuallyHiddenText: "accreditation " + loop.index
+                },
+                {
+                  href: actions.accreditation.change + "/" + accreditation.id + "/edit",
+                  text: "Change",
+                  visuallyHiddenText: "accreditation " + loop.index
+                }
+              ]
+            }
+          },
+          rows: [
+            {
+              key: {
+                text: "Accreditation number"
+              },
+              value: {
+                text: accreditation.number
+              }
+            },
+            {
+              key: {
+                text: "Date accreditation starts"
+              },
+              value: {
+                text: accreditation.startsOn | govukDate
+              }
+            },
+            {
+              key: {
+                text: "Date accreditation ends"
+              },
+              value: {
+                text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
+                classes: "govuk-hint" if not accreditation.endsOn
+              }
+            }
+          ]
+        }) }}
+      {% endfor %}
+    {% else %}
+      <p class="govuk-body">
+        There are no accreditations for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+      </p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
