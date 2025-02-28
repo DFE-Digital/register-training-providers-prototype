@@ -10,7 +10,7 @@ const { isAccreditedProvider } = require('../helpers/accreditation')
 
 exports.providerPartnershipsList = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1
-  const limit = parseInt(req.query.limit, 10) || 50
+  const limit = parseInt(req.query.limit, 10) || 25
   const offset = (page - 1) * limit
 
   // get the providerId from the request for use in subsequent queries
@@ -32,31 +32,49 @@ exports.providerPartnershipsList = async (req, res) => {
     }
   })
 
+  // TODO: Tidy up accreditation data
+
+  if (isAccredited) {
+    // fetch the trainingPartnerships sorted
+    provider.partnerships = await provider.getTrainingPartnerships({
+      order: [['operatingName', 'ASC']],
+      limit,
+      offset
+    })
+  } else {
+    // fetch the accreditedPartnerships sorted
+    provider.partnerships = await provider.getAccreditedPartnerships({
+      order: [['operatingName', 'ASC']],
+      limit,
+      offset
+    })
+  }
+
   // Only fetch ONE page of partnerships
-  const partnerships = await ProviderPartnership.findAll({
-    where: {
-      [Op.or]: [
-        { accreditedProviderId: providerId },
-        { trainingProviderId: providerId },
-      ]
-    },
-    order: [
-      ['accreditedProviderId', 'ASC'],
-      ['trainingProviderId', 'ASC']
-    ],
-    limit,
-    offset,
-    include: [
-      {
-        model: Provider,
-        as: isAccredited ? 'trainingProvider' : 'accreditedProvider'
-      }
-    ]
-  })
+  // const partnerships = await ProviderPartnership.findAll({
+  //   where: {
+  //     [Op.or]: [
+  //       { accreditedProviderId: providerId },
+  //       { trainingProviderId: providerId },
+  //     ]
+  //   },
+  //   order: [
+  //     ['accreditedProviderId', 'ASC'],
+  //     ['trainingProviderId', 'ASC']
+  //   ],
+  //   limit,
+  //   offset,
+  //   include: [
+  //     {
+  //       model: Provider,
+  //       as: isAccredited ? 'trainingProvider' : 'accreditedProvider'
+  //     }
+  //   ]
+  // })
 
   // Create your Pagination object
   // using the chunk + the overall total count
-  const pagination = new Pagination(partnerships, totalCount, page, limit)
+  const pagination = new Pagination(provider.partnerships, totalCount, page, limit)
 
   // Clear session provider data
   delete req.session.data.partnership

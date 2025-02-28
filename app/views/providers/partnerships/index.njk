@@ -43,13 +43,13 @@
 
     {% if partnerships.length %}
 
-      {% for partnership in partnerships %}
+      {% for provider in partnerships %}
 
-        {% if isAccredited %}
+        {# {% if isAccredited %}
           {% set provider = partnership.trainingProvider %}
         {% else %}
           {% set provider = partnership.accreditedProvider %}
-        {% endif %}
+        {% endif %} #}
 
         {% set operatingNameHtml %}
           <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">

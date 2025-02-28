@@ -285,47 +285,28 @@ exports.providerDetails = async (req, res) => {
 
   // 1) Fetch the main provider (and hasMany associations)
   const provider = await Provider.findByPk(providerId, {
-    include: [
-      { model: ProviderAccreditation, as: 'accreditations' },
-      { model: ProviderAddress, as: 'addresses' },
-      { model: ProviderContact, as: 'contacts' }
-    ]
+    // include: [
+    //   { model: ProviderAccreditation, as: 'accreditations' },
+    //   { model: ProviderAddress, as: 'addresses' },
+    //   { model: ProviderContact, as: 'contacts' }
+    // ]
   })
 
   // 2) Fetch the accreditedPartnerships sorted
-  provider.accreditedPartnerships = await provider.getAccreditedPartnerships({
-    order: [['operatingName', 'ASC']]
-  })
+  // provider.accreditedPartnerships = await provider.getAccreditedPartnerships({
+  //   order: [['operatingName', 'ASC']]
+  // })
 
   // 3) Fetch the trainingPartnerships sorted
-  provider.trainingPartnerships = await provider.getTrainingPartnerships({
-    order: [['operatingName', 'ASC']]
-  })
+  // provider.trainingPartnerships = await provider.getTrainingPartnerships({
+  //   order: [['operatingName', 'ASC']]
+  // })
 
   res.render('providers/show', {
     provider,
     isAccredited,
     actions: {
-      accreditation: {
-        change: `/providers/${providerId}/accreditations`,
-        delete: `/providers/${providerId}/accreditations`,
-        new: `/providers/${providerId}/accreditations/new`
-      },
-      address: {
-        change: `/providers/${providerId}/addresses`,
-        delete: `/providers/${providerId}/addresses`,
-        new: `/providers/${providerId}/addresses/new`
-      },
-      contact: {
-        change: `/providers/${providerId}/contacts`,
-        delete: `/providers/${providerId}/contacts`,
-        new: `/providers/${providerId}/contacts/new`
-      },
-      partnership: {
-        change: `/providers/${providerId}/partnerships`,
-        delete: `/providers/${providerId}/partnerships`,
-        new: `/providers/${providerId}/partnerships/new`
-      }
+      delete: `/providers/${providerId}/delete`
     }
    })
 }
