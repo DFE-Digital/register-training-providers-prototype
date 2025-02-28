@@ -42,7 +42,7 @@ exports.providerAccreditationsList = async (req, res) => {
   // Clear session provider data
   delete req.session.data.accreditation
 
-  res.render('providers/accreditation/index', {
+  res.render('providers/accreditations/index', {
     provider,
     isAccredited,
     // Accreditations for *this* page
@@ -50,7 +50,9 @@ exports.providerAccreditationsList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/providers/${providerId}/accreditations/new`
+      new: `/providers/${providerId}/accreditations/new`,
+      change: `/providers/${providerId}/accreditations`,
+      delete: `/providers/${providerId}/accreditations`
     }
   })
 }
@@ -71,7 +73,7 @@ exports.providerAccreditationDetails = async (req, res) => {
       }
     ]
   })
-  res.render('providers/accreditation/show', { accreditation })
+  res.render('providers/accreditations/show', { accreditation })
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -86,7 +88,7 @@ exports.newProviderAccreditation_get = async (req, res) => {
     back = `/providers/${req.params.providerId}/accreditations/new/check`
   }
 
-  res.render('providers/accreditation/edit', {
+  res.render('providers/accreditations/edit', {
     provider,
     accreditation: req.session.data.accreditation,
     actions: {
@@ -126,7 +128,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
       back = `/providers/${req.params.providerId}/accreditations/new/check`
     }
 
-    res.render('providers/accreditation/edit', {
+    res.render('providers/accreditations/edit', {
       provider,
       accreditation: req.session.data.accreditation,
       errors,
@@ -143,7 +145,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
 
 exports.newProviderAccreditationCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
-  res.render('providers/accreditation/check-your-answers', {
+  res.render('providers/accreditations/check-your-answers', {
     provider,
     accreditation: req.session.data.accreditation,
     actions: {
@@ -178,7 +180,7 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation added')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${req.params.providerId}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -201,7 +203,7 @@ exports.editProviderAccreditation_get = async (req, res) => {
     back = `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit/check`
   }
 
-  res.render('providers/accreditation/edit', {
+  res.render('providers/accreditations/edit', {
     provider,
     currentAccreditation,
     accreditation,
@@ -244,7 +246,7 @@ exports.editProviderAccreditation_post = async (req, res) => {
       back = `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit/check`
     }
 
-    res.render('providers/accreditation/edit', {
+    res.render('providers/accreditations/edit', {
       provider,
       currentAccreditation,
       accreditation: req.session.data.accreditation,
@@ -264,7 +266,7 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
   const currentAccreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
 
-  res.render('providers/accreditation/check-your-answers', {
+  res.render('providers/accreditations/check-your-answers', {
     provider,
     currentAccreditation,
     accreditation: req.session.data.accreditation,
@@ -299,7 +301,7 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation updated')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${req.params.providerId}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -309,7 +311,7 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
 exports.deleteProviderAccreditation_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
   const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
-  res.render('providers/accreditation/delete', {
+  res.render('providers/accreditations/delete', {
     provider,
     accreditation,
     actions: {
@@ -325,5 +327,5 @@ exports.deleteProviderAccreditation_post = async (req, res) => {
   await accreditation.destroy()
 
   req.flash('success', 'Accreditation removed')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${req.params.providerId}/accreditations`)
 }
