@@ -348,6 +348,14 @@ exports.newProviderIsAccredited_get = async (req, res) => {
 exports.newProviderIsAccredited_post = async (req, res) => {
   const errors = []
 
+  if (!req.session.data.provider?.isAccredited) {
+    const error = {}
+    error.fieldName = 'isAccredited'
+    error.href = '#isAccredited'
+    error.text = 'Select if the provider is accredited'
+    errors.push(error)
+  }
+
   if (errors.length) {
     res.render('providers/new/is-accredited', {
       provider: req.session.data.provider,
@@ -376,6 +384,14 @@ exports.newProviderType_get = async (req, res) => {
 
 exports.newProviderType_post = async (req, res) => {
   const errors = []
+
+  if (!req.session.data.provider?.type) {
+    const error = {}
+    error.fieldName = 'type'
+    error.href = '#type'
+    error.text = 'Select a provider type'
+    errors.push(error)
+  }
 
   if (errors.length) {
     res.render('providers/new/type', {
@@ -424,11 +440,29 @@ exports.newProviderDetails_post = async (req, res) => {
     }
   }
 
-  if (!req.session.data.provider.type) {
+  if (!req.session.data.provider.ukprn.length) {
     const error = {}
-    error.fieldName = 'type'
-    error.href = '#type'
-    error.text = 'Select a provider type'
+    error.fieldName = 'ukprn'
+    error.href = '#ukprn'
+    error.text = 'Enter a UK provider reference number (UKPRN)'
+    errors.push(error)
+  }
+
+  if (req.session.data.provider?.type === 'school') {
+    if (!req.session.data.provider.urn.length) {
+      const error = {}
+      error.fieldName = 'urn'
+      error.href = '#urn'
+      error.text = 'Enter a unique reference number (URN)'
+      errors.push(error)
+    }
+  }
+
+  if (!req.session.data.provider.code.length) {
+    const error = {}
+    error.fieldName = 'code'
+    error.href = '#code'
+    error.text = 'Enter a provider code'
     errors.push(error)
   }
 
