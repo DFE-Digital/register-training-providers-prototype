@@ -61,7 +61,7 @@ exports.providerPartnershipsList = async (req, res) => {
   // Clear session provider data
   delete req.session.data.partnership
 
-  res.render('providers/partnership/index', {
+  res.render('providers/partnerships/index', {
     provider,
     isAccredited,
     // Partnerships for *this* page
@@ -105,7 +105,7 @@ exports.providerPartnershipDetails = async (req, res) => {
     ]
   })
 
-  res.render('providers/partnership/show', {
+  res.render('providers/partnerships/show', {
     provider,
     partnership,
     isAccredited,
@@ -136,7 +136,7 @@ exports.newProviderPartnership_get = async (req, res) => {
     back = `/providers/${providerId}/partnerships/new/check`
   }
 
-  res.render('providers/partnership/find', {
+  res.render('providers/partnerships/find', {
     provider,
     isAccredited,
     actions: {
@@ -173,7 +173,7 @@ exports.newProviderPartnership_post = async (req, res) => {
       back = `/providers/${providerId}/partnerships/new/check`
     }
 
-    res.render('providers/partnership/find', {
+    res.render('providers/partnerships/find', {
       provider,
       isAccredited,
       errors,
@@ -193,7 +193,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   const partner = await Provider.findByPk(req.session.data.provider.id)
-  res.render('providers/partnership/check-your-answers', {
+  res.render('providers/partnerships/check-your-answers', {
     provider,
     partner,
     actions: {
@@ -236,7 +236,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   delete req.session.data.provider
 
   req.flash('success', 'Partnership added')
-  res.redirect(`/providers/${providerId}`)
+  res.redirect(`/providers/${providerId}/partnerships`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -262,7 +262,7 @@ exports.deleteProviderPartnership_get = async (req, res) => {
 
   const isAccredited = await isAccreditedProvider({ providerId })
 
-  res.render('providers/partnership/delete', {
+  res.render('providers/partnerships/delete', {
     provider,
     partnership,
     isAccredited,
@@ -281,5 +281,5 @@ exports.deleteProviderPartnership_post = async (req, res) => {
   await partnership.destroy()
 
   req.flash('success', 'Partnership removed')
-  res.redirect(`/providers/${providerId}`)
+  res.redirect(`/providers/${providerId}/partnerships`)
 }
