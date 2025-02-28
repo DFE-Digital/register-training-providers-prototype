@@ -69,7 +69,9 @@ exports.providerPartnershipsList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/providers/${providerId}/partnerships/new`
+      new: `/providers/${providerId}/partnerships/new`,
+      delete: `/providers/${providerId}/partnerships`,
+      view: `/providers`
     }
   })
 }
