@@ -132,7 +132,7 @@ exports.providerPartnershipDetails = async (req, res) => {
     actions: {
       back: `/providers/${providerId}`,
       cancel: `/providers/${providerId}`,
-      delete: `/providers/${providerId}/partnerships/${partnershipId}/delete`
+      delete: `/providers/${providerId}/partnerships`
     }
   })
 }
