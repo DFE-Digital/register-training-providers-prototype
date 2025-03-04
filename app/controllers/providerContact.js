@@ -1,4 +1,3 @@
-const { v4: uuid } = require('uuid')
 const { Provider, ProviderContact } = require('../models')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { nullIfEmpty } = require('../helpers/string')
@@ -172,7 +171,6 @@ exports.newProviderContactCheck_get = async (req, res) => {
 
 exports.newProviderContactCheck_post = async (req, res) => {
   await ProviderContact.create({
-    id: uuid(),
     providerId: req.params.providerId,
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,

@@ -1,4 +1,3 @@
-const { v4: uuid } = require('uuid')
 const { Provider, ProviderAddress } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
@@ -341,7 +340,6 @@ exports.newProviderAddressCheck_post = async (req, res) => {
   const userId = req.session.passport.user.id
 
   await ProviderAddress.create({
-    id: uuid(),
     providerId: req.params.providerId,
     uprn: nullIfEmpty(address.uprn),
     line1: address.line1,

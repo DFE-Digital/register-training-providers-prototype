@@ -1,4 +1,3 @@
-const { v4: uuid } = require('uuid')
 const { Provider, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
@@ -168,7 +167,6 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
   }
 
   await ProviderAccreditation.create({
-    id: uuid(),
     providerId: req.params.providerId,
     number: req.session.data.accreditation.number,
     startsOn,

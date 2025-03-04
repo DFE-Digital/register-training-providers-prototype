@@ -1,4 +1,3 @@
-const { v4: uuid } = require('uuid')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
@@ -773,10 +772,7 @@ exports.newProviderCheck_post = async (req, res) => {
   const { address, provider } = req.session.data
   const userId = req.session.passport.user.id
 
-  const providerId = uuid()
-
-  await Provider.create({
-    id: providerId,
+  const newProvider = await Provider.create({
     operatingName: provider.operatingName,
     legalName: nullIfEmpty(provider.legalName),
     type: provider.type,
@@ -798,8 +794,7 @@ exports.newProviderCheck_post = async (req, res) => {
     }
 
     await ProviderAccreditation.create({
-      id: uuid(),
-      providerId,
+      providerId: newProvider.id,
       number: provider.accreditation.number,
       startsOn,
       endsOn,
@@ -810,8 +805,7 @@ exports.newProviderCheck_post = async (req, res) => {
 
   if (address) {
     await ProviderAddress.create({
-      id: uuid(),
-      providerId,
+      providerId: newProvider.id,
       line1: address.line1,
       line2: nullIfEmpty(address.line2),
       line3: nullIfEmpty(address.line3),

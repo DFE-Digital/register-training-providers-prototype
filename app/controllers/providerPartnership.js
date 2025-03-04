@@ -1,5 +1,4 @@
 const { Op } = require('sequelize')
-const { v4: uuid } = require('uuid')
 const { Provider, ProviderPartnership } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
@@ -235,7 +234,6 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   if (isAccredited) {
     // if the provider is accredited, the partner provider is the training provider
     await ProviderPartnership.create({
-      id: uuid(),
       accreditedProviderId: providerId,
       trainingProviderId: req.session.data.provider.id,
       createdById: req.session.passport.user.id,
@@ -244,7 +242,6 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   } else {
     // if the provider is not accredited, the partner provider is the accredited provider
     await ProviderPartnership.create({
-      id: uuid(),
       accreditedProviderId: req.session.data.provider.id,
       trainingProviderId: providerId,
       createdById: req.session.passport.user.id,

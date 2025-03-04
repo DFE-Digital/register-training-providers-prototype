@@ -1,4 +1,3 @@
-const { v4: uuid } = require('uuid')
 const { User } = require('../models')
 
 exports.usersList = async (req, res) => {
@@ -91,17 +90,16 @@ exports.newUserCheck_get = async (req, res) => {
 
 exports.newUserCheck_post = async (req, res) => {
   const user = await User.create({
-    id: uuid(),
     firstName: req.session.data.user.firstName,
     lastName: req.session.data.user.lastName,
     email: req.session.data.user.email,
     createdById: req.session.passport.user.id,
-    uodatedById: req.session.passport.user.id
+    updatedById: req.session.passport.user.id
   })
 
   delete req.session.data.user
 
-  req.flash('success', 'User added')
+  req.flash('success', 'Support user added')
   res.redirect('/users')
 }
 
@@ -207,7 +205,7 @@ exports.editUserCheck_post = async (req, res) => {
 
   delete req.session.data.user
 
-  req.flash('success', 'User updated')
+  req.flash('success', 'Support user updated')
   res.redirect(`/users/${req.params.userId}`)
 }
 
@@ -220,6 +218,6 @@ exports.deleteUser_post = async (req, res) => {
   const user = await User.findOne({ where: { id: req.params.userId } })
   user.destroy()
 
-  req.flash('success', 'User removed')
+  req.flash('success', 'Support user removed')
   res.redirect('/users')
 }
