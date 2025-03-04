@@ -66,16 +66,20 @@ module.exports = (sequelize) => {
     },
     updatedAt: {
       type: DataTypes.DATE,
+      allowNull: false,
       field: 'updated_at'
     },
     updatedById: {
       type: DataTypes.UUID,
+      allowNull: false,
       field: 'updated_by_id'
     }
-  }, {
+  },
+  {
     sequelize,
     modelName: 'User',
-    tableName: 'users'
+    tableName: 'users',
+    timestamps: true
   })
 
   return User

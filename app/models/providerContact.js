@@ -69,10 +69,12 @@ module.exports = (sequelize) => {
       },
       updatedAt: {
         type: DataTypes.DATE,
+        allowNull: false,
         field: 'updated_at'
       },
       updatedById: {
         type: DataTypes.UUID,
+        allowNull: false,
         field: 'updated_by_id'
       }
     },
@@ -80,7 +82,7 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'ProviderContact',
       tableName: 'provider_contacts',
-      timestamps: false
+      timestamps: true
     }
   )
 
