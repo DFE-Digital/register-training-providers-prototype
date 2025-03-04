@@ -285,47 +285,28 @@ exports.providerDetails = async (req, res) => {
 
   // 1) Fetch the main provider (and hasMany associations)
   const provider = await Provider.findByPk(providerId, {
-    include: [
-      { model: ProviderAccreditation, as: 'accreditations' },
-      { model: ProviderAddress, as: 'addresses' },
-      { model: ProviderContact, as: 'contacts' }
-    ]
+    // include: [
+    //   { model: ProviderAccreditation, as: 'accreditations' },
+    //   { model: ProviderAddress, as: 'addresses' },
+    //   { model: ProviderContact, as: 'contacts' }
+    // ]
   })
 
   // 2) Fetch the accreditedPartnerships sorted
-  provider.accreditedPartnerships = await provider.getAccreditedPartnerships({
-    order: [['operatingName', 'ASC']]
-  })
+  // provider.accreditedPartnerships = await provider.getAccreditedPartnerships({
+  //   order: [['operatingName', 'ASC']]
+  // })
 
   // 3) Fetch the trainingPartnerships sorted
-  provider.trainingPartnerships = await provider.getTrainingPartnerships({
-    order: [['operatingName', 'ASC']]
-  })
+  // provider.trainingPartnerships = await provider.getTrainingPartnerships({
+  //   order: [['operatingName', 'ASC']]
+  // })
 
   res.render('providers/show', {
     provider,
     isAccredited,
     actions: {
-      accreditation: {
-        change: `/providers/${providerId}/accreditations`,
-        delete: `/providers/${providerId}/accreditations`,
-        new: `/providers/${providerId}/accreditations/new`
-      },
-      address: {
-        change: `/providers/${providerId}/addresses`,
-        delete: `/providers/${providerId}/addresses`,
-        new: `/providers/${providerId}/addresses/new`
-      },
-      contact: {
-        change: `/providers/${providerId}/contacts`,
-        delete: `/providers/${providerId}/contacts`,
-        new: `/providers/${providerId}/contacts/new`
-      },
-      partnership: {
-        change: `/providers/${providerId}/partnerships`,
-        delete: `/providers/${providerId}/partnerships`,
-        new: `/providers/${providerId}/partnerships/new`
-      }
+      delete: `/providers/${providerId}/delete`
     }
    })
 }
@@ -347,6 +328,14 @@ exports.newProviderIsAccredited_get = async (req, res) => {
 
 exports.newProviderIsAccredited_post = async (req, res) => {
   const errors = []
+
+  if (!req.session.data.provider?.isAccredited) {
+    const error = {}
+    error.fieldName = 'isAccredited'
+    error.href = '#isAccredited'
+    error.text = 'Select if the provider is accredited'
+    errors.push(error)
+  }
 
   if (errors.length) {
     res.render('providers/new/is-accredited', {
@@ -376,6 +365,14 @@ exports.newProviderType_get = async (req, res) => {
 
 exports.newProviderType_post = async (req, res) => {
   const errors = []
+
+  if (!req.session.data.provider?.type) {
+    const error = {}
+    error.fieldName = 'type'
+    error.href = '#type'
+    error.text = 'Select a provider type'
+    errors.push(error)
+  }
 
   if (errors.length) {
     res.render('providers/new/type', {
@@ -424,11 +421,29 @@ exports.newProviderDetails_post = async (req, res) => {
     }
   }
 
-  if (!req.session.data.provider.type) {
+  if (!req.session.data.provider.ukprn.length) {
     const error = {}
-    error.fieldName = 'type'
-    error.href = '#type'
-    error.text = 'Select a provider type'
+    error.fieldName = 'ukprn'
+    error.href = '#ukprn'
+    error.text = 'Enter a UK provider reference number (UKPRN)'
+    errors.push(error)
+  }
+
+  if (req.session.data.provider?.type === 'school') {
+    if (!req.session.data.provider.urn.length) {
+      const error = {}
+      error.fieldName = 'urn'
+      error.href = '#urn'
+      error.text = 'Enter a unique reference number (URN)'
+      errors.push(error)
+    }
+  }
+
+  if (!req.session.data.provider.code.length) {
+    const error = {}
+    error.fieldName = 'code'
+    error.href = '#code'
+    error.text = 'Enter a provider code'
     errors.push(error)
   }
 

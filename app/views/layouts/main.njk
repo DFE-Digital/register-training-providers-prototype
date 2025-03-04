@@ -2,6 +2,7 @@
 
 {% from "_components/checkbox-filter/macro.njk" import appCheckboxFilter %}
 {% from "_components/search/macro.njk" import appSearch %}
+{% from "_components/secondary-navigation/macro.njk" import appSecondaryNavigation %}
 
 {% block pageTitle %}
   {{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
@@ -33,6 +34,7 @@
   {% include "_includes/phase-banner.njk" %}
 
   {{ govukServiceNavigation({
+    navigationId: "primaryNavigation",
     navigation: [
       {
         text: "Providers",
@@ -40,7 +42,7 @@
         active: primaryNavId == "providers"
       },
       {
-        text: "Users",
+        text: "Support users",
         href: "/users",
         active: primaryNavId == "users"
       }

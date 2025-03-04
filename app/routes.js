@@ -41,6 +41,8 @@ const userController = require('./controllers/user')
 const checkIsAuthenticated = (req, res, next) => {
   // the signed in user
   req.session.passport = passport
+  // the base URL for navigation
+  res.locals.baseUrl = `/providers/${req.params.providerId}`
   next()
 }
 

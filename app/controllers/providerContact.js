@@ -1,5 +1,7 @@
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderContact } = require('../models')
+const { isAccreditedProvider } = require('../helpers/accreditation')
+const Pagination = require('../helpers/pagination')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider contacts
@@ -10,14 +12,23 @@ exports.providerContactsList = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 50
   const offset = (page - 1) * limit
 
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // get the current provider
+  const provider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
   // Get the total number of contacts for pagination metadata
   const totalCount = await ProviderContact.count({
-    where: { providerId: req.params.providerId }
+    where: { providerId }
   })
 
   // Only fetch ONE page of contacts
   const contacts = await ProviderContact.findAll({
-    where: { providerId: req.params.providerId },
+    where: { providerId },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -31,10 +42,17 @@ exports.providerContactsList = async (req, res) => {
   delete req.session.data.contact
 
   res.render('providers/contacts/index', {
+    provider,
+    isAccredited,
     // Contacts for *this* page
     contacts: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
-    pagination
+    pagination,
+    actions: {
+      new: `/providers/${providerId}/contacts/new`,
+      change: `/providers/${providerId}/contacts`,
+      delete: `/providers/${providerId}/contacts`
+    }
   })
 }
 
@@ -69,7 +87,7 @@ exports.newProviderContact_get = async (req, res) => {
     back = `/providers/${req.params.providerId}/contacts/new/check`
   }
 
-  res.render('providers/contact/edit', {
+  res.render('providers/contacts/edit', {
     provider,
     contact: req.session.data.contact,
     actions: {
@@ -122,7 +140,7 @@ exports.newProviderContact_post = async (req, res) => {
       back = `/providers/${req.params.providerId}/contacts/new/check`
     }
 
-    res.render('providers/contact/edit', {
+    res.render('providers/contacts/edit', {
       provider,
       contact: req.session.data.contact,
       errors,
@@ -139,7 +157,7 @@ exports.newProviderContact_post = async (req, res) => {
 
 exports.newProviderContactCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
-  res.render('providers/contact/check-your-answers', {
+  res.render('providers/contacts/check-your-answers', {
     provider,
     contact: req.session.data.contact,
     actions: {
@@ -166,7 +184,7 @@ exports.newProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact added')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${req.params.providerId}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -189,7 +207,7 @@ exports.editProviderContact_get = async (req, res) => {
     back = `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit/check`
   }
 
-  res.render('providers/contact/edit', {
+  res.render('providers/contacts/edit', {
     provider,
     currentContact,
     contact,
@@ -245,7 +263,7 @@ exports.editProviderContact_post = async (req, res) => {
       back = `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit/check`
     }
 
-    res.render('providers/contact/edit', {
+    res.render('providers/contacts/edit', {
       provider,
       currentContact,
       contact: req.session.data.contact,
@@ -265,7 +283,7 @@ exports.editProviderContactCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
   const currentContact = await ProviderContact.findByPk(req.params.contactId)
 
-  res.render('providers/contact/check-your-answers', {
+  res.render('providers/contacts/check-your-answers', {
     provider,
     currentContact,
     contact: req.session.data.contact,
@@ -292,7 +310,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact updated')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${req.params.providerId}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -302,7 +320,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
 exports.deleteProviderContact_get = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
   const contact = await ProviderContact.findByPk(req.params.contactId)
-  res.render('providers/contact/delete', {
+  res.render('providers/contacts/delete', {
     provider,
     contact,
     actions: {
@@ -318,5 +336,5 @@ exports.deleteProviderContact_post = async (req, res) => {
   await contact.destroy()
 
   req.flash('success', 'Contact removed')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${req.params.providerId}/contacts`)
 }

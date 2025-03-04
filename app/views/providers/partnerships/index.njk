@@ -1,0 +1,148 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "partnerships" %}
+
+{% set title = provider.operatingName %}
+{% set caption = "Provider" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/providers"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include "../_secondary-navigation.njk" %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m">Partnerships</h2>
+
+    {{ govukButton({
+      text: "Add partnership",
+      href: actions.new
+    }) }}
+
+    {% if partnerships.length %}
+
+      {% for provider in partnerships %}
+
+        {# {% if isAccredited %}
+          {% set provider = partnership.trainingProvider %}
+        {% else %}
+          {% set provider = partnership.accreditedProvider %}
+        {% endif %} #}
+
+        {% set operatingNameHtml %}
+          <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">
+            {{ provider.operatingName }}
+          </a>
+        {% endset %}
+
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: provider.operatingName
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.delete + "/" + provider.ProviderPartnership.id + "/delete",
+                  text: "Remove",
+                  visuallyHiddenText: "address " + loop.index
+                }
+              ]
+            }
+          },
+          rows: [
+            {
+              key: {
+                text: "Provider type"
+              },
+              value: {
+                text: provider.type | getProviderTypeLabel if provider.type.length else "Not entered",
+                classes: "govuk-hint" if not provider.type.length
+              }
+            },
+            {
+              key: {
+                text: "Accreditation type"
+              },
+              value: {
+                text: "Accredited" if provider.isAccredited else "Not accredited"
+              }
+            } if 1==0,
+            {
+              key: {
+                text: "Operating name"
+              },
+              value: {
+                html: operatingNameHtml
+              }
+            },
+            {
+              key: {
+                text: "Legal name"
+              },
+              value: {
+                text: provider.legalName if provider.legalName.length else "Not entered",
+                classes: "govuk-hint" if not provider.legalName.length
+              }
+            },
+            {
+              key: {
+                text: "UK provider reference number (UKPRN)"
+              },
+              value: {
+                text: provider.ukprn
+              }
+            },
+            {
+              key: {
+                text: "Unique reference number (URN)"
+              },
+              value: {
+                text: provider.urn if provider.urn.length else "Not entered",
+                classes: "govuk-hint" if not provider.urn.length
+              }
+            } if provider.type == "school",
+            {
+              key: {
+                text: "Provider code"
+              },
+              value: {
+                text: provider.code
+              }
+            }
+          ]
+        }) }}
+
+      {% endfor %}
+
+      {% include "_includes/pagination.njk" %}
+    {% else %}
+      <p class="govuk-body">There are no partnerships.</p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
