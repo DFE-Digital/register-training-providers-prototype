@@ -13,7 +13,7 @@ module.exports = {
       const providerPartnerships = JSON.parse(rawData)
 
       const createdAt = new Date()
-      const createdById = '354751f2-c5f7-483c-b9e4-b6103f50f970'
+      const userId = '354751f2-c5f7-483c-b9e4-b6103f50f970'
 
       // Map JSON keys to database column names
       const formattedProviderPartnerships = providerPartnerships
@@ -24,7 +24,9 @@ module.exports = {
           training_provider_id: providerPartnership.trainingProviderId, // JSON "trainingProviderId" → DB "training_provider_id"
           accredited_provider_id: providerPartnership.accreditedProviderId, // JSON "accreditedProviderId" → DB "accredited_provider_id"
           created_at: createdAt,
-          created_by_id: createdById // Default user
+          created_by_id: userId, // Default user
+          updated_at: createdAt,
+          updated_by_id: userId // Default user
         }))
 
       // Insert transformed data into the 'provider_accreditations' table
