@@ -238,8 +238,8 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
       id: uuid(),
       accreditedProviderId: providerId,
       trainingProviderId: req.session.data.provider.id,
-      createdAt: new Date(),
-      createdById: req.session.passport.user.id
+      createdById: req.session.passport.user.id,
+      updatedById: req.session.passport.user.id
     })
   } else {
     // if the provider is not accredited, the partner provider is the accredited provider
@@ -247,8 +247,8 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
       id: uuid(),
       accreditedProviderId: req.session.data.provider.id,
       trainingProviderId: providerId,
-      createdAt: new Date(),
-      createdById: req.session.passport.user.id
+      createdById: req.session.passport.user.id,
+      updatedById: req.session.passport.user.id
     })
   }
 

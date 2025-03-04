@@ -783,8 +783,8 @@ exports.newProviderCheck_post = async (req, res) => {
     code: provider.code,
     ukprn: provider.ukprn,
     urn: nullIfEmpty(provider.urn),
-    createdAt: new Date(),
-    createdById: userId
+    createdById: userId,
+    updatedById: userId
   })
 
   if (provider.accreditation) {
@@ -803,8 +803,8 @@ exports.newProviderCheck_post = async (req, res) => {
       number: provider.accreditation.number,
       startsOn,
       endsOn,
-      createdAt: new Date(),
-      createdById: userId
+      createdById: userId,
+      updatedById: userId
     })
   }
 
@@ -956,8 +956,7 @@ exports.editProviderCheck_post = async (req, res) => {
     // type: req.session.data.provider.type,
     code: req.session.data.provider.code,
     ukprn: req.session.data.provider.ukprn,
-    urn: req.session.data.provider.urn ? req.session.data.provider.urn : null,
-    updatedAt: new Date(),
+    urn: nullIfEmpty(req.session.data.provider.urn),
     updatedById: req.session.passport.user.id
   })
 

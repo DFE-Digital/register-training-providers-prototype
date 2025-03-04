@@ -173,8 +173,8 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
     number: req.session.data.accreditation.number,
     startsOn,
     endsOn,
-    createdAt: new Date(),
-    createdById: req.session.passport.user.id
+    createdById: req.session.passport.user.id,
+    updatedById: req.session.passport.user.id
   })
 
   delete req.session.data.accreditation
@@ -294,7 +294,6 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
     number: req.session.data.accreditation.number,
     startsOn,
     endsOn,
-    updatedAt: new Date(),
     updatedById: req.session.passport.user.id
   })
 

@@ -1,6 +1,7 @@
 const { v4: uuid } = require('uuid')
 const { Provider, ProviderContact } = require('../models')
 const { isAccreditedProvider } = require('../helpers/accreditation')
+const { nullIfEmpty } = require('../helpers/string')
 const Pagination = require('../helpers/pagination')
 
 /// ------------------------------------------------------------------------ ///
@@ -175,10 +176,10 @@ exports.newProviderContactCheck_post = async (req, res) => {
     providerId: req.params.providerId,
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,
-    email: req.session.data.contact.email.length ? req.session.data.contact.email : null,
-    telephone: req.session.data.contact.telephone.length ? req.session.data.contact.telephone : null,
-    createdAt: new Date(),
-    createdById: req.session.passport.user.id
+    email: nullIfEmpty(req.session.data.contact.email),
+    telephone: nullIfEmpty(req.session.data.contact.telephone),
+    createdById: req.session.passport.user.id,
+    updatedById: req.session.passport.user.id
   })
 
   delete req.session.data.contact
@@ -301,9 +302,8 @@ exports.editProviderContactCheck_post = async (req, res) => {
   await contact.update({
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,
-    email: req.session.data.contact.email.length ? req.session.data.contact.email : null,
-    telephone: req.session.data.contact.telephone.length ? req.session.data.contact.telephone : null,
-    updatedAt: new Date(),
+    email: nullIfEmpty(req.session.data.contact.email),
+    telephone: nullIfEmpty(req.session.data.contact.telephone),
     updatedById: req.session.passport.user.id
   })
 

@@ -95,8 +95,8 @@ exports.newUserCheck_post = async (req, res) => {
     firstName: req.session.data.user.firstName,
     lastName: req.session.data.user.lastName,
     email: req.session.data.user.email,
-    createdAt: new Date(),
-    createdById: '354751f2-c5f7-483c-b9e4-b6103f50f970'
+    createdById: req.session.passport.user.id,
+    uodatedById: req.session.passport.user.id
   })
 
   delete req.session.data.user
@@ -202,8 +202,7 @@ exports.editUserCheck_post = async (req, res) => {
     firstName: req.session.data.user.firstName,
     lastName: req.session.data.user.lastName,
     email: req.session.data.user.email,
-    updatedAt: new Date(),
-    updatedById: '354751f2-c5f7-483c-b9e4-b6103f50f970'
+    updatedById: req.session.passport.user.id
   })
 
   delete req.session.data.user
