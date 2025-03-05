@@ -30,10 +30,12 @@
 
     <h2 class="govuk-heading-m">Addresses</h2>
 
-    {{ govukButton({
-      text: "Add Address",
-      href: actions.new
-    }) }}
+    {% if not provider.archivedAt %}
+      {{ govukButton({
+        text: "Add Address",
+        href: actions.new
+      }) }}
+    {% endif %}
 
     {% if addresses.length %}
       {% for address in addresses %}
@@ -55,7 +57,7 @@
                   visuallyHiddenText: "address " + loop.index
                 }
               ]
-            }
+            } if not provider.archivedAt
           },
           rows: [
             {

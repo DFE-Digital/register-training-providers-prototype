@@ -30,10 +30,12 @@
 
     <h2 class="govuk-heading-m">Accreditations</h2>
 
-    {{ govukButton({
-      text: "Add Accreditation",
-      href: actions.new
-    }) }}
+    {% if not provider.archivedAt %}
+      {{ govukButton({
+        text: "Add Accreditation",
+        href: actions.new
+      }) }}
+    {% endif %}
 
     {% if accreditations.length %}
       {% for accreditation in accreditations %}
@@ -55,7 +57,7 @@
                   visuallyHiddenText: "accreditation " + loop.index
                 }
               ]
-            }
+            } if not provider.archivedAt
           },
           rows: [
             {
