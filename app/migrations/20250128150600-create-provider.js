@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       type: {
-        type: Sequelize.ENUM('hei', 'scitt', 'school')
+        type: Sequelize.ENUM('hei', 'school')
       },
       ukprn: {
         type: Sequelize.STRING,
