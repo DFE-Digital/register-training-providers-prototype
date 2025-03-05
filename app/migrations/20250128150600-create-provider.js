@@ -47,6 +47,12 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
+      archived_at: {
+        type: Sequelize.DATE
+      },
+      archived_by_id: {
+        type: Sequelize.UUID
+      },
       deleted_at: {
         type: Sequelize.DATE
       },
