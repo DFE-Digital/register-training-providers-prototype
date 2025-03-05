@@ -1,0 +1,37 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Confirm you want to restore " + provider.operatingName %}
+{% set caption = "Restore provider" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/providers/" + provider.id
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <form action="{{ actions.restore }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukButton({
+        text: "Restore provider"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
