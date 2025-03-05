@@ -89,10 +89,10 @@
         }) }}
 
         <p class="govuk-body">
-          Find UKPRNs on the <a href="https://ukrlp.co.uk/" class="govuk-link" target="_blank">UK register of learning providers (opens in new tab)</a>.
+          Find UKPRNs on the <a href="https://ukrlp.co.uk/" class="govuk-link" target="_blank">UK register of learning providers (opens in new tab)</a>
         </p>
 
-        {% if provider.type == "school" %}
+        {% if provider.type == "school" and not (provider.isAccredited == "yes" or isAccredited) %}
           {{ govukInput({
             id: "urn",
             name: "provider[urn]",

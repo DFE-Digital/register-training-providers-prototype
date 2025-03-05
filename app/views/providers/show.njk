@@ -55,7 +55,7 @@
             text: "Provider type"
           },
           value: {
-            text: provider.type | getProviderTypeLabel if provider.type.length else "Not entered",
+            text: provider.type | getProviderTypeLabel(isAccredited) if provider.type.length else "Not entered",
             classes: "govuk-hint" if not provider.type.length
           },
           actions: {

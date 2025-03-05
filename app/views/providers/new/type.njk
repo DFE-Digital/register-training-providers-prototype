@@ -47,13 +47,9 @@
             text: "hei" | getProviderTypeLabel
           },
           {
-            value: "scitt",
-            text: "scitt" | getProviderTypeLabel
-          } if provider.isAccredited == "yes",
-          {
             value: "school",
-            text: "school" | getProviderTypeLabel
-          } if provider.isAccredited == "no"
+            text: "school" | getProviderTypeLabel(provider.isAccredited)
+          }
         ]
       }) }}
 
