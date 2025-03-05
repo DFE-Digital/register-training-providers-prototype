@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingTag %}
+      {% if provider.deletedAt %}
+        {{ govukTag({
+          text: "Deleted",
+          classes: "govuk-tag--red"
+        }) }}
+      {% else %}
+        {% if provider.archivedAt %}
+          {{ govukTag({
+            text: "Archived"
+          }) }}
+        {% endif %}
+      {% endif %}
+    {% endset %}
+
+    {% include "_includes/page-heading.njk" %}
+
+    {% if provider.deletedAt %}
+      <p class="govuk-body">Provider deleted on {{ provider.deletedAt | govukDateTime }}</p>
+    {% endif %}
+
+  </div>
+</div>

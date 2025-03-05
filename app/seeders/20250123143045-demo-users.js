@@ -4,7 +4,7 @@ module.exports = {
     await queryInterface.bulkDelete('users', null, {})
 
     const createdAt = new Date()
-    const createdById = '354751f2-c5f7-483c-b9e4-b6103f50f970'
+    const userId = '354751f2-c5f7-483c-b9e4-b6103f50f970'
 
     await queryInterface.bulkInsert('users', [
       {
@@ -15,7 +15,9 @@ module.exports = {
         password: 'bat',
         is_active: true,
         created_at: createdAt,
-        created_by_id: createdById
+        created_by_id: userId,
+        updated_at: createdAt,
+        updated_by_id: userId
       },
       {
         id: '99c07212-6395-40b5-9776-9210645a5028',
@@ -25,7 +27,9 @@ module.exports = {
         password: 'bat',
         is_active: true,
         created_at: createdAt,
-        created_by_id: createdById
+        created_by_id: userId,
+        updated_at: createdAt,
+        updated_by_id: userId
       },
       {
         id: '354751f2-c5f7-483c-b9e4-b6103f50f970',
@@ -35,7 +39,9 @@ module.exports = {
         password: 'bat',
         is_active: true,
         created_at: createdAt,
-        created_by_id: createdById
+        created_by_id: userId,
+        updated_at: createdAt,
+        updated_by_id: userId
       },
     ], {})
   },

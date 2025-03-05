@@ -17,13 +17,7 @@
 
 {% include "_includes/notification-banner.njk" %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-
-    {% include "_includes/page-heading.njk" %}
-
-  </div>
-</div>
+{% include "./_page-heading.njk" %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
@@ -36,9 +30,23 @@
 
     <h2 class="govuk-heading-m">Provider details</h2>
 
-    <p class="govuk-body">
-      <a href="/providers/{{ provider.id }}/delete" class="govuk-link">Remove provider</a>
-    </p>
+    <div class="govuk-button-group">
+    {% if not provider.archivedAt %}
+      {{ govukButton({
+        text: "Archive provider",
+        href: actions.archive
+      }) }}
+    {% else %}
+      {{ govukButton({
+        text: "Restore provider",
+        href: actions.restore
+      }) }}
+      {% if not provider.deletedAt %}
+        <a href="{{ actions.delete }}" class="govuk-link">Delete provider</a>
+      {% endif %}
+    {% endif %}
+    </div>
+
 
     {{ govukSummaryList({
       rows: [
@@ -83,7 +91,7 @@
                 visuallyHiddenText: "operating name"
               }
             ]
-          }
+          } if not provider.archivedAt
         },
         {
           key: {
@@ -101,7 +109,7 @@
                 visuallyHiddenText: "legal name"
               }
             ]
-          }
+          } if not provider.archivedAt
         },
         {
           key: {
@@ -118,7 +126,7 @@
                 visuallyHiddenText: "UK provider reference number (UKPRN)"
               }
             ]
-          }
+          } if not provider.archivedAt
         },
         {
           key: {
@@ -136,7 +144,7 @@
                 visuallyHiddenText: "Unique reference number (URN)"
               }
             ]
-          }
+          } if not provider.archivedAt
         } if provider.type == "school",
         {
           key: {
@@ -153,7 +161,7 @@
                 visuallyHiddenText: "provider code"
               }
             ]
-          }
+          } if not provider.archivedAt
         }
       ]
     }) }}

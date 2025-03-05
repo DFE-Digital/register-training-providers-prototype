@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require('sequelize')
+const { v4: uuid } = require('uuid')
 
 module.exports = (sequelize) => {
   class ProviderPartnership extends Model {
@@ -29,7 +30,7 @@ module.exports = (sequelize) => {
     {
       id: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        defaultValue: uuid(),
         primaryKey: true
       },
       trainingProviderId: {
@@ -54,10 +55,12 @@ module.exports = (sequelize) => {
       },
       updatedAt: {
         type: DataTypes.DATE,
+        allowNull: false,
         field: 'updated_at'
       },
       updatedById: {
         type: DataTypes.UUID,
+        allowNull: false,
         field: 'updated_by_id'
       }
     },
@@ -65,7 +68,7 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'ProviderPartnership',
       tableName: 'provider_partnerships',
-      timestamps: false
+      timestamps: true
     }
   )
 

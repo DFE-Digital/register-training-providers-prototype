@@ -17,13 +17,7 @@
 
 {% include "_includes/notification-banner.njk" %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-
-    {% include "_includes/page-heading.njk" %}
-
-  </div>
-</div>
+{% include "../_page-heading.njk" %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
@@ -36,10 +30,12 @@
 
     <h2 class="govuk-heading-m">Partnerships</h2>
 
-    {{ govukButton({
-      text: "Add partnership",
-      href: actions.new
-    }) }}
+    {% if not provider.archivedAt %}
+      {{ govukButton({
+        text: "Add partnership",
+        href: actions.new
+      }) }}
+    {% endif %}
 
     {% if partnerships.length %}
 
@@ -70,7 +66,7 @@
                   visuallyHiddenText: "address " + loop.index
                 }
               ]
-            }
+            } if not provider.archivedAt
           },
           rows: [
             {

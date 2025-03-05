@@ -2,8 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Confirm you want to delete " + provider.operatingName %}
-{% set caption = "Delete provider" %}
+{% set title = "Confirm you want to archive " + provider.operatingName %}
+{% set caption = "Archive provider" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -19,11 +19,10 @@
 
     {% include "_includes/page-heading.njk" %}
 
-    <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
+    <form action="{{ actions.archive }}" method="post" accept-charset="utf-8" novalidate>
 
       {{ govukButton({
-        text: "Delete provider",
-        classes: "govuk-button--warning"
+        text: "Archive provider"
       }) }}
 
     </form>

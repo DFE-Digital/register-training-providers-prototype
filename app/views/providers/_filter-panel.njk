@@ -56,6 +56,29 @@
     }
   ]
 }) }}
+
+{{ govukCheckboxes({
+  id: "filters-show-archived",
+  name: "filters[showArchivedProvider]",
+  fieldset: {
+    legend: {
+      text: "Archived providers",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  formGroup: {
+    classes: "app-filter__group"
+  },
+  classes: "govuk-checkboxes--small",
+  values: data.filters.showArchivedProvider,
+  items: [
+    {
+      value: "showArchivedProvider",
+      text: "Include archived providers"
+    }
+  ]
+}) }}
 {% endset %}
 
 <div class="app-filter">

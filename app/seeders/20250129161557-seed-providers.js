@@ -13,7 +13,7 @@ module.exports = {
       const providers = JSON.parse(rawData)
 
       const createdAt = new Date()
-      const createdById = '354751f2-c5f7-483c-b9e4-b6103f50f970'
+      const userId = '354751f2-c5f7-483c-b9e4-b6103f50f970'
 
       // Map JSON keys to database column names
       const formattedProviders = providers.map(provider => ({
@@ -25,7 +25,9 @@ module.exports = {
         code: provider.code, // JSON "code" → DB "code"
         website: provider.website, // JSON "website" → DB "website"
         created_at: createdAt,
-        created_by_id: createdById // Default user
+        created_by_id: userId, // Default user
+        updated_at: createdAt,
+        updated_by_id: userId // Default user
       }))
 
       // Insert transformed data into the 'providers' table

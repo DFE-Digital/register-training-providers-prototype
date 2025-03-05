@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require('sequelize')
+const { v4: uuid } = require('uuid')
 
 module.exports = (sequelize) => {
   class Provider extends Model {
@@ -53,7 +54,7 @@ module.exports = (sequelize) => {
     {
       id: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        defaultValue: uuid(),
         primaryKey: true
       },
       operatingName: {
@@ -111,18 +112,36 @@ module.exports = (sequelize) => {
       },
       updatedAt: {
         type: DataTypes.DATE,
+        allowNull: false,
         field: 'updated_at'
       },
       updatedById: {
         type: DataTypes.UUID,
+        allowNull: false,
         field: 'updated_by_id'
+      },
+      archivedAt: {
+        type: DataTypes.DATE,
+        field: 'archived_at'
+      },
+      archivedById: {
+        type: DataTypes.UUID,
+        field: 'archived_by_id'
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        field: 'deleted_at'
+      },
+      deletedById: {
+        type: DataTypes.UUID,
+        field: 'deleted_by_id'
       }
     },
     {
       sequelize,
       modelName: 'Provider',
       tableName: 'providers',
-      timestamps: false
+      timestamps: true
     }
   )
 
