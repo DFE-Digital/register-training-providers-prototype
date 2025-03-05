@@ -7,12 +7,7 @@ const { isValidPostcode } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
 const { geocodeAddress } = require('../services/googleMaps')
-const {
-  Provider,
-  ProviderAddress,
-  ProviderContact,
-  ProviderAccreditation
-} = require('../models')
+const { Provider, ProviderAddress, ProviderAccreditation } = require('../models')
 
 const { Op, literal } = require('sequelize')
 
@@ -971,7 +966,13 @@ exports.deleteProvider_get = async (req, res) => {
 
 exports.deleteProvider_post = async (req, res) => {
   const provider = await Provider.findByPk(req.params.providerId)
-  provider.destroy()
+  await provider.update({
+    deletedAt: new Date(),
+    deletedById: req.session.passport.user.id,
+    updatedById: req.session.passport.user.id
+  })
+
+  // provider.destroy()
 
   req.flash('success', 'Provider removed')
   res.redirect('/providers')
