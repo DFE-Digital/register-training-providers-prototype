@@ -2,8 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Confirm you want to remove " + provider.operatingName + "?" %}
-{% set caption = "Remove provider" %}
+{% set title = "Confirm you want to delete " + provider.operatingName %}
+{% set caption = "Delete provider" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -19,17 +19,17 @@
 
     {% include "_includes/page-heading.njk" %}
 
-    <form action="/providers/{{ provider.id }}/delete" method="post" accept-charset="utf-8" novalidate>
+    <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
 
       {{ govukButton({
-        text: "Remove provider",
+        text: "Delete provider",
         classes: "govuk-button--warning"
       }) }}
 
     </form>
 
     <p class="govuk-body">
-      <a class="govuk-link" href="/providers/{{ provider.id }}">Cancel</a>
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
     </p>
 
   </div>
