@@ -1075,7 +1075,7 @@ exports.deleteProvider_post = async (req, res) => {
 
   // provider.destroy()
 
-  req.flash('success', 'Provider removed')
+  req.flash('success', 'Provider deleted')
   res.redirect('/providers')
 }
 
