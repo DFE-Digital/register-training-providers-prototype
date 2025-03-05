@@ -183,7 +183,7 @@ router.get('/providers/:providerId/partnerships', checkIsAuthenticated, provider
 
 router.get('/providers/remove-provider-type-filter/:providerType', checkIsAuthenticated, providerController.removeProviderTypeFilter)
 router.get('/providers/remove-accreditation-type-filter/:accreditationType', checkIsAuthenticated, providerController.removeAccreditationTypeFilter)
-router.get('/providers/remove-show-deleted-provider-filter/:showDeletedProvider', checkIsAuthenticated, providerController.removeShowDeletedProviderFilter)
+router.get('/providers/remove-show-archived-provider-filter/:showArchivedProvider', checkIsAuthenticated, providerController.removeShowArchivedProviderFilter)
 
 router.get('/providers/remove-all-filters', checkIsAuthenticated, providerController.removeAllFilters)
 
@@ -221,6 +221,12 @@ router.post('/providers/:providerId/edit/check', checkIsAuthenticated, providerC
 
 router.get('/providers/:providerId/delete', checkIsAuthenticated, providerController.deleteProvider_get)
 router.post('/providers/:providerId/delete', checkIsAuthenticated, providerController.deleteProvider_post)
+
+router.get('/providers/:providerId/archive', checkIsAuthenticated, providerController.archiveProvider_get)
+router.post('/providers/:providerId/archive', checkIsAuthenticated, providerController.archiveProvider_post)
+
+router.get('/providers/:providerId/restore', checkIsAuthenticated, providerController.restoreProvider_get)
+router.post('/providers/:providerId/restore', checkIsAuthenticated, providerController.restoreProvider_post)
 
 router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
 
