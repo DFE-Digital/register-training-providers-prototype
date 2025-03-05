@@ -1098,6 +1098,8 @@ exports.accreditedProviderSuggestions_json = async (req, res) => {
       'urn'
     ],
     where: {
+      archivedAt: null,
+      deletedAt: null,
       [Op.or]: [
         { operatingName: { [Op.like]: `%${query}%` } },
         { legalName: { [Op.like]: `%${query}%` } },
@@ -1140,6 +1142,8 @@ exports.trainingProviderSuggestions_json = async (req, res) => {
       'urn'
     ],
     where: {
+      archivedAt: null,
+      deletedAt: null,
       [Op.or]: [
         { operatingName: { [Op.like]: `%${query}%` } },
         { legalName: { [Op.like]: `%${query}%` } },
