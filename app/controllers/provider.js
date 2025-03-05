@@ -53,6 +53,7 @@ exports.providersList = async (req, res) => {
   // filters
   const providerType = null
   const accreditationType = null
+  const showDeletedProvider = null
 
   let providerTypes
   if (req.session.data.filters?.providerType) {
@@ -64,7 +65,15 @@ exports.providersList = async (req, res) => {
     accreditationTypes = getCheckboxValues(accreditationType, req.session.data.filters.accreditationType)
   }
 
-  const hasFilters = !!((providerTypes?.length > 0) || (accreditationTypes?.length > 0))
+  let showDeletedProviders
+  if (req.session.data.filters?.showDeletedProvider) {
+    showDeletedProviders = getCheckboxValues(showDeletedProvider, req.session.data.filters.showDeletedProvider)
+  }
+
+  const hasFilters = !!((providerTypes?.length > 0)
+   || (accreditationTypes?.length > 0)
+   || (showDeletedProviders?.length > 0)
+  )
 
   let selectedFilters = null
 
@@ -96,6 +105,18 @@ exports.providersList = async (req, res) => {
         })
       })
     }
+
+    if (showDeletedProviders?.length) {
+      selectedFilters.categories.push({
+        heading: { text: 'Deleted providers' },
+        items: showDeletedProviders.map((showDeletedProvider) => {
+          return {
+            text: 'Include deleted providers',
+            href: `/providers/remove-show-deleted-provider-filter/${showDeletedProvider}`
+          }
+        })
+      })
+    }
   }
 
   let selectedProviderType = []
@@ -106,6 +127,11 @@ exports.providersList = async (req, res) => {
   let selectedAccreditationType = []
   if (req.session.data.filters?.accreditationType) {
     selectedAccreditationType = req.session.data.filters.accreditationType
+  }
+
+  let selectedDeletedProvider = []
+  if (req.session.data.filters?.showDeletedProvider) {
+    selectedDeletedProvider = req.session.data.filters.showDeletedProvider
   }
 
   // build the WHERE conditions
@@ -179,6 +205,13 @@ exports.providersList = async (req, res) => {
   // If selectedAccreditationType includes both 'accredited' and 'notAccredited',
   // we do nothing—because that means return everything.
 
+  // Only show active providers unless user has selected to also show deleted providers
+  if (!selectedDeletedProvider.length) {
+    whereClause[Op.and].push({
+      'deletedAt': null
+    })
+  }
+
   // Get the total number of providers for pagination metadata
   const totalCount = await Provider.count({
     where: whereClause,
@@ -244,6 +277,14 @@ exports.removeAccreditationTypeFilter = (req, res) => {
   req.session.data.filters.accreditationType = removeFilter(
     req.params.accreditationType,
     req.session.data.filters.accreditationType
+  )
+  res.redirect('/providers')
+}
+
+exports.removeShowDeletedProviderFilter = (req, res) => {
+  req.session.data.filters.showDeletedProvider = removeFilter(
+    req.params.showDeletedProvider,
+    req.session.data.filters.showDeletedProvider
   )
   res.redirect('/providers')
 }

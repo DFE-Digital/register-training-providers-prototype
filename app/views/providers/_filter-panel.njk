@@ -56,6 +56,29 @@
     }
   ]
 }) }}
+
+{{ govukCheckboxes({
+  id: "filters-show-deleted",
+  name: "filters[showDeletedProvider]",
+  fieldset: {
+    legend: {
+      text: "Deleted providers",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  formGroup: {
+    classes: "app-filter__group"
+  },
+  classes: "govuk-checkboxes--small",
+  values: data.filters.showDeletedProvider,
+  items: [
+    {
+      value: "showDeletedProvider",
+      text: "Include deleted providers"
+    }
+  ]
+}) }}
 {% endset %}
 
 <div class="app-filter">
