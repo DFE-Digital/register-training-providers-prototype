@@ -43,6 +43,12 @@
           <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">
             {{ provider.operatingName }}
           </a>
+          {% if provider.deletedAt %}
+            {{ govukTag({
+              text: "Deleted",
+              classes: "govuk-tag--red govuk-!-margin-left-1"
+            }) }}
+          {% endif %}
         {% endset %}
 
         {{ govukSummaryList({
