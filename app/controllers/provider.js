@@ -53,7 +53,7 @@ exports.providersList = async (req, res) => {
   // filters
   const providerType = null
   const accreditationType = null
-  const showDeletedProvider = null
+  const showArchivedProvider = null
 
   let providerTypes
   if (req.session.data.filters?.providerType) {
@@ -65,14 +65,14 @@ exports.providersList = async (req, res) => {
     accreditationTypes = getCheckboxValues(accreditationType, req.session.data.filters.accreditationType)
   }
 
-  let showDeletedProviders
-  if (req.session.data.filters?.showDeletedProvider) {
-    showDeletedProviders = getCheckboxValues(showDeletedProvider, req.session.data.filters.showDeletedProvider)
+  let showArchivedProviders
+  if (req.session.data.filters?.showArchivedProvider) {
+    showArchivedProviders = getCheckboxValues(showArchivedProvider, req.session.data.filters.showArchivedProvider)
   }
 
   const hasFilters = !!((providerTypes?.length > 0)
    || (accreditationTypes?.length > 0)
-   || (showDeletedProviders?.length > 0)
+   || (showArchivedProviders?.length > 0)
   )
 
   let selectedFilters = null
@@ -106,13 +106,13 @@ exports.providersList = async (req, res) => {
       })
     }
 
-    if (showDeletedProviders?.length) {
+    if (showArchivedProviders?.length) {
       selectedFilters.categories.push({
-        heading: { text: 'Deleted providers' },
-        items: showDeletedProviders.map((showDeletedProvider) => {
+        heading: { text: 'Archived providers' },
+        items: showArchivedProviders.map((showArchivedProvider) => {
           return {
-            text: 'Include deleted providers',
-            href: `/providers/remove-show-deleted-provider-filter/${showDeletedProvider}`
+            text: 'Include archived providers',
+            href: `/providers/remove-show-archived-provider-filter/${showArchivedProvider}`
           }
         })
       })
@@ -129,9 +129,9 @@ exports.providersList = async (req, res) => {
     selectedAccreditationType = req.session.data.filters.accreditationType
   }
 
-  let selectedDeletedProvider = []
-  if (req.session.data.filters?.showDeletedProvider) {
-    selectedDeletedProvider = req.session.data.filters.showDeletedProvider
+  let selectedArchivedProvider = []
+  if (req.session.data.filters?.showArchivedProvider) {
+    selectedArchivedProvider = req.session.data.filters.showArchivedProvider
   }
 
   // build the WHERE conditions
@@ -206,11 +206,16 @@ exports.providersList = async (req, res) => {
   // we do nothing—because that means return everything.
 
   // Only show active providers unless user has selected to also show deleted providers
-  if (!selectedDeletedProvider.length) {
+  if (!selectedArchivedProvider.length) {
     whereClause[Op.and].push({
-      'deletedAt': null
+      'archivedAt': null
     })
   }
+
+  // Only show providers that have not been deleted
+  whereClause[Op.and].push({
+    'deletedAt': null
+  })
 
   // Get the total number of providers for pagination metadata
   const totalCount = await Provider.count({
@@ -281,10 +286,10 @@ exports.removeAccreditationTypeFilter = (req, res) => {
   res.redirect('/providers')
 }
 
-exports.removeShowDeletedProviderFilter = (req, res) => {
-  req.session.data.filters.showDeletedProvider = removeFilter(
-    req.params.showDeletedProvider,
-    req.session.data.filters.showDeletedProvider
+exports.removeShowArchivedProviderFilter = (req, res) => {
+  req.session.data.filters.showArchivedProvider = removeFilter(
+    req.params.showArchivedProvider,
+    req.session.data.filters.showArchivedProvider
   )
   res.redirect('/providers')
 }
@@ -310,6 +315,7 @@ exports.providerDetails = async (req, res) => {
   delete req.session.data.address
   delete req.session.data.search
   delete req.session.data.keywords
+  delete req.session.data.filters
   delete req.session.data.find
 
   // get the providerId from the request for use in subsequent queries
@@ -318,30 +324,16 @@ exports.providerDetails = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
-  // 1) Fetch the main provider (and hasMany associations)
-  const provider = await Provider.findByPk(providerId, {
-    // include: [
-    //   { model: ProviderAccreditation, as: 'accreditations' },
-    //   { model: ProviderAddress, as: 'addresses' },
-    //   { model: ProviderContact, as: 'contacts' }
-    // ]
-  })
-
-  // 2) Fetch the accreditedPartnerships sorted
-  // provider.accreditedPartnerships = await provider.getAccreditedPartnerships({
-  //   order: [['operatingName', 'ASC']]
-  // })
-
-  // 3) Fetch the trainingPartnerships sorted
-  // provider.trainingPartnerships = await provider.getTrainingPartnerships({
-  //   order: [['operatingName', 'ASC']]
-  // })
+  // Fetch the provider
+  const provider = await Provider.findByPk(providerId)
 
   res.render('providers/show', {
     provider,
     isAccredited,
     actions: {
-      delete: `/providers/${providerId}/delete`
+      archive: `/providers/${providerId}/archive`,
+      delete: `/providers/${providerId}/delete`,
+      restore: `/providers/${providerId}/restore`
     }
    })
 }
@@ -997,20 +989,88 @@ exports.editProviderCheck_post = async (req, res) => {
 }
 
 /// ------------------------------------------------------------------------ ///
+/// Archive provider
+/// ------------------------------------------------------------------------ ///
+
+exports.archiveProvider_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  res.render('providers/archive', {
+    provider,
+    actions: {
+      archive: `/providers/${providerId}/archive`,
+      cancel: `/providers/${providerId}`
+    }
+  })
+}
+
+exports.archiveProvider_post = async (req, res) => {
+  const { providerId } = req.params
+  const { user } = req.session.passport
+  const provider = await Provider.findByPk(providerId)
+  await provider.update({
+    archivedAt: new Date(),
+    archivedById: user.id,
+    updatedById: user.id
+  })
+
+  req.flash('success', 'Provider archived')
+  res.redirect(`/providers/${providerId}`)
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Restore provider
+/// ------------------------------------------------------------------------ ///
+
+exports.restoreProvider_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  res.render('providers/restore', {
+    provider,
+    actions: {
+      cancel: `/providers/${providerId}`,
+      restore: `/providers/${providerId}/restore`
+    }
+  })
+}
+
+exports.restoreProvider_post = async (req, res) => {
+  const { providerId } = req.params
+  const { user } = req.session.passport
+  const provider = await Provider.findByPk(providerId)
+  await provider.update({
+    archivedAt: null,
+    archivedById: null,
+    updatedById: user.id
+  })
+
+  req.flash('success', 'Provider restored')
+  res.redirect(`/providers/${providerId}`)
+}
+
+/// ------------------------------------------------------------------------ ///
 /// Delete provider
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteProvider_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  res.render('providers/delete', { provider })
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  res.render('providers/delete', {
+    provider,
+    actions: {
+      cancel: `/providers/${providerId}`,
+      delete: `/providers/${providerId}/delete`
+    }
+  })
 }
 
 exports.deleteProvider_post = async (req, res) => {
+  const { user } = req.session.passport
   const provider = await Provider.findByPk(req.params.providerId)
   await provider.update({
     deletedAt: new Date(),
-    deletedById: req.session.passport.user.id,
-    updatedById: req.session.passport.user.id
+    deletedById: user.id,
+    updatedById: user.id
   })
 
   // provider.destroy()
