@@ -28,12 +28,14 @@ const getProviderTypeLabel = (code, isAccredited = false) => {
 
   if (code === 'hei') {
     label = 'Higher education institution (HEI)'
-  } else {
+  } else if (code === 'school') {
     if (toBoolean(isAccredited)) {
       label = 'School-centred initial teacher training (SCITT)'
     } else {
       label = 'School'
     }
+  } else {
+    label = 'Other'
   }
 
   return label
