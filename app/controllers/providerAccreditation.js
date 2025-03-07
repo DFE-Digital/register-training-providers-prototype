@@ -61,10 +61,12 @@ exports.providerAccreditationsList = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.providerAccreditationDetails = async (req, res) => {
+  const { accreditationId } = req.params
+
   // Clear session accreditation data
   delete req.session.data.accreditation
 
-  const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId, {
+  const accreditation = await ProviderAccreditation.findByPk(accreditationId, {
     include: [
       {
         model: Provider,
