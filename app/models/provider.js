@@ -70,7 +70,7 @@ module.exports = (sequelize) => {
         field: 'legal_name'
       },
       type: {
-        type: DataTypes.ENUM('hei', 'scitt', 'school')
+        type: DataTypes.ENUM('hei', 'other', 'school')
       },
       ukprn:  {
         type: DataTypes.STRING,

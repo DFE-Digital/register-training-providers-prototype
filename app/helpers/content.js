@@ -1,3 +1,5 @@
+const { toBoolean } = require('./boolean')
+
 const getAccreditationTypeLabel = (code) => {
   if (!code) {
     return null
@@ -17,23 +19,23 @@ const getAccreditationTypeLabel = (code) => {
   return label
 }
 
-const getProviderTypeLabel = (code) => {
+const getProviderTypeLabel = (code, isAccredited = false) => {
   if (!code) {
     return null
   }
 
   let label = code
 
-  switch (code) {
-    case 'hei':
-      label = 'Higher education institution (HEI)'
-      break
-    case 'scitt':
+  if (code === 'hei') {
+    label = 'Higher education institution (HEI)'
+  } else if (code === 'school') {
+    if (toBoolean(isAccredited)) {
       label = 'School-centred initial teacher training (SCITT)'
-      break
-    case 'school':
+    } else {
       label = 'School'
-      break
+    }
+  } else {
+    label = 'Other'
   }
 
   return label

@@ -28,7 +28,7 @@
               text: "Provider type"
             },
             value: {
-              text: provider.type | getProviderTypeLabel
+              text: provider.type | getProviderTypeLabel(provider.isAccredited)
             },
             actions: {
               items: [

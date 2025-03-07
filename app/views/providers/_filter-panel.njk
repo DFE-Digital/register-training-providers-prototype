@@ -20,12 +20,16 @@
       text: "hei" | getProviderTypeLabel
     },
     {
-      value: "scitt",
-      text: "scitt" | getProviderTypeLabel
-    },
+      value: "school",
+      text: "school" | getProviderTypeLabel(true)
+    } if 1==0,
     {
       value: "school",
       text: "school" | getProviderTypeLabel
+    },
+    {
+      value: "other",
+      text: "other" | getProviderTypeLabel
     }
   ]
 }) }}

@@ -860,10 +860,18 @@ exports.newProviderCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.editProvider_get = async (req, res) => {
-  const currentProvider = await Provider.findByPk(req.params.providerId)
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // Fetch the current provider
+  const currentProvider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
 
   let provider
   if (req.session.data.provider) {
+    // combine the current and new provider details
     provider = {...currentProvider.dataValues, ...req.session.data.provider}
   } else {
     provider = currentProvider
@@ -877,6 +885,7 @@ exports.editProvider_get = async (req, res) => {
   res.render('providers/edit', {
     currentProvider,
     provider,
+    isAccredited,
     actions: {
       back,
       cancel: `/providers/${req.params.providerId}`,
@@ -886,12 +895,21 @@ exports.editProvider_get = async (req, res) => {
 }
 
 exports.editProvider_post = async (req, res) => {
-  const currentProvider = await Provider.findByPk(req.params.providerId)
+  // get the providerId from the request for use in subsequent queries
+  const { providerId } = req.params
+
+  // Fetch the current provider
+  const currentProvider = await Provider.findByPk(providerId)
+
+  // calculate if the provider is accredited
+  const isAccredited = await isAccreditedProvider({ providerId })
+
+  // combine the current and new provider details
   const provider = {...currentProvider.dataValues, ...req.session.data.provider}
 
   const errors = []
 
-  if (!req.session.data.provider.operatingName.length) {
+  if (!provider.operatingName.length) {
     const error = {}
     error.fieldName = 'operatingName'
     error.href = '#operatingName'
@@ -899,8 +917,8 @@ exports.editProvider_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (['hei','scitt'].includes(provider.type)) {
-    if (!req.session.data.provider.legalName.length) {
+  if (isAccredited) {
+    if (!provider.legalName.length) {
       const error = {}
       error.fieldName = 'legalName'
       error.href = '#legalName'
@@ -909,7 +927,7 @@ exports.editProvider_post = async (req, res) => {
     }
   }
 
-  if (!req.session.data.provider.ukprn.length) {
+  if (!provider.ukprn.length) {
     const error = {}
     error.fieldName = 'ukprn'
     error.href = '#ukprn'
@@ -917,8 +935,8 @@ exports.editProvider_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (provider.type === 'school') {
-    if (!req.session.data.provider.urn.length) {
+  if (!isAccredited) {
+    if (!provider.urn.length) {
       const error = {}
       error.fieldName = 'urn'
       error.href = '#urn'
@@ -927,7 +945,7 @@ exports.editProvider_post = async (req, res) => {
     }
   }
 
-  if (!req.session.data.provider.code.length) {
+  if (!provider.code.length) {
     const error = {}
     error.fieldName = 'code'
     error.href = '#code'
@@ -942,7 +960,9 @@ exports.editProvider_post = async (req, res) => {
     }
 
     res.render('providers/edit', {
+      currentProvider,
       provider,
+      isAccredited,
       errors,
       actions: {
         back,
@@ -956,12 +976,15 @@ exports.editProvider_post = async (req, res) => {
 }
 
 exports.editProviderCheck_get = async (req, res) => {
-  const currentProvider = await Provider.findByPk(req.params.providerId)
+  const { providerId } = req.params
+  const currentProvider = await Provider.findByPk(providerId)
+  const isAccredited = await isAccreditedProvider({ providerId })
   const provider = {...currentProvider.dataValues, ...req.session.data.provider}
 
   res.render('providers/edit/check-your-answers', {
     currentProvider,
     provider,
+    isAccredited,
     actions: {
       back: `/providers/${req.params.providerId}/edit`,
       cancel: `/providers/${req.params.providerId}`,
