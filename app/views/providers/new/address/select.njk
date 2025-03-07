@@ -36,53 +36,65 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% set headingHtml %}
-      {% include "_includes/page-heading-legend.njk" %}
-    {% endset %}
+    {% if addresses.length %}
 
-    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
-
-      {% set beforeInputHtml %}
-        <p class="govuk-body">
-        {% if addresses.length == 0 %}
-          <a class="govuk-link" href="{{ actions.change }}">Change your search</a>.
-        {% elif addresses.length > 25 %}
-          Showing the first 25 results. <a class="govuk-link" href="{{ actions.change }}">Try narrowing down your search</a> if the address you’re looking for is not listed.
-        {% else %}
-          <a class="govuk-link" href="{{ actions.change }}">Change your search</a> if the address you’re looking for is not listed.
-        {% endif %}
-        </p>
+      {% set headingHtml %}
+        {% include "_includes/page-heading-legend.njk" %}
       {% endset %}
 
-      {{ govukRadios({
-        id: "address-uprn",
-        name: "find[uprn]",
-        fieldset: {
-          legend: {
-            html: headingHtml,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        formGroup: {
-          beforeInputs: {
-            html: beforeInputHtml
-          }
-        },
-        value: find.uprn,
-        items: addresses,
-        errorMessage: errors | getErrorMessage("address-uprn")
-      }) }}
+      <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-      {{ govukButton({
-        text: "Continue"
-      }) }}
+        {% set beforeInputHtml %}
+          <p class="govuk-body">
+          {% if addresses.length == 0 %}
+            <a class="govuk-link" href="{{ actions.change }}">Change your search</a>.
+          {% elif addresses.length > 25 %}
+            Showing the first 25 results. <a class="govuk-link" href="{{ actions.change }}">Try narrowing down your search</a> if the address you’re looking for is not listed.
+          {% else %}
+            <a class="govuk-link" href="{{ actions.change }}">Change your search</a> if the address you’re looking for is not listed.
+          {% endif %}
+          </p>
+        {% endset %}
 
-    </form>
+        {{ govukRadios({
+          id: "address-uprn",
+          name: "find[uprn]",
+          fieldset: {
+            legend: {
+              html: headingHtml,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          formGroup: {
+            beforeInputs: {
+              html: beforeInputHtml
+            }
+          },
+          value: find.uprn,
+          items: addresses,
+          errorMessage: errors | getErrorMessage("address-uprn")
+        }) }}
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="{{ actions.enter }}">Enter address manually</a>
-    </p>
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ actions.enter }}">Enter address manually</a>
+      </p>
+
+    {% else %}
+
+      {% include "_includes/page-heading.njk" %}
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ actions.change }}">Change your search</a> or <a class="govuk-link" href="{{ actions.enter }}">enter the address manually</a>
+      </p>
+
+    {% endif %}
 
     <p class="govuk-body">
       <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>

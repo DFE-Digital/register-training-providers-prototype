@@ -16,11 +16,11 @@
   "dependencies": {
     "connect-flash": "^0.1.1",
     "dotenv": "^16.4.7",
-    "govuk-frontend": "^5.8.0",
+    "govuk-frontend": "^5.9.0",
     "govuk-prototype-kit": "^13.16.2",
     "inflection": "^3.0.2",
     "luxon": "^3.5.0",
-    "sequelize": "^6.37.5",
+    "sequelize": "^6.37.6",
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7",
     "uuid": "^11.1.0"
