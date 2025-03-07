@@ -80,29 +80,33 @@ exports.providerAccreditationDetails = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.newProviderAccreditation_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { accreditation } = req.session.data
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/accreditations/new/check`
+    back = `/providers/${providerId}/accreditations/new/check`
   }
 
   res.render('providers/accreditations/edit', {
     provider,
-    accreditation: req.session.data.accreditation,
+    accreditation,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/accreditations/new`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/accreditations/new`
     }
   })
 }
 
 exports.newProviderAccreditation_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { accreditation } = req.session.data
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
   const errors = []
 
-  if (!req.session.data.accreditation.number.length) {
+  if (!accreditation.number.length) {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
@@ -110,9 +114,9 @@ exports.newProviderAccreditation_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!(req.session.data.accreditation.startsOn?.day.length
-    && req.session.data.accreditation.startsOn?.month.length
-    && req.session.data.accreditation.startsOn?.year.length)
+  if (!(accreditation.startsOn?.day.length
+    && accreditation.startsOn?.month.length
+    && accreditation.startsOn?.year.length)
   ) {
     const error = {}
     error.fieldName = "startsOn"
@@ -122,63 +126,69 @@ exports.newProviderAccreditation_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/accreditations/new/check`
+      back = `/providers/${providerId}/accreditations/new/check`
     }
 
     res.render('providers/accreditations/edit', {
       provider,
-      accreditation: req.session.data.accreditation,
+      accreditation,
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/accreditations/new`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/accreditations/new`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/accreditations/new/check`)
+    res.redirect(`/providers/${providerId}/accreditations/new/check`)
   }
 }
 
 exports.newProviderAccreditationCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { accreditation } = req.session.data
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
   res.render('providers/accreditations/check-your-answers', {
     provider,
-    accreditation: req.session.data.accreditation,
+    accreditation,
     actions: {
-      back: `/providers/${req.params.providerId}/accreditations/new`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/accreditations/new`,
-      save: `/providers/${req.params.providerId}/accreditations/new/check`
+      back: `/providers/${providerId}/accreditations/new`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/accreditations/new`,
+      save: `/providers/${providerId}/accreditations/new/check`
     }
   })
 }
 
 exports.newProviderAccreditationCheck_post = async (req, res) => {
-  let startsOn = isoDateFromDateInput(req.session.data.accreditation.startsOn)
+  const { accreditation } = req.session.data
+  const { providerId } = req.params
+  const { user } = req.session.passport
+
+  let startsOn = isoDateFromDateInput(accreditation.startsOn)
   startsOn = new Date(startsOn)
 
   let endsOn = null
-  if (isoDateFromDateInput(req.session.data.accreditation.endsOn) !== 'Invalid DateTime') {
-    endsOn =  isoDateFromDateInput(req.session.data.accreditation.endsOn)
+  if (isoDateFromDateInput(accreditation.endsOn) !== 'Invalid DateTime') {
+    endsOn =  isoDateFromDateInput(accreditation.endsOn)
     endsOn = new Date(endsOn)
   }
 
   await ProviderAccreditation.create({
-    providerId: req.params.providerId,
-    number: req.session.data.accreditation.number,
+    providerId,
+    number: accreditation.number,
     startsOn,
     endsOn,
-    createdById: req.session.passport.user.id,
-    updatedById: req.session.passport.user.id
+    createdById: user.id,
+    updatedById: user.id
   })
 
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation added')
-  res.redirect(`/providers/${req.params.providerId}/accreditations`)
+  res.redirect(`/providers/${providerId}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -186,19 +196,20 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.editProviderAccreditation_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentAccreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
+  const { accreditationId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
 
   let accreditation
   if (req.session.data?.accreditation) {
     accreditation = req.session.data.accreditation
   } else {
-    accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
+    accreditation = await ProviderAccreditation.findByPk(accreditationId)
   }
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit/check`
+    back = `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
   }
 
   res.render('providers/accreditations/edit', {
@@ -207,19 +218,21 @@ exports.editProviderAccreditation_get = async (req, res) => {
     accreditation,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/accreditations/${accreditationId}/edit`
     }
   })
 }
 
 exports.editProviderAccreditation_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentAccreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
+  const { accreditation } = req.session.data
+  const { accreditationId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
 
   const errors = []
 
-  if (!req.session.data.accreditation.number.length) {
+  if (!accreditation.number.length) {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
@@ -227,9 +240,9 @@ exports.editProviderAccreditation_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!(req.session.data.accreditation.startsOn?.day.length
-    && req.session.data.accreditation.startsOn?.month.length
-    && req.session.data.accreditation.startsOn?.year.length)
+  if (!(accreditation.startsOn?.day.length
+    && accreditation.startsOn?.month.length
+    && accreditation.startsOn?.year.length)
   ) {
     const error = {}
     error.fieldName = "startsOn"
@@ -239,66 +252,72 @@ exports.editProviderAccreditation_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit/check`
+      back = `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
     }
 
     res.render('providers/accreditations/edit', {
       provider,
       currentAccreditation,
-      accreditation: req.session.data.accreditation,
+      accreditation,
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/accreditations/${accreditationId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit/check`)
+    res.redirect(`/providers/${providerId}/accreditations/${accreditationId}/edit/check`)
   }
 }
 
 exports.editProviderAccreditationCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentAccreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
+  const { accreditation } = req.session.data
+  const { accreditationId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
 
   res.render('providers/accreditations/check-your-answers', {
     provider,
     currentAccreditation,
-    accreditation: req.session.data.accreditation,
+    accreditation,
     actions: {
-      back: `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit`,
-      save: `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/edit/check`
+      back: `/providers/${providerId}/accreditations/${accreditationId}/edit`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/accreditations/${accreditationId}/edit`,
+      save: `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
     }
   })
 }
 
 exports.editProviderAccreditationCheck_post = async (req, res) => {
-  let startsOn = isoDateFromDateInput(req.session.data.accreditation.startsOn)
+  const { accreditation } = req.session.data
+  const { accreditationId, providerId } = req.params
+  const { user } = req.session.passport
+
+  let startsOn = isoDateFromDateInput(accreditation.startsOn)
   startsOn = new Date(startsOn)
 
   let endsOn = null
-  if (isoDateFromDateInput(req.session.data.accreditation.endsOn) !== 'Invalid DateTime') {
-    endsOn =  isoDateFromDateInput(req.session.data.accreditation.endsOn)
+  if (isoDateFromDateInput(accreditation.endsOn) !== 'Invalid DateTime') {
+    endsOn =  isoDateFromDateInput(accreditation.endsOn)
     endsOn = new Date(endsOn)
   }
 
-  const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
-  await accreditation.update({
-    number: req.session.data.accreditation.number,
+  const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
+  await currentAccreditation.update({
+    number: accreditation.number,
     startsOn,
     endsOn,
-    updatedById: req.session.passport.user.id
+    updatedById: user.id
   })
 
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation updated')
-  res.redirect(`/providers/${req.params.providerId}/accreditations`)
+  res.redirect(`/providers/${providerId}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -306,23 +325,25 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteProviderAccreditation_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
+  const { accreditationId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   res.render('providers/accreditations/delete', {
     provider,
     accreditation,
     actions: {
-      back: `/providers/${req.params.providerId}`,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/accreditations/${req.params.accreditationId}/delete`
+      back: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/accreditations/${accreditationId}/delete`
     }
   })
 }
 
 exports.deleteProviderAccreditation_post = async (req, res) => {
-  const accreditation = await ProviderAccreditation.findByPk(req.params.accreditationId)
+  const { accreditationId, providerId } = req.params
+  const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   await accreditation.destroy()
 
   req.flash('success', 'Accreditation removed')
-  res.redirect(`/providers/${req.params.providerId}/accreditations`)
+  res.redirect(`/providers/${providerId}/accreditations`)
 }
