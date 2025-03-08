@@ -228,6 +228,12 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
 
+  // get the provider from the session data
+  const { provider } = req.session.data
+
+  // get the signed in user
+  const { user } = req.session.passport
+
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
@@ -235,17 +241,17 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
     // if the provider is accredited, the partner provider is the training provider
     await ProviderPartnership.create({
       accreditedProviderId: providerId,
-      trainingProviderId: req.session.data.provider.id,
-      createdById: req.session.passport.user.id,
-      updatedById: req.session.passport.user.id
+      trainingProviderId: provider.id,
+      createdById: user.id,
+      updatedById: user.id
     })
   } else {
     // if the provider is not accredited, the partner provider is the accredited provider
     await ProviderPartnership.create({
-      accreditedProviderId: req.session.data.provider.id,
+      accreditedProviderId: provider.id,
       trainingProviderId: providerId,
-      createdById: req.session.passport.user.id,
-      updatedById: req.session.passport.user.id
+      createdById: user.id,
+      updatedById: user.id
     })
   }
 
