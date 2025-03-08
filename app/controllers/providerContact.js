@@ -61,10 +61,12 @@ exports.providerContactsList = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.providerContactDetails = async (req, res) => {
+  const { contactId } = req.params
+
   // Clear session provider data
   delete req.session.data.contact
 
-  const contact = await ProviderContact.findByPk(req.params.contactId, {
+  const contact = await ProviderContact.findByPk(contactId, {
     include: [
       {
         model: Provider,
@@ -80,29 +82,33 @@ exports.providerContactDetails = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.newProviderContact_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { providerId } = req.params
+  const { contact } = req.session.data
+  const provider = await Provider.findByPk(providerId)
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/contacts/new/check`
+    back = `/providers/${providerId}/contacts/new/check`
   }
 
   res.render('providers/contacts/edit', {
     provider,
-    contact: req.session.data.contact,
+    contact,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/contacts/new`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/contacts/new`
     }
   })
 }
 
 exports.newProviderContact_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { providerId } = req.params
+  const { contact } = req.session.data
+  const provider = await Provider.findByPk(providerId)
   const errors = []
 
-  if (!req.session.data.contact.firstName.length) {
+  if (!contact.firstName.length) {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
@@ -110,7 +116,7 @@ exports.newProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.contact.lastName.length) {
+  if (!contact.lastName.length) {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
@@ -118,7 +124,7 @@ exports.newProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.contact.email.length) {
+  if (!contact.email.length) {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
@@ -126,7 +132,7 @@ exports.newProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.contact.telephone.length) {
+  if (!contact.telephone.length) {
     const error = {}
     error.fieldName = "telephone"
     error.href = "#telephone"
@@ -135,49 +141,55 @@ exports.newProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/contacts/new/check`
+      back = `/providers/${providerId}/contacts/new/check`
     }
 
     res.render('providers/contacts/edit', {
       provider,
-      contact: req.session.data.contact,
+      contact,
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/contacts/new`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/contacts/new`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/contacts/new/check`)
+    res.redirect(`/providers/${providerId}/contacts/new/check`)
   }
 }
 
 exports.newProviderContactCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
+  const { providerId } = req.params
+  const { contact } = req.session.data
+  const provider = await Provider.findByPk(providerId)
   res.render('providers/contacts/check-your-answers', {
     provider,
-    contact: req.session.data.contact,
+    contact,
     actions: {
-      back: `/providers/${req.params.providerId}/contacts/new`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/contacts/new`,
-      save: `/providers/${req.params.providerId}/contacts/new/check`
+      back: `/providers/${providerId}/contacts/new`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/contacts/new`,
+      save: `/providers/${providerId}/contacts/new/check`
     }
   })
 }
 
 exports.newProviderContactCheck_post = async (req, res) => {
+  const { providerId } = req.params
+  const { contact } = req.session.data
+  const { user } = req.session.passport
+
   await ProviderContact.create({
-    providerId: req.params.providerId,
-    firstName: req.session.data.contact.firstName,
-    lastName: req.session.data.contact.lastName,
-    email: nullIfEmpty(req.session.data.contact.email),
-    telephone: nullIfEmpty(req.session.data.contact.telephone),
-    createdById: req.session.passport.user.id,
-    updatedById: req.session.passport.user.id
+    providerId,
+    firstName: contact.firstName,
+    lastName: contact.lastName,
+    email: nullIfEmpty(contact.email),
+    telephone: nullIfEmpty(contact.telephone),
+    createdById: user.id,
+    updatedById: user.id
   })
 
   delete req.session.data.contact
@@ -191,19 +203,20 @@ exports.newProviderContactCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.editProviderContact_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentContact = await ProviderContact.findByPk(req.params.contactId)
+  const { contactId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const currentContact = await ProviderContact.findByPk(contactId)
 
   let contact
   if (req.session.data?.contact) {
     contact = req.session.data.contact
   } else {
-    contact = await ProviderContact.findByPk(req.params.contactId)
+    contact = await ProviderContact.findByPk(contactId)
   }
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit/check`
+    back = `/providers/${providerId}/contacts/${contactId}/edit/check`
   }
 
   res.render('providers/contacts/edit', {
@@ -212,19 +225,21 @@ exports.editProviderContact_get = async (req, res) => {
     contact,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/contacts/${contactId}/edit`
     }
   })
 }
 
 exports.editProviderContact_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentContact = await ProviderContact.findByPk(req.params.contactId)
+  const { contactId, providerId } = req.params
+  const { contact } = req.session.data
+  const provider = await Provider.findByPk(providerId)
+  const currentContact = await ProviderContact.findByPk(contactId)
 
   const errors = []
 
-  if (!req.session.data.contact.firstName.length) {
+  if (!contact.firstName.length) {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
@@ -232,7 +247,7 @@ exports.editProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.contact.lastName.length) {
+  if (!contact.lastName.length) {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
@@ -240,7 +255,7 @@ exports.editProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.contact.email.length) {
+  if (!contact.email.length) {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
@@ -248,7 +263,7 @@ exports.editProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.contact.telephone.length) {
+  if (!contact.telephone.length) {
     const error = {}
     error.fieldName = "telephone"
     error.href = "#telephone"
@@ -257,46 +272,49 @@ exports.editProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit/check`
+      back = `/providers/${providerId}/contacts/${contactId}/edit/check`
     }
 
     res.render('providers/contacts/edit', {
       provider,
       currentContact,
-      contact: req.session.data.contact,
+      contact,
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/contacts/${contactId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit/check`)
+    res.redirect(`/providers/${providerId}/contacts/${contactId}/edit/check`)
   }
 }
 
 exports.editProviderContactCheck_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentContact = await ProviderContact.findByPk(req.params.contactId)
+  const { contactId, providerId } = req.params
+  const { contact } = req.session.data
+  const provider = await Provider.findByPk(providerId)
+  const currentContact = await ProviderContact.findByPk(contactId)
 
   res.render('providers/contacts/check-your-answers', {
     provider,
     currentContact,
-    contact: req.session.data.contact,
+    contact,
     actions: {
-      back: `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit`,
-      cancel: `/providers/${req.params.providerId}`,
-      change: `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit`,
-      save: `/providers/${req.params.providerId}/contacts/${req.params.contactId}/edit/check`
+      back: `/providers/${providerId}/contacts/${contactId}/edit`,
+      cancel: `/providers/${providerId}`,
+      change: `/providers/${providerId}/contacts/${contactId}/edit`,
+      save: `/providers/${providerId}/contacts/${contactId}/edit/check`
     }
   })
 }
 
 exports.editProviderContactCheck_post = async (req, res) => {
-  const contact = await ProviderContact.findByPk(req.params.contactId)
+  const { contactId, providerId } = req.params
+  const contact = await ProviderContact.findByPk(contactId)
   await contact.update({
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,
@@ -308,7 +326,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact updated')
-  res.redirect(`/providers/${req.params.providerId}/contacts`)
+  res.redirect(`/providers/${providerId}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -316,23 +334,26 @@ exports.editProviderContactCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteProviderContact_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const contact = await ProviderContact.findByPk(req.params.contactId)
+  const { contactId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const contact = await ProviderContact.findByPk(contactId)
+
   res.render('providers/contacts/delete', {
     provider,
     contact,
     actions: {
-      back: `/providers/${req.params.providerId}`,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/contacts/${req.params.contactId}/delete`
+      back: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/contacts/${contactId}/delete`
     }
   })
 }
 
 exports.deleteProviderContact_post = async (req, res) => {
-  const contact = await ProviderContact.findByPk(req.params.contactId)
+  const { contactId, providerId } = req.params
+  const contact = await ProviderContact.findByPk(contactId)
   await contact.destroy()
 
   req.flash('success', 'Contact removed')
-  res.redirect(`/providers/${req.params.providerId}/contacts`)
+  res.redirect(`/providers/${providerId}/contacts`)
 }

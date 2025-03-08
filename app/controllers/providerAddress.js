@@ -65,10 +65,12 @@ exports.providerAddressesList = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.providerAddressDetails = async (req, res) => {
+  const { addressId } = req.params
+
   // Clear session address data
   delete req.session.data.address
 
-  const address = await ProviderAddress.findByPk(req.params.addressId, {
+  const address = await ProviderAddress.findByPk(addressId, {
     include: [
       {
         model: Provider,
@@ -100,17 +102,18 @@ exports.newFindProviderAddress_get = async (req, res) => {
 
 exports.newFindProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
+  const { find } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const errors = []
 
-  if (!req.session.data.find.postcode.length) {
+  if (!find.postcode.length) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
     errors.push(error)
   }
-  // else if (!isValidPostcode(req.session.data.find.postcode)) {
+  // else if (!isValidPostcode(find.postcode)) {
   //   const error = {}
   //   error.fieldName = "address-postcode"
   //   error.href = "#address-postcode"
@@ -118,7 +121,7 @@ exports.newFindProviderAddress_post = async (req, res) => {
   //   errors.push(error)
   // }
 
-  // if (!req.session.data.find.building.length) {
+  // if (!find.building.length) {
   //   const error = {}
   //   error.fieldName = "address-building"
   //   error.href = "#address-building"
@@ -129,7 +132,7 @@ exports.newFindProviderAddress_post = async (req, res) => {
   if (errors.length) {
     res.render('providers/addresses/find', {
       provider,
-      find: req.session.data.find,
+      find,
       errors,
       actions: {
         back: `/providers/${providerId}`,
@@ -144,13 +147,14 @@ exports.newFindProviderAddress_post = async (req, res) => {
 
 exports.newSelectProviderAddress_get = async (req, res) => {
   const { providerId } = req.params
+  const { address, find } = req.session.data
   const provider = await Provider.findByPk(providerId)
 
   let addresses = []
-  if (req.session.data.find.postcode?.length) {
+  if (find.postcode?.length) {
     addresses = await findByPostcode(
-      postcode = req.session.data.find.postcode,
-      building = req.session.data.find.building
+      postcode = find.postcode,
+      building = find.building
     )
 
     addresses = await parseForGovukRadios(addresses)
@@ -164,8 +168,8 @@ exports.newSelectProviderAddress_get = async (req, res) => {
   res.render('providers/addresses/select', {
     provider,
     addresses,
-    find: req.session.data.find,
-    address: req.session.data.address,
+    find,
+    address,
     actions: {
       back,
       cancel: `/providers/${providerId}`,
@@ -178,10 +182,11 @@ exports.newSelectProviderAddress_get = async (req, res) => {
 
 exports.newSelectProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
+  const { address, find } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const errors = []
 
-  if (!req.session.data.find.uprn) {
+  if (!find.uprn) {
     const error = {}
     error.fieldName = "address-uprn"
     error.href = "#address-uprn"
@@ -191,10 +196,10 @@ exports.newSelectProviderAddress_post = async (req, res) => {
 
   if (errors.length) {
     let addresses = []
-    if (req.session.data.find.postcode?.length) {
+    if (find.postcode?.length) {
       addresses = await findByPostcode(
-        postcode = req.session.data.find.postcode,
-        building = req.session.data.find.building
+        postcode = find.postcode,
+        building = find.building
       )
 
       addresses = await parseForGovukRadios(addresses)
@@ -208,8 +213,8 @@ exports.newSelectProviderAddress_post = async (req, res) => {
     res.render('providers/addresses/select', {
       provider,
       addresses,
-      find: req.session.data.find,
-      address: req.session.data.address,
+      find,
+      address,
       errors,
       actions: {
         back,
@@ -226,6 +231,7 @@ exports.newSelectProviderAddress_post = async (req, res) => {
 
 exports.newEnterProviderAddress_get = async (req, res) => {
   const { providerId } = req.params
+  const { address } = req.session.data
   const provider = await Provider.findByPk(providerId)
 
   // delete any selected address URPN as user is entering manually
@@ -233,7 +239,7 @@ exports.newEnterProviderAddress_get = async (req, res) => {
 
   res.render('providers/addresses/edit', {
     provider,
-    address: req.session.data.address,
+    address,
     actions: {
       back: `/providers/${providerId}/addresses/new/select`,
       cancel: `/providers/${providerId}`,
@@ -244,10 +250,11 @@ exports.newEnterProviderAddress_get = async (req, res) => {
 
 exports.newEnterProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
+  const { address } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const errors = []
 
-  if (!req.session.data.address.line1.length) {
+  if (!address.line1.length) {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
@@ -255,7 +262,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.address.town.length) {
+  if (!address.town.length) {
     const error = {}
     error.fieldName = "address-town"
     error.href = "#address-town"
@@ -263,13 +270,13 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.address.postcode.length) {
+  if (!address.postcode.length) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
     errors.push(error)
-  } else if (!isValidPostcode(req.session.data.address.postcode)) {
+  } else if (!isValidPostcode(address.postcode)) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
@@ -280,7 +287,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
   if (errors.length) {
     res.render('providers/addresses/edit', {
       provider,
-      address: req.session.data.address,
+      address,
       errors,
       actions: {
         back: `/providers/${providerId}/addresses/new/select`,
@@ -337,7 +344,7 @@ exports.newProviderAddressCheck_get = async (req, res) => {
 
 exports.newProviderAddressCheck_post = async (req, res) => {
   const { address } = req.session.data
-  const userId = req.session.passport.user.id
+  const { user } = req.session.passport
 
   await ProviderAddress.create({
     providerId: req.params.providerId,
@@ -351,8 +358,8 @@ exports.newProviderAddressCheck_post = async (req, res) => {
     latitude: nullIfEmpty(address.latitude),
     longitude: nullIfEmpty(address.longitude),
     googlePlaceId: nullIfEmpty(address.googlePlaceId),
-    createdById: userId,
-    updatedById: userId
+    createdById: user.id,
+    updatedById: user.id
   })
 
   delete req.session.data.find
@@ -367,19 +374,20 @@ exports.newProviderAddressCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.editProviderAddress_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const currentAddress = await ProviderAddress.findByPk(req.params.addressId)
+  const { addressId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const currentAddress = await ProviderAddress.findByPk(addressId)
 
   let address
   if (req.session.data?.address) {
     address = req.session.data.address
   } else {
-    address = await ProviderAddress.findByPk(req.params.addressId)
+    address = await ProviderAddress.findByPk(addressId)
   }
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit/check`
+    back = `/providers/${providerId}/addresses/${addressId}/edit/check`
   }
 
   res.render('providers/addresses/edit', {
@@ -388,8 +396,8 @@ exports.editProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/addresses/${req.params.addressId}/edit`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/addresses/${addressId}/edit`
     }
   })
 }
@@ -485,7 +493,7 @@ exports.editProviderAddressCheck_get = async (req, res) => {
 exports.editProviderAddressCheck_post = async (req, res) => {
   const { addressId, providerId } = req.params
   const { address } = req.session.data
-  const userId = req.session.passport.user.id
+  const { user } = req.session.passport
 
   const currentAddress = await ProviderAddress.findByPk(addressId)
 
@@ -500,7 +508,7 @@ exports.editProviderAddressCheck_post = async (req, res) => {
     latitude: nullIfEmpty(address.latitude),
     longitude: nullIfEmpty(address.longitude),
     googlePlaceId: nullIfEmpty(address.googlePlaceId),
-    updatedById: userId
+    updatedById: user.id
   })
 
   delete req.session.data.address
@@ -514,23 +522,26 @@ exports.editProviderAddressCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteProviderAddress_get = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  const address = await ProviderAddress.findByPk(req.params.addressId)
+  const { addressId, providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const address = await ProviderAddress.findByPk(addressId)
+
   res.render('providers/addresses/delete', {
     provider,
     address,
     actions: {
-      back: `/providers/${req.params.providerId}`,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/addresses/${req.params.addressId}/delete`
+      back: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/addresses/${addressId}/delete`
     }
   })
 }
 
 exports.deleteProviderAddress_post = async (req, res) => {
-  const address = await ProviderAddress.findByPk(req.params.addressId)
+  const { addressId, providerId } = req.params
+  const address = await ProviderAddress.findByPk(addressId)
   await address.destroy()
 
   req.flash('success', 'Address removed')
-  res.redirect(`/providers/${req.params.providerId}/addresses`)
+  res.redirect(`/providers/${providerId}/addresses`)
 }
