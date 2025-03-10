@@ -21,6 +21,14 @@
 
     <form action="{{ actions.archive }}" method="post" accept-charset="utf-8" novalidate>
 
+      <p class="govuk-body">
+        After archiving the provider, you will not be able to make changes to it.
+      </p>
+
+      <p class="govuk-body">
+        You can restore the provider at any time.
+      </p>
+
       {{ govukButton({
         text: "Archive provider"
       }) }}
