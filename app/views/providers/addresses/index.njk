@@ -42,7 +42,7 @@
         {{ govukSummaryList({
           card: {
             title: {
-              text: "Address " + loop.index
+              text: address.town + ", " + address.postcode | upper
             },
             actions: {
               items: [
@@ -105,7 +105,7 @@
                 text: "Postcode"
               },
               value: {
-                text: address.postcode
+                text: address.postcode | upper
               }
             },
             {

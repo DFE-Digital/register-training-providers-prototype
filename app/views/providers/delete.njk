@@ -21,6 +21,11 @@
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
 
+      {{ govukWarningText({
+        text: "Deleting a provider is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
+      }) }}
+
       {{ govukButton({
         text: "Delete provider",
         classes: "govuk-button--warning"

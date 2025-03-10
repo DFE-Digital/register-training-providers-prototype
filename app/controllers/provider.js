@@ -41,6 +41,8 @@ exports.providersList = async (req, res) => {
   delete req.session.data.contact
   delete req.session.data.find
 
+  const { filters } = req.session.data
+
   // variables for use in pagination
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 25
@@ -56,18 +58,18 @@ exports.providersList = async (req, res) => {
   const showArchivedProvider = null
 
   let providerTypes
-  if (req.session.data.filters?.providerType) {
-    providerTypes = getCheckboxValues(providerType, req.session.data.filters.providerType)
+  if (filters?.providerType) {
+    providerTypes = getCheckboxValues(providerType, filters.providerType)
   }
 
   let accreditationTypes
-  if (req.session.data.filters?.accreditationType) {
-    accreditationTypes = getCheckboxValues(accreditationType, req.session.data.filters.accreditationType)
+  if (filters?.accreditationType) {
+    accreditationTypes = getCheckboxValues(accreditationType, filters.accreditationType)
   }
 
   let showArchivedProviders
-  if (req.session.data.filters?.showArchivedProvider) {
-    showArchivedProviders = getCheckboxValues(showArchivedProvider, req.session.data.filters.showArchivedProvider)
+  if (filters?.showArchivedProvider) {
+    showArchivedProviders = getCheckboxValues(showArchivedProvider, filters.showArchivedProvider)
   }
 
   const hasFilters = !!((providerTypes?.length > 0)
@@ -120,18 +122,18 @@ exports.providersList = async (req, res) => {
   }
 
   let selectedProviderType = []
-  if (req.session.data.filters?.providerType) {
-    selectedProviderType = req.session.data.filters.providerType
+  if (filters?.providerType) {
+    selectedProviderType = filters.providerType
   }
 
   let selectedAccreditationType = []
-  if (req.session.data.filters?.accreditationType) {
-    selectedAccreditationType = req.session.data.filters.accreditationType
+  if (filters?.accreditationType) {
+    selectedAccreditationType = filters.accreditationType
   }
 
   let selectedArchivedProvider = []
-  if (req.session.data.filters?.showArchivedProvider) {
-    selectedArchivedProvider = req.session.data.filters.showArchivedProvider
+  if (filters?.showArchivedProvider) {
+    selectedArchivedProvider = filters.showArchivedProvider
   }
 
   // build the WHERE conditions
@@ -271,25 +273,28 @@ exports.providersList = async (req, res) => {
 }
 
 exports.removeProviderTypeFilter = (req, res) => {
-  req.session.data.filters.providerType = removeFilter(
+  const { filters } = req.session.data
+  filters.providerType = removeFilter(
     req.params.providerType,
-    req.session.data.filters.providerType
+    filters.providerType
   )
   res.redirect('/providers')
 }
 
 exports.removeAccreditationTypeFilter = (req, res) => {
-  req.session.data.filters.accreditationType = removeFilter(
+  const { filters } = req.session.data
+  filters.accreditationType = removeFilter(
     req.params.accreditationType,
-    req.session.data.filters.accreditationType
+    filters.accreditationType
   )
   res.redirect('/providers')
 }
 
 exports.removeShowArchivedProviderFilter = (req, res) => {
-  req.session.data.filters.showArchivedProvider = removeFilter(
+  const { filters } = req.session.data
+  filters.showArchivedProvider = removeFilter(
     req.params.showArchivedProvider,
-    req.session.data.filters.showArchivedProvider
+    filters.showArchivedProvider
   )
   res.redirect('/providers')
 }
@@ -343,8 +348,9 @@ exports.providerDetails = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.newProviderIsAccredited_get = async (req, res) => {
+  const { provider } = req.session.data
   res.render('providers/new/is-accredited', {
-    provider: req.session.data.provider,
+    provider,
     actions: {
       back: '/providers',
       cancel: '/providers',
@@ -354,9 +360,10 @@ exports.newProviderIsAccredited_get = async (req, res) => {
 }
 
 exports.newProviderIsAccredited_post = async (req, res) => {
+  const { provider } = req.session.data
   const errors = []
 
-  if (!req.session.data.provider?.isAccredited) {
+  if (!provider?.isAccredited) {
     const error = {}
     error.fieldName = 'isAccredited'
     error.href = '#isAccredited'
@@ -366,7 +373,7 @@ exports.newProviderIsAccredited_post = async (req, res) => {
 
   if (errors.length) {
     res.render('providers/new/is-accredited', {
-      provider: req.session.data.provider,
+      provider,
       errors,
       actions: {
         back: '/providers',
@@ -380,8 +387,9 @@ exports.newProviderIsAccredited_post = async (req, res) => {
 }
 
 exports.newProviderType_get = async (req, res) => {
+  const { provider } = req.session.data
   res.render('providers/new/type', {
-    provider: req.session.data.provider,
+    provider,
     actions: {
       back: '/providers/new',
       cancel: '/providers',
@@ -391,9 +399,10 @@ exports.newProviderType_get = async (req, res) => {
 }
 
 exports.newProviderType_post = async (req, res) => {
+  const { provider } = req.session.data
   const errors = []
 
-  if (!req.session.data.provider?.type) {
+  if (!provider?.type) {
     const error = {}
     error.fieldName = 'type'
     error.href = '#type'
@@ -403,7 +412,7 @@ exports.newProviderType_post = async (req, res) => {
 
   if (errors.length) {
     res.render('providers/new/type', {
-      provider: req.session.data.provider,
+      provider,
       errors,
       actions: {
         back: '/providers/new',
@@ -417,8 +426,9 @@ exports.newProviderType_post = async (req, res) => {
 }
 
 exports.newProviderDetails_get = async (req, res) => {
+  const { provider } = req.session.data
   res.render('providers/edit', {
-    provider: req.session.data.provider,
+    provider,
     actions: {
       back: '/providers/new/type',
       cancel: '/providers',
@@ -428,9 +438,10 @@ exports.newProviderDetails_get = async (req, res) => {
 }
 
 exports.newProviderDetails_post = async (req, res) => {
+  const { provider } = req.session.data
   const errors = []
 
-  if (!req.session.data.provider.operatingName.length) {
+  if (!provider.operatingName.length) {
     const error = {}
     error.fieldName = 'operatingName'
     error.href = '#operatingName'
@@ -438,8 +449,8 @@ exports.newProviderDetails_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (req.session.data.provider?.type !== 'school') {
-    if (!req.session.data.provider.legalName.length) {
+  if (provider?.type !== 'school') {
+    if (!provider.legalName.length) {
       const error = {}
       error.fieldName = 'legalName'
       error.href = '#legalName'
@@ -448,7 +459,7 @@ exports.newProviderDetails_post = async (req, res) => {
     }
   }
 
-  if (!req.session.data.provider.ukprn.length) {
+  if (!provider.ukprn.length) {
     const error = {}
     error.fieldName = 'ukprn'
     error.href = '#ukprn'
@@ -456,8 +467,8 @@ exports.newProviderDetails_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (req.session.data.provider?.type === 'school') {
-    if (!req.session.data.provider.urn.length) {
+  if (provider?.type === 'school') {
+    if (!provider.urn.length) {
       const error = {}
       error.fieldName = 'urn'
       error.href = '#urn'
@@ -466,7 +477,7 @@ exports.newProviderDetails_post = async (req, res) => {
     }
   }
 
-  if (!req.session.data.provider.code.length) {
+  if (!provider.code.length) {
     const error = {}
     error.fieldName = 'code'
     error.href = '#code'
@@ -476,7 +487,7 @@ exports.newProviderDetails_post = async (req, res) => {
 
   if (errors.length) {
     res.render('providers/edit', {
-      provider: req.session.data.provider,
+      provider,
       errors,
       actions: {
         back: '/providers/new/type',
@@ -485,7 +496,7 @@ exports.newProviderDetails_post = async (req, res) => {
       }
     })
   } else {
-    if (req.session.data.provider.isAccredited == "yes") {
+    if (provider.isAccredited == "yes") {
       res.redirect('/providers/new/accreditation')
     } else {
       res.redirect('/providers/new/address')
@@ -494,8 +505,9 @@ exports.newProviderDetails_post = async (req, res) => {
 }
 
 exports.newProviderAccreditation_get = async (req, res) => {
+  const { provider } = req.session.data
   res.render('providers/new/accreditation', {
-    provider: req.session.data.provider,
+    provider,
     actions: {
       back: '/providers/new/details',
       cancel: '/providers',
@@ -505,9 +517,10 @@ exports.newProviderAccreditation_get = async (req, res) => {
 }
 
 exports.newProviderAccreditation_post = async (req, res) => {
+  const { provider } = req.session.data
   const errors = []
 
-  if (!req.session.data.provider.accreditation.number.length) {
+  if (!provider.accreditation.number.length) {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
@@ -515,9 +528,9 @@ exports.newProviderAccreditation_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!(req.session.data.provider.accreditation.startsOn?.day.length
-    && req.session.data.provider.accreditation.startsOn?.month.length
-    && req.session.data.provider.accreditation.startsOn?.year.length)
+  if (!(provider.accreditation.startsOn?.day.length
+    && provider.accreditation.startsOn?.month.length
+    && provider.accreditation.startsOn?.year.length)
   ) {
     const error = {}
     error.fieldName = "startsOn"
@@ -528,7 +541,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
 
   if (errors.length) {
     res.render('providers/new/accreditation', {
-      provider: req.session.data.provider,
+      provider,
       errors,
       actions: {
         back: '/providers/new/details',
@@ -798,7 +811,7 @@ exports.newProviderCheck_get = async (req, res) => {
 
 exports.newProviderCheck_post = async (req, res) => {
   const { address, provider } = req.session.data
-  const userId = req.session.passport.user.id
+  const { user } = req.session.passport
 
   const newProvider = await Provider.create({
     operatingName: provider.operatingName,
@@ -807,8 +820,8 @@ exports.newProviderCheck_post = async (req, res) => {
     code: provider.code,
     ukprn: provider.ukprn,
     urn: nullIfEmpty(provider.urn),
-    createdById: userId,
-    updatedById: userId
+    createdById: user.id,
+    updatedById: user.id
   })
 
   if (provider.accreditation) {
@@ -826,8 +839,8 @@ exports.newProviderCheck_post = async (req, res) => {
       number: provider.accreditation.number,
       startsOn,
       endsOn,
-      createdById: userId,
-      updatedById: userId
+      createdById: user.id,
+      updatedById: user.id
     })
   }
 
@@ -843,8 +856,8 @@ exports.newProviderCheck_post = async (req, res) => {
       latitude: nullIfEmpty(address.latitude),
       longitude: nullIfEmpty(address.longitude),
       googlePlaceId: nullIfEmpty(address.googlePlaceId),
-      createdById: userId,
-      updatedById: userId
+      createdById: user.id,
+      updatedById: user.id
     })
   }
 
@@ -994,15 +1007,17 @@ exports.editProviderCheck_get = async (req, res) => {
 }
 
 exports.editProviderCheck_post = async (req, res) => {
-  const provider = await Provider.findByPk(req.params.providerId)
-  await provider.update({
-    operatingName: req.session.data.provider.operatingName,
-    legalName: req.session.data.provider.legalName,
-    // type: req.session.data.provider.type,
-    code: req.session.data.provider.code,
-    ukprn: req.session.data.provider.ukprn,
-    urn: nullIfEmpty(req.session.data.provider.urn),
-    updatedById: req.session.passport.user.id
+  const { provider } = req.session.data
+  const { user } = req.session.passport
+  const currentProvider = await Provider.findByPk(req.params.providerId)
+  await currentProvider.update({
+    operatingName: provider.operatingName,
+    legalName: provider.legalName,
+    // type: provider.type,
+    code: provider.code,
+    ukprn: provider.ukprn,
+    urn: nullIfEmpty(provider.urn),
+    updatedById: user.id
   })
 
   delete req.session.data.provider
@@ -1088,8 +1103,9 @@ exports.deleteProvider_get = async (req, res) => {
 }
 
 exports.deleteProvider_post = async (req, res) => {
+  const { providerId } = req.params
   const { user } = req.session.passport
-  const provider = await Provider.findByPk(req.params.providerId)
+  const provider = await Provider.findByPk(providerId)
   await provider.update({
     deletedAt: new Date(),
     deletedById: user.id,

@@ -21,6 +21,10 @@
 
     <form action="{{ actions.restore }}" method="post" accept-charset="utf-8" novalidate>
 
+      <p class="govuk-body">
+        After restoring the provider, you will be able to make changes to it.
+      </p>
+
       {{ govukButton({
         text: "Restore provider"
       }) }}
