@@ -110,24 +110,9 @@ exports.newFindProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a postcode"
+    error.text = "Enter postcode"
     errors.push(error)
   }
-  // else if (!isValidPostcode(find.postcode)) {
-  //   const error = {}
-  //   error.fieldName = "address-postcode"
-  //   error.href = "#address-postcode"
-  //   error.text = "Enter a real postcode"
-  //   errors.push(error)
-  // }
-
-  // if (!find.building.length) {
-  //   const error = {}
-  //   error.fieldName = "address-building"
-  //   error.href = "#address-building"
-  //   error.text = "Enter building number or name"
-  //   errors.push(error)
-  // }
 
   if (errors.length) {
     res.render('providers/addresses/find', {
@@ -266,7 +251,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-town"
     error.href = "#address-town"
-    error.text = "Enter a town or city"
+    error.text = "Enter town or city"
     errors.push(error)
   }
 
@@ -274,13 +259,13 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a postcode"
+    error.text = "Enter postcode"
     errors.push(error)
   } else if (!isValidPostcode(address.postcode)) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a real postcode"
+    error.text = "Enter a full UK postcode"
     errors.push(error)
   }
 
@@ -421,7 +406,7 @@ exports.editProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-town"
     error.href = "#address-town"
-    error.text = "Enter a town or city"
+    error.text = "Enter town or city"
     errors.push(error)
   }
 
@@ -429,13 +414,13 @@ exports.editProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a postcode"
+    error.text = "Enter postcode"
     errors.push(error)
   } else if (!isValidPostcode(address.postcode)) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a real postcode"
+    error.text = "Enter a full UK postcode"
     errors.push(error)
   }
 

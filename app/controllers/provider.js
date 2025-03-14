@@ -406,7 +406,7 @@ exports.newProviderType_post = async (req, res) => {
     const error = {}
     error.fieldName = 'type'
     error.href = '#type'
-    error.text = 'Select a provider type'
+    error.text = 'Select provider type'
     errors.push(error)
   }
 
@@ -445,7 +445,7 @@ exports.newProviderDetails_post = async (req, res) => {
     const error = {}
     error.fieldName = 'operatingName'
     error.href = '#operatingName'
-    error.text = 'Enter an operating name'
+    error.text = 'Enter operating name'
     errors.push(error)
   }
 
@@ -454,7 +454,7 @@ exports.newProviderDetails_post = async (req, res) => {
       const error = {}
       error.fieldName = 'legalName'
       error.href = '#legalName'
-      error.text = 'Enter a legal name'
+      error.text = 'Enter legal name'
       errors.push(error)
     }
   }
@@ -463,7 +463,7 @@ exports.newProviderDetails_post = async (req, res) => {
     const error = {}
     error.fieldName = 'ukprn'
     error.href = '#ukprn'
-    error.text = 'Enter a UK provider reference number (UKPRN)'
+    error.text = 'Enter UK provider reference number (UKPRN)'
     errors.push(error)
   }
 
@@ -472,7 +472,7 @@ exports.newProviderDetails_post = async (req, res) => {
       const error = {}
       error.fieldName = 'urn'
       error.href = '#urn'
-      error.text = 'Enter a unique reference number (URN)'
+      error.text = 'Enter unique reference number (URN)'
       errors.push(error)
     }
   }
@@ -481,7 +481,7 @@ exports.newProviderDetails_post = async (req, res) => {
     const error = {}
     error.fieldName = 'code'
     error.href = '#code'
-    error.text = 'Enter a provider code'
+    error.text = 'Enter provider code'
     errors.push(error)
   }
 
@@ -524,7 +524,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
-    error.text = "Enter an accredited provider number"
+    error.text = "Enter accredited provider number"
     errors.push(error)
   }
 
@@ -586,21 +586,6 @@ exports.newProviderFindAddress_post = async (req, res) => {
     error.text = "Enter a postcode"
     errors.push(error)
   }
-  // else if (!isValidPostcode(find.postcode)) {
-  //   const error = {}
-  //   error.fieldName = "address-postcode"
-  //   error.href = "#address-postcode"
-  //   error.text = "Enter a real postcode"
-  //   errors.push(error)
-  // }
-
-  // if (!find.building.length) {
-  //   const error = {}
-  //   error.fieldName = "address-building"
-  //   error.href = "#address-building"
-  //   error.text = "Enter building number or name"
-  //   errors.push(error)
-  // }
 
   if (errors.length) {
     let back
@@ -738,7 +723,7 @@ exports.newProviderEnterAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-town"
     error.href = "#address-town"
-    error.text = "Enter a town or city"
+    error.text = "Enter town or city"
     errors.push(error)
   }
 
@@ -746,13 +731,13 @@ exports.newProviderEnterAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a postcode"
+    error.text = "Enter postcode"
     errors.push(error)
   } else if (!isValidPostcode(address.postcode)) {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a real postcode"
+    error.text = "Enter a full UK postcode"
     errors.push(error)
   }
 
@@ -926,7 +911,7 @@ exports.editProvider_post = async (req, res) => {
     const error = {}
     error.fieldName = 'operatingName'
     error.href = '#operatingName'
-    error.text = 'Enter an operating name'
+    error.text = 'Enter operating name'
     errors.push(error)
   }
 
@@ -935,7 +920,7 @@ exports.editProvider_post = async (req, res) => {
       const error = {}
       error.fieldName = 'legalName'
       error.href = '#legalName'
-      error.text = 'Enter a legal name'
+      error.text = 'Enter legal name'
       errors.push(error)
     }
   }
@@ -944,7 +929,7 @@ exports.editProvider_post = async (req, res) => {
     const error = {}
     error.fieldName = 'ukprn'
     error.href = '#ukprn'
-    error.text = 'Enter a UK provider reference number (UKPRN)'
+    error.text = 'Enter UK provider reference number (UKPRN)'
     errors.push(error)
   }
 
@@ -953,7 +938,7 @@ exports.editProvider_post = async (req, res) => {
       const error = {}
       error.fieldName = 'urn'
       error.href = '#urn'
-      error.text = 'Enter a unique reference number (URN)'
+      error.text = 'Enter unique reference number (URN)'
       errors.push(error)
     }
   }
@@ -962,7 +947,7 @@ exports.editProvider_post = async (req, res) => {
     const error = {}
     error.fieldName = 'code'
     error.href = '#code'
-    error.text = 'Enter a provider code'
+    error.text = 'Enter provider code'
     errors.push(error)
   }
 
@@ -1111,8 +1096,6 @@ exports.deleteProvider_post = async (req, res) => {
     deletedById: user.id,
     updatedById: user.id
   })
-
-  // provider.destroy()
 
   req.flash('success', 'Provider deleted')
   res.redirect('/providers')
