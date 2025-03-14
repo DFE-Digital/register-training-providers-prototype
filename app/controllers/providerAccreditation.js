@@ -112,7 +112,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
-    error.text = "Enter an accredited provider number"
+    error.text = "Enter accredited provider number"
     errors.push(error)
   }
 
@@ -238,7 +238,7 @@ exports.editProviderAccreditation_post = async (req, res) => {
     const error = {}
     error.fieldName = "number"
     error.href = "#number"
-    error.text = "Enter an accredited provider number"
+    error.text = "Enter accredited provider number"
     errors.push(error)
   }
 

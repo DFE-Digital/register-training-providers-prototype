@@ -28,7 +28,7 @@ exports.newUser_post = async (req, res) => {
     const error = {}
     error.fieldName = 'firstName'
     error.href = '#firstName'
-    error.text = 'Enter a first name'
+    error.text = 'Enter first name'
     errors.push(error)
   }
 
@@ -36,7 +36,7 @@ exports.newUser_post = async (req, res) => {
     const error = {}
     error.fieldName = 'lastName'
     error.href = '#lastName'
-    error.text = 'Enter a last name'
+    error.text = 'Enter last name'
     errors.push(error)
   }
 
@@ -46,7 +46,7 @@ exports.newUser_post = async (req, res) => {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
-    error.text = 'Enter an email address'
+    error.text = 'Enter email address'
     errors.push(error)
   // } else if (!validationHelper.isValidEmail(req.session.data.user.email)) {
   //   const error = {}
@@ -131,7 +131,7 @@ exports.editUser_post = async (req, res) => {
     const error = {}
     error.fieldName = 'firstName'
     error.href = '#firstName'
-    error.text = 'Enter a first name'
+    error.text = 'Enter first name'
     errors.push(error)
   }
 
@@ -139,7 +139,7 @@ exports.editUser_post = async (req, res) => {
     const error = {}
     error.fieldName = 'lastName'
     error.href = '#lastName'
-    error.text = 'Enter a last name'
+    error.text = 'Enter last name'
     errors.push(error)
   }
 
@@ -149,7 +149,7 @@ exports.editUser_post = async (req, res) => {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
-    error.text = 'Enter an email address'
+    error.text = 'Enter email address'
     errors.push(error)
   // } else if (!validationHelper.isValidEmail(req.session.data.user.email)) {
   //   const error = {}

@@ -182,7 +182,7 @@ exports.newProviderPartnership_post = async (req, res) => {
     const error = {}
     error.fieldName = "provider-autocomplete"
     error.href = "#provider-autocomplete"
-    error.text = "Enter a provider name, UKPRN, URN or postcode"
+    error.text = "Enter provider name, UKPRN, URN or postcode"
     errors.push(error)
   }
 
