@@ -875,9 +875,9 @@ exports.editProvider_get = async (req, res) => {
     provider = currentProvider
   }
 
-  let back = `/providers/${req.params.providerId}`
+  let back = `/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${req.params.providerId}/edit/check`
+    back = `/providers/${providerId}/edit/check`
   }
 
   res.render('providers/edit', {
@@ -886,8 +886,8 @@ exports.editProvider_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/edit`
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/edit`
     }
   })
 }
@@ -952,9 +952,9 @@ exports.editProvider_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${req.params.providerId}`
+    let back = `/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${req.params.providerId}/edit/check`
+      back = `/providers/${providerId}/edit/check`
     }
 
     res.render('providers/edit', {
@@ -964,8 +964,8 @@ exports.editProvider_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${req.params.providerId}`,
-        save: `/providers/${req.params.providerId}/edit`
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/edit`
       }
     })
   } else {
@@ -984,17 +984,18 @@ exports.editProviderCheck_get = async (req, res) => {
     provider,
     isAccredited,
     actions: {
-      back: `/providers/${req.params.providerId}/edit`,
-      cancel: `/providers/${req.params.providerId}`,
-      save: `/providers/${req.params.providerId}/edit/check`
+      back: `/providers/${providerId}/edit`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/edit/check`
     }
   })
 }
 
 exports.editProviderCheck_post = async (req, res) => {
+  const { providerId } = req.params
   const { provider } = req.session.data
   const { user } = req.session.passport
-  const currentProvider = await Provider.findByPk(req.params.providerId)
+  const currentProvider = await Provider.findByPk(providerId)
   await currentProvider.update({
     operatingName: provider.operatingName,
     legalName: provider.legalName,
@@ -1008,7 +1009,7 @@ exports.editProviderCheck_post = async (req, res) => {
   delete req.session.data.provider
 
   req.flash('success', 'Provider updated')
-  res.redirect(`/providers/${req.params.providerId}`)
+  res.redirect(`/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
