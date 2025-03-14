@@ -467,7 +467,7 @@ exports.newProviderDetails_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (provider?.type === 'school') {
+  if (provider?.isAccredited === 'no' && provider?.type === 'school') {
     if (!provider.urn.length) {
       const error = {}
       error.fieldName = 'urn'
