@@ -130,7 +130,7 @@ exports.providerPartnershipDetails = async (req, res) => {
     isAccredited,
     actions: {
       back: `/providers/${providerId}`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/partnerships`,
       delete: `/providers/${providerId}/partnerships`
     }
   })
@@ -160,7 +160,7 @@ exports.newProviderPartnership_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/partnerships/new`
     }
   })
@@ -198,7 +198,7 @@ exports.newProviderPartnership_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}/partnerships`,
         save: `/providers/${providerId}/partnerships/new`
       }
     })
@@ -217,7 +217,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
     partner,
     actions: {
       back: `/providers/${providerId}/partnerships/new`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/partnerships`,
       change: `/providers/${providerId}/partnerships/new`,
       save: `/providers/${providerId}/partnerships/new/check`
     }
@@ -290,8 +290,8 @@ exports.deleteProviderPartnership_get = async (req, res) => {
     partnership,
     isAccredited,
     actions: {
-      back: `/providers/${providerId}/partnerships/${partnershipId}`,
-      cancel: `/providers/${providerId}/partnerships/${partnershipId}`,
+      back: `/providers/${providerId}/partnerships`,
+      cancel: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/partnerships/${partnershipId}/delete`
     }
   })

@@ -93,8 +93,8 @@ exports.newFindProviderAddress_get = async (req, res) => {
     provider,
     find: req.session.data.find,
     actions: {
-      back: `/providers/${providerId}`,
-      cancel: `/providers/${providerId}`,
+      back: `/providers/${providerId}/addresses`,
+      cancel: `/providers/${providerId}/addresses`,
       save: `/providers/${providerId}/addresses/new`
     }
   })
@@ -120,8 +120,8 @@ exports.newFindProviderAddress_post = async (req, res) => {
       find,
       errors,
       actions: {
-        back: `/providers/${providerId}`,
-        cancel: `/providers/${providerId}`,
+        back: `/providers/${providerId}/addresses`,
+        cancel: `/providers/${providerId}/addresses`,
         save: `/providers/${providerId}/addresses/new`
       }
     })
@@ -157,7 +157,7 @@ exports.newSelectProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/addresses`,
       change: `/providers/${providerId}/addresses/new`,
       enter: `/providers/${providerId}/addresses/new/enter`,
       save: `/providers/${providerId}/addresses/new/select`
@@ -203,7 +203,7 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}/addresses`,
         change: `/providers/${providerId}/addresses/new`,
         enter: `/providers/${providerId}/addresses/new/enter`,
         save: `/providers/${providerId}/addresses/new/select`
@@ -227,7 +227,7 @@ exports.newEnterProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back: `/providers/${providerId}/addresses/new/select`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/addresses`,
       save: `/providers/${providerId}/addresses/new/enter`
     }
   })
@@ -276,7 +276,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back: `/providers/${providerId}/addresses/new/select`,
-        cancel: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}/addresses`,
         save: `/providers/${providerId}/addresses/new/enter`
       }
     })
@@ -320,7 +320,7 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     address: req.session.data.address,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/addresses`,
       change: back,
       save: `/providers/${providerId}/addresses/new/check`
     }
@@ -328,11 +328,12 @@ exports.newProviderAddressCheck_get = async (req, res) => {
 }
 
 exports.newProviderAddressCheck_post = async (req, res) => {
+  const { providerId } = req.params
   const { address } = req.session.data
   const { user } = req.session.passport
 
   await ProviderAddress.create({
-    providerId: req.params.providerId,
+    providerId,
     uprn: nullIfEmpty(address.uprn),
     line1: address.line1,
     line2: nullIfEmpty(address.line2),
@@ -351,7 +352,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
   delete req.session.data.address
 
   req.flash('success', 'Address added')
-  res.redirect(`/providers/${req.params.providerId}/addresses`)
+  res.redirect(`/providers/${providerId}/addresses`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -381,7 +382,7 @@ exports.editProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/addresses`,
       save: `/providers/${providerId}/addresses/${addressId}/edit`
     }
   })
@@ -437,7 +438,7 @@ exports.editProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}/addresses`,
         save: `/providers/${providerId}/addresses/${addressId}/edit`
       }
     })
@@ -468,7 +469,7 @@ exports.editProviderAddressCheck_get = async (req, res) => {
     address: req.session.data.address,
     actions: {
       back: `/providers/${providerId}/addresses/${addressId}/edit`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/addresses`,
       change: `/providers/${providerId}/addresses/${addressId}/edit`,
       save: `/providers/${providerId}/addresses/${addressId}/edit/check`
     }
@@ -516,7 +517,7 @@ exports.deleteProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back: `/providers/${providerId}`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/addresses`,
       save: `/providers/${providerId}/addresses/${addressId}/delete`
     }
   })
