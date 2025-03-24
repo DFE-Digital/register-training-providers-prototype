@@ -96,7 +96,7 @@ exports.newProviderContact_get = async (req, res) => {
     contact,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/contacts`,
       save: `/providers/${providerId}/contacts/new`
     }
   })
@@ -152,7 +152,7 @@ exports.newProviderContact_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}/contacts`,
         save: `/providers/${providerId}/contacts/new`
       }
     })
@@ -170,7 +170,7 @@ exports.newProviderContactCheck_get = async (req, res) => {
     contact,
     actions: {
       back: `/providers/${providerId}/contacts/new`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/contacts`,
       change: `/providers/${providerId}/contacts/new`,
       save: `/providers/${providerId}/contacts/new/check`
     }
@@ -225,7 +225,7 @@ exports.editProviderContact_get = async (req, res) => {
     contact,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/contacts`,
       save: `/providers/${providerId}/contacts/${contactId}/edit`
     }
   })
@@ -284,7 +284,7 @@ exports.editProviderContact_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}/contacts`,
         save: `/providers/${providerId}/contacts/${contactId}/edit`
       }
     })
@@ -305,7 +305,7 @@ exports.editProviderContactCheck_get = async (req, res) => {
     contact,
     actions: {
       back: `/providers/${providerId}/contacts/${contactId}/edit`,
-      cancel: `/providers/${providerId}`,
+      cancel: `/providers/${providerId}/contacts`,
       change: `/providers/${providerId}/contacts/${contactId}/edit`,
       save: `/providers/${providerId}/contacts/${contactId}/edit/check`
     }
@@ -342,8 +342,8 @@ exports.deleteProviderContact_get = async (req, res) => {
     provider,
     contact,
     actions: {
-      back: `/providers/${providerId}`,
-      cancel: `/providers/${providerId}`,
+      back: `/providers/${providerId}/contacts`,
+      cancel: `/providers/${providerId}/contacts`,
       save: `/providers/${providerId}/contacts/${contactId}/delete`
     }
   })
