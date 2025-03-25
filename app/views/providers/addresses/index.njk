@@ -6,6 +6,12 @@
 {% set title = provider.operatingName %}
 {% set caption = "Provider" %}
 
+{% if pagination.totalCount %}
+  {% set subtitle = "Addresses (" + pagination.totalCount + ")" %}
+{% else %}
+  {% set subtitle = "Addresses" %}
+{% endif %}
+
 {% block beforeContent %}
 {{ govukBackLink({
   text: "Back",
@@ -28,7 +34,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h2 class="govuk-heading-m">Addresses</h2>
+    <h2 class="govuk-heading-m">{{ subtitle }}</h2>
 
     {% if not provider.archivedAt %}
       {{ govukButton({
@@ -127,6 +133,7 @@
           ]
         }) }}
       {% endfor %}
+      {% include "_includes/pagination.njk" %}
     {% else %}
       <p class="govuk-body">
         There are no addresses for {{ provider.operatingName if provider.operatingName else "this provider" }}.
