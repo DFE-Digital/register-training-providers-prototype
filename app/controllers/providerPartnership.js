@@ -22,18 +22,13 @@ exports.providerPartnershipsList = async (req, res) => {
   const isAccredited = await isAccreditedProvider({ providerId })
 
   // Get the total number of partnerships for pagination metadata
-  const totalCount = await ProviderPartnership.count({
-    where: {
-        [Op.or]: [
-        { accreditedProviderId: providerId },
-        { trainingProviderId: providerId },
-      ]
-    }
-  })
-
-  // TODO: Tidy up accreditation data
+  let totalCount = 0
 
   if (isAccredited) {
+    totalCount = await ProviderPartnership.count({
+      where: { accreditedProviderId: providerId }
+    })
+
     // fetch the trainingPartnerships sorted
     provider.partnerships = await provider.getTrainingPartnerships({
       order: [['operatingName', 'ASC']],
@@ -41,6 +36,10 @@ exports.providerPartnershipsList = async (req, res) => {
       offset
     })
   } else {
+    totalCount = await ProviderPartnership.count({
+      where: { trainingProviderId: providerId }
+    })
+
     // fetch the accreditedPartnerships sorted
     provider.partnerships = await provider.getAccreditedPartnerships({
       order: [['operatingName', 'ASC']],
@@ -48,28 +47,6 @@ exports.providerPartnershipsList = async (req, res) => {
       offset
     })
   }
-
-  // Only fetch ONE page of partnerships
-  // const partnerships = await ProviderPartnership.findAll({
-  //   where: {
-  //     [Op.or]: [
-  //       { accreditedProviderId: providerId },
-  //       { trainingProviderId: providerId },
-  //     ]
-  //   },
-  //   order: [
-  //     ['accreditedProviderId', 'ASC'],
-  //     ['trainingProviderId', 'ASC']
-  //   ],
-  //   limit,
-  //   offset,
-  //   include: [
-  //     {
-  //       model: Provider,
-  //       as: isAccredited ? 'trainingProvider' : 'accreditedProvider'
-  //     }
-  //   ]
-  // })
 
   // Create your Pagination object
   // using the chunk + the overall total count
