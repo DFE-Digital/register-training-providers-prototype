@@ -4,9 +4,9 @@
 {% from "_components/search/macro.njk" import appSearch %}
 {% from "_components/secondary-navigation/macro.njk" import appSecondaryNavigation %}
 
-{% block pageTitle %}
-  {{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
-{% endblock %}
+{% block pageTitle -%}
+  {{ subtitle + " - " if subtitle }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{%- endblock %}
 
 {% block head %}
   {% include "_includes/head.njk" %}
