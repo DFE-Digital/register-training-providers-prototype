@@ -127,7 +127,7 @@ exports.newProviderPartnership_get = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
-  let back = `/providers/${providerId}`
+  let back = `/providers/${providerId}/partnerships`
   if (req.query.referrer === 'check') {
     back = `/providers/${providerId}/partnerships/new/check`
   }
@@ -164,7 +164,7 @@ exports.newProviderPartnership_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/providers/${providerId}/partnerships`
     if (req.query.referrer === 'check') {
       back = `/providers/${providerId}/partnerships/new/check`
     }
