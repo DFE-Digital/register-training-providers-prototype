@@ -47,22 +47,35 @@
 
       {% for partner in partnerships %}
 
-        {# {% if isAccredited %}
-          {% set partner = partnership.trainingProvider %}
-        {% else %}
-          {% set partner = partnership.accreditedProvider %}
-        {% endif %} #}
+        {% set cardTitleHtml %}
+          {{ partner.operatingName }}
+          {% if partner.deletedAt %}
+            {{ govukTag({
+              text: "Deleted",
+              classes: "govuk-tag--red govuk-!-margin-left-1"
+            }) }}
+          {% elif partner.archivedAt %}
+            {{ govukTag({
+              text: "Archived",
+              classes: "govuk-!-margin-left-1"
+            }) }}
+          {% endif %}
+        {% endset %}
 
         {% set operatingNameHtml %}
-          <a href="{{ actions.view }}/{{ partner.id }}" class="govuk-link">
+          {% if partner.deletedAt %}
             {{ partner.operatingName }}
-          </a>
+          {% else %}
+            <a href="{{ actions.view }}/{{ partner.id }}" class="govuk-link">
+              {{ partner.operatingName }}
+            </a>
+          {% endif %}
         {% endset %}
 
         {{ govukSummaryList({
           card: {
             title: {
-              text: partner.operatingName
+              html: cardTitleHtml
             },
             actions: {
               items: [
