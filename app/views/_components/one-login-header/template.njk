@@ -16,7 +16,7 @@
       </a>
     </div>
 
-    {# <button type="button"
+    <button type="button"
       aria-controls="one-login-header__nav"
       aria-label="Show GOV.UK One Login menu"
       data-open-class="app-cross-service-header__button--open"
@@ -47,12 +47,12 @@
         </svg>
       </span>
       <!--<![endif]-->
-    </button> #}
+    </button>
 
     <nav aria-label="GOV.UK One Login menu" class="app-one-login-header__nav govuk-!-display-none-print" data-open-class="app-one-login-header__nav--open" id="one-login-header__nav">
       <ul class="app-one-login-header__nav__list">
         <li class="app-one-login-header__nav__list-item">
-          <a class="app-one-login-header__nav__link app-one-login-header__nav__link--one-login" href="">
+          <a class="app-one-login-header__nav__link app-one-login-header__nav__link--one-login" href="{{ params.href }}">
             <span class="app-one-login-header__nav__link-content">
               GOV.UK One Login
             </span>
@@ -83,7 +83,7 @@
 
         {% for item in params.navigation %}
           {% if item.text or item.html %}
-          <li class="app-one-login-header__nav__list-item{%- if item.active %} govuk-header__navigation-item--active{% endif %}">
+          <li class="app-one-login-header__nav__list-item">
             {% if item.href %}
             <a class="app-one-login-header__nav__link" href="{{ item.href }}">
             {% endif %}
@@ -94,8 +94,6 @@
           </li>
           {% endif %}
         {% endfor %}
-
-
       </ul>
     </nav>
   </div>
