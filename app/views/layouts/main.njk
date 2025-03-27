@@ -3,6 +3,7 @@
 {% from "_components/checkbox-filter/macro.njk" import appCheckboxFilter %}
 {% from "_components/search/macro.njk" import appSearch %}
 {% from "_components/secondary-navigation/macro.njk" import appSecondaryNavigation %}
+{% from "_components/one-login-header/macro.njk" import appOneLoginHeader %}
 
 {% block pageTitle -%}
   {{ subtitle + " - " if subtitle }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
@@ -13,7 +14,16 @@
 {% endblock %}
 
 {% block header %}
-  {{ govukHeader({
+  {{ appOneLoginHeader({
+    navigation: [
+      {
+        href: "/sign-out",
+        text: "Sign out"
+      }
+    ]
+  }) }}
+
+  {# {{ govukHeader({
     homepageUrl: "/",
     productName: serviceName,
     containerClasses: "govuk-width-container",
@@ -29,11 +39,10 @@
         text: "Sign out"
       }
     ]
-  }) }}
-
-  {% include "_includes/phase-banner.njk" %}
+  }) }} #}
 
   {{ govukServiceNavigation({
+    serviceName: serviceName,
     navigationId: "primaryNavigation",
     navigation: [
       {
@@ -48,6 +57,8 @@
       }
     ]
   }) }}
+
+  {% include "_includes/phase-banner.njk" %}
 {% endblock %}
 
 {% block footer %}
