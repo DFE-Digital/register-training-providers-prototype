@@ -20,7 +20,7 @@
     "govuk-prototype-kit": "^13.16.2",
     "inflection": "^3.0.2",
     "luxon": "^3.6.0",
-    "sequelize": "^6.37.6",
+    "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7",
     "uuid": "^11.1.0"
