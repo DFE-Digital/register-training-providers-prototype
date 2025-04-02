@@ -28,6 +28,7 @@ const passport = {
 /// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
+const errorController = require('./controllers/error')
 const providerController = require('./controllers/provider')
 const providerAccreditationController = require('./controllers/providerAccreditation')
 const providerAddressController = require('./controllers/providerAddress')
@@ -231,6 +232,25 @@ router.post('/providers/:providerId/restore', checkIsAuthenticated, providerCont
 router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
 
 router.get('/providers', checkIsAuthenticated, providerController.providersList)
+
+/// ------------------------------------------------------------------------ ///
+/// GENERAL ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/404', checkIsAuthenticated, errorController.pageNotFound)
+router.get('/page-not-found', checkIsAuthenticated, errorController.pageNotFound)
+
+router.get('/500', errorController.unexpectedError)
+router.get('/server-error', errorController.unexpectedError)
+
+router.get('/503', errorController.serviceUnavailable)
+router.get('/service-unavailable', errorController.serviceUnavailable)
+
+router.get('/unauthorised', errorController.unauthorised)
+
+router.get('/account-not-recognised', errorController.accountNotRecognised)
+
+router.get('/account-no-organisation', errorController.accountNoOrganisation)
 
 /// ------------------------------------------------------------------------ ///
 /// AUTOCOMPLETE ROUTES
