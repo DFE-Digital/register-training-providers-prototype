@@ -28,6 +28,7 @@ const passport = {
 /// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
+const feedbackController = require('./controllers/feedback')
 const providerController = require('./controllers/provider')
 const providerAccreditationController = require('./controllers/providerAccreditation')
 const providerAddressController = require('./controllers/providerAddress')
@@ -231,6 +232,18 @@ router.post('/providers/:providerId/restore', checkIsAuthenticated, providerCont
 router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
 
 router.get('/providers', checkIsAuthenticated, providerController.providersList)
+
+/// ------------------------------------------------------------------------ ///
+/// FEEDBACK ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/feedback', feedbackController.newFeedback_get)
+router.post('/feedback', feedbackController.newFeedback_post)
+
+router.get('/feedback/check', feedbackController.newFeedbackCheck_get)
+router.post('/feedback/check', feedbackController.newFeedbackCheck_post)
+
+router.get('/feedback/confirmation', feedbackController.newFeedbackConfirmation_get)
 
 /// ------------------------------------------------------------------------ ///
 /// AUTOCOMPLETE ROUTES
