@@ -1,0 +1,38 @@
+{% extends "layouts/auth.njk" %}
+
+{% set hideAccountNavigation = true %}
+
+{% set title = "Thank you for submitting feedback" %}
+
+{% block pageTitle %}
+  {{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{# {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: actions.home
+    }
+  ]
+}) }} #}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <p class="govuk-body">If you gave us your name and email, we will respond within 5 working days.</p>
+
+    <p class="govuk-body">
+      <a href="{{ actions.home }}" class="govuk-link">Return to the home page</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
