@@ -40,6 +40,7 @@ exports.providersList = async (req, res) => {
   delete req.session.data.address
   delete req.session.data.contact
   delete req.session.data.find
+  delete req.session.data.feedback
 
   const { filters } = req.session.data
 
