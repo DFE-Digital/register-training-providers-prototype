@@ -247,6 +247,7 @@ router.get('/503', errorController.serviceUnavailable)
 router.get('/service-unavailable', errorController.serviceUnavailable)
 
 router.get('/unauthorised', errorController.unauthorised)
+router.get('/account-not-authorised', errorController.unauthorised)
 
 router.get('/account-not-recognised', errorController.accountNotRecognised)
 
