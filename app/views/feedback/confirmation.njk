@@ -24,7 +24,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "_includes/page-heading.njk" %}
+    {{ govukPanel({
+      titleText: title
+    }) }}
 
     <p class="govuk-body">If you gave us your name and email, we will respond within 5 working days.</p>
 
