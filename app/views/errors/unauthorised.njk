@@ -1,0 +1,13 @@
+{% extends "layouts/error.njk" %}
+
+{% set title = "Your account is not authorised" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+      <p class="govuk-body">You are seeing this page because you have signed into {{ serviceName }} but your account is not authorised to view this page.</p>
+      <p class="govuk-body">If you think your account should be authorised, email <a class="govuk-link" href="mailto:becomingateacher@education.gov.uk">becomingateacher@education.gov.uk</a>.</p>
+    </div>
+  </div>
+{% endblock %}
