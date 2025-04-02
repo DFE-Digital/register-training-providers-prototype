@@ -1,1 +1,41 @@
-{{ govukFooter({}) }}
+{% set helpHtml %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="app-footer__email">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+        Email
+      </h3>
+      <p class="govuk-body govuk-!-margin-bottom-1">
+        <a class="govuk-footer__link" href="mailto:ittmentor.funding@education.gov.uk">
+          becomingateacher@education.gov.uk
+        </a>
+      </p>
+      <p class="govuk-body">You’ll get a response within 5 working days.</p>
+    </div>
+  </div>
+</div>
+{% endset %}
+
+{{ appFooter({
+  classes: "app-footer",
+  meta: {
+    title: "Get help",
+    html: helpHtml,
+    items: [{
+      href: "/guidance",
+      text: "How to use this service"
+    }, {
+      href: "/accessibility",
+      text: "Accessibility"
+    }, {
+      href: "/cookies",
+      text: "Cookies"
+    }, {
+      href: "/privacy",
+      text: "Privacy notice"
+    }, {
+      href: "/terms",
+      text: "Terms and conditions"
+    }] if not hideFooterLinks and 1==0
+  }
+}) }}
