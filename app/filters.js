@@ -13,6 +13,7 @@ const {
 
 const {
   getAccreditationTypeLabel,
+  getFeedbackRatingLabel,
   getProviderTypeLabel
 } = require('./helpers/content')
 
@@ -104,3 +105,10 @@ addFilter('getMonth', getMonth)
  outputs: 1970
 ------------------------------------------------------------------ */
 addFilter('getYear', getYear)
+
+/* ------------------------------------------------------------------
+utility function to get the feedback rating label
+example: {{ 5 | getFeedbackRatingLabel }}
+outputs: "Very satisfiled"
+------------------------------------------------------------------ */
+addFilter('getFeedbackRatingLabel', getFeedbackRatingLabel)

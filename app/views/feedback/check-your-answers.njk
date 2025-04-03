@@ -1,0 +1,115 @@
+{% extends "layouts/auth.njk" %}
+
+{% set hideAccountNavigation = true %}
+
+{% set title = "Check your answers" %}
+{% set caption = "Feedback" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ caption }}</span>
+      {{ title }}
+    </h1>
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Overall, how do you feel about this service?"
+            },
+            value: {
+              text: feedback.satisfaction | getFeedbackRatingLabel
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "how you feel about this service"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "How could we improve this service?"
+            },
+            value: {
+              text: feedback.details
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "how could we improve this service"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Your name"
+            },
+            value: {
+              text: feedback.fullname if feedback.fullname.length else "Not entered",
+              classes: "govuk-hint" if not feedback.fullname.length
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "Item label"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Your email address"
+            },
+            value: {
+              text: feedback.email if feedback.email.length else "Not entered",
+              classes: "govuk-hint" if not feedback.email.length
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "Item label"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Send feedback"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
