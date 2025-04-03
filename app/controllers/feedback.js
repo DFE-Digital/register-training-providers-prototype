@@ -52,8 +52,8 @@ exports.newFeedback_post = async (req, res) => {
   if (errors.length) {
     res.render('feedback/edit', {
       feedback,
-      errors,
       wordCount,
+      errors,
       actions: {
         back: '/',
         cancel: '/',
@@ -79,10 +79,7 @@ exports.newFeedbackCheck_get = async (req, res) => {
 }
 
 exports.newFeedbackCheck_post = async (req, res) => {
-  // const { feedback } = req.session.data
-
   delete req.session.data.feedback
-
   res.redirect('/feedback/confirmation')
 }
 
