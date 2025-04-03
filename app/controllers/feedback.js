@@ -2,8 +2,10 @@ const { isValidEmail, isValidWordCount } = require('../helpers/validation')
 
 exports.newFeedback_get = async (req, res) => {
   const { feedback } = req.session.data
+  const wordCount = 200
   res.render('feedback/edit', {
     feedback,
+    wordCount,
     actions: {
       back: '/',
       cancel: '/',
@@ -14,9 +16,8 @@ exports.newFeedback_get = async (req, res) => {
 
 exports.newFeedback_post = async (req, res) => {
   const { feedback } = req.session.data
-  const errors = []
-
   const wordCount = 200
+  const errors = []
 
   if (!feedback?.satisfaction) {
     const error = {}
@@ -52,6 +53,7 @@ exports.newFeedback_post = async (req, res) => {
     res.render('feedback/edit', {
       feedback,
       errors,
+      wordCount,
       actions: {
         back: '/',
         cancel: '/',
@@ -61,7 +63,6 @@ exports.newFeedback_post = async (req, res) => {
   } else {
     res.redirect('feedback/check')
   }
-
 }
 
 exports.newFeedbackCheck_get = async (req, res) => {
