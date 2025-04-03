@@ -1,0 +1,26 @@
+{% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
+
+{% block pageTitle -%}
+  {{ subtitle + " - " if subtitle }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% block head %}
+  {% include "_includes/head.njk" %}
+{% endblock %}
+
+{% block header %}
+  {{ govukHeader({
+    homepageUrl: "/",
+    productName: serviceName,
+    containerClasses: "govuk-width-container",
+    navigationClasses: "govuk-header__navigation--end"
+  }) }}
+
+  {% if not hidePhaseBanner %}
+    {% include "_includes/phase-banner.njk" %}
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {% include "_includes/footer.njk" %}
+{% endblock %}
