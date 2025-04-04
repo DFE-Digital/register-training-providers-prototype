@@ -28,6 +28,7 @@ const passport = {
 /// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
+const accountController = require('./controllers/account')
 const errorController = require('./controllers/error')
 const feedbackController = require('./controllers/feedback')
 const providerController = require('./controllers/provider')
@@ -233,6 +234,12 @@ router.post('/providers/:providerId/restore', checkIsAuthenticated, providerCont
 router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
 
 router.get('/providers', checkIsAuthenticated, providerController.providersList)
+
+/// ------------------------------------------------------------------------ ///
+/// MY ACCOUNT ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/account', checkIsAuthenticated, accountController.userAccount)
 
 /// ------------------------------------------------------------------------ ///
 /// FEEDBACK ROUTES
