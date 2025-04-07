@@ -14,7 +14,7 @@ exports.usersList = async (req, res) => {
   const offset = (page - 1) * limit
 
   // Get the total number of providers for pagination metadata
-  const totalCount = await User.count()
+  const totalCount = await User.count({ where: { deletedAt: null } })
 
   // Only fetch ONE page of users
   const users = await User.findAll({
