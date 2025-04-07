@@ -166,7 +166,7 @@ exports.newUserCheck_post = async (req, res) => {
 
 exports.editUser_get = async (req, res) => {
   const { userId } = req.params
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
 
   let user
   if (req.session.data.user) {
@@ -189,7 +189,7 @@ exports.editUser_get = async (req, res) => {
 exports.editUser_post = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
   const errors = []
 
   if (!user.firstName.length) {
@@ -260,7 +260,7 @@ exports.editUserCheck_get = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
 
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
 
   res.render('users/check-your-answers', {
     currentUser,
@@ -277,7 +277,7 @@ exports.editUserCheck_get = async (req, res) => {
 exports.editUserCheck_post = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
 
   currentUser.update({
     firstName: user.firstName,
