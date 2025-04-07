@@ -97,7 +97,14 @@ exports.newUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const userCount = await User.count({ where: { email: user.email } })
+  const whereClause = {
+    [Op.and]: [
+      { email: user.email },
+      { deletedAt: null }
+    ]
+  }
+
+  const userCount = await User.count({ where: whereClause })
 
   const isValidEmailAddress = !!(
     isValidEmail(user.email) &&
