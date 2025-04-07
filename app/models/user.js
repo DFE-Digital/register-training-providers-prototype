@@ -74,6 +74,14 @@ module.exports = (sequelize) => {
       type: DataTypes.UUID,
       allowNull: false,
       field: 'updated_by_id'
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      field: 'deleted_at'
+    },
+    deletedById: {
+      type: DataTypes.UUID,
+      field: 'deleted_by_id'
     }
   },
   {
