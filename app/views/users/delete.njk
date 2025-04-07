@@ -2,13 +2,13 @@
 
 {% set primaryNavId = "users" %}
 
-{% set title = "Confirm you want to remove " + user.firstName + " " + user.lastName + "?" %}
-{% set caption = "Remove support user" %}
+{% set title = "Confirm you want to delete " + user.firstName + " " + user.lastName %}
+{% set caption = "Delete user" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
   text: "Back",
-  href: "/users/" + user.id
+  href: actions.back
 }) }}
 {% endblock %}
 
@@ -22,17 +22,22 @@
       {{ title }}
     </h1>
 
-    <form action="/users/{{ user.id }}/delete" method="post" accept-charset="utf-8" novalidate>
+    <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukWarningText({
+        text: "Deleting a user is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
+      }) }}
 
       {{ govukButton({
-        text: "Remove user",
+        text: "Delete user",
         classes: "govuk-button--warning"
       }) }}
 
     </form>
 
     <p class="govuk-body">
-      <a class="govuk-link" href="/users/{{ user.id }}">Cancel</a>
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
     </p>
 
   </div>
