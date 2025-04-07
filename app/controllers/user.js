@@ -2,6 +2,8 @@ const Pagination = require('../helpers/pagination')
 const { isValidEmail, isValidEducationEmail } = require('../helpers/validation')
 const { User } = require('../models')
 
+const { Op } = require('sequelize')
+
 exports.usersList = async (req, res) => {
   // clear session data
   delete req.session.data.user
@@ -12,10 +14,11 @@ exports.usersList = async (req, res) => {
   const offset = (page - 1) * limit
 
   // Get the total number of providers for pagination metadata
-  const totalCount = await User.count()
+  const totalCount = await User.count({ where: { deletedAt: null } })
 
   // Only fetch ONE page of users
   const users = await User.findAll({
+    where: { 'deletedAt': null },
     order: [['firstName', 'ASC'],['lastName', 'ASC']],
     limit,
     offset
@@ -46,8 +49,20 @@ exports.usersList = async (req, res) => {
 }
 
 exports.userDetails = async (req, res) => {
+  delete req.session.data.user
+
   const user = await User.findOne({ where: { id: req.params.userId } })
-  res.render('users/show', { user })
+  const showDeleteLink = !(req.params.userId === req.session.passport.user.id)
+
+  res.render('users/show', {
+    user,
+    showDeleteLink,
+    actions: {
+      back: '/users',
+      change: `/users/${user.id}/edit`,
+      delete: `/users/${user.id}/delete`
+    }
+  })
 }
 
 exports.newUser_get = async (req, res) => {
@@ -82,7 +97,14 @@ exports.newUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const userCount = await User.count({ where: { email: user.email } })
+  const whereClause = {
+    [Op.and]: [
+      { email: user.email },
+      { deletedAt: null }
+    ]
+  }
+
+  const userCount = await User.count({ where: whereClause })
 
   const isValidEmailAddress = !!(
     isValidEmail(user.email) &&
@@ -155,7 +177,7 @@ exports.newUserCheck_post = async (req, res) => {
 
 exports.editUser_get = async (req, res) => {
   const { userId } = req.params
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
 
   let user
   if (req.session.data.user) {
@@ -178,7 +200,7 @@ exports.editUser_get = async (req, res) => {
 exports.editUser_post = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
   const errors = []
 
   if (!user.firstName.length) {
@@ -201,7 +223,13 @@ exports.editUser_post = async (req, res) => {
 
   // check if the email already exists if it's not the current user's
   if (currentUser.email.toLowerCase() !== user.email.trim().toLowerCase()) {
-    userCount = await User.count({ where: { email: user.email } })
+    const whereClause = {
+      [Op.and]: [
+        { email: user.email },
+        { deletedAt: null }
+      ]
+    }
+    userCount = await User.count({ where: whereClause })
   }
 
   const isValidEmailAddress = !!(
@@ -249,7 +277,7 @@ exports.editUserCheck_get = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
 
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
 
   res.render('users/check-your-answers', {
     currentUser,
@@ -266,7 +294,7 @@ exports.editUserCheck_get = async (req, res) => {
 exports.editUserCheck_post = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
-  const currentUser = await User.findOne({ where: { id: userId } })
+  const currentUser = await User.findByPk(userId)
 
   currentUser.update({
     firstName: user.firstName,
@@ -283,15 +311,26 @@ exports.editUserCheck_post = async (req, res) => {
 
 exports.deleteUser_get = async (req, res) => {
   const { userId } = req.params
-  const user = await User.findOne({ where: { id: userId } })
-  res.render('users/delete', { user })
+  const user = await User.findByPk(userId)
+  res.render('users/delete', {
+    user,
+    actions: {
+      back: `/users/${userId}`,
+      cancel: `/users/${userId}`,
+      delete: `/users/${userId}/delete`
+    }
+  })
 }
 
 exports.deleteUser_post = async (req, res) => {
   const { userId } = req.params
-  const user = await User.findOne({ where: { id: userId } })
-  user.destroy()
+  const user = await User.findByPk(userId)
+  await user.update({
+    deletedAt: new Date(),
+    deletedById: req.session.passport.user.id,
+    updatedById: req.session.passport.user.id
+  })
 
-  req.flash('success', 'Support user removed')
+  req.flash('success', 'Support user deleted')
   res.redirect('/users')
 }

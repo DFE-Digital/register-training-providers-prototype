@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize')
-const { v4: uuid } = require('uuid')
 
 module.exports = (sequelize) => {
   class User extends Model {
@@ -16,7 +15,7 @@ module.exports = (sequelize) => {
   User.init({
     id: {
       type: DataTypes.UUID,
-      defaultValue: uuid(),
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true
     },
@@ -39,7 +38,6 @@ module.exports = (sequelize) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         notEmpty: true,
         isEmail: true
@@ -74,6 +72,14 @@ module.exports = (sequelize) => {
       type: DataTypes.UUID,
       allowNull: false,
       field: 'updated_by_id'
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      field: 'deleted_at'
+    },
+    deletedById: {
+      type: DataTypes.UUID,
+      field: 'deleted_by_id'
     }
   },
   {

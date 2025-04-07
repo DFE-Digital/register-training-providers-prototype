@@ -24,9 +24,12 @@
       {{ title }}
     </h1>
 
-    <p class="govuk-body">
-      <a href="/users/{{ user.id }}/delete" class="govuk-link">Remove user</a>
-    </p>
+    {# only show delete link if it's not the signed in user #}
+    {% if showDeleteLink %}
+      <p class="govuk-body">
+        <a href="{{ actions.delete }}" class="govuk-link">Delete user</a>
+      </p>
+    {% endif %}
 
     {{ govukSummaryList({
       rows: [
@@ -40,7 +43,7 @@
           actions: {
             items: [
               {
-                href: "/users/" + user.id + "/edit",
+                href: actions.change,
                 text: "Change",
                 visuallyHiddenText: "first name"
               }
@@ -57,7 +60,7 @@
           actions: {
             items: [
               {
-                href: "/users/" + user.id + "/edit",
+                href: actions.change,
                 text: "Change",
                 visuallyHiddenText: "last name"
               }
@@ -74,7 +77,7 @@
           actions: {
             items: [
               {
-                href: "/users/" + user.id + "/edit",
+                href: actions.change,
                 text: "Change",
                 visuallyHiddenText: "email"
               }
