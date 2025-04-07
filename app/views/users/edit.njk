@@ -74,6 +74,9 @@
           text: "Email address",
           classes: "govuk-label--s"
         },
+        hint: {
+          text: "Email must be a valid Department for Education address, like name@education.gov.uk"
+        },
         errorMessage: errors | getErrorMessage("email"),
         value: user.email
       }) }}
