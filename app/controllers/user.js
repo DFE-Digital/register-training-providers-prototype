@@ -81,7 +81,7 @@ exports.newUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const users = await User.findAll({ where: { email: user.email } })
+  const userCount = await User.count({ where: { email: user.email } })
 
   const isValidEmailAddress = !!(
     isValidEmail(user.email) &&
@@ -100,7 +100,7 @@ exports.newUser_post = async (req, res) => {
     error.href = '#email'
     error.text = 'Enter a Department for Education email address in the correct format, like name@education.gov.uk'
     errors.push(error)
-  } else if (users.length) {
+  } else if (userCount) {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
@@ -190,7 +190,7 @@ exports.editUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const users = await User.findAll({ where: { email: req.session.data.user.email } })
+  const userCount = await User.count({ where: { email: req.session.data.user.email } })
 
   const isValidEmailAddress = !!(
     isValidEmail(req.session.data.user.email) &&
@@ -209,7 +209,7 @@ exports.editUser_post = async (req, res) => {
     error.href = '#email'
     error.text = 'Enter a Department for Education email address in the correct format, like name@education.gov.uk'
     errors.push(error)
-  } else if (users.length) {
+  } else if (userCount) {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
