@@ -2,6 +2,8 @@ const Pagination = require('../helpers/pagination')
 const { isValidEmail, isValidEducationEmail } = require('../helpers/validation')
 const { User } = require('../models')
 
+const { Op } = require('sequelize')
+
 exports.usersList = async (req, res) => {
   // clear session data
   delete req.session.data.user
@@ -47,6 +49,8 @@ exports.usersList = async (req, res) => {
 }
 
 exports.userDetails = async (req, res) => {
+  delete req.session.data.user
+
   const user = await User.findOne({ where: { id: req.params.userId } })
   const showDeleteLink = !(req.params.userId === req.session.passport.user.id)
 
@@ -212,7 +216,13 @@ exports.editUser_post = async (req, res) => {
 
   // check if the email already exists if it's not the current user's
   if (currentUser.email.toLowerCase() !== user.email.trim().toLowerCase()) {
-    userCount = await User.count({ where: { email: user.email } })
+    const whereClause = {
+      [Op.and]: [
+        { email: user.email },
+        { deletedAt: null }
+      ]
+    }
+    userCount = await User.count({ where: whereClause })
   }
 
   const isValidEmailAddress = !!(
