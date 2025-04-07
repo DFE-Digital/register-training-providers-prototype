@@ -47,8 +47,11 @@ exports.usersList = async (req, res) => {
 
 exports.userDetails = async (req, res) => {
   const user = await User.findOne({ where: { id: req.params.userId } })
+  const showDeleteLink = !(req.params.userId === req.session.passport.user.id)
+
   res.render('users/show', {
     user,
+    showDeleteLink,
     actions: {
       back: '/users',
       change: `/users/${user.id}/edit`,
