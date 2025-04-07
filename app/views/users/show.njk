@@ -25,7 +25,7 @@
     </h1>
 
     <p class="govuk-body">
-      <a href="/users/{{ user.id }}/delete" class="govuk-link">Remove user</a>
+      <a href="{{ actions.delete }}" class="govuk-link">Delete user</a>
     </p>
 
     {{ govukSummaryList({
@@ -40,7 +40,7 @@
           actions: {
             items: [
               {
-                href: "/users/" + user.id + "/edit",
+                href: actions.change,
                 text: "Change",
                 visuallyHiddenText: "first name"
               }
@@ -57,7 +57,7 @@
           actions: {
             items: [
               {
-                href: "/users/" + user.id + "/edit",
+                href: actions.change,
                 text: "Change",
                 visuallyHiddenText: "last name"
               }
@@ -74,7 +74,7 @@
           actions: {
             items: [
               {
-                href: "/users/" + user.id + "/edit",
+                href: actions.change,
                 text: "Change",
                 visuallyHiddenText: "email"
               }
