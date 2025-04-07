@@ -2,7 +2,7 @@
 
 {% set primaryNavId = "users" %}
 
-{% set title = "Support users" %}
+{% set title = "Support users (" + pagination.totalCount + ")" %}
 
 {% block content %}
 
@@ -17,7 +17,7 @@
 
     {{ govukButton({
       text: "Add user",
-      href: "/users/new"
+      href: actions.new
     }) }}
 
     {% if users.length %}
@@ -32,7 +32,7 @@
           {% for user in users %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                <a class="govuk-link" href="/users/{{ user.id }}">
+                <a class="govuk-link" href="{{ actions.view }}/{{ user.id }}">
                   {{ user.firstName }} {{ user.lastName }}
                 </a>
               </td>
@@ -43,6 +43,7 @@
           {% endfor %}
         </tbody>
       </table>
+      {% include "_includes/pagination.njk" %}
     {% else %}
       <p class="govuk-body">There are no users.</p>
     {% endif %}
