@@ -16,6 +16,7 @@ exports.usersList = async (req, res) => {
 
   // Only fetch ONE page of users
   const users = await User.findAll({
+    where: { 'deletedAt': null },
     order: [['firstName', 'ASC'],['lastName', 'ASC']],
     limit,
     offset
@@ -293,21 +294,26 @@ exports.editUserCheck_post = async (req, res) => {
 
 exports.deleteUser_get = async (req, res) => {
   const { userId } = req.params
-  const user = await User.findOne({ where: { id: userId } })
+  const user = await User.findByPk(userId)
   res.render('users/delete', {
     user,
     actions: {
-      back: `/users/${userId}/edit`,
-      cancel: `/users/${userId}`
+      back: `/users/${userId}`,
+      cancel: `/users/${userId}`,
+      delete: `/users/${userId}/delete`
     }
   })
 }
 
 exports.deleteUser_post = async (req, res) => {
   const { userId } = req.params
-  const user = await User.findOne({ where: { id: userId } })
-  user.destroy()
+  const user = await User.findByPk(userId)
+  await user.update({
+    deletedAt: new Date(),
+    deletedById: req.session.passport.user.id,
+    updatedById: req.session.passport.user.id
+  })
 
-  req.flash('success', 'Support user removed')
+  req.flash('success', 'Support user deleted')
   res.redirect('/users')
 }
