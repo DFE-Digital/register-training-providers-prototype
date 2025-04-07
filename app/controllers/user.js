@@ -51,8 +51,9 @@ exports.userDetails = async (req, res) => {
 }
 
 exports.newUser_get = async (req, res) => {
+  const { user } = req.session.data
   res.render('users/edit', {
-    user: req.session.data.user,
+    user,
     actions: {
       back: '/users',
       cancel: '/users',
@@ -124,8 +125,9 @@ exports.newUser_post = async (req, res) => {
 }
 
 exports.newUserCheck_get = async (req, res) => {
+  const { user } = req.session.data
   res.render('users/check-your-answers', {
-    user: req.session.data.user,
+    user,
     actions: {
       back: `/users/new`,
       cancel: `/users`,
@@ -136,10 +138,11 @@ exports.newUserCheck_get = async (req, res) => {
 }
 
 exports.newUserCheck_post = async (req, res) => {
-  const user = await User.create({
-    firstName: req.session.data.user.firstName,
-    lastName: req.session.data.user.lastName,
-    email: req.session.data.user.email,
+  const { user } = req.session.data
+  await User.create({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
     createdById: req.session.passport.user.id,
     updatedById: req.session.passport.user.id
   })
@@ -151,7 +154,8 @@ exports.newUserCheck_post = async (req, res) => {
 }
 
 exports.editUser_get = async (req, res) => {
-  const currentUser = await User.findOne({ where: { id: req.params.userId } })
+  const { userId } = req.params
+  const currentUser = await User.findOne({ where: { id: userId } })
 
   let user
   if (req.session.data.user) {
@@ -164,17 +168,19 @@ exports.editUser_get = async (req, res) => {
     currentUser,
     user,
     actions: {
-      back: `/users/${req.params.userId}`,
-      cancel: `/users/${req.params.userId}`,
-      save: `/users/${req.params.userId}/edit`
+      back: `/users/${userId}`,
+      cancel: `/users/${userId}`,
+      save: `/users/${userId}/edit`
     }
   })
 }
 
 exports.editUser_post = async (req, res) => {
+  const { userId } = req.params
+  const { user } = req.session.data
   const errors = []
 
-  if (!req.session.data.user.firstName.length) {
+  if (!user.firstName.length) {
     const error = {}
     error.fieldName = 'firstName'
     error.href = '#firstName'
@@ -182,7 +188,7 @@ exports.editUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.user.lastName.length) {
+  if (!user.lastName.length) {
     const error = {}
     error.fieldName = 'lastName'
     error.href = '#lastName'
@@ -190,14 +196,14 @@ exports.editUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const userCount = await User.count({ where: { email: req.session.data.user.email } })
+  const userCount = await User.count({ where: { email: user.email } })
 
   const isValidEmailAddress = !!(
-    isValidEmail(req.session.data.user.email) &&
-    isValidEducationEmail(req.session.data.user.email)
+    isValidEmail(user.email) &&
+    isValidEducationEmail(user.email)
   )
 
-  if (!req.session.data.user.email.length) {
+  if (!user.email.length) {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
@@ -219,55 +225,63 @@ exports.editUser_post = async (req, res) => {
 
   if (errors.length) {
     res.render('users/edit', {
-      user: req.session.data.user,
+      user,
       errors,
       actions: {
-        back: `/users/${req.params.userId}`,
-        cancel: `/users/${req.params.userId}`,
-        save: `/users/${req.params.userId}/edit`
+        back: `/users/${userId}`,
+        cancel: `/users/${userId}`,
+        save: `/users/${userId}/edit`
       }
     })
   } else {
-    res.redirect(`/users/${req.params.userId}/edit/check`)
+    res.redirect(`/users/${userId}/edit/check`)
   }
 }
 
 exports.editUserCheck_get = async (req, res) => {
-  const currentUser = await User.findOne({ where: { id: req.params.userId } })
+  const { userId } = req.params
+  const { user } = req.session.data
+
+  const currentUser = await User.findOne({ where: { id: userId } })
 
   res.render('users/check-your-answers', {
     currentUser,
-    user: req.session.data.user,
+    user,
     actions: {
-      back: `/users/${req.params.userId}/edit`,
-      cancel: `/users/${req.params.userId}`,
-      save: `/users/${req.params.userId}/edit/check`
+      back: `/users/${userId}/edit`,
+      cancel: `/users/${userId}`,
+      save: `/users/${userId}/edit/check`
     }
   })
 }
 
 exports.editUserCheck_post = async (req, res) => {
-  const user = await User.findOne({ where: { id: req.params.userId } })
-  user.update({
-    firstName: req.session.data.user.firstName,
-    lastName: req.session.data.user.lastName,
-    email: req.session.data.user.email,
+  const { userId } = req.params
+  const { user } = req.session.data
+  const currentUser = await User.findOne({ where: { id: userId } })
+
+  currentUser.update({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
     updatedById: req.session.passport.user.id
   })
 
   delete req.session.data.user
 
   req.flash('success', 'Support user updated')
-  res.redirect(`/users/${req.params.userId}`)
+  res.redirect(`/users/${userId}`)
 }
 
 exports.deleteUser_get = async (req, res) => {
-  const user = await User.findOne({ where: { id: req.params.userId } })
+  const { userId } = req.params
+  const user = await User.findOne({ where: { id: userId } })
   res.render('users/delete', { user })
 }
 
 exports.deleteUser_post = async (req, res) => {
-  const user = await User.findOne({ where: { id: req.params.userId } })
+  const { userId } = req.params
+  const user = await User.findOne({ where: { id: userId } })
   user.destroy()
 
   req.flash('success', 'Support user removed')
