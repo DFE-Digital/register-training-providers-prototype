@@ -1,8 +1,48 @@
+const Pagination = require('../helpers/pagination')
+const { isValidEmail, isValidEducationEmail } = require('../helpers/validation')
 const { User } = require('../models')
 
 exports.usersList = async (req, res) => {
-  const users = await User.findAll()
-  res.render('users/index', { users })
+  // clear session data
+  delete req.session.data.user
+
+  // variables for use in pagination
+  const page = parseInt(req.query.page, 10) || 1
+  const limit = parseInt(req.query.limit, 10) || 25
+  const offset = (page - 1) * limit
+
+  // Get the total number of providers for pagination metadata
+  const totalCount = await User.count()
+
+  // Only fetch ONE page of users
+  const users = await User.findAll({
+    order: [['firstName', 'ASC'],['lastName', 'ASC']],
+    limit,
+    offset
+  })
+
+  // create the Pagination object
+  // using the chunk + the overall total count
+  const pagination = new Pagination(users, totalCount, page, limit)
+
+  res.render('users/index', {
+    // users for *this* page
+    users: pagination.getData(),
+    // the pagination metadata (pageItems, nextPage, etc.)
+    pagination,
+    actions: {
+      new: '/users/new/',
+      view: '/users',
+      filters: {
+        apply: '/users',
+        remove: '/users/remove-all-filters'
+      },
+      search: {
+        find: '/users',
+        remove: '/users/remove-keyword-search'
+      }
+    }
+  })
 }
 
 exports.userDetails = async (req, res) => {
@@ -22,9 +62,10 @@ exports.newUser_get = async (req, res) => {
 }
 
 exports.newUser_post = async (req, res) => {
+  const { user } = req.session.data
   const errors = []
 
-  if (!req.session.data.user.firstName.length) {
+  if (!user.firstName.length) {
     const error = {}
     error.fieldName = 'firstName'
     error.href = '#firstName'
@@ -32,7 +73,7 @@ exports.newUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!req.session.data.user.lastName.length) {
+  if (!user.lastName.length) {
     const error = {}
     error.fieldName = 'lastName'
     error.href = '#lastName'
@@ -40,20 +81,25 @@ exports.newUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const users = User.findAll({ where: { email: req.session.data.user.email } })
+  const users = await User.findAll({ where: { email: user.email } })
 
-  if (!req.session.data.user.email.length) {
+  const isValidEmailAddress = !!(
+    isValidEmail(user.email) &&
+    isValidEducationEmail(user.email)
+  )
+
+  if (!user.email.length) {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
     error.text = 'Enter email address'
     errors.push(error)
-  // } else if (!validationHelper.isValidEmail(req.session.data.user.email)) {
-  //   const error = {}
-  //   error.fieldName = 'email'
-  //   error.href = '#email'
-  //   error.text = 'Enter an email address in the correct format, like name@example.com'
-  //   errors.push(error)
+  } else if (!isValidEmailAddress) {
+    const error = {}
+    error.fieldName = 'email'
+    error.href = '#email'
+    error.text = 'Enter a Department for Education email address in the correct format, like name@education.gov.uk'
+    errors.push(error)
   } else if (users.length) {
     const error = {}
     error.fieldName = 'email'
@@ -64,7 +110,7 @@ exports.newUser_post = async (req, res) => {
 
   if (errors.length) {
     res.render('users/edit', {
-      user: req.session.data.user,
+      user,
       errors,
       actions: {
         back: '/users',
@@ -83,6 +129,7 @@ exports.newUserCheck_get = async (req, res) => {
     actions: {
       back: `/users/new`,
       cancel: `/users`,
+      change: `/users/new`,
       save: `/users/new/check`
     }
   })
@@ -143,7 +190,12 @@ exports.editUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  // const users = User.findAll({ where: { email: req.session.data.user.email } })
+  const users = await User.findAll({ where: { email: req.session.data.user.email } })
+
+  const isValidEmailAddress = !!(
+    isValidEmail(req.session.data.user.email) &&
+    isValidEducationEmail(req.session.data.user.email)
+  )
 
   if (!req.session.data.user.email.length) {
     const error = {}
@@ -151,18 +203,18 @@ exports.editUser_post = async (req, res) => {
     error.href = '#email'
     error.text = 'Enter email address'
     errors.push(error)
-  // } else if (!validationHelper.isValidEmail(req.session.data.user.email)) {
-  //   const error = {}
-  //   error.fieldName = 'email'
-  //   error.href = '#email'
-  //   error.text = 'Enter an email address in the correct format, like name@example.com'
-  //   errors.push(error)
-  // } else if (users.length) {
-  //   const error = {}
-  //   error.fieldName = 'email'
-  //   error.href = '#email'
-  //   error.text = 'Email address already in use'
-  //   errors.push(error)
+  } else if (!isValidEmailAddress) {
+    const error = {}
+    error.fieldName = 'email'
+    error.href = '#email'
+    error.text = 'Enter a Department for Education email address in the correct format, like name@education.gov.uk'
+    errors.push(error)
+  } else if (users.length) {
+    const error = {}
+    error.fieldName = 'email'
+    error.href = '#email'
+    error.text = 'Email address already in use'
+    errors.push(error)
   }
 
   if (errors.length) {
