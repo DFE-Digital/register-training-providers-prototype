@@ -178,6 +178,7 @@ exports.editUser_get = async (req, res) => {
 exports.editUser_post = async (req, res) => {
   const { userId } = req.params
   const { user } = req.session.data
+  const currentUser = await User.findOne({ where: { id: userId } })
   const errors = []
 
   if (!user.firstName.length) {
@@ -196,7 +197,12 @@ exports.editUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const userCount = await User.count({ where: { email: user.email } })
+  let userCount = 0
+
+  // check if the email already exists if it's not the current user's
+  if (currentUser.email.toLowerCase() !== user.email.trim().toLowerCase()) {
+    userCount = await User.count({ where: { email: user.email } })
+  }
 
   const isValidEmailAddress = !!(
     isValidEmail(user.email) &&
@@ -225,6 +231,7 @@ exports.editUser_post = async (req, res) => {
 
   if (errors.length) {
     res.render('users/edit', {
+      currentUser,
       user,
       errors,
       actions: {
@@ -250,6 +257,7 @@ exports.editUserCheck_get = async (req, res) => {
     actions: {
       back: `/users/${userId}/edit`,
       cancel: `/users/${userId}`,
+      change: `/users/${userId}/edit`,
       save: `/users/${userId}/edit/check`
     }
   })
