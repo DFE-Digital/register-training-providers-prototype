@@ -47,7 +47,14 @@ exports.usersList = async (req, res) => {
 
 exports.userDetails = async (req, res) => {
   const user = await User.findOne({ where: { id: req.params.userId } })
-  res.render('users/show', { user })
+  res.render('users/show', {
+    user,
+    actions: {
+      back: '/users',
+      change: `/users/${user.id}/edit`,
+      delete: `/users/${user.id}/delete`
+    }
+  })
 }
 
 exports.newUser_get = async (req, res) => {
@@ -284,7 +291,13 @@ exports.editUserCheck_post = async (req, res) => {
 exports.deleteUser_get = async (req, res) => {
   const { userId } = req.params
   const user = await User.findOne({ where: { id: userId } })
-  res.render('users/delete', { user })
+  res.render('users/delete', {
+    user,
+    actions: {
+      back: `/users/${userId}/edit`,
+      cancel: `/users/${userId}`
+    }
+  })
 }
 
 exports.deleteUser_post = async (req, res) => {
