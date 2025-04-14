@@ -5,7 +5,7 @@
 {% set title = "Check your answers" %}
 
 {% if currentUser %}
-  {% set caption = currentUser.firstName + " " + currentUser.lastName %}
+  {% set caption = "Support user - " + currentUser.firstName + " " + currentUser.lastName %}
 {% else %}
   {% set caption = "Add support user" %}
 {% endif %}
