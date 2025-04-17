@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 
+const { nullIfEmpty } = require('../helpers/string')
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
@@ -22,6 +24,7 @@ module.exports = {
         legal_name: provider.legalName, // JSON "legalName" → DB "legal_name"
         type: provider.type, // JSON "type" → DB "type"
         ukprn: provider.ukprn, // JSON "ukprn" → DB "ukprn"
+        urn: nullIfEmpty(provider.urn), // JSON "urn" → DB "urn"
         code: provider.code, // JSON "code" → DB "code"
         website: provider.website, // JSON "website" → DB "website"
         created_at: createdAt,
