@@ -2,6 +2,10 @@
 
 {% set primaryNavId = "users" %}
 
+{% block pageTitle -%}
+  View support user - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
 {% set title = user.firstName + " " + user.lastName %}
 {% set caption = "Support user" %}
 
@@ -19,10 +23,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l">{{ caption }}</span>
-      {{ title }}
-    </h1>
+    {% include "_includes/page-heading.njk" %}
 
     {# only show delete link if it's not the signed in user #}
     {% if showDeleteLink %}
