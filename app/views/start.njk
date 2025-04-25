@@ -1,0 +1,44 @@
+{% extends "layouts/auth.njk" %}
+
+{% set hidePrimaryNavigation = true %}
+{% set hideAccountNavigation = true %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      {{ serviceName }}
+    </h1>
+
+    <p class="govuk-body">Use this service to manage the details of all initial teacher training (ITT) providers.</p>
+
+    <h2 class="govuk-heading-m">Who can use this service</h2>
+
+    <p class="govuk-body">You can use this service if you are a member of the Department for Education (DfE).</p>
+
+    {# <ul class="govuk-list govuk-list--bullet">
+      <li>
+        training provider or education organisation that offers ITT
+      </li>
+      <li>
+        member of the Department for Education (DfE)
+      </li>
+    </ul> #}
+
+    <h2 class="govuk-heading-m">Before you start</h2>
+
+    <p class="govuk-body">To access this service, you will be asked to sign in or create a DfE Sign-in account. DfE Sign-in is how training providers and other education organisations access DfE online services.</p>
+
+    {{ govukButton({
+      classes: "govuk-!-margin-top-4",
+      text: "Start now",
+      href: actions.start,
+      isStartButton: true
+    }) }}
+
+  </div>
+</div>
+
+{% endblock %}

@@ -63,7 +63,15 @@ router.all('*', (req, res, next) => {
 /// HOMEPAGE ROUTE
 /// ------------------------------------------------------------------------ ///
 router.get('/', (req, res) => {
-  res.redirect('/providers')
+  res.redirect('/start')
+})
+
+router.get('/start', (req, res) => {
+  res.render('start', {
+    actions: {
+      start: "/providers"
+    }
+  })
 })
 
 /// ------------------------------------------------------------------------ ///
