@@ -54,6 +54,7 @@ exports.providerPartnershipsList = async (req, res) => {
 
   // Clear session provider data
   delete req.session.data.partnership
+  delete req.session.data.search
 
   res.render('providers/partnerships/index', {
     provider,
@@ -159,7 +160,11 @@ exports.newProviderPartnership_post = async (req, res) => {
     const error = {}
     error.fieldName = "provider-autocomplete"
     error.href = "#provider-autocomplete"
-    error.text = "Enter provider name, UKPRN, URN or postcode"
+    if (isAccredited) {
+      error.text = "Enter training partner name, UKPRN or URN"
+    } else {
+      error.text = "Enter accredited provider name, UKPRN or URN"
+    }
     errors.push(error)
   }
 
