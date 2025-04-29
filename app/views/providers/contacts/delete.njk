@@ -2,8 +2,12 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Confirm you want to remove " + provider.operatingName + "’s contact" %}
-{% set caption = "Remove contact" %}
+{% block pageTitle -%}
+  Confirm you want to remove provider contact - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = "Confirm you want to remove " + contact.firstName + " " + contact.lastName %}
+{% set caption = "Remove contact - " + provider.operatingName %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -58,6 +62,11 @@
             }
           }
         ]
+      }) }}
+
+      {{ govukWarningText({
+        text: "Removing a contact is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
       }) }}
 
       {{ govukButton({
