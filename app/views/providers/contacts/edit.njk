@@ -2,17 +2,23 @@
 
 {% set primaryNavId = "providers" %}
 
+{% block pageTitle -%}
+{{ "Error: " if errors.length -}}
+{% if currentContact -%}
+  Change contact details
+{%- else -%}
+  Add contact details
+{%- endif %}
+ - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
 {% set title = "Contact details" %}
 
 {% if currentContact %}
-  {% set caption = provider.operatingName %}
+  {% set caption = currentContact.firstName + " " + currentContact.lastName + " - " + provider.operatingName %}
 {% else %}
   {% set caption = "Add contact - " + provider.operatingName %}
 {% endif %}
-
-{% block pageTitle %}
-  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
-{% endblock %}
 
 {% block beforeContent %}
 {{ govukBackLink({
