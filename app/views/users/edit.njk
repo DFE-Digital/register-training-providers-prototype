@@ -3,7 +3,13 @@
 {% set primaryNavId = "users" %}
 
 {% block pageTitle -%}
-  {{ "Error: " if errors.length -}} Change support user personal details - {{ serviceName }} - GOV.UK
+{{ "Error: " if errors.length -}}
+{% if currentUser -%}
+  Change support user - personal details
+{%- else -%}
+  Add support user - personal details
+{%- endif %}
+ - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = "Personal details" %}
