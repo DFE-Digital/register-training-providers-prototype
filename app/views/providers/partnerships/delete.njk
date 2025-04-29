@@ -8,8 +8,8 @@
   {% set partner = partnership.accreditedProvider %}
 {% endif %}
 
-{% set title = "Confirm you want to remove " + provider.operatingName + "’s partnership with " + partner.operatingName %}
-{% set caption = "Remove partnership" %}
+{% set title = "Confirm you want to remove partnership with " + partner.operatingName %}
+{% set caption = "Remove partnership - " + provider.operatingName %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -26,6 +26,11 @@
     {% include "_includes/page-heading.njk" %}
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
+
+      {# {{ govukWarningText({
+        text: "Removing a partnership is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
+      }) }} #}
 
       {{ govukButton({
         text: "Remove partnership",
