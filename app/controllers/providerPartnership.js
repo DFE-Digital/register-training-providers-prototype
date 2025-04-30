@@ -1,7 +1,7 @@
-const { Op } = require('sequelize')
 const { Provider, ProviderPartnership } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
+const { hasPartnership } = require('../helpers/partnership')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider partnerships
@@ -54,6 +54,7 @@ exports.providerPartnershipsList = async (req, res) => {
 
   // Clear session provider data
   delete req.session.data.partnership
+  delete req.session.data.search
 
   res.render('providers/partnerships/index', {
     provider,
@@ -159,7 +160,11 @@ exports.newProviderPartnership_post = async (req, res) => {
     const error = {}
     error.fieldName = "provider-autocomplete"
     error.href = "#provider-autocomplete"
-    error.text = "Enter provider name, UKPRN, URN or postcode"
+    if (isAccredited) {
+      error.text = "Enter training partner name, UKPRN or URN"
+    } else {
+      error.text = "Enter accredited provider name, UKPRN or URN"
+    }
     errors.push(error)
   }
 
@@ -180,8 +185,44 @@ exports.newProviderPartnership_post = async (req, res) => {
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/partnerships/new/check`)
+
+    let hasExistingPartnership
+    if (isAccredited) {
+      hasExistingPartnership = await hasPartnership({
+        accreditedProviderId: providerId,
+        trainingProviderId: req.session.data.provider.id
+      })
+    } else {
+      hasExistingPartnership = await hasPartnership({
+        accreditedProviderId: req.session.data.provider.id,
+        trainingProviderId: providerId
+      })
+    }
+
+    if (hasExistingPartnership) {
+      res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
+    } else {
+      res.redirect(`/providers/${providerId}/partnerships/new/check`)
+    }
   }
+}
+
+exports.newProviderPartnershipDuplicate_get = async (req, res) => {
+  // get the provider and partnership IDs from the request
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  const partner = await Provider.findByPk(req.session.data.provider.id)
+
+  res.render('providers/partnerships/duplicate', {
+    provider,
+    partner,
+    actions: {
+      back: `/providers/${providerId}/partnerships/new`,
+      cancel: `/providers/${providerId}/partnerships`,
+      change: `/providers/${providerId}/partnerships/new`
+    }
+  })
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {

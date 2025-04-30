@@ -178,6 +178,8 @@ router.get('/providers/:providerId/addresses', checkIsAuthenticated, providerAdd
 router.get('/providers/:providerId/partnerships/new', checkIsAuthenticated, providerPartnershipController.newProviderPartnership_get)
 router.post('/providers/:providerId/partnerships/new', checkIsAuthenticated, providerPartnershipController.newProviderPartnership_post)
 
+router.get('/providers/:providerId/partnerships/new/duplicate', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDuplicate_get)
+
 router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
 router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
 

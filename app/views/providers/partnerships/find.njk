@@ -2,7 +2,11 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Enter a provider name, UKPRN, URN or postcode" %}
+{% if isAccredited %}
+  {% set title = "Enter training partner name, UKPRN or URN" %}
+{% else %}
+  {% set title = "Enter accredited provider name, UKPRN or URN" %}
+{% endif %}
 
 {% if currentPartnership %}
   {% set caption = provider.operatingName %}
@@ -36,7 +40,7 @@
       {# Hidden field to store the provider ID #}
       <input type="hidden" id="selected-provider-id" name="provider[id]" value="{{ data.provider.id | default('') }}">
 
-      <div class="govuk-form-group {{- ' govuk-form-group--error' if (errors | getErrorMessage('provider'))}}">
+      <div class="govuk-form-group {{- ' govuk-form-group--error' if errors.length }}">
         <label class="govuk-label govuk-label--l" for="provider-autocomplete">
           <span class="govuk-caption-l">{{ caption }} </span>
           {{ title }}
@@ -46,21 +50,12 @@
 
       {% set helpText %}
         <p class="govuk-body">
-          {# If you cannot find the provider, it may be because the provider: #}
           Something helpful goes here
         </p>
-        {# <ul class="govuk-list govuk-list--bullet">
-          <li>
-            is not a training provider
-          </li>
-          <li>
-            has not been added to the service
-          </li>
-        </ul> #}
       {% endset %}
 
       {{ govukDetails({
-        summaryText: "I cannot find the provider",
+        summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
         html: helpText
       }) }}
 
