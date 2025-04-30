@@ -86,7 +86,7 @@ exports.newProviderContact_get = async (req, res) => {
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
 
-  let back = `/providers/${providerId}`
+  let back = `/providers/${providerId}/contacts`
   if (req.query.referrer === 'check') {
     back = `/providers/${providerId}/contacts/new/check`
   }
@@ -141,7 +141,7 @@ exports.newProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/providers/${providerId}/contacts`
     if (req.query.referrer === 'check') {
       back = `/providers/${providerId}/contacts/new/check`
     }
@@ -214,7 +214,7 @@ exports.editProviderContact_get = async (req, res) => {
     contact = await ProviderContact.findByPk(contactId)
   }
 
-  let back = `/providers/${providerId}`
+  let back = `/providers/${providerId}/contacts`
   if (req.query.referrer === 'check') {
     back = `/providers/${providerId}/contacts/${contactId}/edit/check`
   }
@@ -272,7 +272,7 @@ exports.editProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/providers/${providerId}/contacts`
     if (req.query.referrer === 'check') {
       back = `/providers/${providerId}/contacts/${contactId}/edit/check`
     }
