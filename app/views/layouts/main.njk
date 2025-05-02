@@ -18,7 +18,6 @@
 {% block header %}
   {{ govukHeader({
     homepageUrl: "/",
-    productName: serviceName,
     containerClasses: "govuk-width-container",
     navigationClasses: "govuk-header__navigation--end",
     navigation: [
@@ -34,10 +33,9 @@
     ]
   }) }}
 
-  {% include "_includes/phase-banner.njk" %}
-
   {{ govukServiceNavigation({
     navigationId: "primaryNavigation",
+    serviceName: serviceName,
     navigation: [
       {
         text: "Providers",
@@ -51,6 +49,8 @@
       }
     ]
   }) }}
+
+  {% include "_includes/phase-banner.njk" %}
 {% endblock %}
 
 {% block footer %}
