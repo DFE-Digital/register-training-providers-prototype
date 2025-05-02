@@ -9,6 +9,7 @@ exports.newFeedback_get = async (req, res) => {
     actions: {
       back: '/',
       cancel: '/',
+      home: '/',
       save: '/feedback'
     }
   })
@@ -57,6 +58,7 @@ exports.newFeedback_post = async (req, res) => {
       actions: {
         back: '/',
         cancel: '/',
+        home: '/',
         save: '/feedback'
       }
     })
