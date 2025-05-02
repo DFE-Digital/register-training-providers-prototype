@@ -17,7 +17,6 @@
 {% block header %}
   {{ govukHeader({
     homepageUrl: "/",
-    productName: serviceName,
     containerClasses: "govuk-width-container",
     navigationClasses: "govuk-header__navigation--end",
     navigation: [
@@ -31,6 +30,11 @@
         text: "Sign out"
       }
     ] if not hideAccountNavigation
+  }) }}
+
+  {{ govukServiceNavigation({
+    navigationId: "primaryNavigation",
+    serviceName: serviceName
   }) }}
 
   {% include "_includes/phase-banner.njk" %}
