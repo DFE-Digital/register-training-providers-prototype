@@ -16,7 +16,7 @@
   "dependencies": {
     "connect-flash": "^0.1.1",
     "dotenv": "^16.5.0",
-    "govuk-frontend": "^5.9.0",
+    "govuk-frontend": "^5.10.0",
     "govuk-prototype-kit": "^13.16.2",
     "inflection": "^3.0.2",
     "luxon": "^3.6.1",
