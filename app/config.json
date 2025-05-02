@@ -1,4 +1,9 @@
 {
   "serviceName": "Register of training providers",
-  "useNjkExtensions": true
+  "useNjkExtensions": true,
+  "plugins": {
+    "govuk-frontend": {
+      "reband": true
+    }
+  }
 }
