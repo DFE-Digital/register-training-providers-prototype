@@ -3,9 +3,6 @@ $app-assets-path: "/public/";
 // Import local component styles
 @import "app/views/_components/index.scss";
 
-// Core
-@import "core/header";
-
 // Utilities
 @import "utilities/overrides";
 
