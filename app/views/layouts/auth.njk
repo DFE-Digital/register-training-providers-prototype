@@ -1,5 +1,7 @@
 {% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
 
+{% set govukRebrand = true %}
+
 {% from "_components/footer/macro.njk" import appFooter %}
 
 {% set hidePrimaryNavigation = true %}
@@ -14,8 +16,8 @@
 
 {% block header %}
   {{ govukHeader({
+    rebrand: true,
     homepageUrl: "/",
-    productName: serviceName,
     containerClasses: "govuk-width-container",
     navigationClasses: "govuk-header__navigation--end",
     navigation: [
@@ -29,6 +31,11 @@
         text: "Sign out"
       }
     ] if not hideAccountNavigation
+  }) }}
+
+  {{ govukServiceNavigation({
+    navigationId: "primaryNavigation",
+    serviceName: serviceName
   }) }}
 
   {% include "_includes/phase-banner.njk" %}

@@ -1,5 +1,7 @@
 {% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
 
+{% set govukRebrand = true %}
+
 {% from "_components/checkbox-filter/macro.njk" import appCheckboxFilter %}
 {% from "_components/footer/macro.njk" import appFooter %}
 {% from "_components/search/macro.njk" import appSearch %}
@@ -15,8 +17,8 @@
 
 {% block header %}
   {{ govukHeader({
+    rebrand: true,
     homepageUrl: "/",
-    productName: serviceName,
     containerClasses: "govuk-width-container",
     navigationClasses: "govuk-header__navigation--end",
     navigation: [
@@ -32,10 +34,9 @@
     ]
   }) }}
 
-  {% include "_includes/phase-banner.njk" %}
-
   {{ govukServiceNavigation({
     navigationId: "primaryNavigation",
+    serviceName: serviceName,
     navigation: [
       {
         text: "Providers",
@@ -49,6 +50,8 @@
       }
     ]
   }) }}
+
+  {% include "_includes/phase-banner.njk" %}
 {% endblock %}
 
 {% block footer %}
