@@ -11,5 +11,12 @@ module.exports = {
     'archivedById',
     'deletedAt',
     'deletedById'
+  ],
+  providerAccreditation: [
+    'number',
+    'startsOn',
+    'endsOn',
+    'deletedAt',
+    'deletedById'
   ]
 }
