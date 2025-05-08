@@ -157,6 +157,5 @@ module.exports = (sequelize) => {
     createRevisionHook({ revisionModelName: 'ProviderRevision', modelKey: 'provider' })
   )
 
-
   return Provider
 }
