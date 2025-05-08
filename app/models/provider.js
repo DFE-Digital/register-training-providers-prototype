@@ -144,79 +144,19 @@ module.exports = (sequelize) => {
     }
   )
 
-  const createRevision = async (provider, options) => {
-    const { ProviderRevision } = sequelize.models
+  const createRevisionHook = require('../hooks/revisionHook')
 
-    // Always create a revision on first save
-    if (options?.hookName === 'afterCreate') {
-      await ProviderRevision.create({
-        ...provider.get({ plain: true }),
-        providerId: provider.id,
-        revisionNumber: 1,
-        revisionById: provider.updatedById || provider.createdById
-      })
-      return
-    }
-
-    // Get the latest revision for this provider
-    const latestRevision = await ProviderRevision.findOne({
-      where: { providerId: provider.id },
-      order: [['revisionNumber', 'DESC']]
+  Provider.addHook('afterCreate', (instance, options) =>
+    createRevisionHook({ revisionModelName: 'ProviderRevision', modelKey: 'provider' })(instance, {
+      ...options,
+      hookName: 'afterCreate'
     })
-
-    // If no revision exists (shouldn't happen), create one
-    if (!latestRevision) {
-      await ProviderRevision.create({
-        ...provider.get({ plain: true }),
-        providerId: provider.id,
-        revisionNumber: 1,
-        revisionById: provider.updatedById
-      })
-      return
-    }
-
-    // Compare fields — define the ones you care about
-    const fieldsToCompare = [
-      'operatingName',
-      'legalName',
-      'type',
-      'ukprn',
-      'urn',
-      'code',
-      'website',
-      'archivedAt',
-      'archivedById',
-      'deletedAt',
-      'deletedById'
-    ]
-
-    const hasChanged = fieldsToCompare.some(field => {
-      return provider.get(field) !== latestRevision.get(field)
-    })
-
-    if (!hasChanged) {
-      return // No relevant change → skip revision
-    }
-
-    // Get next revision number
-    const nextRevisionNumber = latestRevision.revisionNumber + 1
-
-    const revisionData = {
-      ...provider.get({ plain: true }),
-      providerId: provider.id,
-      revisionNumber: nextRevisionNumber,
-      revisionById: provider.updatedById
-    }
-
-    delete revisionData.id
-    await ProviderRevision.create(revisionData)
-  }
-
-  Provider.addHook('afterCreate', (provider, options) =>
-    createRevision(provider, { ...options, hookName: 'afterCreate' })
   )
 
-  Provider.addHook('afterUpdate', createRevision)
+  Provider.addHook('afterUpdate',
+    createRevisionHook({ revisionModelName: 'ProviderRevision', modelKey: 'provider' })
+  )
+
 
   return Provider
 }
