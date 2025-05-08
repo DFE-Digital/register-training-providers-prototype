@@ -145,9 +145,16 @@ module.exports = (sequelize) => {
   )
 
   const createRevision = async (provider) => {
+    const { ProviderRevision } = sequelize.models
+
+    const latestRevisionNumber = await ProviderRevision.max('revisionNumber', {
+      where: { providerId: provider.id }
+    })
+
     const revisionData = {
       ...provider.get({ plain: true }),
       providerId: provider.id,
+      revisionNumber: (latestRevisionNumber || 0) + 1,
       revisionById: provider.updatedById || provider.createdById || null
     }
 
