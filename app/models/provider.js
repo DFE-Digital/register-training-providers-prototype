@@ -3,6 +3,11 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class Provider extends Model {
     static associate(models) {
+      Provider.hasMany(models.ProviderRevision, {
+        foreignKey: 'providerId',
+        as: 'revisions'
+      })
+
       Provider.hasMany(models.ProviderAccreditation, {
         foreignKey: 'providerId',
         as: 'accreditations'
@@ -16,11 +21,6 @@ module.exports = (sequelize) => {
       Provider.hasMany(models.ProviderContact, {
         foreignKey: 'providerId',
         as: 'contacts'
-      })
-
-      Provider.hasMany(models.ProviderHistory, {
-        foreignKey: 'providerId',
-        as: 'histories'
       })
 
       Provider.belongsToMany(models.Provider, {
@@ -143,6 +143,20 @@ module.exports = (sequelize) => {
       timestamps: true
     }
   )
+
+  const createRevision = async (provider) => {
+    const revisionData = {
+      ...provider.get({ plain: true }),
+      providerId: provider.id,
+      revisionById: provider.updatedById || provider.createdById || null
+    }
+
+    delete revisionData.id // ensure a new UUID is used
+    await sequelize.models.ProviderRevision.create(revisionData)
+  }
+
+  Provider.addHook('afterCreate', createRevision)
+  Provider.addHook('afterUpdate', createRevision)
 
   return Provider
 }
