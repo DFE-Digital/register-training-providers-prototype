@@ -1,60 +1,31 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class Provider extends Model {
+  class ProviderRevision extends Model {
     static associate(models) {
-      Provider.hasMany(models.ProviderRevision, {
+      ProviderRevision.belongsTo(models.Provider, {
         foreignKey: 'providerId',
-        as: 'revisions'
+        as: 'provider'
       })
 
-      Provider.hasMany(models.ProviderAccreditation, {
-        foreignKey: 'providerId',
-        as: 'accreditations'
-      })
-
-      Provider.hasMany(models.ProviderAddress, {
-        foreignKey: 'providerId',
-        as: 'addresses'
-      })
-
-      Provider.hasMany(models.ProviderContact, {
-        foreignKey: 'providerId',
-        as: 'contacts'
-      })
-
-      Provider.belongsToMany(models.Provider, {
-        through: models.ProviderPartnership,
-        as: 'accreditedPartnerships',
-        foreignKey: 'trainingProviderId',
-        otherKey: 'accreditedProviderId'
-      })
-
-      Provider.belongsToMany(models.Provider, {
-        through: models.ProviderPartnership,
-        as: 'trainingPartnerships',
-        foreignKey: 'accreditedProviderId',
-        otherKey: 'trainingProviderId'
-      })
-
-      Provider.belongsTo(models.User, {
-        foreignKey: 'createdById',
-        as: 'createdByUser'
-      })
-
-      Provider.belongsTo(models.User, {
-        foreignKey: 'updatedById',
-        as: 'updatedByUser'
+      ProviderRevision.belongsTo(models.User, {
+        foreignKey: 'revisionById',
+        as: 'revisionByUser'
       })
     }
   }
 
-  Provider.init(
+  ProviderRevision.init(
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
+      },
+      providerId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'provider_id'
       },
       operatingName: {
         type: DataTypes.STRING,
@@ -134,29 +105,28 @@ module.exports = (sequelize) => {
       deletedById: {
         type: DataTypes.UUID,
         field: 'deleted_by_id'
+      },
+      revisionNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'revision_number'
+      },
+      revisionAt: {
+        type: DataTypes.DATE,
+        field: 'revision_at'
+      },
+      revisionById: {
+        type: DataTypes.UUID,
+        field: 'revision_by_id'
       }
     },
     {
       sequelize,
-      modelName: 'Provider',
-      tableName: 'providers',
-      timestamps: true
+      modelName: 'ProviderRevision',
+      tableName: 'provider_revisions',
+      timestamps: false
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
-
-  Provider.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'ProviderRevision', modelKey: 'provider' })(instance, {
-      ...options,
-      hookName: 'afterCreate'
-    })
-  )
-
-  Provider.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'ProviderRevision', modelKey: 'provider' })
-  )
-
-
-  return Provider
+  return ProviderRevision
 }
