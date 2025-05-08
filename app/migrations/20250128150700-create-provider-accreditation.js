@@ -37,6 +37,12 @@ module.exports = {
       updated_by_id: {
         type: Sequelize.UUID,
         allowNull: false
+      },
+      deleted_at: {
+        type: Sequelize.DATE
+      },
+      deleted_by_id: {
+        type: Sequelize.UUID
       }
     })
   },
