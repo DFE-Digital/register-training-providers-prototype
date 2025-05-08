@@ -106,6 +106,11 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         field: 'deleted_by_id'
       },
+      revisionNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'revision_number'
+      },
       revisionAt: {
         type: DataTypes.DATE,
         field: 'revision_at'
@@ -119,7 +124,7 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'ProviderRevision',
       tableName: 'provider_revisions',
-      timestamps: true
+      timestamps: false
     }
   )
 
