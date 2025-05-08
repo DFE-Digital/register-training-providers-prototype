@@ -144,25 +144,78 @@ module.exports = (sequelize) => {
     }
   )
 
-  const createRevision = async (provider) => {
+  const createRevision = async (provider, options) => {
     const { ProviderRevision } = sequelize.models
 
-    const latestRevisionNumber = await ProviderRevision.max('revisionNumber', {
-      where: { providerId: provider.id }
+    // Always create a revision on first save
+    if (options?.hookName === 'afterCreate') {
+      await ProviderRevision.create({
+        ...provider.get({ plain: true }),
+        providerId: provider.id,
+        revisionNumber: 1,
+        revisionById: provider.updatedById || provider.createdById
+      })
+      return
+    }
+
+    // Get the latest revision for this provider
+    const latestRevision = await ProviderRevision.findOne({
+      where: { providerId: provider.id },
+      order: [['revisionNumber', 'DESC']]
     })
+
+    // If no revision exists (shouldn't happen), create one
+    if (!latestRevision) {
+      await ProviderRevision.create({
+        ...provider.get({ plain: true }),
+        providerId: provider.id,
+        revisionNumber: 1,
+        revisionById: provider.updatedById
+      })
+      return
+    }
+
+    // Compare fields — define the ones you care about
+    const fieldsToCompare = [
+      'operatingName',
+      'legalName',
+      'type',
+      'ukprn',
+      'urn',
+      'code',
+      'website',
+      'archivedAt',
+      'archivedById',
+      'deletedAt',
+      'deletedById'
+    ]
+
+    const hasChanged = fieldsToCompare.some(field => {
+      return provider.get(field) !== latestRevision.get(field)
+    })
+
+    if (!hasChanged) {
+      return // No relevant change → skip revision
+    }
+
+    // Get next revision number
+    const nextRevisionNumber = latestRevision.revisionNumber + 1
 
     const revisionData = {
       ...provider.get({ plain: true }),
       providerId: provider.id,
-      revisionNumber: (latestRevisionNumber || 0) + 1,
-      revisionById: provider.updatedById || provider.createdById || null
+      revisionNumber: nextRevisionNumber,
+      revisionById: provider.updatedById
     }
 
-    delete revisionData.id // ensure a new UUID is used
-    await sequelize.models.ProviderRevision.create(revisionData)
+    delete revisionData.id
+    await ProviderRevision.create(revisionData)
   }
 
-  Provider.addHook('afterCreate', createRevision)
+  Provider.addHook('afterCreate', (provider, options) =>
+    createRevision(provider, { ...options, hookName: 'afterCreate' })
+  )
+
   Provider.addHook('afterUpdate', createRevision)
 
   return Provider
