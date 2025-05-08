@@ -67,6 +67,10 @@ module.exports = {
       deleted_by_id: {
         type: Sequelize.UUID
       },
+      revision_number: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       revision_at: {
         type: Sequelize.DATE,
         allowNull: false,
