@@ -23,12 +23,18 @@ exports.providerAccreditationsList = async (req, res) => {
 
   // Get the total number of accreditations for pagination metadata
   const totalCount = await ProviderAccreditation.count({
-    where: { providerId }
+    where: {
+      providerId,
+      deletedAt: null
+    }
   })
 
   // Only fetch ONE page of accreditations
   const accreditations = await ProviderAccreditation.findAll({
-    where: { providerId },
+    where: {
+      providerId,
+      deletedAt: null
+    },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -343,9 +349,14 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
 
 exports.deleteProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const { user } = req.session.passport
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
-  await accreditation.destroy()
+  await accreditation.update({
+    deletedAt: new Date(),
+    deletedById: user.id,
+    updatedById: user.id
+  })
 
-  req.flash('success', 'Accreditation removed')
+  req.flash('success', 'Accreditation deleted')
   res.redirect(`/providers/${providerId}/accreditations`)
 }
