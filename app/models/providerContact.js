@@ -76,6 +76,14 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false,
         field: 'updated_by_id'
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        field: 'deleted_at'
+      },
+      deletedById: {
+        type: DataTypes.UUID,
+        field: 'deleted_by_id'
       }
     },
     {
@@ -84,6 +92,19 @@ module.exports = (sequelize) => {
       tableName: 'provider_contacts',
       timestamps: true
     }
+  )
+
+  const createRevisionHook = require('../hooks/revisionHook')
+
+  ProviderContact.addHook('afterCreate', (instance, options) =>
+    createRevisionHook({ revisionModelName: 'ProviderContactRevision', modelKey: 'providerContact' })(instance, {
+      ...options,
+      hookName: 'afterCreate'
+    })
+  )
+
+  ProviderContact.addHook('afterUpdate',
+    createRevisionHook({ revisionModelName: 'ProviderContactRevision', modelKey: 'providerContact' })
   )
 
   return ProviderContact
