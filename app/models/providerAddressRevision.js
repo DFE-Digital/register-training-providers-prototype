@@ -1,31 +1,36 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class ProviderAddress extends Model {
+  class ProviderAddressRevision extends Model {
     static associate(models) {
-      ProviderAddress.belongsTo(models.Provider, {
+      ProviderAddressRevision.belongsTo(models.ProviderAddress, {
+        foreignKey: 'providerAddressId',
+        as: 'providerAddress'
+      })
+
+      ProviderAddressRevision.belongsTo(models.Provider, {
         foreignKey: 'providerId',
         as: 'provider'
       })
 
-      ProviderAddress.belongsTo(models.User, {
-        foreignKey: 'createdById',
-        as: 'createdByUser'
-      })
-
-      ProviderAddress.belongsTo(models.User, {
-        foreignKey: 'updatedById',
-        as: 'updatedByUser'
+      ProviderAddressRevision.belongsTo(models.User, {
+        foreignKey: 'revisionById',
+        as: 'revisionByUser'
       })
     }
   }
 
-  ProviderAddress.init(
+  ProviderAddressRevision.init(
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
+      },
+      providerAddressId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'provider_address_id'
       },
       providerId: {
         type: DataTypes.UUID,
@@ -104,28 +109,28 @@ module.exports = (sequelize) => {
       deletedById: {
         type: DataTypes.UUID,
         field: 'deleted_by_id'
+      },
+      revisionNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'revision_number'
+      },
+      revisionAt: {
+        type: DataTypes.DATE,
+        field: 'revision_at'
+      },
+      revisionById: {
+        type: DataTypes.UUID,
+        field: 'revision_by_id'
       }
     },
     {
       sequelize,
-      modelName: 'ProviderAddress',
-      tableName: 'provider_addresses',
-      timestamps: true
+      modelName: 'ProviderAddressRevision',
+      tableName: 'provider_address_revisions',
+      timestamps: false
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
-
-  ProviderAddress.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'ProviderAddressRevision', modelKey: 'providerAddress' })(instance, {
-      ...options,
-      hookName: 'afterCreate'
-    })
-  )
-
-  ProviderAddress.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'ProviderAddressRevision', modelKey: 'providerAddress' })
-  )
-
-  return ProviderAddress
+  return ProviderAddressRevision
 }

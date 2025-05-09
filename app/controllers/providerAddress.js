@@ -27,12 +27,18 @@ exports.providerAddressesList = async (req, res) => {
 
   // Get the total number of addresses for pagination metadata
   const totalCount = await ProviderAddress.count({
-    where: { providerId }
+    where: {
+      providerId,
+      'deletedAt': null
+    }
   })
 
   // Only fetch ONE page of addresses
   const addresses = await ProviderAddress.findAll({
-    where: { providerId },
+    where: {
+      providerId,
+      'deletedAt': null
+    },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -525,9 +531,14 @@ exports.deleteProviderAddress_get = async (req, res) => {
 
 exports.deleteProviderAddress_post = async (req, res) => {
   const { addressId, providerId } = req.params
+  const { user } = req.session.passport
   const address = await ProviderAddress.findByPk(addressId)
-  await address.destroy()
+  await address.update({
+    deletedAt: new Date(),
+    deletedById: user.id,
+    updatedById: user.id
+  })
 
-  req.flash('success', 'Address removed')
+  req.flash('success', 'Address deleted')
   res.redirect(`/providers/${providerId}/addresses`)
 }

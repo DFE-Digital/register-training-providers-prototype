@@ -2,8 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Confirm you want to remove " + provider.operatingName + "’s address" %}
-{% set caption = "Remove address" %}
+{% set title = "Confirm you want to delete " + provider.operatingName + "’s address" %}
+{% set caption = "Delete address" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -90,8 +90,13 @@
         ]
       }) }}
 
+      {{ govukWarningText({
+        text: "Deleting an address is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
+      }) }}
+
       {{ govukButton({
-        text: "Remove address",
+        text: "Delete address",
         classes: "govuk-button--warning"
       }) }}
 
