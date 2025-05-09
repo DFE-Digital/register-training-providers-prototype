@@ -71,14 +71,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'updated_by_id'
       },
-      archivedAt: {
-        type: DataTypes.DATE,
-        field: 'archived_at'
-      },
-      archivedById: {
-        type: DataTypes.UUID,
-        field: 'archived_by_id'
-      },
       deletedAt: {
         type: DataTypes.DATE,
         field: 'deleted_at'
