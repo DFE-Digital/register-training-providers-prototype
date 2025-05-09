@@ -32,5 +32,13 @@ module.exports = {
     'googlePlaceId',
     'deletedAt',
     'deletedById'
+  ],
+  providerContact: [
+    'firstName',
+    'lastName',
+    'email',
+    'telephone',
+    'deletedAt',
+    'deletedById'
   ]
 }
