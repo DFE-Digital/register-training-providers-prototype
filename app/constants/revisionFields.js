@@ -18,5 +18,19 @@ module.exports = {
     'endsOn',
     'deletedAt',
     'deletedById'
+  ],
+  providerAddress: [
+    'uprn',
+    'line1',
+    'line2',
+    'line3',
+    'town',
+    'county',
+    'postcode',
+    'latitude',
+    'longitude',
+    'googlePlaceId',
+    'deletedAt',
+    'deletedById'
   ]
 }
