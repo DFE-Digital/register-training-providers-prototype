@@ -1,0 +1,99 @@
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('provider_address_revisions', {
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+        primaryKey: true
+      },
+      provider_address_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'provider_addresses',
+          key: 'id'
+        }
+      },
+      provider_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'providers',
+          key: 'id'
+        }
+      },
+      uprn: {
+        type: Sequelize.STRING
+      },
+      line_1:  {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      line_2: {
+        type: Sequelize.STRING
+      },
+      line_3: {
+        type: Sequelize.STRING
+      },
+      town:  {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      county: {
+        type: Sequelize.STRING
+      },
+      postcode:  {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      latitude: {
+        type: Sequelize.FLOAT
+      },
+      longitude: {
+        type: Sequelize.FLOAT
+      },
+      google_place_id: {
+        type: Sequelize.STRING
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      created_by_id: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      updated_by_id: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
+      deleted_at: {
+        type: Sequelize.DATE
+      },
+      deleted_by_id: {
+        type: Sequelize.UUID
+      },
+      revision_number: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      revision_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      revision_by_id: {
+        type: Sequelize.UUID,
+        allowNull: true
+      }
+    })
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('provider_address_revisions')
+  }
+}
