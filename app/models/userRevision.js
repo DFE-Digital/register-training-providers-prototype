@@ -101,5 +101,18 @@ module.exports = (sequelize) => {
     }
   )
 
+  const createActivityHook = require('../hooks/activityHook')
+
+  UserRevision.addHook('afterCreate', (instance, options) =>
+    createActivityHook({
+      entityType: 'user',
+      revisionTable: 'user_revisions',
+      entityIdField: 'userId'
+    })(instance, {
+      ...options,
+      hookName: 'afterCreate'
+    })
+  )
+
   return UserRevision
 }

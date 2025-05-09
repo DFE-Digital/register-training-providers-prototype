@@ -132,5 +132,18 @@ module.exports = (sequelize) => {
     }
   )
 
+  const createActivityHook = require('../hooks/activityHook')
+
+  ProviderAddressRevision.addHook('afterCreate', (instance, options) =>
+    createActivityHook({
+      entityType: 'provider_address',
+      revisionTable: 'provider_address_revisions',
+      entityIdField: 'providerAddressId'
+    })(instance, {
+      ...options,
+      hookName: 'afterCreate'
+    })
+  )
+
   return ProviderAddressRevision
 }
