@@ -23,12 +23,18 @@ exports.providerContactsList = async (req, res) => {
 
   // Get the total number of contacts for pagination metadata
   const totalCount = await ProviderContact.count({
-    where: { providerId }
+    where: {
+      providerId,
+      'deletedAt': null
+    }
   })
 
   // Only fetch ONE page of contacts
   const contacts = await ProviderContact.findAll({
-    where: { providerId },
+    where: {
+      providerId,
+      'deletedAt': null
+    },
     order: [['id', 'ASC']],
     limit,
     offset
@@ -351,9 +357,14 @@ exports.deleteProviderContact_get = async (req, res) => {
 
 exports.deleteProviderContact_post = async (req, res) => {
   const { contactId, providerId } = req.params
+  const { user } = req.session.passport
   const contact = await ProviderContact.findByPk(contactId)
-  await contact.destroy()
+  await contact.update({
+    deletedAt: new Date(),
+    deletedById: user.id,
+    updatedById: user.id
+  })
 
-  req.flash('success', 'Contact removed')
+  req.flash('success', 'Contact deleted')
   res.redirect(`/providers/${providerId}/contacts`)
 }
