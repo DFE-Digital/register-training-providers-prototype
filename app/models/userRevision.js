@@ -1,24 +1,31 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class UserRevision extends Model {
     static associate(models) {
-      // define association here
+      UserRevision.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: 'user'
+      })
+
+      UserRevision.belongsTo(models.User, {
+        foreignKey: 'revisionById',
+        as: 'revisionByUser'
+      })
     }
   }
 
-  User.init(
+  UserRevision.init(
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
         primaryKey: true
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'user_id'
       },
       firstName: {
         type: DataTypes.STRING,
@@ -43,16 +50,6 @@ module.exports = (sequelize) => {
           notEmpty: true,
           isEmail: true
         }
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'bat'
-      },
-      isActive: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -81,28 +78,28 @@ module.exports = (sequelize) => {
       deletedById: {
         type: DataTypes.UUID,
         field: 'deleted_by_id'
+      },
+      revisionNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'revision_number'
+      },
+      revisionAt: {
+        type: DataTypes.DATE,
+        field: 'revision_at'
+      },
+      revisionById: {
+        type: DataTypes.UUID,
+        field: 'revision_by_id'
       }
     },
     {
       sequelize,
-      modelName: 'User',
-      tableName: 'users',
-      timestamps: true
+      modelName: 'UserRevision',
+      tableName: 'user_revisions',
+      timestamps: false
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
-
-  User.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })(instance, {
-      ...options,
-      hookName: 'afterCreate'
-    })
-  )
-
-  User.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })
-  )
-
-  return User
+  return UserRevision
 }

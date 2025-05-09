@@ -40,5 +40,12 @@ module.exports = {
     'telephone',
     'deletedAt',
     'deletedById'
+  ],
+  user: [
+    'firstName',
+    'lastName',
+    'email',
+    'deletedAt',
+    'deletedById'
   ]
 }
