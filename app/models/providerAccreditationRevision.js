@@ -1,31 +1,36 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class ProviderAccreditation extends Model {
+  class ProviderAccreditationRevision extends Model {
     static associate(models) {
-      ProviderAccreditation.belongsTo(models.Provider, {
+      ProviderAccreditationRevision.belongsTo(models.ProviderAccreditation, {
+        foreignKey: 'providerAccreditationId',
+        as: 'providerAccreditation'
+      })
+
+      ProviderAccreditationRevision.belongsTo(models.Provider, {
         foreignKey: 'providerId',
         as: 'provider'
       })
 
-      ProviderAccreditation.belongsTo(models.User, {
-        foreignKey: 'createdById',
-        as: 'createdByUser'
-      })
-
-      ProviderAccreditation.belongsTo(models.User, {
-        foreignKey: 'updatedById',
-        as: 'updatedByUser'
+      ProviderAccreditationRevision.belongsTo(models.User, {
+        foreignKey: 'revisionById',
+        as: 'revisionByUser'
       })
     }
   }
 
-  ProviderAccreditation.init(
+  ProviderAccreditationRevision.init(
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
+      },
+      providerAccreditationId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'provider_accreditation_id'
       },
       providerId: {
         type: DataTypes.UUID,
@@ -72,28 +77,28 @@ module.exports = (sequelize) => {
       deletedById: {
         type: DataTypes.UUID,
         field: 'deleted_by_id'
+      },
+      revisionNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'revision_number'
+      },
+      revisionAt: {
+        type: DataTypes.DATE,
+        field: 'revision_at'
+      },
+      revisionById: {
+        type: DataTypes.UUID,
+        field: 'revision_by_id'
       }
     },
     {
       sequelize,
-      modelName: 'ProviderAccreditation',
-      tableName: 'provider_accreditations',
-      timestamps: true
+      modelName: 'ProviderAccreditationRevision',
+      tableName: 'provider_accreditation_revisions',
+      timestamps: false
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
-
-  ProviderAccreditation.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'ProviderAccreditationRevision', modelKey: 'providerAccreditation' })(instance, {
-      ...options,
-      hookName: 'afterCreate'
-    })
-  )
-
-  ProviderAccreditation.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'ProviderAccreditationRevision', modelKey: 'providerAccreditation' })
-  )
-
-  return ProviderAccreditation
+  return ProviderAccreditationRevision
 }

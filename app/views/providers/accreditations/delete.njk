@@ -2,8 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Confirm you want to remove " + provider.operatingName + "’s accreditation" %}
-{% set caption = "Remove accreditation" %}
+{% set title = "Confirm you want to delete " + provider.operatingName + "’s accreditation" %}
+{% set caption = "Delete accreditation" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -44,15 +44,20 @@
               text: "Date accreditation ends"
             },
             value: {
-              text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
-              classes: "govuk-hint" if accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+              text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
+              classes: "govuk-hint" if not accreditation.endsOn
             }
           }
         ]
       }) }}
 
+      {{ govukWarningText({
+        text: "Deleting an accreditation is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
+      }) }}
+
       {{ govukButton({
-        text: "Remove accreditation",
+        text: "Delete accreditation",
         classes: "govuk-button--warning"
       }) }}
 
