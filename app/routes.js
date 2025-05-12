@@ -29,12 +29,14 @@ const passport = {
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
 const accountController = require('./controllers/account')
+const activityController = require('./controllers/activity')
 const errorController = require('./controllers/error')
 const feedbackController = require('./controllers/feedback')
-const providerController = require('./controllers/provider')
 const providerAccreditationController = require('./controllers/providerAccreditation')
+const providerActivityController = require('./controllers/providerActivity')
 const providerAddressController = require('./controllers/providerAddress')
 const providerContactController = require('./controllers/providerContact')
+const providerController = require('./controllers/provider')
 const providerPartnershipController = require('./controllers/providerPartnership')
 const userController = require('./controllers/user')
 
@@ -250,6 +252,14 @@ router.get('/providers', checkIsAuthenticated, providerController.providersList)
 /// ------------------------------------------------------------------------ ///
 
 router.get('/account', checkIsAuthenticated, accountController.userAccount)
+
+/// ------------------------------------------------------------------------ ///
+/// ACTIVITY ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/activity', checkIsAuthenticated, activityController.activityList)
+
+router.get('/providers/:providerId/activity', checkIsAuthenticated, providerActivityController.activityList)
 
 /// ------------------------------------------------------------------------ ///
 /// FEEDBACK ROUTES
