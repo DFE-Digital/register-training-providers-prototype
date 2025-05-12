@@ -50,10 +50,10 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }
-    });
+    })
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('activity_logs');
+    await queryInterface.dropTable('activity_logs')
   }
-};
+}

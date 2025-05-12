@@ -27,6 +27,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'bat'
+      },
+      is_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false
