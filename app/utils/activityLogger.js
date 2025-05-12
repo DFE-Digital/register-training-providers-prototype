@@ -14,7 +14,16 @@
 // utils/activityLogger.js
 let ActivityLog
 
-async function logActivity({ revisionTable, revisionId, entityType, entityId, revisionNumber, changedById, changedAt }) {
+const logActivity = async ({
+  revisionTable,
+  revisionId,
+  entityType,
+  entityId,
+  revisionNumber,
+  action,
+  changedById,
+  changedAt
+}) => {
   if (!ActivityLog) {
     // Lazy-load after all models have been registered
     const db = require('../models')
@@ -27,6 +36,7 @@ async function logActivity({ revisionTable, revisionId, entityType, entityId, re
     entityType,
     entityId,
     revisionNumber,
+    action,
     changedById,
     changedAt
   })
