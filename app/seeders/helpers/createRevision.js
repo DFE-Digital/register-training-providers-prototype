@@ -14,14 +14,14 @@ const { v4: uuidv4 } = require('uuid')
  * @param {Object} [transaction] - Optional Sequelize transaction
  * @returns {string} revisionId
  */
-async function createRevision({
+const createRevision = async ({
   revisionTable,
   entityId,
   revisionData,
   revisionNumber,
   userId,
   timestamp
-}, queryInterface, transaction) {
+}, queryInterface, transaction) => {
   const revisionId = uuidv4()
   const now = timestamp || new Date()
 
