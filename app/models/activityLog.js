@@ -7,50 +7,35 @@ module.exports = (sequelize) => {
         foreignKey: 'revisionId',
         targetKey: 'id',
         constraints: false,
-        as: 'providerRevision',
-        scope: {
-          revisionTable: 'provider_revisions'
-        }
+        as: 'providerRevision'
       })
 
       ActivityLog.belongsTo(models.ProviderAccreditationRevision, {
         foreignKey: 'revisionId',
         targetKey: 'id',
         constraints: false,
-        as: 'providerAccreditationRevision',
-        scope: {
-          revisionTable: 'provider_accreditation_revisions'
-        }
+        as: 'providerAccreditationRevision'
       })
 
       ActivityLog.belongsTo(models.ProviderAddressRevision, {
         foreignKey: 'revisionId',
         targetKey: 'id',
         constraints: false,
-        as: 'providerAddressRevision',
-        scope: {
-          revisionTable: 'provider_address_revisions'
-        }
+        as: 'providerAddressRevision'
       })
 
       ActivityLog.belongsTo(models.ProviderContactRevision, {
         foreignKey: 'revisionId',
         targetKey: 'id',
         constraints: false,
-        as: 'providerContactRevision',
-        scope: {
-          revisionTable: 'provider_contact_revisions'
-        }
+        as: 'providerContactRevision'
       })
 
       ActivityLog.belongsTo(models.UserRevision, {
         foreignKey: 'revisionId',
         targetKey: 'id',
         constraints: false,
-        as: 'userRevision',
-        scope: {
-          revisionTable: 'user_revisions'
-        }
+        as: 'userRevision'
       })
 
       ActivityLog.belongsTo(models.User, {
