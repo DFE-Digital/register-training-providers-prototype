@@ -49,25 +49,25 @@ module.exports = {
         await queryInterface.bulkInsert('provider_addresses', [baseFields], { transaction })
 
         // 2. Insert revision
-        const revisionId = await createRevision({
-          revisionTable: 'provider_address_revisions',
-          entityId: addressId,
-          revisionData: baseFields,
-          revisionNumber,
-          userId,
-          timestamp: createdAt
-        }, queryInterface, transaction)
+        // const revisionId = await createRevision({
+        //   revisionTable: 'provider_address_revisions',
+        //   entityId: addressId,
+        //   revisionData: baseFields,
+        //   revisionNumber,
+        //   userId,
+        //   timestamp: createdAt
+        // }, queryInterface, transaction)
 
         // 3. Insert activity log
-        await createActivityLog({
-          revisionTable: 'provider_address_revisions',
-          revisionId,
-          entityType: 'provider_address',
-          entityId: addressId,
-          revisionNumber,
-          changedById: userId,
-          changedAt: createdAt
-        }, queryInterface, transaction)
+        // await createActivityLog({
+        //   revisionTable: 'provider_address_revisions',
+        //   revisionId,
+        //   entityType: 'provider_address',
+        //   entityId: addressId,
+        //   revisionNumber,
+        //   changedById: userId,
+        //   changedAt: createdAt
+        // }, queryInterface, transaction)
       }
 
       await transaction.commit()
