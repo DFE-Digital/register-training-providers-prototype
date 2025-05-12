@@ -42,6 +42,14 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'revision_number'
       },
+      action: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'update',
+        validate: {
+          isIn: [['create', 'update', 'delete']]
+        }
+      },
       changedById: {
         type: DataTypes.UUID,
         allowNull: true,
@@ -51,7 +59,7 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
-        field: 'changed_by_id'
+        field: 'changed_at'
       }
     },
     {
