@@ -17,6 +17,11 @@ function createActivityHook({ entityType, revisionTable, entityIdField }) {
     const changedById = instance.updatedById
     const changedAt = instance.updatedAt
 
+    // Infer action from hook name
+    const action = options?.hookName === 'afterCreate' ? 'create'
+      : options?.hookName === 'afterDestroy' ? 'delete'
+      : 'update'
+
     if (!revisionId || !entityId) {
       console.warn(`[ActivityHook] Skipped logging activity — missing revisionId (${revisionId}) or entityId (${entityId})`)
       return
@@ -28,6 +33,7 @@ function createActivityHook({ entityType, revisionTable, entityIdField }) {
       entityType,
       entityId,
       revisionNumber,
+      action,
       changedById,
       changedAt
     }, options)
