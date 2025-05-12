@@ -3,6 +3,56 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class ActivityLog extends Model {
     static associate(models) {
+      ActivityLog.belongsTo(models.ProviderRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerRevision',
+        scope: {
+          revisionTable: 'provider_revisions'
+        }
+      })
+
+      ActivityLog.belongsTo(models.ProviderAccreditationRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerAccreditationRevision',
+        scope: {
+          revisionTable: 'provider_accreditation_revisions'
+        }
+      })
+
+      ActivityLog.belongsTo(models.ProviderAddressRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerAddressRevision',
+        scope: {
+          revisionTable: 'provider_address_revisions'
+        }
+      })
+
+      ActivityLog.belongsTo(models.ProviderContactRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerContactRevision',
+        scope: {
+          revisionTable: 'provider_contact_revisions'
+        }
+      })
+
+      ActivityLog.belongsTo(models.UserRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'userRevision',
+        scope: {
+          revisionTable: 'user_revisions'
+        }
+      })
+
       ActivityLog.belongsTo(models.User, {
         foreignKey: 'changedById',
         as: 'changedByUser'
