@@ -39,9 +39,9 @@
     {% if activityItems.length %}
 
       {% for item in activityItems %}
-        <h2 class="govuk-summary-card__title">
+        <h3 class="govuk-summary-card__title">
           {{ item.summary.activity }}
-        </h2>
+        </h3>
         <p class="govuk-body">
           By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
         </p>
