@@ -25,11 +25,14 @@ const createRevision = async ({
   const revisionId = uuidv4()
   const now = timestamp || new Date()
 
+  // Remove any accidental `id` property
+  const { id: _, ...cleanedRevisionData } = revisionData
+
   const fullRevisionData = {
     id: revisionId,
     [`${revisionTable.replace('_revisions', '')}_id`]: entityId, // e.g. provider_id
     revision_number: revisionNumber,
-    ...revisionData,
+    ...cleanedRevisionData,
     created_by_id: userId,
     created_at: now,
     updated_at: now
