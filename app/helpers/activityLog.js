@@ -1,4 +1,14 @@
-const { ActivityLog, User, ProviderRevision, ProviderAccreditationRevision, ProviderAddressRevision, ProviderContactRevision, UserRevision } = require('../models')
+const { Op } = require('sequelize')
+const {
+  ActivityLog,
+  Provider,
+  ProviderAccreditationRevision,
+  ProviderAddressRevision,
+  ProviderContactRevision,
+  ProviderRevision,
+  User,
+  UserRevision
+} = require('../models')
 
 const revisionAssociationMap = {
   provider_revisions: 'providerRevision',
@@ -70,6 +80,113 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
   })
 
   return withRevisions
+}
+
+const getProviderActivityLogs = async ({ providerId = null, limit = 25, offset = 0 }) => {
+  if (!providerId) {
+    throw new Error('providerId is required for this function')
+  }
+
+  const queries = []
+
+  // ProviderRevision logs
+  queries.push(
+    ActivityLog.findAll({
+      where: { revisionTable: 'provider_revisions' },
+      include: [
+        {
+          model: ProviderRevision,
+          as: 'providerRevision',
+          where: { providerId },
+          include: [{ model: Provider, as: 'provider' }]
+        },
+        { model: User, as: 'changedByUser' }
+      ]
+    })
+  )
+
+  // ProviderAccreditationRevision logs
+  queries.push(
+    ActivityLog.findAll({
+      where: { revisionTable: 'provider_accreditation_revisions' },
+      include: [
+        {
+          model: ProviderAccreditationRevision,
+          as: 'providerAccreditationRevision',
+          where: { providerId },
+          include: [{ model: Provider, as: 'provider' }]
+        },
+        { model: User, as: 'changedByUser' }
+      ]
+    })
+  )
+
+  // ProviderAddressRevision logs
+  queries.push(
+    ActivityLog.findAll({
+      where: { revisionTable: 'provider_address_revisions' },
+      include: [
+        {
+          model: ProviderAddressRevision,
+          as: 'providerAddressRevision',
+          where: { providerId },
+          include: [{ model: Provider, as: 'provider' }]
+        },
+        { model: User, as: 'changedByUser' }
+      ]
+    })
+  )
+
+  // ProviderContactRevision logs
+  queries.push(
+    ActivityLog.findAll({
+      where: { revisionTable: 'provider_contact_revisions' },
+      include: [
+        {
+          model: ProviderContactRevision,
+          as: 'providerContactRevision',
+          where: { providerId },
+          include: [{ model: Provider, as: 'provider' }]
+        },
+        { model: User, as: 'changedByUser' }
+      ]
+    })
+  )
+
+  const results = (await Promise.all(queries)).flat()
+
+  // Sort by changedAt descending
+  results.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+
+  // Apply pagination manually after sorting
+  const paginated = results.slice(offset, offset + limit)
+
+  const enriched = paginated.map((log) => {
+    try {
+      const logJson = log.toJSON()
+      const alias = revisionAssociationMap[log.revisionTable]
+      const revision = log[alias] || null
+      logJson.revision = revision ? revision.toJSON?.() || revision : null
+      logJson.summary = getRevisionSummary({
+        revision: logJson.revision,
+        revisionTable: log.revisionTable,
+        ...logJson
+      })
+      return logJson
+    } catch (err) {
+      console.error(`Error processing activity log ${log.id}:`, err)
+      return {
+        ...log.toJSON(),
+        revision: null,
+        summary: {
+          label: 'Error loading revision',
+          fields: []
+        }
+      }
+    }
+  })
+
+  return enriched
 }
 
 // const getRevisionSummary = (log) => {
@@ -254,4 +371,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
   }
 }
 
-module.exports = { getActivityLogs }
+module.exports = {
+  getActivityLogs,
+  getProviderActivityLogs
+}
