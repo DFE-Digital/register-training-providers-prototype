@@ -167,15 +167,15 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
   // Set default summary
   const action = log.action
   let activity = ''
-  let id = null
   let label = ''
+  let href = ''
   const fields = []
 
   switch (revisionTable) {
     case 'provider_revisions':
       activity = `Provider ${log.action}d`
       label = revision.operatingName || revision.name || 'Provider'
-      id = revision.providerId
+      href = `/providers/${revision.providerId}/`
 
       fields.push({ key: 'Provider type', value: revision.type })
       fields.push({ key: 'Operating name', value: revision.operatingName })
@@ -190,7 +190,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider address ${log.action}d`
       label = `${providerName} – address details`
-      id = revision.providerId
+      href = `/providers/${revision.providerId}/addresses`
 
       fields.push({ key: 'Address line 1', value: revision.line1 })
       fields.push({ key: 'Address line 2', value: revision.line2 })
@@ -206,7 +206,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider contact ${log.action}d`
       label = `${providerName} – contact details`
-      id = revision.providerId
+      href = `/providers/${revision.providerId}/contacts`
 
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
@@ -220,7 +220,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider accreditation ${log.action}d`
       label = `${providerName} – accreditation`
-      id = revision.providerId
+      href = `/providers/${revision.providerId}/accreditations`
 
       fields.push({ key: 'Accreditation number', value: revision.number })
       fields.push({ key: 'Accreditation starts on', value: revision.startsOn })
@@ -231,6 +231,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
     case 'user_revisions':
       activity = `User ${log.action}d`
       label = `${revision.firstName} ${revision.lastName}` || revision.email || 'User'
+      href = `/users/${revision.userId}`
       id = revision.userId
 
       fields.push({ key: 'First name', value: revision.firstName })
@@ -239,15 +240,14 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       break
 
     default:
-      // activity = 'Unknown action'
       label = 'Unknown revision'
   }
 
   return {
     action,
     activity,
-    id,
     label,
+    href,
     fields
   }
 }
