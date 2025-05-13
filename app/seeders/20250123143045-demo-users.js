@@ -55,25 +55,27 @@ module.exports = {
         await queryInterface.bulkInsert('users', [baseFields], { transaction })
 
         // 2. Create revision
-        // const revisionId = await createRevision({
-        //   revisionTable: 'user_revisions',
-        //   entityId: user.id,
-        //   revisionData: baseFields,
-        //   revisionNumber,
-        //   userId: systemUserId,
-        //   timestamp: createdAt
-        // }, queryInterface, transaction)
+        const { id: _, ...revisionDataWithoutId } = baseFields
+
+        const revisionId = await createRevision({
+          revisionTable: 'user_revisions',
+          entityId: user.id,
+          revisionData: revisionDataWithoutId,
+          revisionNumber,
+          userId: systemUserId,
+          timestamp: createdAt
+        }, queryInterface, transaction)
 
         // 3. Create activity log
-        // await createActivityLog({
-        //   revisionTable: 'user_revisions',
-        //   revisionId,
-        //   entityType: 'user',
-        //   entityId: user.id,
-        //   revisionNumber,
-        //   changedById: systemUserId,
-        //   changedAt: createdAt
-        // }, queryInterface, transaction)
+        await createActivityLog({
+          revisionTable: 'user_revisions',
+          revisionId,
+          entityType: 'user',
+          entityId: user.id,
+          revisionNumber,
+          changedById: systemUserId,
+          changedAt: createdAt
+        }, queryInterface, transaction)
       }
 
       await transaction.commit()

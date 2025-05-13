@@ -43,25 +43,27 @@ module.exports = {
         await queryInterface.bulkInsert('provider_accreditations', [baseFields], { transaction })
 
         // 2. Create revision
-        // const revisionId = await createRevision({
-        //   revisionTable: 'provider_accreditation_revisions',
-        //   entityId: accreditationId,
-        //   revisionData: baseFields,
-        //   revisionNumber,
-        //   userId,
-        //   timestamp: createdAt
-        // }, queryInterface, transaction)
+        const { id: _, ...revisionData } = baseFields
+
+        const revisionId = await createRevision({
+          revisionTable: 'provider_accreditation_revisions',
+          entityId: accreditationId,
+          revisionData,
+          revisionNumber,
+          userId,
+          timestamp: createdAt
+        }, queryInterface, transaction)
 
         // 3. Create activity log
-        // await createActivityLog({
-        //   revisionTable: 'provider_accreditation_revisions',
-        //   revisionId,
-        //   entityType: 'provider_accreditation',
-        //   entityId: accreditationId,
-        //   revisionNumber,
-        //   changedById: userId,
-        //   changedAt: createdAt
-        // }, queryInterface, transaction)
+        await createActivityLog({
+          revisionTable: 'provider_accreditation_revisions',
+          revisionId,
+          entityType: 'provider_accreditation',
+          entityId: accreditationId,
+          revisionNumber,
+          changedById: userId,
+          changedAt: createdAt
+        }, queryInterface, transaction)
       }
 
       await transaction.commit()
