@@ -8,7 +8,7 @@ const revisionAssociationMap = {
   user_revisions: 'userRevision'
 }
 
-const getActivityLogs = async ({ entityId = null }) => {
+const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
   const whereClause = entityId ? { entityId } : {}
 
   const activityLogs = await ActivityLog.findAll({
@@ -43,7 +43,9 @@ const getActivityLogs = async ({ entityId = null }) => {
         as: 'changedByUser'
       }
     ],
-    order: [['changedAt', 'DESC']]
+    order: [['changedAt', 'DESC']],
+    limit,
+    offset
   })
 
   const withRevisions = activityLogs.map((log) => {
