@@ -78,23 +78,23 @@ module.exports = (sequelize) => {
         field: 'revision_number'
       },
       action: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('create', 'update', 'delete'),
         allowNull: false,
         defaultValue: 'update',
         validate: {
           isIn: [['create', 'update', 'delete']]
         }
       },
-      changedById: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        field: 'changed_by_id'
-      },
       changedAt: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
         field: 'changed_at'
+      },
+      changedById: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'changed_by_id'
       }
     },
     {
