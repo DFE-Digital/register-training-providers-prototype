@@ -50,8 +50,8 @@
                   <dt class="govuk-summary-list__key">
                     {{ field.key }}
                   </dt>
-                  <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value.length }}">
-                    {{ field.value if field.value.length else "Not entered" }}
+                  <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+                    {{ field.value if field.value else "Not entered" }}
                   </dd>
                 </div>
               </dl>
