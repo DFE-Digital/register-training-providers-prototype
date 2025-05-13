@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const {
   ActivityLog,
   Provider,
@@ -132,6 +133,59 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
   return paginated.map(formatActivityLog)
 }
 
+const getProviderActivityTotalCount = async ({ providerId }) => {
+  if (!providerId) throw new Error('providerId is required')
+
+  const results = await Promise.all([
+    ActivityLog.count({
+      where: { revisionTable: 'provider_revisions' },
+      include: [
+        {
+          model: ProviderRevision,
+          as: 'providerRevision',
+          required: true,
+          where: { providerId }
+        }
+      ]
+    }),
+    ActivityLog.count({
+      where: { revisionTable: 'provider_accreditation_revisions' },
+      include: [
+        {
+          model: ProviderAccreditationRevision,
+          as: 'providerAccreditationRevision',
+          required: true,
+          where: { providerId }
+        }
+      ]
+    }),
+    ActivityLog.count({
+      where: { revisionTable: 'provider_address_revisions' },
+      include: [
+        {
+          model: ProviderAddressRevision,
+          as: 'providerAddressRevision',
+          required: true,
+          where: { providerId }
+        }
+      ]
+    }),
+    ActivityLog.count({
+      where: { revisionTable: 'provider_contact_revisions' },
+      include: [
+        {
+          model: ProviderContactRevision,
+          as: 'providerContactRevision',
+          required: true,
+          where: { providerId }
+        }
+      ]
+    })
+  ])
+
+  return results.reduce((sum, count) => sum + count, 0)
+}
+
 // User-specific
 const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, offset = 0 }) => {
   if (!userId) throw new Error('userId is required')
@@ -180,6 +234,55 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
   })
 
   return activityLogs.map(formatActivityLog)
+}
+
+const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
+  if (!userId) throw new Error('userId is required')
+
+  const whereClause = { changedById: userId }
+
+  if (revisionTable) {
+    whereClause.revisionTable = Array.isArray(revisionTable)
+      ? { [Op.in]: revisionTable }
+      : revisionTable
+  }
+
+  const totalCount = await ActivityLog.count({
+    where: whereClause,
+    include: [
+      {
+        model: ProviderRevision,
+        as: 'providerRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderAccreditationRevision,
+        as: 'providerAccreditationRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderAddressRevision,
+        as: 'providerAddressRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderContactRevision,
+        as: 'providerContactRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: UserRevision,
+        as: 'userRevision',
+        required: false
+      }
+    ]
+  })
+
+  return totalCount
 }
 
 // Shared revision summary
@@ -283,5 +386,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
 module.exports = {
   getActivityLogs,
   getProviderActivityLogs,
-  getUserActivityLogs
+  getProviderActivityTotalCount,
+  getUserActivityLogs,
+  getUserActivityTotalCount
 }
