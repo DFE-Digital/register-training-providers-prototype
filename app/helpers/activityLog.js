@@ -216,7 +216,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider address ${log.action}d`
-      label = `${providerName} – address details`
+      label = providerName // `${providerName} – address details`
       href = `/providers/${revision.providerId}/addresses`
 
       fields.push({ key: 'Address line 1', value: revision.line1 })
@@ -232,7 +232,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider contact ${log.action}d`
-      label = `${providerName} – contact details`
+      label = providerName // `${providerName} – contact details`
       href = `/providers/${revision.providerId}/contacts`
 
       fields.push({ key: 'First name', value: revision.firstName })
@@ -246,7 +246,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider accreditation ${log.action}d`
-      label = `${providerName} – accreditation`
+      label = providerName // `${providerName} – accreditation`
       href = `/providers/${revision.providerId}/accreditations`
 
       fields.push({ key: 'Accreditation number', value: revision.number })
@@ -259,7 +259,6 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       activity = `User ${log.action}d`
       label = `${revision.firstName} ${revision.lastName}` || revision.email || 'User'
       href = `/users/${revision.userId}`
-      id = revision.userId
 
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
