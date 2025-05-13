@@ -10,6 +10,8 @@ const {
   UserRevision
 } = require('../models')
 
+const { govukDate } = require('./date')
+
 const revisionAssociationMap = {
   provider_revisions: 'providerRevision',
   provider_accreditation_revisions: 'providerAccreditationRevision',
@@ -355,8 +357,8 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       href = `/providers/${revision.providerId}/accreditations`
 
       fields.push({ key: 'Accreditation number', value: revision.number })
-      fields.push({ key: 'Accreditation starts on', value: revision.startsOn })
-      fields.push({ key: 'Accreditation ends on', value: revision.endsOn })
+      fields.push({ key: 'Accreditation starts on', value: govukDate(revision.startsOn) })
+      fields.push({ key: 'Accreditation ends on', value: revision.endsOn ? govukDate(revision.endsOn) : null })
       break
     }
 
