@@ -46,18 +46,6 @@
           By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
         </p>
         <div class="govuk-summary-card">
-          <div class="govuk-summary-card__title-wrapper">
-            <h2 class="govuk-summary-card__title">
-              {{ item.summary.label }}
-            </h2>
-            {% if item.summary.action !== "delete" %}
-              <ul class="govuk-summary-card__actions">
-                <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ item.summary.action }}">View<span class="govuk-visually-hidden">{{ item.summary.title }}</span></a>
-                </li>
-              </ul>
-            {% endif %}
-          </div>
           <div class="govuk-summary-card__content">
             {% for field in item.summary.fields %}
               <dl class="govuk-summary-list">
@@ -79,7 +67,7 @@
 
     {% else %}
       <p class="govuk-body">
-        There are no activity for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+        There is no activity for {{ provider.operatingName if provider.operatingName else "this provider" }}.
       </p>
     {% endif %}
 
