@@ -11,6 +11,7 @@ const {
 } = require('../models')
 
 const { govukDate } = require('./date')
+const { getProviderTypeLabel } = require('./content')
 
 const revisionAssociationMap = {
   provider_revisions: 'providerRevision',
@@ -309,7 +310,7 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       label = revision.operatingName || revision.name || 'Provider'
       href = `/providers/${revision.providerId}/`
 
-      fields.push({ key: 'Provider type', value: revision.type })
+      fields.push({ key: 'Provider type', value: getProviderTypeLabel(revision.type) })
       fields.push({ key: 'Operating name', value: revision.operatingName })
       fields.push({ key: 'Legal name', value: revision.legalName })
       fields.push({ key: 'UK provider reference number (UKPRN)', value: revision.ukprn })
