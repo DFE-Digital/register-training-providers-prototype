@@ -225,6 +225,8 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Town or city', value: revision.town })
       fields.push({ key: 'County', value: revision.county })
       fields.push({ key: 'Postcode', value: revision.postcode })
+      fields.push({ key: 'Latitude', value: revision.latitude })
+      fields.push({ key: 'Longitude', value: revision.longitude })
       break
     }
 
