@@ -11,24 +11,7 @@ exports.activityList = async (req, res) => {
   // Get the total amount of activity for pagination metadata
   const totalCount = await ActivityLog.count()
 
-  const activityItems = await getActivityLogs({})
-
-  // const whereClause = entityId ? { entityId } : {}
-
-  // const activityItems = await ActivityLog.findAll({
-  //   // where: whereClause,
-  //   include: [
-  //     { model: ProviderRevision, as: 'providerRevision' },
-  //     { model: ProviderAccreditationRevision, as: 'providerAccreditationRevision' },
-  //     { model: ProviderAddressRevision, as: 'providerAddressRevision' },
-  //     { model: ProviderContactRevision, as: 'providerContactRevision' },
-  //     { model: UserRevision, as: 'userRevision' },
-  //     { model: User, as: 'changedByUser' }
-  //   ],
-  //   order: [['changedAt', 'DESC']],
-  //   limit,
-  //   offset
-  // })
+  const activityItems = await getActivityLogs({ limit, offset })
 
   // create the Pagination object
   // using the chunk + the overall total count
