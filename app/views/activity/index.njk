@@ -34,7 +34,7 @@
             {% if item.summary.action !== "delete" %}
               <ul class="govuk-summary-card__actions">
                 <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ item.summary.action }}">View<span class="govuk-visually-hidden">{{ item.summary.title }}</span></a>
+                  <a class="govuk-link" href="{{ item.summary.href }}">View<span class="govuk-visually-hidden">{{ item.summary.title }}</span></a>
                 </li>
               </ul>
             {% endif %}
@@ -60,7 +60,7 @@
 
     {% else %}
       <p class="govuk-body">
-        There are no activity.
+        There is no activity.
       </p>
     {% endif %}
 
