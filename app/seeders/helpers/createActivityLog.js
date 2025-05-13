@@ -18,6 +18,7 @@ const createActivityLog = async ({
     entity_type: entityType,
     entity_id: entityId,
     revision_number: revisionNumber,
+    action: 'create',
     changed_by_id: changedById,
     changed_at: now,
     created_at: now,
