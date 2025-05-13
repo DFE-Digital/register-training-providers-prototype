@@ -20,24 +20,28 @@
     {% if activityItems.length %}
 
       {% for item in activityItems %}
+
         <h2 class="govuk-summary-card__title">
           {{ item.summary.activity }}
         </h2>
         <p class="govuk-body">
-          By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+          {% if item.changedByUser.deleteById %}
+            By Deleted user on {{ item.changedAt | govukDateTime }}
+          {% else %}
+            By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+          {% endif %}
         </p>
         <div class="govuk-summary-card">
           <div class="govuk-summary-card__title-wrapper">
             <h2 class="govuk-summary-card__title">
-              {{ item.summary.label }}
+              {# {% if item.summary.href.length %}
+                <a class="govuk-link" href="{{ item.summary.href }}">
+                  {{ item.summary.label }}
+                </a>
+              {% else %} #}
+                {{ item.summary.label }}
+              {# {% endif %} #}
             </h2>
-            {% if item.summary.action !== "delete" %}
-              <ul class="govuk-summary-card__actions">
-                <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ item.summary.href }}">View<span class="govuk-visually-hidden">{{ item.summary.title }}</span></a>
-                </li>
-              </ul>
-            {% endif %}
           </div>
           <div class="govuk-summary-card__content">
             {% for field in item.summary.fields %}
