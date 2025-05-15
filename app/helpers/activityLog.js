@@ -413,12 +413,21 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         entityId: log.entityId
       })
 
-      if (revision.archivedAt) {
-        activity = 'Provider archived'
-      } else if (previousRevision?.archivedAt) {
-        activity = 'Provider unarchived'
+      if (log.action === 'update') {
+        if (revision.archivedAt) {
+          activity = 'Provider archived'
+        } else if (previousRevision?.archivedAt) {
+          activity = 'Provider unarchived'
+        } else {
+          activity = 'Provider updated'
+        }
       } else {
-        activity = `Provider ${log.action}d`
+        const actionLabel = {
+          create: 'created',
+          delete: 'deleted'
+        }[log.action] || `${log.action}d`
+
+        activity = `Provider ${actionLabel}`
       }
 
       label = revision.operatingName || revision.name || 'Provider'
