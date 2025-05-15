@@ -390,7 +390,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
   switch (revisionTable) {
     case 'provider_revisions':
-      const previousRevision = getPreviousRevision({
+      const previousRevision = await getPreviousRevision({
         revisionTable,
         revisionId: log.revisionId,
         entityId: log.entityId
@@ -398,7 +398,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
       if (revision.archivedAt) {
         activity = 'Provider archived'
-      } else if (previousRevision.archivedAt) {
+      } else if (previousRevision?.archivedAt) {
         activity = 'Provider unarchived'
       } else {
         activity = `Provider ${log.action}d`
