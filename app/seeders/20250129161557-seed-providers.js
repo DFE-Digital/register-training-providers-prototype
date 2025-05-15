@@ -47,10 +47,12 @@ module.exports = {
         await queryInterface.bulkInsert('providers', [baseFields], { transaction })
 
         // 2. Insert revision using helper
+        const { id: _, ...revisionData } = baseFields
+
         const revisionId = await createRevision({
           revisionTable: 'provider_revisions',
           entityId: providerId,
-          revisionData: baseFields,
+          revisionData,
           revisionNumber,
           userId,
           timestamp: createdAt

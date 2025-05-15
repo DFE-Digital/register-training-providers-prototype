@@ -3,6 +3,41 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class ActivityLog extends Model {
     static associate(models) {
+      ActivityLog.belongsTo(models.ProviderRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerRevision'
+      })
+
+      ActivityLog.belongsTo(models.ProviderAccreditationRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerAccreditationRevision'
+      })
+
+      ActivityLog.belongsTo(models.ProviderAddressRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerAddressRevision'
+      })
+
+      ActivityLog.belongsTo(models.ProviderContactRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerContactRevision'
+      })
+
+      ActivityLog.belongsTo(models.UserRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'userRevision'
+      })
+
       ActivityLog.belongsTo(models.User, {
         foreignKey: 'changedById',
         as: 'changedByUser'
@@ -42,15 +77,23 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'revision_number'
       },
-      changedById: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        field: 'changed_by_id'
+      action: {
+        type: DataTypes.ENUM('create', 'update', 'delete'),
+        allowNull: false,
+        defaultValue: 'update',
+        validate: {
+          isIn: [['create', 'update', 'delete']]
+        }
       },
       changedAt: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
+        field: 'changed_at'
+      },
+      changedById: {
+        type: DataTypes.UUID,
+        allowNull: true,
         field: 'changed_by_id'
       }
     },

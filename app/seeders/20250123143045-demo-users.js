@@ -1,5 +1,3 @@
-const { v4: uuidv4 } = require('uuid')
-
 const createRevision = require('./helpers/createRevision')
 const createActivityLog = require('./helpers/createActivityLog')
 
@@ -57,10 +55,12 @@ module.exports = {
         await queryInterface.bulkInsert('users', [baseFields], { transaction })
 
         // 2. Create revision
+        const { id: _, ...revisionDataWithoutId } = baseFields
+
         const revisionId = await createRevision({
           revisionTable: 'user_revisions',
           entityId: user.id,
-          revisionData: baseFields,
+          revisionData: revisionDataWithoutId,
           revisionNumber,
           userId: systemUserId,
           timestamp: createdAt

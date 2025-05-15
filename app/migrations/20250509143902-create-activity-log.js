@@ -30,6 +30,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      action: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'update'
+      },
       changed_by_id: {
         type: Sequelize.UUID,
         allowNull: true,

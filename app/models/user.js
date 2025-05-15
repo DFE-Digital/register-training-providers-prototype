@@ -100,9 +100,17 @@ module.exports = (sequelize) => {
     })
   )
 
-  User.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })
-  )
+  User.addHook('afterUpdate', (instance, options) => {
+    const hookName = instance.deletedById !== null ? 'afterDestroy' : 'afterUpdate'
+    createRevisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })(instance, {
+      ...options,
+      hookName
+    })
+  })
+
+  // User.addHook('afterUpdate',
+  //   createRevisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })
+  // )
 
   return User
 }

@@ -43,10 +43,12 @@ module.exports = {
         await queryInterface.bulkInsert('provider_accreditations', [baseFields], { transaction })
 
         // 2. Create revision
+        const { id: _, ...revisionData } = baseFields
+
         const revisionId = await createRevision({
           revisionTable: 'provider_accreditation_revisions',
           entityId: accreditationId,
-          revisionData: baseFields,
+          revisionData,
           revisionNumber,
           userId,
           timestamp: createdAt

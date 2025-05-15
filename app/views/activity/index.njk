@@ -1,0 +1,74 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "activity" %}
+
+{% set title = "Activity log" %}
+
+{% block beforeContent %}
+
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    {% if activityItems.length %}
+
+      {% for item in activityItems %}
+
+        <h2 class="govuk-summary-card__title">
+          {{ item.summary.activity }}
+        </h2>
+        <p class="govuk-body">
+          {% if item.changedByUser.deleteById %}
+            By Deleted user on {{ item.changedAt | govukDateTime }}
+          {% else %}
+            By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+          {% endif %}
+        </p>
+        <div class="govuk-summary-card">
+          <div class="govuk-summary-card__title-wrapper">
+            <h2 class="govuk-summary-card__title">
+              {# {% if item.summary.href.length %}
+                <a class="govuk-link" href="{{ item.summary.href }}">
+                  {{ item.summary.label }}
+                </a>
+              {% else %} #}
+                {{ item.summary.label }}
+              {# {% endif %} #}
+            </h2>
+          </div>
+          <div class="govuk-summary-card__content">
+            {% for field in item.summary.fields %}
+              <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ field.key }}
+                  </dt>
+                  <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+                    {{ field.value if field.value else "Not entered" }}
+                  </dd>
+                </div>
+              </dl>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+
+      {% include "_includes/pagination.njk" %}
+
+    {% else %}
+      <p class="govuk-body">
+        There is no activity.
+      </p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid')
 
-async function createActivityLog({
+const createActivityLog = async ({
   revisionTable,
   revisionId,
   entityType,
@@ -8,7 +8,7 @@ async function createActivityLog({
   revisionNumber,
   changedById,
   changedAt
-}, queryInterface, transaction) {
+}, queryInterface, transaction) => {
   const now = changedAt || new Date()
 
   await queryInterface.bulkInsert('activity_logs', [{
@@ -18,6 +18,7 @@ async function createActivityLog({
     entity_type: entityType,
     entity_id: entityId,
     revision_number: revisionNumber,
+    action: 'create',
     changed_by_id: changedById,
     changed_at: now,
     created_at: now,

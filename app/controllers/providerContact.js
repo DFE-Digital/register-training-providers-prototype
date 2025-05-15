@@ -1,6 +1,7 @@
 const { Provider, ProviderContact } = require('../models')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { nullIfEmpty } = require('../helpers/string')
+const { isValidEmail,isValidTelephone } = require('../helpers/validation')
 const Pagination = require('../helpers/pagination')
 
 /// ------------------------------------------------------------------------ ///
@@ -136,6 +137,12 @@ exports.newProviderContact_post = async (req, res) => {
     error.href = "#email"
     error.text = "Enter email address"
     errors.push(error)
+  } else if (!isValidEmail(contact.email)) {
+    const error = {}
+    error.fieldName = 'email'
+    error.href = '#email'
+    error.text = 'Enter an email address in the correct format, like name@example.com'
+    errors.push(error)
   }
 
   if (!contact.telephone.length) {
@@ -143,6 +150,12 @@ exports.newProviderContact_post = async (req, res) => {
     error.fieldName = "telephone"
     error.href = "#telephone"
     error.text = "Enter telephone number"
+    errors.push(error)
+  } else if (!isValidTelephone(contact.telephone)) {
+    const error = {}
+    error.fieldName = 'telephone'
+    error.href = '#telephone'
+    error.text = 'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
     errors.push(error)
   }
 
@@ -267,6 +280,12 @@ exports.editProviderContact_post = async (req, res) => {
     error.href = "#email"
     error.text = "Enter email address"
     errors.push(error)
+  } else if (!isValidEmail(contact.email)) {
+    const error = {}
+    error.fieldName = 'email'
+    error.href = '#email'
+    error.text = 'Enter an email address in the correct format, like name@example.com'
+    errors.push(error)
   }
 
   if (!contact.telephone.length) {
@@ -274,6 +293,12 @@ exports.editProviderContact_post = async (req, res) => {
     error.fieldName = "telephone"
     error.href = "#telephone"
     error.text = "Enter telephone number"
+    errors.push(error)
+  } else if (!isValidTelephone(contact.telephone)) {
+    const error = {}
+    error.fieldName = 'telephone'
+    error.href = '#telephone'
+    error.text = 'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
     errors.push(error)
   }
 
