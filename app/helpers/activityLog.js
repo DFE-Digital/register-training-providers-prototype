@@ -38,16 +38,18 @@ const revisionModels = {
 }
 
 /**
- * Gets the Sequelize model for the given revision table.
- * @param {string} revisionTable
- * @returns {import('sequelize').Model}
+ * Returns the Sequelize model for the given revision table.
+ *
+ * @param {string} revisionTable - Name of the revision table (e.g. 'provider_revisions').
+ * @returns {import('sequelize').Model} The associated Sequelize model.
  */
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
 /**
- * Returns the foreign key used in a revision table.
- * @param {string} revisionTable
- * @returns {'providerId'|'userId'}
+ * Returns the foreign key used by the revision table (e.g. 'providerId' or 'userId').
+ *
+ * @param {string} revisionTable - Name of the revision table.
+ * @returns {'providerId' | 'userId'} The foreign key field.
  */
 const getEntityKey = (revisionTable) => {
   switch (revisionTable) {
@@ -59,9 +61,11 @@ const getEntityKey = (revisionTable) => {
 }
 
 /**
- * Formats a raw ActivityLog instance into a summary object.
- * @param {import('sequelize').Model} log
- * @returns {Object}
+ * Formats a raw ActivityLog instance by attaching its revision and generating a summary.
+ *
+ * @async
+ * @param {import('sequelize').Model} log - A Sequelize ActivityLog instance with includes.
+ * @returns {Promise<Object>} A plain object including `revision` and `summary` fields.
  */
 const formatActivityLog = async (log) => {
   try {
@@ -89,12 +93,14 @@ const formatActivityLog = async (log) => {
 }
 
 /**
- * Fetches global or filtered activity logs.
+ * Fetches all activity logs, optionally filtered by entity ID, and formats them.
+ *
+ * @async
  * @param {Object} options
- * @param {string|null} [options.entityId]
- * @param {number} [options.limit=25]
- * @param {number} [options.offset=0]
- * @returns {Promise<Object[]>}
+ * @param {string|null} [options.entityId] - Optional ID of the entity to filter logs.
+ * @param {number} [options.limit=25] - Maximum number of logs to return.
+ * @param {number} [options.offset=0] - Number of logs to skip (for pagination).
+ * @returns {Promise<Object[]>} Array of formatted activity log entries.
  */
 const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
   const whereClause = entityId ? { entityId } : {}
@@ -140,12 +146,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
 }
 
 /**
- * Fetches activity logs related to a specific provider.
+ * Fetches activity logs related to a specific provider across all relevant revision tables.
+ *
+ * @async
  * @param {Object} options
- * @param {string} options.providerId
- * @param {number} [options.limit=25]
- * @param {number} [options.offset=0]
- * @returns {Promise<Object[]>}
+ * @param {string} options.providerId - The ID of the provider.
+ * @param {number} [options.limit=25] - Maximum number of logs to return.
+ * @param {number} [options.offset=0] - Number of logs to skip (for pagination).
+ * @returns {Promise<Object[]>} Array of formatted activity log entries.
  */
 const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) => {
   if (!providerId) throw new Error('providerId is required')
@@ -192,10 +200,12 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
 }
 
 /**
- * Returns the total activity log count for a given provider.
+ * Returns the total count of activity logs for a specific provider across all revision types.
+ *
+ * @async
  * @param {Object} options
- * @param {string} options.providerId
- * @returns {Promise<number>}
+ * @param {string} options.providerId - The provider ID to count activity for.
+ * @returns {Promise<number>} Total count of logs.
  */
 const getProviderActivityTotalCount = async ({ providerId }) => {
   if (!providerId) throw new Error('providerId is required')
@@ -251,13 +261,15 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
 }
 
 /**
- * Fetches activity logs made by a specific user.
+ * Fetches all activity logs made by a specific user, optionally filtered by revision table(s).
+ *
+ * @async
  * @param {Object} options
- * @param {string} options.userId
- * @param {string|string[]|null} [options.revisionTable]
- * @param {number} [options.limit=25]
- * @param {number} [options.offset=0]
- * @returns {Promise<Object[]>}
+ * @param {string} options.userId - ID of the user who made the changes.
+ * @param {string|string[]|null} [options.revisionTable] - Optional table(s) to filter by.
+ * @param {number} [options.limit=25] - Maximum number of logs to return.
+ * @param {number} [options.offset=0] - Number of logs to skip (for pagination).
+ * @returns {Promise<Object[]>} Array of formatted activity logs.
  */
 const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, offset = 0 }) => {
   if (!userId) throw new Error('userId is required')
@@ -309,11 +321,13 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
 }
 
 /**
- * Returns the total number of logs created by a user.
+ * Returns the total number of activity logs created by a user, optionally filtered by revision table(s).
+ *
+ * @async
  * @param {Object} options
- * @param {string} options.userId
- * @param {string|string[]|null} [options.revisionTable]
- * @returns {Promise<number>}
+ * @param {string} options.userId - ID of the user.
+ * @param {string|string[]|null} [options.revisionTable] - Optional table(s) to filter by.
+ * @returns {Promise<number>} Total number of logs.
  */
 const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
   if (!userId) throw new Error('userId is required')
@@ -365,13 +379,16 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
 }
 
 /**
- * Generates a human-readable summary of a revision for display purposes.
+ * Builds a structured summary for a given revision, including activity label, link and changed fields.
  *
+ * @async
  * @param {Object} options
- * @param {Object|null} options.revision - The revision record, already eager-loaded if needed.
- * @param {string} options.revisionTable - The name of the revision table.
- * @param {string} options.action - Action performed (e.g. 'create', 'update', 'delete').
- * @returns {Object} A structured summary object for UI rendering.
+ * @param {Object|null} options.revision - The revision object.
+ * @param {string} options.revisionTable - Name of the revision table.
+ * @param {string} options.action - Type of action (e.g. 'create', 'update', 'delete').
+ * @param {string} options.revisionId - ID of the revision.
+ * @param {string} options.entityId - ID of the provider or user.
+ * @returns {Promise<Object>} Structured summary object with `label`, `activity`, `href`, and `fields`.
  */
 const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   if (!revision) {
@@ -484,13 +501,14 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 }
 
 /**
- * Retrieves the previous revision for a given entity.
+ * Returns the previous revision for a given entity (based on revisionNumber ordering).
  *
+ * @async
  * @param {Object} options
  * @param {string} options.revisionTable - Name of the revision table.
  * @param {string} options.revisionId - ID of the current revision.
- * @param {string} options.entityId - ID of the associated provider or user.
- * @returns {Promise<Object|null>} The previous revision, or null if none exists.
+ * @param {string} options.entityId - ID of the associated entity.
+ * @returns {Promise<Object|null>} The previous revision or null if none exists.
  */
 const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   if (!revisionTable || !revisionId || !entityId) throw new Error('revisionTable, revisionId, and entityId are required')
@@ -513,12 +531,13 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
 }
 
 /**
- * Retrieves the latest revision for a given entity.
+ * Returns the most recent revision for a given entity in the specified revision table.
  *
+ * @async
  * @param {Object} options
  * @param {string} options.revisionTable - Name of the revision table.
- * @param {string} options.entityId - ID of the associated provider or user.
- * @returns {Promise<Object|null>} The most recent revision record, or null.
+ * @param {string} options.entityId - ID of the associated entity.
+ * @returns {Promise<Object|null>} The latest revision or null if none exists.
  */
 const getLatestRevision = async ({ revisionTable, entityId }) => {
   if (!revisionTable || !entityId) throw new Error('revisionTable and entityId are required')
