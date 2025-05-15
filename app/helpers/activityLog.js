@@ -373,7 +373,7 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
  * @param {string} options.action - Action performed (e.g. 'create', 'update', 'delete').
  * @returns {Object} A structured summary object for UI rendering.
  */
-const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
+const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   if (!revision) {
     return {
       label: 'Revision details unavailable',
@@ -390,8 +390,16 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
 
   switch (revisionTable) {
     case 'provider_revisions':
+      const previousRevision = getPreviousRevision({
+        revisionTable,
+        revisionId: log.revisionId,
+        entityId: log.entityId
+      })
+
       if (revision.archivedAt) {
-        activity = `Provider archived`
+        activity = 'Provider archived'
+      } else if (previousRevision.archivedAt) {
+        activity = 'Provider unarchived'
       } else {
         activity = `Provider ${log.action}d`
       }
