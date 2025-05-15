@@ -21,6 +21,25 @@ const revisionAssociationMap = {
   user_revisions: 'userRevision'
 }
 
+const revisionModels = {
+  provider_revisions: ProviderRevision,
+  provider_accreditation_revisions: ProviderAccreditationRevision,
+  provider_address_revisions: ProviderAddressRevision,
+  provider_contact_revisions: ProviderContactRevision,
+  user_revisions: UserRevision
+}
+
+const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
+
+const getEntityKey = (revisionTable) => {
+  switch (revisionTable) {
+    case 'user_revisions':
+      return 'userId'
+    default:
+      return 'providerId'
+  }
+}
+
 // Shared formatter
 const formatActivityLog = (log) => {
   try {
@@ -389,6 +408,40 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
     href,
     fields
   }
+}
+
+const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
+  if (!revisionTable || !revisionId || !entityId) throw new Error('revisionTable, revisionId, and entityId are required')
+
+  const revisionModel = getRevisionModel(revisionTable)
+  if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
+
+  const revisions = await revisionModel.findAll({
+    where: { [`${getEntityKey(revisionTable)}`]: entityId },
+    order: [['revisionNumber', 'ASC']]
+  })
+
+  const index = revisions.findIndex(r => r.id === revisionId)
+
+  if (index > 0) {
+    return revisions[index - 1]
+  }
+
+  return null // no previous revision
+}
+
+const getLatestRevision = async ({ revisionTable, entityId }) => {
+  if (!revisionTable || !entityId) throw new Error('revisionTable and entityId are required')
+
+  const revisionModel = getRevisionModel(revisionTable)
+  if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
+
+  const latest = await revisionModel.findOne({
+    where: { [`${getEntityKey(revisionTable)}`]: entityId },
+    order: [['revisionNumber', 'DESC']]
+  })
+
+  return latest
 }
 
 module.exports = {
