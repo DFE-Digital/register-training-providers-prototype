@@ -63,13 +63,13 @@ const getEntityKey = (revisionTable) => {
  * @param {import('sequelize').Model} log
  * @returns {Object}
  */
-const formatActivityLog = (log) => {
+const formatActivityLog = async (log) => {
   try {
     const logJson = log.toJSON()
     const alias = revisionAssociationMap[log.revisionTable]
     const revision = log[alias] || null
     logJson.revision = revision ? revision.toJSON?.() || revision : null
-    logJson.summary = getRevisionSummary({
+    logJson.summary = await getRevisionSummary({
       revision: logJson.revision,
       revisionTable: log.revisionTable,
       ...logJson
