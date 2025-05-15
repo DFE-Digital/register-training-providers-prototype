@@ -13,6 +13,10 @@ const {
 const { govukDate } = require('./date')
 const { getProviderTypeLabel } = require('./content')
 
+/**
+ * Maps revision table names to their associated include alias.
+ * @type {Object.<string, string>}
+ */
 const revisionAssociationMap = {
   provider_revisions: 'providerRevision',
   provider_accreditation_revisions: 'providerAccreditationRevision',
@@ -21,6 +25,10 @@ const revisionAssociationMap = {
   user_revisions: 'userRevision'
 }
 
+/**
+ * Maps revision table names to their Sequelize model.
+ * @type {Object.<string, import('sequelize').Model>}
+ */
 const revisionModels = {
   provider_revisions: ProviderRevision,
   provider_accreditation_revisions: ProviderAccreditationRevision,
@@ -29,8 +37,18 @@ const revisionModels = {
   user_revisions: UserRevision
 }
 
+/**
+ * Gets the Sequelize model for the given revision table.
+ * @param {string} revisionTable
+ * @returns {import('sequelize').Model}
+ */
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
+/**
+ * Returns the foreign key used in a revision table.
+ * @param {string} revisionTable
+ * @returns {'providerId'|'userId'}
+ */
 const getEntityKey = (revisionTable) => {
   switch (revisionTable) {
     case 'user_revisions':
@@ -40,7 +58,11 @@ const getEntityKey = (revisionTable) => {
   }
 }
 
-// Shared formatter
+/**
+ * Formats a raw ActivityLog instance into a summary object.
+ * @param {import('sequelize').Model} log
+ * @returns {Object}
+ */
 const formatActivityLog = (log) => {
   try {
     const logJson = log.toJSON()
@@ -66,7 +88,14 @@ const formatActivityLog = (log) => {
   }
 }
 
-// Global / entityId-based
+/**
+ * Fetches global or filtered activity logs.
+ * @param {Object} options
+ * @param {string|null} [options.entityId]
+ * @param {number} [options.limit=25]
+ * @param {number} [options.offset=0]
+ * @returns {Promise<Object[]>}
+ */
 const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
   const whereClause = entityId ? { entityId } : {}
 
@@ -110,7 +139,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
   return activityLogs.map(formatActivityLog)
 }
 
-// Provider-specific
+/**
+ * Fetches activity logs related to a specific provider.
+ * @param {Object} options
+ * @param {string} options.providerId
+ * @param {number} [options.limit=25]
+ * @param {number} [options.offset=0]
+ * @returns {Promise<Object[]>}
+ */
 const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) => {
   if (!providerId) throw new Error('providerId is required')
 
@@ -155,6 +191,12 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
   return paginated.map(formatActivityLog)
 }
 
+/**
+ * Returns the total activity log count for a given provider.
+ * @param {Object} options
+ * @param {string} options.providerId
+ * @returns {Promise<number>}
+ */
 const getProviderActivityTotalCount = async ({ providerId }) => {
   if (!providerId) throw new Error('providerId is required')
 
@@ -208,7 +250,15 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
   return results.reduce((sum, count) => sum + count, 0)
 }
 
-// User-specific
+/**
+ * Fetches activity logs made by a specific user.
+ * @param {Object} options
+ * @param {string} options.userId
+ * @param {string|string[]|null} [options.revisionTable]
+ * @param {number} [options.limit=25]
+ * @param {number} [options.offset=0]
+ * @returns {Promise<Object[]>}
+ */
 const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, offset = 0 }) => {
   if (!userId) throw new Error('userId is required')
 
@@ -258,6 +308,13 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
   return activityLogs.map(formatActivityLog)
 }
 
+/**
+ * Returns the total number of logs created by a user.
+ * @param {Object} options
+ * @param {string} options.userId
+ * @param {string|string[]|null} [options.revisionTable]
+ * @returns {Promise<number>}
+ */
 const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
   if (!userId) throw new Error('userId is required')
 
@@ -307,7 +364,15 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
   return totalCount
 }
 
-// Shared revision summary
+/**
+ * Generates a human-readable summary of a revision for display purposes.
+ *
+ * @param {Object} options
+ * @param {Object|null} options.revision - The revision record, already eager-loaded if needed.
+ * @param {string} options.revisionTable - The name of the revision table.
+ * @param {string} options.action - Action performed (e.g. 'create', 'update', 'delete').
+ * @returns {Object} A structured summary object for UI rendering.
+ */
 const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
   if (!revision) {
     return {
@@ -410,6 +475,15 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
   }
 }
 
+/**
+ * Retrieves the previous revision for a given entity.
+ *
+ * @param {Object} options
+ * @param {string} options.revisionTable - Name of the revision table.
+ * @param {string} options.revisionId - ID of the current revision.
+ * @param {string} options.entityId - ID of the associated provider or user.
+ * @returns {Promise<Object|null>} The previous revision, or null if none exists.
+ */
 const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   if (!revisionTable || !revisionId || !entityId) throw new Error('revisionTable, revisionId, and entityId are required')
 
@@ -430,6 +504,14 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   return null // no previous revision
 }
 
+/**
+ * Retrieves the latest revision for a given entity.
+ *
+ * @param {Object} options
+ * @param {string} options.revisionTable - Name of the revision table.
+ * @param {string} options.entityId - ID of the associated provider or user.
+ * @returns {Promise<Object|null>} The most recent revision record, or null.
+ */
 const getLatestRevision = async ({ revisionTable, entityId }) => {
   if (!revisionTable || !entityId) throw new Error('revisionTable and entityId are required')
 
@@ -449,5 +531,7 @@ module.exports = {
   getProviderActivityLogs,
   getProviderActivityTotalCount,
   getUserActivityLogs,
-  getUserActivityTotalCount
+  getUserActivityTotalCount,
+  getPreviousRevision,
+  getLatestRevision
 }
