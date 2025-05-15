@@ -358,8 +358,8 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
       href = `/providers/${revision.providerId}/accreditations`
 
       fields.push({ key: 'Accreditation number', value: revision.number })
-      fields.push({ key: 'Accreditation starts on', value: govukDate(revision.startsOn) })
-      fields.push({ key: 'Accreditation ends on', value: revision.endsOn ? govukDate(revision.endsOn) : null })
+      fields.push({ key: 'Date accreditation starts', value: govukDate(revision.startsOn) })
+      fields.push({ key: 'Date accreditation ends', value: revision.endsOn ? govukDate(revision.endsOn) : null })
       break
     }
 
