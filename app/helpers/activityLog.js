@@ -306,7 +306,12 @@ const getRevisionSummary = ({ revision, revisionTable, ...log }) => {
 
   switch (revisionTable) {
     case 'provider_revisions':
-      activity = `Provider ${log.action}d`
+      if (revision.archivedAt) {
+        activity = `Provider archived`
+      } else {
+        activity = `Provider ${log.action}d`
+      }
+
       label = revision.operatingName || revision.name || 'Provider'
       href = `/providers/${revision.providerId}/`
 
