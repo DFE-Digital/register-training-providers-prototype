@@ -136,7 +136,7 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
     offset
   })
 
-  return activityLogs.map(formatActivityLog)
+  return await Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -186,9 +186,9 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
 
   // Sort and paginate manually
   allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
-  const paginated = allLogs.slice(offset, offset + limit)
+  const activityLogs = allLogs.slice(offset, offset + limit)
 
-  return paginated.map(formatActivityLog)
+  return await Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -305,7 +305,7 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
     offset
   })
 
-  return activityLogs.map(formatActivityLog)
+  return await Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
