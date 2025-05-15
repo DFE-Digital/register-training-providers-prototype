@@ -20,7 +20,7 @@ module.exports = {
     'deletedById'
   ],
   providerAddress: [
-    'uprn',
+    // 'uprn',
     'line1',
     'line2',
     'line3',
@@ -29,7 +29,7 @@ module.exports = {
     'postcode',
     'latitude',
     'longitude',
-    'googlePlaceId',
+    // 'googlePlaceId',
     'deletedAt',
     'deletedById'
   ],
