@@ -155,7 +155,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = 'telephone'
     error.href = '#telephone'
-    error.text = 'Enter a phone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
+    error.text = 'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
     errors.push(error)
   }
 
@@ -298,7 +298,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = 'telephone'
     error.href = '#telephone'
-    error.text = 'Enter a phone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
+    error.text = 'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
     errors.push(error)
   }
 
