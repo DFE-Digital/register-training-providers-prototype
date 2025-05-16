@@ -417,7 +417,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         if (revision.archivedAt) {
           activity = 'Provider archived'
         } else if (previousRevision?.archivedAt) {
-          activity = 'Provider unarchived'
+          activity = 'Provider restored'
         } else {
           activity = 'Provider updated'
         }
