@@ -7,11 +7,11 @@ module.exports = {
         allowNull: false,
         primaryKey: true
       },
-      training_provider_id: {
+      accredited_provider_id: {
         type: Sequelize.UUID,
         allowNull: false
       },
-      accredited_provider_id: {
+      training_provider_id: {
         type: Sequelize.UUID,
         allowNull: false
       },
@@ -30,6 +30,12 @@ module.exports = {
       updated_by_id: {
         type: Sequelize.UUID,
         allowNull: false
+      },
+      deleted_at: {
+        type: Sequelize.DATE
+      },
+      deleted_by_id: {
+        type: Sequelize.UUID
       }
     })
   },
