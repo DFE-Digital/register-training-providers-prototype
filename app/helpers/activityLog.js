@@ -49,17 +49,19 @@ const revisionModels = {
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
 /**
- * Returns the foreign key used by the revision table (e.g. 'providerId' or 'userId').
+ * Returns the foreign key(s) used by the revision table.
  *
  * @param {string} revisionTable - Name of the revision table.
- * @returns {'providerId' | 'userId'} The foreign key field.
+ * @returns {string[]} Array of foreign key fields.
  */
-const getEntityKey = (revisionTable) => {
+const getEntityKeyss = (revisionTable) => {
   switch (revisionTable) {
     case 'user_revisions':
-      return 'userId'
+      return ['userId']
+    case 'provider_partnership_revisions':
+      return ['accreditedProviderId', 'trainingProviderId']
     default:
-      return 'providerId'
+      return ['providerId']
   }
 }
 
@@ -529,7 +531,7 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
   const revisions = await revisionModel.findAll({
-    where: { [`${getEntityKey(revisionTable)}`]: entityId },
+    where: { [`${getEntityKeys(revisionTable)}`]: entityId },
     order: [['revisionNumber', 'ASC']]
   })
 
@@ -558,7 +560,7 @@ const getLatestRevision = async ({ revisionTable, entityId }) => {
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
   const latest = await revisionModel.findOne({
-    where: { [`${getEntityKey(revisionTable)}`]: entityId },
+    where: { [`${getEntityKeys(revisionTable)}`]: entityId },
     order: [['revisionNumber', 'DESC']]
   })
 
