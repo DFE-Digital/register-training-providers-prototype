@@ -557,18 +557,18 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const accredited = revision.accreditedProvider
       const training = revision.trainingProvider
 
-      const labelParts = [
-        accredited?.operatingName || accredited?.legalName || 'Accredited provider',
-        training?.operatingName || training?.legalName || 'Training provider'
-      ]
-      label = labelParts.join(' ↔︎ ')
+      const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
+      const trainingName = training?.operatingName || training?.legalName || 'Training provider'
+
+      label = `${accreditedName} – ${trainingName}`
       activity = `Partnership ${log.action}d`
       href = `/providers/${revision.accreditedProviderId}/partnerships`
 
-      fields.push({ key: 'Accredited provider', value: labelParts[0] })
-      fields.push({ key: 'Training provider', value: labelParts[1] })
+      fields.push({ key: 'Accredited provider', value: accreditedName })
+      fields.push({ key: 'Training provider', value: trainingName })
       break
     }
+
 
     case 'user_revisions':
       activity = `User ${log.action}d`
