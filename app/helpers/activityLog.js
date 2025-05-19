@@ -134,6 +134,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         include: [{ model: Provider, as: 'provider' }]
       },
       {
+        model: ProviderPartnershipRevision,
+        as: 'providerPartnershipRevision',
+        include: [
+          { model: Provider, as: 'accreditedProvider' },
+          { model: Provider, as: 'trainingProvider' }
+        ]
+      },
+      {
         model: UserRevision,
         as: 'userRevision'
       },
