@@ -554,17 +554,19 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
  * @returns {Promise<Object|null>} The latest revision or null if none exists.
  */
 const getLatestRevision = async ({ revisionTable, entityId }) => {
-  if (!revisionTable || !entityId) throw new Error('revisionTable and entityId are required')
-
   const revisionModel = getRevisionModel(revisionTable)
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
-  const latest = await revisionModel.findOne({
-    where: { [`${getEntityKeys(revisionTable)}`]: entityId },
+  const entityKeys = getEntityKeys(revisionTable)
+
+  const whereClause = {
+    [Op.or]: entityKeys.map(key => ({ [key]: entityId }))
+  }
+
+  return await revisionModel.findOne({
+    where: whereClause,
     order: [['revisionNumber', 'DESC']]
   })
-
-  return latest
 }
 
 module.exports = {
