@@ -6,6 +6,7 @@ const {
   ProviderAddressRevision,
   ProviderContactRevision,
   ProviderRevision,
+  ProviderPartnershipRevision,
   User,
   UserRevision
 } = require('../models')
@@ -22,6 +23,7 @@ const revisionAssociationMap = {
   provider_accreditation_revisions: 'providerAccreditationRevision',
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
+  provider_partnership_revisions: 'providerPartnershipRevision',
   user_revisions: 'userRevision'
 }
 
@@ -34,6 +36,7 @@ const revisionModels = {
   provider_accreditation_revisions: ProviderAccreditationRevision,
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
+  provider_partnership_revisions: ProviderPartnershipRevision,
   user_revisions: UserRevision
 }
 
