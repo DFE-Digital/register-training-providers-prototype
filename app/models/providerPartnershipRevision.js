@@ -1,36 +1,36 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
-  class ProviderPartnership extends Model {
+  class ProviderPartnershipRevision extends Model {
     static associate(models) {
-      ProviderPartnership.belongsTo(models.Provider, {
+      ProviderPartnershipRevision.belongsTo(models.Provider, {
         foreignKey: 'accreditedProviderId',
         as: 'accreditedProvider'
       })
 
-      ProviderPartnership.belongsTo(models.Provider, {
+      ProviderPartnershipRevision.belongsTo(models.Provider, {
         foreignKey: 'trainingProviderId',
         as: 'trainingProvider'
       })
 
-      ProviderPartnership.belongsTo(models.User, {
-        foreignKey: 'createdById',
-        as: 'createdByUser'
-      })
-
-      ProviderPartnership.belongsTo(models.User, {
-        foreignKey: 'updatedById',
-        as: 'updatedByUser'
+      ProviderPartnershipRevision.belongsTo(models.User, {
+        foreignKey: 'revisionById',
+        as: 'revisionByUser'
       })
     }
   }
 
-  ProviderPartnership.init(
+  ProviderPartnershipRevision.init(
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
+      },
+      providerPartnershipId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'provider_partnership_id'
       },
       accreditedProviderId: {
         type: DataTypes.UUID,
@@ -69,28 +69,41 @@ module.exports = (sequelize) => {
       deletedById: {
         type: DataTypes.UUID,
         field: 'deleted_by_id'
+      },
+      revisionNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'revision_number'
+      },
+      revisionAt: {
+        type: DataTypes.DATE,
+        field: 'revision_at'
+      },
+      revisionById: {
+        type: DataTypes.UUID,
+        field: 'revision_by_id'
       }
     },
     {
       sequelize,
-      modelName: 'ProviderPartnership',
-      tableName: 'provider_partnerships',
-      timestamps: true
+      modelName: 'ProviderPartnershipRevision',
+      tableName: 'provider_partnership_revisions',
+      timestamps: false
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
+  const createActivityHook = require('../hooks/activityHook')
 
-  ProviderPartnership.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'ProviderPartnershipRevision', modelKey: 'providerPartnership' })(instance, {
+  ProviderPartnershipRevision.addHook('afterCreate', (instance, options) =>
+    createActivityHook({
+      entityType: 'provider_partnership',
+      revisionTable: 'provider_partnership_revisions',
+      entityIdField: 'providerPartnershipId'
+    })(instance, {
       ...options,
       hookName: 'afterCreate'
     })
   )
 
-  ProviderPartnership.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'ProviderPartnershipRevision', modelKey: 'providerPartnership' })
-  )
-
-  return ProviderPartnership
+  return ProviderPartnershipRevision
 }
