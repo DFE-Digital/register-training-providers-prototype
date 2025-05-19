@@ -281,6 +281,22 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
           where: { providerId }
         }
       ]
+    }),
+    ActivityLog.count({
+      where: { revisionTable: 'provider_partnership_revisions' },
+      include: [
+        {
+          model: ProviderPartnershipRevision,
+          as: 'providerPartnershipRevision',
+          required: true,
+          where: {
+            [Op.or]: [
+              { accreditedProviderId: providerId },
+              { trainingProviderId: providerId }
+            ]
+          }
+        }
+      ]
     })
   ])
 
