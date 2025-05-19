@@ -8,8 +8,8 @@
   {% set partner = partnership.accreditedProvider %}
 {% endif %}
 
-{% set title = "Confirm you want to remove partnership with " + partner.operatingName %}
-{% set caption = "Remove partnership - " + provider.operatingName %}
+{% set title = "Confirm you want to delete the partnership with " + partner.operatingName %}
+{% set caption = "Delete partnership - " + provider.operatingName %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -33,7 +33,7 @@
       }) }} #}
 
       {{ govukButton({
-        text: "Remove partnership",
+        text: "Delete partnership",
         classes: "govuk-button--warning"
       }) }}
 

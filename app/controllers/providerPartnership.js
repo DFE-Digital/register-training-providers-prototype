@@ -316,11 +316,15 @@ exports.deleteProviderPartnership_get = async (req, res) => {
 }
 
 exports.deleteProviderPartnership_post = async (req, res) => {
-  // get the provider and partnership IDs from the request
   const { providerId, partnershipId } = req.params
+  const { user } = req.session.passport
   const partnership = await ProviderPartnership.findByPk(partnershipId)
-  await partnership.destroy()
+  await partnership.update({
+    deletedAt: new Date(),
+    deletedById: user.id,
+    updatedById: user.id
+  })
 
-  req.flash('success', 'Partnership removed')
+  req.flash('success', 'Partnership deleted')
   res.redirect(`/providers/${providerId}/partnerships`)
 }
