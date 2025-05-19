@@ -525,23 +525,23 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
  * @returns {Promise<Object|null>} The previous revision or null if none exists.
  */
 const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
-  if (!revisionTable || !revisionId || !entityId) throw new Error('revisionTable, revisionId, and entityId are required')
-
   const revisionModel = getRevisionModel(revisionTable)
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
+  const entityKeys = getEntityKeys(revisionTable)
+
+  const whereClause = {
+    [Op.or]: entityKeys.map(key => ({ [key]: entityId }))
+  }
+
   const revisions = await revisionModel.findAll({
-    where: { [`${getEntityKeys(revisionTable)}`]: entityId },
+    where: whereClause,
     order: [['revisionNumber', 'ASC']]
   })
 
   const index = revisions.findIndex(r => r.id === revisionId)
 
-  if (index > 0) {
-    return revisions[index - 1]
-  }
-
-  return null // no previous revision
+  return index > 0 ? revisions[index - 1] : null
 }
 
 /**
