@@ -54,7 +54,7 @@ const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
  * @param {string} revisionTable - Name of the revision table.
  * @returns {string[]} Array of foreign key fields.
  */
-const getEntityKeyss = (revisionTable) => {
+const getEntityKeys = (revisionTable) => {
   switch (revisionTable) {
     case 'user_revisions':
       return ['userId']
@@ -488,6 +488,23 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Accreditation number', value: revision.number })
       fields.push({ key: 'Date accreditation starts', value: govukDate(revision.startsOn) })
       fields.push({ key: 'Date accreditation ends', value: revision.endsOn ? govukDate(revision.endsOn) : null })
+      break
+    }
+
+    case 'provider_partnership_revisions': {
+      const accredited = revision.accreditedProvider
+      const training = revision.trainingProvider
+
+      const labelParts = [
+        accredited?.operatingName || accredited?.legalName || 'Accredited provider',
+        training?.operatingName || training?.legalName || 'Training provider'
+      ]
+      label = labelParts.join(' ↔︎ ')
+      activity = `Partnership ${log.action}d`
+      href = `/providers/${revision.accreditedProviderId}/partnerships`
+
+      fields.push({ key: 'Accredited provider', value: labelParts[0] })
+      fields.push({ key: 'Training provider', value: labelParts[1] })
       break
     }
 
