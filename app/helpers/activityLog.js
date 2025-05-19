@@ -195,6 +195,28 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
+  queries.push(ActivityLog.findAll({
+    where: { revisionTable: 'provider_partnership_revisions' },
+    include: [
+      {
+        model: ProviderPartnershipRevision,
+        as: 'providerPartnershipRevision',
+        required: true,
+        where: {
+          [Op.or]: [
+            { accreditedProviderId: providerId },
+            { trainingProviderId: providerId }
+          ]
+        },
+        include: [
+          { model: Provider, as: 'accreditedProvider' },
+          { model: Provider, as: 'trainingProvider' }
+        ]
+      },
+      { model: User, as: 'changedByUser' }
+    ]
+  }))
+
   const allLogs = (await Promise.all(queries)).flat()
 
   // Sort and paginate manually
