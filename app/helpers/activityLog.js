@@ -355,6 +355,14 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         include: [{ model: Provider, as: 'provider' }]
       },
       {
+        model: ProviderPartnershipRevision,
+        as: 'providerPartnershipRevision',
+        include: [
+          { model: Provider, as: 'accreditedProvider' },
+          { model: Provider, as: 'trainingProvider' }
+        ]
+      },
+      {
         model: UserRevision,
         as: 'userRevision'
       },
@@ -417,6 +425,14 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         as: 'providerContactRevision',
         required: false,
         include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderPartnershipRevision,
+        as: 'providerPartnershipRevision',
+        include: [
+          { model: Provider, as: 'accreditedProvider' },
+          { model: Provider, as: 'trainingProvider' }
+        ]
       },
       {
         model: UserRevision,
