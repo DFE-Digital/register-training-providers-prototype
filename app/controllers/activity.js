@@ -1,5 +1,5 @@
 const { ActivityLog } = require('../models')
-const { getActivityLogs } = require('../helpers/activityLog')
+const { getActivityLogs, groupActivityLogsByDate } = require('../helpers/activityLog')
 const Pagination = require('../helpers/pagination')
 
 exports.activityList = async (req, res) => {
@@ -13,9 +13,11 @@ exports.activityList = async (req, res) => {
 
   const activityItems = await getActivityLogs({ limit, offset })
 
+  const groupedItems = groupActivityLogsByDate(activityItems)
+
   // create the Pagination object
   // using the chunk + the overall total count
-  const pagination = new Pagination(activityItems, totalCount, page, limit)
+  const pagination = new Pagination(groupedItems, totalCount, page, limit)
 
   res.render('activity/index', {
     activityItems: pagination.getData(),
