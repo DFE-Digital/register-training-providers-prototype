@@ -11,7 +11,7 @@ const {
   UserRevision
 } = require('../models')
 
-const { govukDate } = require('./date')
+const { govukDate, isToday, isYesterday } = require('./date')
 const { getProviderTypeLabel } = require('./content')
 
 /**
@@ -648,6 +648,40 @@ const getLatestRevision = async ({ revisionTable, entityId }) => {
   })
 }
 
+/**
+ * Groups formatted activity logs by date.
+ *
+ * @param {Object[]} logs - Array of formatted activity log entries.
+ * @returns {Object[]} An array of groups with { label, entries }.
+ */
+const groupActivityLogsByDate = (logs) => {
+  const groups = {}
+
+  for (const log of logs) {
+    const date = new Date(log.changedAt)
+
+    let label
+    if (isToday(date)) {
+      label = 'Today'
+    } else if (isYesterday(date)) {
+      label = 'Yesterday'
+    } else {
+      label = govukDate(date)
+    }
+
+    if (!groups[label]) {
+      groups[label] = []
+    }
+
+    groups[label].push(log)
+  }
+
+  // Convert to array in descending order of date
+  return Object.entries(groups)
+    .map(([label, entries]) => ({ label, entries }))
+    .sort((a, b) => new Date(b.entries[0].changedAt) - new Date(a.entries[0].changedAt))
+}
+
 module.exports = {
   getActivityLogs,
   getProviderActivityLogs,
@@ -655,5 +689,6 @@ module.exports = {
   getUserActivityLogs,
   getUserActivityTotalCount,
   getPreviousRevision,
-  getLatestRevision
+  getLatestRevision,
+  groupActivityLogsByDate
 }
