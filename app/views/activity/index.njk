@@ -17,47 +17,46 @@
 
     {% include "_includes/page-heading.njk" %}
 
-    {% if activityItems.length %}
+      {% if activityItems.length %}
 
-      {% for item in activityItems %}
+      {% for group in activityItems %}
 
-        <h2 class="govuk-summary-card__title">
-          {{ item.summary.activity }}
-        </h2>
-        <p class="govuk-body">
-          {% if item.changedByUser.deleteById %}
-            By Deleted user on {{ item.changedAt | govukDateTime }}
-          {% else %}
-            By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
-          {% endif %}
-        </p>
-        <div class="govuk-summary-card">
-          <div class="govuk-summary-card__title-wrapper">
-            <h2 class="govuk-summary-card__title">
-              {# {% if item.summary.href.length %}
-                <a class="govuk-link" href="{{ item.summary.href }}">
-                  {{ item.summary.label }}
-                </a>
-              {% else %} #}
+        <h2 class="govuk-heading-m">{{ group.label }}</h2>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        {% for item in group.entries %}
+          <h3 class="govuk-summary-card__title">
+            {{ item.summary.activity }}
+          </h3>
+          <p class="govuk-body">
+            {% if item.changedByUser.deleteById %}
+              By Deleted user on {{ item.changedAt | govukDateTime }}
+            {% else %}
+              By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+            {% endif %}
+          </p>
+          <div class="govuk-summary-card">
+            <div class="govuk-summary-card__title-wrapper">
+              <h2 class="govuk-summary-card__title">
                 {{ item.summary.label }}
-              {# {% endif %} #}
-            </h2>
+              </h2>
+            </div>
+            <div class="govuk-summary-card__content">
+              {% for field in item.summary.fields %}
+                <dl class="govuk-summary-list">
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      {{ field.key }}
+                    </dt>
+                    <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+                      {{ field.value if field.value else "Not entered" }}
+                    </dd>
+                  </div>
+                </dl>
+              {% endfor %}
+            </div>
           </div>
-          <div class="govuk-summary-card__content">
-            {% for field in item.summary.fields %}
-              <dl class="govuk-summary-list">
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    {{ field.key }}
-                  </dt>
-                  <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-                    {{ field.value if field.value else "Not entered" }}
-                  </dd>
-                </div>
-              </dl>
-            {% endfor %}
-          </div>
-        </div>
+        {% endfor %}
       {% endfor %}
 
       {% include "_includes/pagination.njk" %}
