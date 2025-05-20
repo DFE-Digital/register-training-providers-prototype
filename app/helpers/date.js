@@ -136,6 +136,59 @@ const getYear = (timestamp) => {
   return new Date(timestamp).getFullYear()
 }
 
+/**
+ * Checks if the given date is today.
+ * @param {Date|string|number} input - A Date object or something convertible to a Date.
+ * @returns {boolean}
+ */
+function isToday(input) {
+  const date = new Date(input)
+  const today = new Date()
+
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  )
+}
+
+/**
+ * Checks if the given date is tomorrow.
+ * @param {Date|string|number} input - A Date object or something convertible to a Date.
+ * @returns {boolean}
+ */
+function isTomorrow(input) {
+  const date = new Date(input)
+  const tomorrow = new Date()
+
+  tomorrow.setDate(tomorrow.getDate() + 1)
+
+  return (
+    date.getFullYear() === tomorrow.getFullYear() &&
+    date.getMonth() === tomorrow.getMonth() &&
+    date.getDate() === tomorrow.getDate()
+  )
+}
+
+/**
+ * Checks if the given date is yesterday.
+ * @param {Date|string|number} input - A Date object or something convertible to a Date.
+ * @returns {boolean}
+ */
+function isYesterday(input) {
+  const date = new Date(input)
+  const yesterday = new Date()
+
+  yesterday.setDate(yesterday.getDate() - 1)
+
+  return (
+    date.getFullYear() === yesterday.getFullYear() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getDate() === yesterday.getDate()
+  )
+}
+
+
 module.exports = {
   govukDate,
   govukDateTime,
@@ -145,5 +198,8 @@ module.exports = {
   getDateParts,
   getDay,
   getMonth,
-  getYear
+  getYear,
+  isToday,
+  isTomorrow,
+  isYesterday
 }
