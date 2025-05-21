@@ -561,7 +561,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const trainingName = training?.operatingName || training?.legalName || 'Training provider'
 
       label = `${accreditedName} – ${trainingName}`
-      activity = `Partnership ${log.action}d`
+      activity = `Provider partnership ${log.action}d`
       href = `/providers/${revision.accreditedProviderId}/partnerships`
 
       fields.push({ key: 'Accredited provider', value: accreditedName })
