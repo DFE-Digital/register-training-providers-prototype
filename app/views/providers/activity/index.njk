@@ -6,11 +6,11 @@
 {% set title = provider.operatingName %}
 {% set caption = "Provider" %}
 
-{# {% if pagination.totalCount %}
+{% if pagination.totalCount %}
   {% set subtitle = "Activity log (" + pagination.totalCount + ")" %}
-{% else %} #}
+{% else %}
   {% set subtitle = "Activity log" %}
-{# {% endif %} #}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

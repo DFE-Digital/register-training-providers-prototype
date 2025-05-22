@@ -191,7 +191,7 @@ const getYear = (timestamp) => {
  * @param {Date|string|number} input - A Date object or something convertible to a Date.
  * @returns {boolean}
  */
-function isToday(input) {
+const isToday = (input) => {
   const date = new Date(input)
   const today = new Date()
 
@@ -207,7 +207,7 @@ function isToday(input) {
  * @param {Date|string|number} input - A Date object or something convertible to a Date.
  * @returns {boolean}
  */
-function isTomorrow(input) {
+const isTomorrow = (input) => {
   const date = new Date(input)
   const tomorrow = new Date()
 
@@ -225,7 +225,7 @@ function isTomorrow(input) {
  * @param {Date|string|number} input - A Date object or something convertible to a Date.
  * @returns {boolean}
  */
-function isYesterday(input) {
+const isYesterday = (input) => {
   const date = new Date(input)
   const yesterday = new Date()
 
