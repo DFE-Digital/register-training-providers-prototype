@@ -5,12 +5,13 @@
       {% if provider.deletedAt %}
         {{ govukTag({
           text: "Deleted",
-          classes: "govuk-tag--red"
+          classes: "govuk-tag--red govuk-tag__heading"
         }) }}
       {% else %}
         {% if provider.archivedAt %}
           {{ govukTag({
-            text: "Archived"
+            text: "Archived",
+            classes: "govuk-tag__heading"
           }) }}
         {% endif %}
       {% endif %}
