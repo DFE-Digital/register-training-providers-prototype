@@ -2,7 +2,7 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = "Providers (" + pagination.totalCount + ")" %}
+{% set title = "Providers (" + pagination.totalCount | numeral("0,0") + ")" %}
 
 {% block content %}
 
