@@ -7,7 +7,7 @@
 {% set caption = "Provider" %}
 
 {% if pagination.totalCount %}
-  {% set subtitle = "Contacts (" + pagination.totalCount + ")" %}
+  {% set subtitle = "Contacts (" + pagination.totalCount | numeral("0,0") + ")" %}
 {% else %}
   {% set subtitle = "Contacts" %}
 {% endif %}
