@@ -202,7 +202,11 @@ exports.newProviderPartnership_post = async (req, res) => {
     if (hasExistingPartnership) {
       res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
     } else {
-      res.redirect(`/providers/${providerId}/partnerships/new/check`)
+      if (req.session.data.provider?.id) {
+        res.redirect(`/providers/${providerId}/partnerships/new/check`)
+      } else {
+        res.redirect(`/providers/${providerId}/partnerships/new/choose`)
+      }
     }
   }
 }
@@ -223,6 +227,14 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
       change: `/providers/${providerId}/partnerships/new`
     }
   })
+}
+
+exports.newProviderPartnershipChoose_get = async (req, res) => {
+  res.send('Not implemented yet')
+}
+
+exports.newProviderPartnershipChoose_post = async (req, res) => {
+  res.send('Not implemented yet')
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
