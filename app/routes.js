@@ -182,6 +182,9 @@ router.post('/providers/:providerId/partnerships/new', checkIsAuthenticated, pro
 
 router.get('/providers/:providerId/partnerships/new/duplicate', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDuplicate_get)
 
+router.get('/providers/:providerId/partnerships/new/choose', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipChoose_get)
+router.post('/providers/:providerId/partnerships/new/choose', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipChoose_post)
+
 router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
 router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
 
