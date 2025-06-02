@@ -1,7 +1,9 @@
-const { Provider, ProviderPartnership } = require('../models')
+const { Provider, ProviderPartnership, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { hasPartnership } = require('../helpers/partnership')
+
+const { Op } = require('sequelize')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider partnerships
@@ -230,7 +232,83 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
 }
 
 exports.newProviderPartnershipChoose_get = async (req, res) => {
-  res.send('Not implemented yet')
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const isAccredited = await isAccreditedProvider({ providerId })
+
+  const query = req.session.data.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      archivedAt: null,
+      deletedAt: null,
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: true, // ensures an INNER JOIN
+        where: {
+          startsOn: { [Op.lte]: today }, // started on or before today
+          [Op.or]: [
+            { endsOn: null }, // no end date
+            { endsOn: { [Op.gte]: today } } // ends on or after today
+          ]
+        }
+      }
+    ],
+    order: [['operatingName', 'ASC']]
+  })
+
+  // store total number of results
+  const providerCount = providers.length
+
+  // parse the provider results for use in macro
+  let providerItems = []
+  providers.forEach(provider => {
+    const item = {}
+    item.text = provider.operatingName
+    item.value = provider.id
+    item.hint = {
+      text: `UKPRN: ${provider.ukprn}`
+    }
+    providerItems.push(item)
+  })
+
+  // sort items alphabetically
+  providerItems.sort((a, b) => {
+    return a.text.localeCompare(b.text)
+  })
+
+  // only get the first 15 items
+  providerItems = providerItems.slice(0, 15)
+
+  res.render('providers/partnerships/choose', {
+    provider,
+    isAccredited,
+    providerItems,
+    providerCount,
+    searchTerm: query,
+    actions: {
+      back: `/providers/${providerId}/partnerships/new`,
+      cancel: `/providers/${providerId}/partnerships`,
+      save: `/providers/${providerId}/partnerships/new/check`
+    }
+  })
 }
 
 exports.newProviderPartnershipChoose_post = async (req, res) => {
