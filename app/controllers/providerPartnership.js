@@ -26,22 +26,28 @@ exports.providerPartnershipsList = async (req, res) => {
 
   if (isAccredited) {
     totalCount = await ProviderPartnership.count({
-      where: { accreditedProviderId: providerId }
+      where: { accreditedProviderId: providerId, deletedAt: null }
     })
 
     // fetch the trainingPartnerships sorted
     provider.partnerships = await provider.getTrainingPartnerships({
+      through: {
+        where: { deletedAt: null },
+      },
       order: [['operatingName', 'ASC']],
       limit,
       offset
     })
   } else {
     totalCount = await ProviderPartnership.count({
-      where: { trainingProviderId: providerId }
+      where: { trainingProviderId: providerId, deletedAt: null }
     })
 
     // fetch the accreditedPartnerships sorted
     provider.partnerships = await provider.getAccreditedPartnerships({
+      through: {
+        where: { deletedAt: null },
+      },
       order: [['operatingName', 'ASC']],
       limit,
       offset
