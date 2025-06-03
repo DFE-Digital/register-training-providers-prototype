@@ -32,19 +32,25 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% set headingHtml %}
-      {% include "_includes/page-heading-legend.njk" %}
-    {% endset %}
+    {% include "_includes/page-heading.njk" %}
 
     <form id="provider-search" action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
       {# Hidden field to store the provider ID #}
       <input type="hidden" id="selected-provider-id" name="provider[id]" value="{{ data.provider.id | default('') }}">
 
       <div class="govuk-form-group {{- ' govuk-form-group--error' if errors.length }}">
-        <label class="govuk-label govuk-label--l" for="provider-autocomplete">
-          <span class="govuk-caption-l">{{ caption }} </span>
-          {{ title }}
-        </label>
+        <div class="autocomplete__fallback">
+          {{ govukInput({
+            id: "provider",
+            name: "search",
+            value: data.search,
+            autocomplete: "off",
+            formGroup: {
+              classes: "govuk-!-margin-bottom-0"
+            },
+            errorMessage: errors | getErrorMessage("provider")
+          }) }}
+        </div>
         <div id="provider-autocomplete-container" class="govuk-body"></div>
       </div>
 
@@ -54,10 +60,12 @@
         </p>
       {% endset %}
 
-      {{ govukDetails({
-        summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
-        html: helpText
-      }) }}
+      <div class="js-enabled-only" hidden>
+        {{ govukDetails({
+          summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
+          html: helpText
+        }) }}
+      </div>
 
       {{ govukButton({
         text: "Continue"
@@ -77,7 +85,28 @@
 {% block pageScripts %}
 <script src="/public/javascripts/vendor/accessible-autocomplete.min.js"></script>
 <script>
+document.documentElement.classList.add('js-enabled');
+
 document.addEventListener('DOMContentLoaded', function () {
+  const fallbackInput = document.getElementById('provider');
+  if (fallbackInput) {
+    fallbackInput.disabled = true;
+  }
+
+  const fallback = document.querySelector('.autocomplete__fallback');
+  const enhanced = document.querySelector('#provider-autocomplete-container');
+
+  if (fallback && enhanced) {
+    fallback.style.display = 'none';
+    enhanced.removeAttribute('hidden');
+
+    // Disable the fallback input so it doesn't get submitted
+    const fallbackInput = document.getElementById('provider');
+    if (fallbackInput) {
+      fallbackInput.disabled = true;
+    }
+  }
+
   let providerMap = []; // store providers for potential auto-match on submit
 
   accessibleAutocomplete({
@@ -85,6 +114,8 @@ document.addEventListener('DOMContentLoaded', function () {
     id: 'provider-autocomplete',
     name: 'search', // <--- Use 'search' as the name of the generated input
     defaultValue: '{{ data["search"] | default("") }}', // re-populate typed text
+    // add an aria-label for screen readers instead of a second visible label
+    ariaLabel: '{{ title }}',
     source: function (query, populateResults) {
       // If user hasn't typed anything, return no suggestions
       if (!query || query.length < 3) {
