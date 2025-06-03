@@ -1,0 +1,88 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = (providerCount | numeral("0,0")) + " results found for ‘" + searchTerm + "’" %}
+
+{% if currentPartnership %}
+  {% set caption = provider.operatingName %}
+{% else %}
+  {% set caption = "Add partnership - " + provider.operatingName %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    {% if providerCount == 0 %}
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ actions.back }}">Change your search</a>.
+      </p>
+    {% elif providerCount > 15 %}
+      <p class="govuk-body">
+        Showing the first 15 results. <a class="govuk-link" href="{{ actions.back }}">Try narrowing down your search</a> if the {{ "training partner" if isAccredited else "accredited provider" }} you’re looking for is not listed.
+      </p>
+    {% else %}
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ actions.back }}">Change your search</a> if the {{ "training partner" if isAccredited else "accredited provider" }} you’re looking for is not listed.
+      </p>
+    {% endif %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukRadios({
+        idPrefix: "provider",
+        name: "provider[id]",
+        fieldset: {
+          legend: {
+            text: "Training partner" if isAccredited else "Accredited provider",
+            classes: "govuk-fieldset__legend--m",
+            isPageHeading: false
+          }
+        },
+        errorMessage: errors | getErrorMessage("provider"),
+        value: data.provider.id,
+        items: providerItems
+      }) }}
+
+      {% set helpText %}
+        <p class="govuk-body">
+          Something helpful goes here
+        </p>
+      {% endset %}
+
+      {{ govukDetails({
+        summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
+        html: helpText
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
