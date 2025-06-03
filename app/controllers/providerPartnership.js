@@ -31,7 +31,9 @@ exports.providerPartnershipsList = async (req, res) => {
 
     // fetch the trainingPartnerships sorted
     provider.partnerships = await provider.getTrainingPartnerships({
-      where: { deletedAt: null },
+      through: {
+        where: { deletedAt: null },
+      },
       order: [['operatingName', 'ASC']],
       limit,
       offset
@@ -43,7 +45,9 @@ exports.providerPartnershipsList = async (req, res) => {
 
     // fetch the accreditedPartnerships sorted
     provider.partnerships = await provider.getAccreditedPartnerships({
-      where: { deletedAt: null },
+      through: {
+        where: { deletedAt: null },
+      },
       order: [['operatingName', 'ASC']],
       limit,
       offset
