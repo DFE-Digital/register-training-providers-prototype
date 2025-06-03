@@ -10,6 +10,11 @@ const { Op } = require('sequelize')
 /// ------------------------------------------------------------------------ ///
 
 exports.providerPartnershipsList = async (req, res) => {
+  // Clear session data
+  delete req.session.data.partnership
+  delete req.session.data.search
+  delete req.session.data.provider
+
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 25
   const offset = (page - 1) * limit
@@ -53,10 +58,6 @@ exports.providerPartnershipsList = async (req, res) => {
   // Create your Pagination object
   // using the chunk + the overall total count
   const pagination = new Pagination(provider.partnerships, totalCount, page, limit)
-
-  // Clear session provider data
-  delete req.session.data.partnership
-  delete req.session.data.search
 
   res.render('providers/partnerships/index', {
     provider,
@@ -160,12 +161,12 @@ exports.newProviderPartnership_post = async (req, res) => {
 
   if (!req.session.data.search.length) {
     const error = {}
-    error.fieldName = "provider-autocomplete"
-    error.href = "#provider-autocomplete"
+    error.fieldName = 'provider-autocomplete'
+    error.href = '#provider-autocomplete'
     if (isAccredited) {
-      error.text = "Enter training partner name, UKPRN or URN"
+      error.text = 'Enter training partner name, UKPRN or URN'
     } else {
-      error.text = "Enter accredited provider name, UKPRN or URN"
+      error.text = 'Enter accredited provider name, UKPRN or URN'
     }
     errors.push(error)
   }
@@ -232,87 +233,11 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
 }
 
 exports.newProviderPartnershipChoose_get = async (req, res) => {
-  const { providerId } = req.params
-  const provider = await Provider.findByPk(providerId)
-  const isAccredited = await isAccreditedProvider({ providerId })
 
-  const query = req.session.data.search || ''
-  const today = new Date()
-
-  const providers = await Provider.findAll({
-    attributes: [
-      'id',
-      'operatingName',
-      'legalName',
-      'ukprn',
-      'urn'
-    ],
-    where: {
-      archivedAt: null,
-      deletedAt: null,
-      [Op.or]: [
-        { operatingName: { [Op.like]: `%${query}%` } },
-        { legalName: { [Op.like]: `%${query}%` } },
-        { ukprn: { [Op.like]: `%${query}%` } },
-        { urn: { [Op.like]: `%${query}%` } }
-      ]
-    },
-    include: [
-      {
-        model: ProviderAccreditation,
-        as: 'accreditations',
-        required: true, // ensures an INNER JOIN
-        where: {
-          startsOn: { [Op.lte]: today }, // started on or before today
-          [Op.or]: [
-            { endsOn: null }, // no end date
-            { endsOn: { [Op.gte]: today } } // ends on or after today
-          ]
-        }
-      }
-    ],
-    order: [['operatingName', 'ASC']]
-  })
-
-  // store total number of results
-  const providerCount = providers.length
-
-  // parse the provider results for use in macro
-  let providerItems = []
-  providers.forEach(provider => {
-    const item = {}
-    item.text = provider.operatingName
-    item.value = provider.id
-    item.hint = {
-      text: `UKPRN: ${provider.ukprn}`
-    }
-    providerItems.push(item)
-  })
-
-  // sort items alphabetically
-  providerItems.sort((a, b) => {
-    return a.text.localeCompare(b.text)
-  })
-
-  // only get the first 15 items
-  providerItems = providerItems.slice(0, 15)
-
-  res.render('providers/partnerships/choose', {
-    provider,
-    isAccredited,
-    providerItems,
-    providerCount,
-    searchTerm: query,
-    actions: {
-      back: `/providers/${providerId}/partnerships/new`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/new/check`
-    }
-  })
 }
 
 exports.newProviderPartnershipChoose_post = async (req, res) => {
-  res.send('Not implemented yet')
+
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
