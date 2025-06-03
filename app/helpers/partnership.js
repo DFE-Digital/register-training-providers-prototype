@@ -4,7 +4,8 @@ const hasPartnership = async (params) => {
   const partnershipCount = await ProviderPartnership.count({
     where: {
       accreditedProviderId: params.accreditedProviderId,
-      trainingProviderId: params.trainingProviderId
+      trainingProviderId: params.trainingProviderId,
+      deletedAt: null
     }
   })
 
