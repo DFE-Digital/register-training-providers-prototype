@@ -32,7 +32,7 @@
               text: "Provider type"
             },
             value: {
-              text: partner.type | getProviderTypeLabel if partner.type.length else "Not entered",
+              text: partner.type | getProviderTypeLabel(isAccredited) if partner.type.length else "Not entered",
               classes: "govuk-hint" if not partner.type.length
             },
             actions: {
