@@ -233,11 +233,205 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
 }
 
 exports.newProviderPartnershipChoose_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const isAccredited = await isAccreditedProvider({ providerId })
 
+  const query = req.session.data.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      archivedAt: null,
+      deletedAt: null,
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: true, // ensures an INNER JOIN
+        where: {
+          startsOn: { [Op.lte]: today }, // started on or before today
+          [Op.or]: [
+            { endsOn: null }, // no end date
+            { endsOn: { [Op.gte]: today } } // ends on or after today
+          ]
+        }
+      }
+    ],
+    order: [['operatingName', 'ASC']]
+  })
+
+  // store total number of results
+  const providerCount = providers.length
+
+  // parse the provider results for use in macro
+  let providerItems = []
+  providers.forEach(provider => {
+    const item = {}
+    item.text = provider.operatingName
+    item.value = provider.id
+    item.hint = {
+      text: `UKPRN: ${provider.ukprn}`
+    }
+    providerItems.push(item)
+  })
+
+  // sort items alphabetically
+  providerItems.sort((a, b) => {
+    return a.text.localeCompare(b.text)
+  })
+
+  // only get the first 15 items
+  providerItems = providerItems.slice(0, 15)
+
+  res.render('providers/partnerships/choose', {
+    provider,
+    isAccredited,
+    providerItems,
+    providerCount,
+    searchTerm: query,
+    actions: {
+      back: `/providers/${providerId}/partnerships/new`,
+      cancel: `/providers/${providerId}/partnerships`,
+      save: `/providers/${providerId}/partnerships/new/choose`
+    }
+  })
 }
 
 exports.newProviderPartnershipChoose_post = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const isAccredited = await isAccreditedProvider({ providerId })
 
+  const query = req.session.data.search || ''
+  const today = new Date()
+
+  const providers = await Provider.findAll({
+    attributes: [
+      'id',
+      'operatingName',
+      'legalName',
+      'ukprn',
+      'urn'
+    ],
+    where: {
+      archivedAt: null,
+      deletedAt: null,
+      [Op.or]: [
+        { operatingName: { [Op.like]: `%${query}%` } },
+        { legalName: { [Op.like]: `%${query}%` } },
+        { ukprn: { [Op.like]: `%${query}%` } },
+        { urn: { [Op.like]: `%${query}%` } }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'accreditations',
+        required: true, // ensures an INNER JOIN
+        where: {
+          startsOn: { [Op.lte]: today }, // started on or before today
+          [Op.or]: [
+            { endsOn: null }, // no end date
+            { endsOn: { [Op.gte]: today } } // ends on or after today
+          ]
+        }
+      }
+    ],
+    order: [['operatingName', 'ASC']]
+  })
+
+  // store total number of results
+  const providerCount = providers.length
+
+  // parse the provider results for use in macro
+  let providerItems = []
+  providers.forEach(provider => {
+    const item = {}
+    item.text = provider.operatingName
+    item.value = provider.id
+    item.hint = {
+      text: `UKPRN: ${provider.ukprn}`
+    }
+    providerItems.push(item)
+  })
+
+  // sort items alphabetically
+  providerItems.sort((a, b) => {
+    return a.text.localeCompare(b.text)
+  })
+
+  // only get the first 15 items
+  providerItems = providerItems.slice(0, 15)
+
+  const errors = []
+
+  let hasExistingPartnership
+  if (isAccredited) {
+    hasExistingPartnership = await hasPartnership({
+      accreditedProviderId: providerId,
+      trainingProviderId: req.session.data.provider.id
+    })
+  } else {
+    hasExistingPartnership = await hasPartnership({
+      accreditedProviderId: req.session.data.provider.id,
+      trainingProviderId: providerId
+    })
+  }
+
+  if (!req.session.data.provider.id) {
+    const error = {}
+    error.fieldName = 'provider'
+    error.href = '#provider'
+    if (isAccredited) {
+      error.text = 'Select a training partner'
+    } else {
+      error.text = 'Select an accredited provider'
+    }
+    errors.push(error)
+  } else if (hasExistingPartnership) {
+    const error = {}
+    error.fieldName = 'provider'
+    error.href = '#provider'
+    if (isAccredited) {
+      error.text = 'Training partner has already been added'
+    } else {
+      error.text = 'Accredited provider has already been added'
+    }
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    res.render('providers/partnerships/choose', {
+      provider,
+      isAccredited,
+      providerItems,
+      providerCount,
+      searchTerm: query,
+      errors,
+      actions: {
+        back: `/providers/${providerId}/partnerships/new`,
+        cancel: `/providers/${providerId}/partnerships`,
+        save: `/providers/${providerId}/partnerships/new/choose`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${providerId}/partnerships/new/check`)
+  }
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
@@ -245,9 +439,11 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   const partner = await Provider.findByPk(req.session.data.provider.id)
+  const isAccredited = await isAccreditedProvider({ providerId: partner.id })
   res.render('providers/partnerships/check-your-answers', {
     provider,
     partner,
+    isAccredited,
     actions: {
       back: `/providers/${providerId}/partnerships/new`,
       cancel: `/providers/${providerId}/partnerships`,
