@@ -131,6 +131,10 @@ exports.newProviderPartnership_get = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
+  // if (req.query.referrer === 'check') {
+  //   delete req.session.data.provider.id
+  // }
+
   let back = `/providers/${providerId}/partnerships`
   if (req.query.referrer === 'check') {
     back = `/providers/${providerId}/partnerships/new/check`
@@ -445,9 +449,9 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
     partner,
     isAccredited,
     actions: {
-      back: `/providers/${providerId}/partnerships/new`,
+      back: `/providers/${providerId}/partnerships/new?referrer=check`,
       cancel: `/providers/${providerId}/partnerships`,
-      change: `/providers/${providerId}/partnerships/new`,
+      change: `/providers/${providerId}/partnerships/new?referrer=check`,
       save: `/providers/${providerId}/partnerships/new/check`
     }
   })
