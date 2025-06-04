@@ -2,7 +2,11 @@
 
 {% set primaryNavId = "providers" %}
 
-{% set title = (providerCount | numeral("0,0")) + " results found for ‘" + searchTerm + "’" %}
+{% if providerCount %}
+  {% set title = (providerCount | numeral("0,0")) + " results found for ‘" + searchTerm + "’" %}
+{% else %}
+  {% set title = "No results found for ‘" + searchTerm + "’" %}
+{% endif %}
 
 {% if currentPartnership %}
   {% set caption = provider.operatingName %}
@@ -44,43 +48,47 @@
       </p>
     {% endif %}
 
-    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+    {% if providerCount %}
 
-      {{ govukRadios({
-        idPrefix: "provider",
-        name: "provider[id]",
-        fieldset: {
-          legend: {
-            text: "Training partner" if isAccredited else "Accredited provider",
-            classes: "govuk-fieldset__legend--m",
-            isPageHeading: false
-          }
-        },
-        errorMessage: errors | getErrorMessage("provider"),
-        value: data.provider.id,
-        items: providerItems
-      }) }}
+      <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-      {% set helpText %}
-        <p class="govuk-body">
-          Something helpful goes here
-        </p>
-      {% endset %}
+        {{ govukRadios({
+          idPrefix: "provider",
+          name: "provider[id]",
+          fieldset: {
+            legend: {
+              text: "Training partner" if isAccredited else "Accredited provider",
+              classes: "govuk-fieldset__legend--m",
+              isPageHeading: false
+            }
+          },
+          errorMessage: errors | getErrorMessage("provider"),
+          value: data.provider.id,
+          items: providerItems
+        }) }}
 
-      {{ govukDetails({
-        summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
-        html: helpText
-      }) }}
+        {% set helpText %}
+          <p class="govuk-body">
+            Something helpful goes here
+          </p>
+        {% endset %}
 
-      {{ govukButton({
-        text: "Continue"
-      }) }}
+        {{ govukDetails({
+          summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
+          html: helpText
+        }) }}
 
-    </form>
+        {{ govukButton({
+          text: "Continue"
+        }) }}
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
-    </p>
+      </form>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+      </p>
+
+    {% endif %}
 
   </div>
 </div>
