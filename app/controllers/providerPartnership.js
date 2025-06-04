@@ -182,8 +182,8 @@ exports.newProviderPartnership_post = async (req, res) => {
 
   if (!req.session.data.search.length) {
     const error = {}
-    error.fieldName = 'provider-autocomplete'
-    error.href = '#provider-autocomplete'
+    error.fieldName = 'provider'
+    error.href = '#provider'
     if (isAccredited) {
       error.text = 'Enter training partner name, UKPRN or URN'
     } else {
