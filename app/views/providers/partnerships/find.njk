@@ -42,6 +42,13 @@
 
       <div class="govuk-form-group {{- ' govuk-form-group--error' if errors.length }}">
         {{ headingHtml | safe }}
+
+        <div class="js-enabled-only" hidden>
+          <p id="selected-provider-id-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{errors[0].text }}
+          </p>
+        </div>
+
         <div class="autocomplete__fallback">
           {{ govukInput({
             id: "provider",
