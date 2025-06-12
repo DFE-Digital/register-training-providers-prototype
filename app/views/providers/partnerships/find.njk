@@ -32,13 +32,23 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "_includes/page-heading.njk" %}
+    {% set headingHtml %}
+      {% include "_includes/page-heading.njk" %}
+    {% endset %}
 
     <form id="provider-search" action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
       {# Hidden field to store the provider ID #}
       <input type="hidden" id="selected-provider-id" name="provider[id]" value="{{ data.provider.id | default('') }}">
 
       <div class="govuk-form-group {{- ' govuk-form-group--error' if errors.length }}">
+        {{ headingHtml | safe }}
+
+        <div class="js-enabled-only" hidden>
+          <p id="selected-provider-id-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{errors[0].text }}
+          </p>
+        </div>
+
         <div class="autocomplete__fallback">
           {{ govukInput({
             id: "provider",
