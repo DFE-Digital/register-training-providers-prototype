@@ -85,7 +85,8 @@
               text: "UK provider reference number (UKPRN)"
             },
             value: {
-              text: partner.ukprn
+              text: partner.ukprn if partner.ukprn.length else "Not entered",
+              classes: "govuk-hint" if not partner.ukprn.length
             },
             actions: {
               items: [
@@ -114,7 +115,7 @@
                 }
               ]
             }
-          } if partner.type == "school",
+          },
           {
             key: {
               text: "Provider code"
