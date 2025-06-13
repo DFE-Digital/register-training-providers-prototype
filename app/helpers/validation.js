@@ -91,6 +91,19 @@ const isValidUKPRN = (ukprn) => {
   return valid
 }
 
+/**
+ * Validates an accredited provider ID based on its format and optional provider type.
+ *
+ * By default, the ID must be a 4-digit string starting with either `1` or `5`.
+ * If a `providerType` is specified:
+ * - `'hei'` (Higher Education Institution) must start with `1`
+ * - `'scitt'` (School-Centred Initial Teacher Training) must start with `5`
+ *
+ * @param {string} accreditedProviderId - The provider ID to validate.
+ * @param {string|null} [providerType=null] - Optional type of provider ('hei' or 'scitt').
+ *
+ * @returns {boolean} `true` if the ID is valid for the given type, otherwise `false`.
+ */
 const isValidAccreditedProviderId = (accreditedProviderId, providerType = null) => {
   // ^ matches the start of the string
   // [15] matches either the character 1 or 5
