@@ -586,6 +586,12 @@ exports.newProviderFindAddress_post = async (req, res) => {
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
     errors.push(error)
+  } else if (!isValidPostcode(find.postcode)) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a full UK postcode"
+    errors.push(error)
   }
 
   if (errors.length) {
