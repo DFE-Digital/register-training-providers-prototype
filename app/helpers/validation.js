@@ -104,7 +104,7 @@ const isValidUKPRN = (ukprn) => {
  *
  * @returns {boolean} `true` if the ID is valid for the given type, otherwise `false`.
  */
-const isValidAccreditedProviderId = (accreditedProviderId, providerType = null) => {
+const isValidAccreditedProviderNumber = (accreditedProviderNumber, providerType = null) => {
   // ^ matches the start of the string
   // [15] matches either the character 1 or 5
   // \d matches any digit (equivalent to [0-9])
@@ -122,7 +122,7 @@ const isValidAccreditedProviderId = (accreditedProviderId, providerType = null) 
 
   let valid = true
 
-  if (!accreditedProviderId || !regex.test(accreditedProviderId)) {
+  if (!accreditedProviderNumber || !regex.test(accreditedProviderNumber)) {
     valid = false
   }
 
@@ -157,7 +157,7 @@ const isValidTRN = (trn) => {
 }
 
 module.exports = {
-  isValidAccreditedProviderId,
+  isValidAccreditedProviderNumber,
   isValidEducationEmail,
   isValidEmail,
   isValidPostcode,
