@@ -2,6 +2,7 @@ const { Provider, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/date')
+const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider accreditations
@@ -119,6 +120,16 @@ exports.newProviderAccreditation_post = async (req, res) => {
     error.fieldName = "number"
     error.href = "#number"
     error.text = "Enter accredited provider number"
+    errors.push(error)
+  } else if (!isValidAccreditedProviderNumber(
+    accreditation.number,
+    provider.type
+  )) {
+    const error = {}
+    const format = provider.type === 'hei' ? '1234' : '5678'
+    error.fieldName = "number"
+    error.href = "#number"
+    error.text = `Enter accredited provider number in the correct format, like ${format}`
     errors.push(error)
   }
 
