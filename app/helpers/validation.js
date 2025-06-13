@@ -115,7 +115,7 @@ const isValidAccreditedProviderNumber = (accreditedProviderNumber, providerType 
   if (providerType === 'hei') {
     // if HEI, accredited provider IDs start with a 1
     regex = /^1\d{3}$/
-  } else if (providerType === 'scitt') {
+  } else {
     // if SCITT, accredited provider IDs start with a 5
     regex = /^5\d{3}$/
   }
