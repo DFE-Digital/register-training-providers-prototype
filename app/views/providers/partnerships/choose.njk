@@ -2,6 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
+{% set providerType = "training partner" if isAccredited else "accredited provider" %}
+
 {% if providerCount %}
   {% set title = (providerCount | numeral("0,0")) + " results found for ‘" + searchTerm + "’" %}
 {% else %}
@@ -40,11 +42,11 @@
       </p>
     {% elif providerCount > 15 %}
       <p class="govuk-body">
-        Showing the first 15 results. <a class="govuk-link" href="{{ actions.back }}">Try narrowing down your search</a> if the {{ "training partner" if isAccredited else "accredited provider" }} you’re looking for is not listed.
+        Showing the first 15 results. <a class="govuk-link" href="{{ actions.back }}">Try narrowing down your search</a> if the {{ providerType }} you’re looking for is not listed.
       </p>
     {% else %}
       <p class="govuk-body">
-        <a class="govuk-link" href="{{ actions.back }}">Change your search</a> if the {{ "training partner" if isAccredited else "accredited provider" }} you’re looking for is not listed.
+        <a class="govuk-link" href="{{ actions.back }}">Change your search</a> if the {{ providerType }} you’re looking for is not listed.
       </p>
     {% endif %}
 
@@ -69,12 +71,18 @@
 
         {% set helpText %}
           <p class="govuk-body">
-            Something helpful goes here
+            Make sure you’ve spelt the {{ providerType }} name correctly.
+          </p>
+          <p class="govuk-body">
+            If you still cannot find it, check that the {{ providerType }} is already listed in the register.
+          </p>
+          <p class="govuk-body">
+            You may need to add the {{ providerType }} first.
           </p>
         {% endset %}
 
         {{ govukDetails({
-          summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
+          summaryText: "I cannot find the " + providerType,
           html: helpText
         }) }}
 
