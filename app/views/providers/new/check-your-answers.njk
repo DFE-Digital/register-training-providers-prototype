@@ -301,28 +301,36 @@
         ]
       }) }}
 
-      <h3 class="govuk-heading-s">Geolocation</h3>
+      <h3 class="govuk-heading-s">Location</h3>
 
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: "Latitude"
+      {% if address.latitude and address.longitude %}
+        <p class="govuk-body">
+          We collect location data to support location-based searches. It’s generated automatically from the address you entered. {# If it’s missing or incorrect, update the address to regenerate it. #}
+        </p>
+        {{ govukSummaryList({
+          classes: "govuk-!-margin-bottom-7",
+          rows: [
+            {
+              key: {
+                text: "Latitude"
+              },
+              value: {
+                text: address.latitude
+              }
             },
-            value: {
-              text: address.latitude
+            {
+              key: {
+                text: "Longitude"
+              },
+              value: {
+                text: address.longitude
+              }
             }
-          },
-          {
-            key: {
-              text: "Longitude"
-            },
-            value: {
-              text: address.longitude
-            }
-          }
-        ]
-      }) }}
+          ]
+        }) }}
+      {% else %}
+        <p class="govuk-body govuk-!-margin-bottom-7">We could not generate location data for this address. We will try again later.</p>
+      {% endif %}
 
       {{ govukButton({
         text: "Save provider"
