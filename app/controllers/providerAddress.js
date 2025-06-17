@@ -303,9 +303,6 @@ exports.newProviderAddressCheck_get = async (req, res) => {
   const { find } = req.session.data
   let { address } = req.session.data
 
-  console.log(find);
-
-
   if (find.uprn) {
     address = await findByUPRN(
       uprn = find.uprn
