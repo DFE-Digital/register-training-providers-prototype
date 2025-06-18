@@ -26,106 +26,43 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
+      {% set addressHtml %}
+        {% if address.line1.length %}
+          {{ address.line1 }}<br>
+        {% endif %}
+        {% if address.line2.length %}
+          {{ address.line2 }}<br>
+        {% endif %}
+        {% if address.line3.length %}
+          {{ address.line3 }}<br>
+        {% endif %}
+        {% if address.town.length %}
+          {{ address.town }}<br>
+        {% endif %}
+        {% if address.county.length %}
+          {{ address.county }}<br>
+        {% endif %}
+        {% if address.postcode.length %}
+          {{ address.postcode }}<br>
+        {% endif %}
+      {% endset %}
+
       {{ govukSummaryList({
         rows: [
           {
             key: {
-              text: "Address line 1"
+              text: "Address"
             },
             value: {
-              text: address.line1
+              html: ('<p class="govuk-body">' + addressHtml + '</p>') if addressHtml | trim | length else "Not entered",
+              classes: "govuk-hint" if not addressHtml | trim | length
             },
             actions: {
               items: [
                 {
                   href: actions.change + "?referrer=check",
                   text: "Change",
-                  visuallyHiddenText: "address line 1"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Address line 2"
-            },
-            value: {
-              text: address.line2
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "?referrer=check",
-                  text: "Change",
-                  visuallyHiddenText: "address line 2"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Address line 3"
-            },
-            value: {
-              text: address.line3
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "?referrer=check",
-                  text: "Change",
-                  visuallyHiddenText: "address line 3"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Town or city"
-            },
-            value: {
-              text: address.town
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "?referrer=check",
-                  text: "Change",
-                  visuallyHiddenText: "town"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "County"
-            },
-            value: {
-              text: address.county
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "?referrer=check",
-                  text: "Change",
-                  visuallyHiddenText: "county"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Postcode"
-            },
-            value: {
-              text: address.postcode
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "?referrer=check",
-                  text: "Change",
-                  visuallyHiddenText: "postcode"
+                  visuallyHiddenText: "address"
                 }
               ]
             }
@@ -133,10 +70,14 @@
         ]
       }) }}
 
-      <h2 class="govuk-heading-m">Geolocation</h2>
+      <h2 class="govuk-heading-m">Location</h2>
 
       {% if address.latitude and address.longitude %}
+        <p class="govuk-body">
+          We collect location data to support location-based searches. It’s generated automatically from the address you entered. {# If it’s missing or incorrect, update the address to regenerate it. #}
+        </p>
         {{ govukSummaryList({
+          classes: "govuk-!-margin-bottom-7",
           rows: [
             {
               key: {
@@ -157,7 +98,7 @@
           ]
         }) }}
       {% else %}
-        <p class="govuk-body govuk-!-margin-bottom-7">The address could not be geocoded.</p>
+        <p class="govuk-body govuk-!-margin-bottom-7">We could not generate location data for this address. We will try again later.</p>
       {% endif %}
 
       {{ govukButton({

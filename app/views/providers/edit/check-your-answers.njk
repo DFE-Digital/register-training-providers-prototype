@@ -83,7 +83,8 @@
               text: "UK provider reference number (UKPRN)"
             },
             value: {
-              text: provider.ukprn
+              text: provider.ukprn if provider.ukprn.length else "Not entered",
+              classes: "govuk-hint" if not provider.ukprn.length
             },
             actions: {
               items: [
@@ -100,7 +101,8 @@
               text: "Unique reference number (URN)"
             },
             value: {
-              text: provider.urn
+              text: provider.urn if provider.urn.length else "Not entered",
+              classes: "govuk-hint" if not provider.urn.length
             },
             actions: {
               items: [
@@ -111,7 +113,7 @@
                 }
               ]
             }
-          } if provider.type == "school" and not isAccredited,
+          },
           {
             key: {
               text: "Provider code"

@@ -92,29 +92,27 @@
           Find UKPRNs on the <a href="https://ukrlp.co.uk/" class="govuk-link" target="_blank">UK register of learning providers (opens in new tab)</a>
         </p>
 
-        {% if provider.type == "school" and not (provider.isAccredited == "yes" or isAccredited) %}
-          {{ govukInput({
-            id: "urn",
-            name: "provider[urn]",
-            label: {
-              text: "Unique reference number (URN)",
-              classes: "govuk-label--s"
-            },
-            hint: {
-              text: "A unique 5 or 6 digit number used by the UK government to identify educational establishments in the United Kingdom"
-            },
-            errorMessage: errors | getErrorMessage("urn"),
-            value: provider.urn,
-            classes: "govuk-!-width-one-quarter",
-            formGroup: {
-              classes: "govuk-!-margin-bottom-4"
-            }
-          }) }}
+        {{ govukInput({
+          id: "urn",
+          name: "provider[urn]",
+          label: {
+            text: "Unique reference number (URN)" + (" (optional)" if provider.type in ["hei","other"]),
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "A unique 5 or 6 digit number used by the UK government to identify educational establishments in the United Kingdom"
+          },
+          errorMessage: errors | getErrorMessage("urn"),
+          value: provider.urn,
+          classes: "govuk-!-width-one-quarter",
+          formGroup: {
+            classes: "govuk-!-margin-bottom-4"
+          }
+        }) }}
 
-          <p class="govuk-body">
-            Find URNs on the <a href="https://get-information-schools.service.gov.uk/" class="govuk-link" target="_blank">Get information about schools (opens in new tab)</a>.
-          </p>
-        {% endif %}
+        <p class="govuk-body">
+          Find URNs on the <a href="https://get-information-schools.service.gov.uk/" class="govuk-link" target="_blank">Get information about schools (opens in new tab)</a>.
+        </p>
 
         {{ govukInput({
           id: "code",

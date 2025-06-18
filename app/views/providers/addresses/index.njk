@@ -45,6 +45,53 @@
 
     {% if addresses.length %}
       {% for address in addresses %}
+
+        {% set addressHtml %}
+          {% if address.line1.length %}
+            {{ address.line1 }}<br>
+          {% endif %}
+          {% if address.line2.length %}
+            {{ address.line2 }}<br>
+          {% endif %}
+          {% if address.line3.length %}
+            {{ address.line3 }}<br>
+          {% endif %}
+          {% if address.town.length %}
+            {{ address.town }}<br>
+          {% endif %}
+          {% if address.county.length %}
+            {{ address.county }}<br>
+          {% endif %}
+          {% if address.postcode.length %}
+            {{ address.postcode }}<br>
+          {% endif %}
+        {% endset %}
+
+        {% set locationHtml %}
+          {% if address.latitude and address.longitude %}
+            {{ govukSummaryList({
+              rows: [
+                {
+                  key: {
+                    text: "Latitude"
+                  },
+                  value: {
+                    text: address.latitude
+                  }
+                },
+                {
+                  key: {
+                    text: "Longitude"
+                  },
+                  value: {
+                    text: address.longitude
+                  }
+                }
+              ]
+            }) }}
+          {% endif %}
+        {% endset %}
+
         {{ govukSummaryList({
           card: {
             title: {
@@ -68,66 +115,20 @@
           rows: [
             {
               key: {
-                text: "Address line 1"
+                text: "Address"
               },
               value: {
-                text: address.line1
+                html: ('<p class="govuk-body">' + addressHtml + '</p>') if addressHtml | trim | length else "Not entered",
+                classes: "govuk-hint" if not addressHtml | trim | length
               }
             },
             {
               key: {
-                text: "Address line 2"
+                text: "Location"
               },
               value: {
-                text: address.line2
-              }
-            },
-            {
-              key: {
-                text: "Address line 3"
-              },
-              value: {
-                text: address.line3
-              }
-            },
-            {
-              key: {
-                text: "Town or city"
-              },
-              value: {
-                text: address.town
-              }
-            },
-            {
-              key: {
-                text: "County"
-              },
-              value: {
-                text: address.county
-              }
-            },
-            {
-              key: {
-                text: "Postcode"
-              },
-              value: {
-                text: address.postcode | upper
-              }
-            },
-            {
-              key: {
-                text: "Latitude"
-              },
-              value: {
-                text: address.latitude
-              }
-            },
-            {
-              key: {
-                text: "Longitude"
-              },
-              value: {
-                text: address.longitude
+                html: ('<p class="govuk-body">' + locationHtml + '</p>') if locationHtml | trim | length else "Not available",
+                classes: "govuk-hint" if not locationHtml | trim | length
               }
             }
           ]

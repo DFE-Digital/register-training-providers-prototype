@@ -1,19 +1,50 @@
+/**
+ * Parses an array of address objects into a format suitable for use with GOV.UK radio components.
+ *
+ * Each address object must have a `UPRN` (Unique Property Reference Number) and `ADDRESS` string.
+ * The returned array contains objects with `text`, `value`, and `id` properties expected by GOV.UK radios.
+ *
+ * @param {Array<{ UPRN: string, ADDRESS: string }>} addresses - The list of addresses to transform.
+ * @returns {Array<{ text: string, value: string, id: string }>} The transformed address data.
+ */
 const parseForGovukRadios = (addresses) => {
-  // addresses: [
-  //   { UPRN: "10091843700", ADDRESS: "DEPARTMENT OF EDUCATION, ..." },
-  //   { UPRN: "100023622080", ADDRESS: "THE ROYAL ANNIVERSARY TRUST, ..." },
-  //   ...
-  // ]
-
   return addresses.map(address => {
     return {
       text: address.ADDRESS, // The label shown in the radio button
       value: address.UPRN,   // The value that is submitted or processed
-      id: address.UPRN   // The value that is submitted or processed
+      id: address.UPRN       // Used for HTML input ID to associate label
     }
   })
 }
 
+/**
+ * Parses an OS Places address object into a structured address format with up to three address lines.
+ *
+ * The function prioritises sub-building and building names for line 1, followed by building number
+ * and street names, then locality information. Remaining data overflows into line 2 and line 3.
+ *
+ * @param {Object} address - The raw address object from OS Places.
+ * @param {string} [address.SUB_BUILDING_NAME] - Name of sub-building (e.g. Flat 2).
+ * @param {string} [address.BUILDING_NAME] - Name of building (e.g. The Oaks).
+ * @param {string} [address.BUILDING_NUMBER] - Street/building number (e.g. 123).
+ * @param {string} [address.DEPENDENT_THOROUGHFARE_NAME] - Dependent street name.
+ * @param {string} [address.THOROUGHFARE_NAME] - Main street name.
+ * @param {string} [address.DOUBLE_DEPENDENT_LOCALITY] - Smallest locality, e.g. hamlet or village.
+ * @param {string} [address.DEPENDENT_LOCALITY] - Secondary locality, e.g. suburb.
+ * @param {string} [address.POST_TOWN] - Post town (e.g. London).
+ * @param {string} [address.POSTCODE] - Postcode (e.g. SW1A 1AA).
+ * @param {string} [address.UPRN] - Unique Property Reference Number.
+ *
+ * @returns {{
+ *   uprn: string|null,
+ *   line1: string,
+ *   line2: string,
+ *   line3: string,
+ *   town: string,
+ *   county: string,
+ *   postcode: string
+ * }} A structured address object suitable for form display or storage.
+ */
 const parseOsPlacesData = (address) => {
   // Initialise lines as empty arrays
   let line1Arr = []
@@ -78,6 +109,21 @@ const parseOsPlacesData = (address) => {
   }
 }
 
+/**
+ * Converts a structured address object into a single-line comma-separated string.
+ *
+ * Filters out any empty or whitespace-only values from the address components before joining.
+ *
+ * @param {Object} [data={}] - The address object.
+ * @param {string} [data.line1] - First line of the address.
+ * @param {string} [data.line2] - Second line of the address.
+ * @param {string} [data.line3] - Third line of the address.
+ * @param {string} [data.town] - Town or city.
+ * @param {string} [data.county] - County or administrative region.
+ * @param {string} [data.postcode] - Postcode.
+ *
+ * @returns {string} A comma-separated address string containing only the non-empty components.
+ */
 const parseAddressAsString = (data = {}) => {
   const { line1, line2, line3, town, county, postcode } = data
 

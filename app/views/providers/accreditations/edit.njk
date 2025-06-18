@@ -50,11 +50,11 @@
             classes: "govuk-label--s"
           },
           hint: {
-            text: "A unique 4 digit code assigned by DfE to accredited providers"
+            text: "A unique 4 digit code starting with " + ("‘1’" if provider.type == "hei" else "‘5’") + " assigned by DfE to accredited providers, for example " + ("1234" if provider.type == "hei" else "5678")
           },
           errorMessage: errors | getErrorMessage("number"),
           value: accreditation.number,
-          classes: "govuk-!-width-one-quarter"
+          classes: "govuk-input--width-4"
         }) }}
 
         {{ govukDateInput({

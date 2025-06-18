@@ -2,11 +2,9 @@
 
 {% set primaryNavId = "providers" %}
 
-{% if isAccredited %}
-  {% set title = "Enter training partner name, UKPRN or URN" %}
-{% else %}
-  {% set title = "Enter accredited provider name, UKPRN or URN" %}
-{% endif %}
+{% set providerType = "training partner" if isAccredited else "accredited provider" %}
+
+{% set title = "Enter " + providerType + " name, UKPRN or URN" %}
 
 {% if currentPartnership %}
   {% set caption = provider.operatingName %}
@@ -66,13 +64,19 @@
 
       {% set helpText %}
         <p class="govuk-body">
-          Something helpful goes here
+          Make sure you’ve spelt the {{ providerType }} name correctly.
+        </p>
+        <p class="govuk-body">
+          If you still cannot find it, check that the {{ providerType }} is already listed in the register.
+        </p>
+        <p class="govuk-body">
+          You may need to add the {{ providerType }} first.
         </p>
       {% endset %}
 
       <div class="js-enabled-only" hidden>
         {{ govukDetails({
-          summaryText: "I cannot find the " + ("training partner" if isAccredited else "accredited provider"),
+          summaryText: "I cannot find the " + providerType,
           html: helpText
         }) }}
       </div>

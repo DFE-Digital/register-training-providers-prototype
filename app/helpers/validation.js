@@ -26,13 +26,24 @@ const isValidURL = (url) => {
   return valid
 }
 
+/**
+ * Validates a UK postcode against the standard full postcode format.
+ *
+ * This function checks for a full UK postcode, including special cases
+ * like 'GIR 0AA'. It allows for an optional space between the outward and
+ * inward parts of the postcode, and ignores case and leading/trailing whitespace.
+ *
+ * @param {string} postcode - The postcode to validate.
+ * @returns {boolean} Returns `true` if the postcode is a valid full UK postcode, otherwise `false`.
+ *
+ * @example
+ * isValidPostcode('EC1A 1BB') // true
+ * isValidPostcode('W1A0AX')   // true
+ * isValidPostcode('SW1')      // false
+ */
 const isValidPostcode = (postcode) => {
-  const regex = /^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$/
-  let valid = true
-  if (!postcode || !regex.test(postcode.toUpperCase())) {
-    valid = false
-  }
-  return valid
+  const regex = /^((GIR 0AA)|((([A-Z]{1,2}[0-9][0-9A-Z]?)|([A-Z]{1,2}[0-9]{1,2})) ?[0-9][A-Z]{2}))$/i
+  return !!postcode && regex.test(postcode.trim().toUpperCase())
 }
 
 const isValidTelephone = (telephone) => {
@@ -80,7 +91,20 @@ const isValidUKPRN = (ukprn) => {
   return valid
 }
 
-const isValidAccreditedProviderId = (accreditedProviderId, providerType = null) => {
+/**
+ * Validates an accredited provider ID based on its format and optional provider type.
+ *
+ * By default, the ID must be a 4-digit string starting with either `1` or `5`.
+ * If a `providerType` is specified:
+ * - `'hei'` (Higher Education Institution) must start with `1`
+ * - `'scitt'` (School-Centred Initial Teacher Training) must start with `5`
+ *
+ * @param {string} accreditedProviderId - The provider ID to validate.
+ * @param {string|null} [providerType=null] - Optional type of provider ('hei' or 'scitt').
+ *
+ * @returns {boolean} `true` if the ID is valid for the given type, otherwise `false`.
+ */
+const isValidAccreditedProviderNumber = (accreditedProviderNumber, providerType = null) => {
   // ^ matches the start of the string
   // [15] matches either the character 1 or 5
   // \d matches any digit (equivalent to [0-9])
@@ -91,14 +115,14 @@ const isValidAccreditedProviderId = (accreditedProviderId, providerType = null) 
   if (providerType === 'hei') {
     // if HEI, accredited provider IDs start with a 1
     regex = /^1\d{3}$/
-  } else if (providerType === 'scitt') {
+  } else {
     // if SCITT, accredited provider IDs start with a 5
     regex = /^5\d{3}$/
   }
 
   let valid = true
 
-  if (!accreditedProviderId || !regex.test(accreditedProviderId)) {
+  if (!accreditedProviderNumber || !regex.test(accreditedProviderNumber)) {
     valid = false
   }
 
@@ -133,7 +157,7 @@ const isValidTRN = (trn) => {
 }
 
 module.exports = {
-  isValidAccreditedProviderId,
+  isValidAccreditedProviderNumber,
   isValidEducationEmail,
   isValidEmail,
   isValidPostcode,

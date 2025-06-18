@@ -118,6 +118,12 @@ exports.newFindProviderAddress_post = async (req, res) => {
     error.href = "#address-postcode"
     error.text = "Enter postcode"
     errors.push(error)
+  } else if (!isValidPostcode(find.postcode)) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a full UK postcode"
+    errors.push(error)
   }
 
   if (errors.length) {
@@ -296,9 +302,6 @@ exports.newProviderAddressCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(providerId)
   const { find } = req.session.data
   let { address } = req.session.data
-
-  console.log(find);
-
 
   if (find.uprn) {
     address = await findByUPRN(

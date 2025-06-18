@@ -3,7 +3,7 @@ const { isAccreditedProvider } = require('../helpers/accreditation')
 const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { nullIfEmpty } = require('../helpers/string')
-const { isValidPostcode } = require('../helpers/validation')
+const { isValidPostcode, isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
 const { geocodeAddress } = require('../services/googleMaps')
@@ -527,6 +527,16 @@ exports.newProviderAccreditation_post = async (req, res) => {
     error.href = "#number"
     error.text = "Enter accredited provider number"
     errors.push(error)
+  } else if (!isValidAccreditedProviderNumber(
+    provider.accreditation.number,
+    provider.type
+  )) {
+    const error = {}
+    const format = provider.type === 'hei' ? '1234' : '5678'
+    error.fieldName = "number"
+    error.href = "#number"
+    error.text = `Enter accredited provider number in the correct format, like ${format}`
+    errors.push(error)
   }
 
   if (!(provider.accreditation.startsOn?.day.length
@@ -585,6 +595,12 @@ exports.newProviderFindAddress_post = async (req, res) => {
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
     error.text = "Enter a postcode"
+    errors.push(error)
+  } else if (!isValidPostcode(find.postcode)) {
+    const error = {}
+    error.fieldName = "address-postcode"
+    error.href = "#address-postcode"
+    error.text = "Enter a full UK postcode"
     errors.push(error)
   }
 
