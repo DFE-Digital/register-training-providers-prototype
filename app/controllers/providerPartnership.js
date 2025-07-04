@@ -221,7 +221,7 @@ exports.newProviderPartnership_post = async (req, res) => {
       res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
     } else {
       if (selectedProviderId) {
-        res.redirect(`/providers/${providerId}/partnerships/new/check`)
+        res.redirect(`/providers/${providerId}/partnerships/new/accreditations`)
       } else {
         res.redirect(`/providers/${providerId}/partnerships/new/choose`)
       }
@@ -320,6 +320,53 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
         back: `/providers/${providerId}/partnerships/new`,
         cancel: `/providers/${providerId}/partnerships`,
         save: `/providers/${providerId}/partnerships/new/choose`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${providerId}/partnerships/new/accreditations`)
+  }
+}
+
+exports.newProviderPartnershipAccreditations_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const partner = await Provider.findByPk(req.session.data.provider.id)
+
+  // TODO
+  const accreditationItems = []
+
+  res.render('providers/partnerships/accreditations', {
+    provider,
+    partner,
+    accreditationItems,
+    actions: {
+      back: `/providers/${providerId}/partnerships/new`,
+      cancel: `/providers/${providerId}/partnerships`,
+      save: `/providers/${providerId}/partnerships/new/accreditations`
+    }
+  })
+}
+
+exports.newProviderPartnershipAccreditations_post = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+  const partner = await Provider.findByPk(req.session.data.provider.id)
+
+  // TODO
+  const accreditationItems = []
+
+  const errors = []
+
+  if (errors.length > 0) {
+    res.render('providers/partnerships/accreditations', {
+      provider,
+      partner,
+      accreditationItems,
+      errors,
+      actions: {
+        back: `/providers/${providerId}/partnerships/new`,
+        cancel: `/providers/${providerId}/partnerships`,
+        save: `/providers/${providerId}/partnerships/new/accreditations`
       }
     })
   } else {
