@@ -3,19 +3,19 @@
 {% set primaryNavId = "providers" %}
 {% set secondaryNavId = "details" %}
 
-{# TODO:
-if provider isAccredited - show its list of accrediations
-else show the partner's list of accreditations
 
-change page title accordingly
- #}
-
-{% set title = "Accreditations" %}
+{% if isAccredited %}
+  {% set providerName = accreditedProvider.operatingName %}
+  {% set title = "Accreditations" %}
+{% else %}
+  {% set providerName = trainingProvider.operatingName %}
+  {% set title = "Accreditations for " + accreditedProvider.operatingName %}
+{% endif %}
 
 {% if currentPartnership %}
-  {% set caption = provider.operatingName %}
+  {% set caption = providerName %}
 {% else %}
-  {% set caption = "Add partnership - " + provider.operatingName %}
+  {% set caption = "Add partnership - " + providerName %}
 {% endif %}
 
 {% block pageTitle %}
@@ -37,26 +37,26 @@ change page title accordingly
   <div class="govuk-grid-column-two-thirds">
 
     {% set headingHtml %}
-      {% include "_includes/page-heading.njk" %}
+      {% include "_includes/page-heading-legend.njk" %}
     {% endset %}
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
     {{ govukCheckboxes({
-      idPrefix: "accreditation",
-      name: "provider[accreditations]",
+      idPrefix: "accreditations",
+      name: "accreditations[]",
       fieldset: {
         legend: {
           html: headingHtml,
           isPageHeading: true,
-          classes: "govuk-fieldset__legend--m"
+          classes: "govuk-fieldset__legend--l"
         }
       },
       hint: {
         text: "Select all that apply"
       },
-      errorMessage: errors | getErrorMessage("accreditation"),
-      values: "ITEM",
+      errorMessage: errors | getErrorMessage("accreditations"),
+      values: selectedAccreditations,
       items: accreditationItems
     }) }}
 
