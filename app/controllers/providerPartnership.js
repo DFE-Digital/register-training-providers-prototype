@@ -38,6 +38,7 @@ exports.providerPartnershipsList = async (req, res) => {
   delete req.session.data.partnership
   delete req.session.data.search
   delete req.session.data.provider
+  delete req.session.data.accreditations
 
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 25
@@ -110,8 +111,9 @@ exports.providerPartnershipsList = async (req, res) => {
 
 exports.providerPartnershipDetails = async (req, res) => {
   // clear session partnership data
-  delete req.session.data.provider
   delete req.session.data.search
+  delete req.session.data.provider
+  delete req.session.data.accreditations
 
   // get the provider and partnership IDs from the request
   const { providerId, partnershipId } = req.params
@@ -432,11 +434,17 @@ exports.newProviderPartnershipAccreditations_post = async (req, res) => {
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
-  // get the provider and partnership IDs from the request
   const { providerId } = req.params
-  const provider = await Provider.findByPk(providerId)
-  const partner = await Provider.findByPk(req.session.data.provider.id)
-  const isAccredited = await isAccreditedProvider({ providerId: partner.id })
+  const isAccredited = await isAccreditedProvider({ providerId })
+
+  const selectedProviderId = req.session.data?.provider?.id
+
+  const providers = isAccredited
+    ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
+    : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+
+  const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
+  const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
   // get the selected accreditations
   const selectedAccreditations = await getAccreditationDetails(req.session.data?.accreditations)
@@ -444,8 +452,8 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
   const accreditationItems = formatAccreditationItems(selectedAccreditations)
 
   res.render('providers/partnerships/check-your-answers', {
-    provider,
-    partner,
+    accreditedProvider,
+    trainingProvider,
     isAccredited,
     accreditationItems,
     actions: {
