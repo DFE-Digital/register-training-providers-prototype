@@ -9,8 +9,8 @@ module.exports = (sequelize) => {
       })
 
       ProviderAccreditationPartnershipRevision.belongsTo(models.Provider, {
-        foreignKey: 'providerId',
-        as: 'provider'
+        foreignKey: 'partnerId',
+        as: 'partner'
       })
 
       ProviderAccreditationPartnershipRevision.belongsTo(models.User, {
@@ -37,10 +37,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'provider_accreditation_id'
       },
-      providerId: {
+      partnerId: {
         type: DataTypes.UUID,
         allowNull: false,
-        field: 'provider_id'
+        field: 'partner_id'
       },
       createdAt: {
         type: DataTypes.DATE,
