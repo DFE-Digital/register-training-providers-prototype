@@ -4,10 +4,16 @@
 
 {% set title = "Check your answers" %}
 
-{% if currentPartnership %}
-  {% set caption = provider.operatingName %}
+{% if isAccredited %}
+  {% set providerName = accreditedProvider.operatingName %}
 {% else %}
-  {% set caption = "Add partnership - " + provider.operatingName %}
+  {% set providerName = trainingProvider.operatingName %}
+{% endif %}
+
+{% if currentPartnership %}
+  {% set caption = providerName %}
+{% else %}
+  {% set caption = "Add partnership - " + providerName %}
 {% endif %}
 
 {% block beforeContent %}
@@ -39,20 +45,37 @@
         rows: [
           {
             key: {
-              text: "Provider"
+              text: "Accredited provider"
             },
             value: {
-              text: partner.operatingName
+              text: accreditedProvider.operatingName
             },
             actions: {
               items: [
                 {
                   href: actions.change + "?referrer=check",
                   text: "Change",
-                  visuallyHiddenText: "partner provider"
+                  visuallyHiddenText: "accredited provider"
                 }
               ]
-            }
+            } if not isAccredited
+          },
+          {
+            key: {
+              text: "Training partner"
+            },
+            value: {
+              text: trainingProvider.operatingName
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "training partner"
+                }
+              ]
+            } if isAccredited
           },
           {
             key: {
