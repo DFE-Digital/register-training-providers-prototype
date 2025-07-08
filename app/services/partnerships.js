@@ -7,9 +7,9 @@ const savePartnerships = async ({ accreditationIds, partnerId, userId }) => {
     providerAccreditationId: accreditationId,
     partnerId,
     createdAt: timestamp,
-    createdBy: userId,
+    createdById: userId,
     updatedAt: timestamp,
-    updatedBy: userId
+    updatedById: userId
   }))
 
   return ProviderAccreditationPartnership.bulkCreate(dataToCreate)
