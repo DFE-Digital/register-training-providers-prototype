@@ -4,8 +4,8 @@ module.exports = (sequelize) => {
   class ProviderAccreditationPartnership extends Model {
     static associate(models) {
       ProviderAccreditationPartnership.belongsTo(models.Provider, {
-        foreignKey: 'providerId',
-        as: 'provider'
+        foreignKey: 'partnerId',
+        as: 'partner'
       })
 
       ProviderAccreditationPartnership.belongsTo(models.ProviderAccreditation, {
@@ -37,10 +37,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'provider_accreditation_id'
       },
-      providerId: {
+      partnerId: {
         type: DataTypes.UUID,
         allowNull: false,
-        field: 'provider_id'
+        field: 'partner_id'
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -79,18 +79,18 @@ module.exports = (sequelize) => {
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
+  // const createRevisionHook = require('../hooks/revisionHook')
 
-  ProviderAccreditationPartnership.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'ProviderAccreditationPartnershipRevision', modelKey: 'providerAccreditationPartnership' })(instance, {
-      ...options,
-      hookName: 'afterCreate'
-    })
-  )
+  // ProviderAccreditationPartnership.addHook('afterCreate', (instance, options) =>
+  //   createRevisionHook({ revisionModelName: 'ProviderAccreditationPartnershipRevision', modelKey: 'providerAccreditationPartnership' })(instance, {
+  //     ...options,
+  //     hookName: 'afterCreate'
+  //   })
+  // )
 
-  ProviderAccreditationPartnership.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'ProviderAccreditationPartnershipRevision', modelKey: 'providerAccreditationPartnership' })
-  )
+  // ProviderAccreditationPartnership.addHook('afterUpdate',
+  //   createRevisionHook({ revisionModelName: 'ProviderAccreditationPartnershipRevision', modelKey: 'providerAccreditationPartnership' })
+  // )
 
   return ProviderAccreditationPartnership
 }

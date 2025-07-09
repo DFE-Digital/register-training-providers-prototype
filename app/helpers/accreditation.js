@@ -36,6 +36,28 @@ const isAccreditedProvider = async (params) => {
   return isAccredited
 }
 
+/**
+ * Get details for a list of accreditation IDs.
+ * @param {Array<string>} accreditationIds - Array of accreditation UUIDs
+ * @returns {Promise<Array<Object>>} Array of ProviderAccreditation objects
+ */
+const getAccreditationDetails = async (accreditationIds) => {
+  if (!Array.isArray(accreditationIds) || accreditationIds.length === 0) {
+    return []
+  }
+
+  const accreditations = await ProviderAccreditation.findAll({
+    where: {
+      id: {
+        [Op.in]: accreditationIds
+      }
+    }
+  })
+
+  return accreditations.map(accreditation => accreditation.toJSON())
+}
+
 module.exports = {
-  isAccreditedProvider
+  isAccreditedProvider,
+  getAccreditationDetails
 }

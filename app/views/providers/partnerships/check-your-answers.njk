@@ -4,10 +4,16 @@
 
 {% set title = "Check your answers" %}
 
-{% if currentPartnership %}
-  {% set caption = provider.operatingName %}
+{% if isAccredited %}
+  {% set providerName = accreditedProvider.operatingName %}
 {% else %}
-  {% set caption = "Add partnership - " + provider.operatingName %}
+  {% set providerName = trainingProvider.operatingName %}
+{% endif %}
+
+{% if currentPartnership %}
+  {% set caption = providerName %}
+{% else %}
+  {% set caption = "Add partnership - " + providerName %}
 {% endif %}
 
 {% block beforeContent %}
@@ -25,72 +31,67 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
+      {% set accreditations %}
+        <ul class="govuk-list">
+          {% for accreditation in accreditationItems %}
+            <li>
+              {{ accreditation.text }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endset %}
+
       {{ govukSummaryList({
-        card: {
-          title: {
-            text: partner.operatingName
-          },
-          actions: {
-            items: [
-              {
-                href: actions.change,
-                text: "Change",
-                visuallyHiddenText: "partnership"
-              }
-            ]
-          }
-        },
         rows: [
           {
             key: {
-              text: "Provider type"
+              text: "Accredited provider"
             },
             value: {
-              text: partner.type | getProviderTypeLabel(isAccredited) if partner.type.length else "Not entered",
-              classes: "govuk-hint" if not partner.type.length
-            }
+              text: accreditedProvider.operatingName
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "accredited provider"
+                }
+              ]
+            } if not isAccredited
           },
           {
             key: {
-              text: "Operating name"
+              text: "Training partner"
             },
             value: {
-              text: partner.operatingName
-            }
+              text: trainingProvider.operatingName
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "training partner"
+                }
+              ]
+            } if isAccredited
           },
           {
             key: {
-              text: "Legal name"
+              text: "Accreditations"
             },
             value: {
-              text: partner.legalName if partner.legalName.length else "Not entered",
-              classes: "govuk-hint" if not partner.legalName.length
-            }
-          },
-          {
-            key: {
-              text: "UK provider reference number (UKPRN)"
+              html: accreditations
             },
-            value: {
-              text: partner.ukprn if partner.ukprn.length else "Not entered",
-              classes: "govuk-hint" if not partner.ukprn.length
-            }
-          },
-          {
-            key: {
-              text: "Unique reference number (URN)"
-            },
-            value: {
-              text: partner.urn if partner.urn.length else "Not entered",
-              classes: "govuk-hint" if not partner.urn.length
-            }
-          },
-          {
-            key: {
-              text: "Provider code"
-            },
-            value: {
-              text: partner.code
+            actions: {
+              items: [
+                {
+                  href: actions.change + "/accreditations?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "accreditations"
+                }
+              ]
             }
           }
         ]

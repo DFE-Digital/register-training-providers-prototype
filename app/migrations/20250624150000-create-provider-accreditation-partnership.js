@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
-      provider_id: {
+      partner_id: {
         type: Sequelize.UUID,
         allowNull: false
       },
