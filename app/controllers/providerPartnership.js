@@ -1,9 +1,11 @@
-const { Provider, ProviderPartnership, ProviderAccreditation } = require('../models')
+const { Provider, ProviderPartnership, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
 const { savePartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
 const { govukDate } = require('../helpers/date')
 const { hasPartnership, getEligiblePartnerProviders } = require('../helpers/partnership')
+
+const { Op } = require('sequelize')
 
 const formatProviderItems = (providers) => {
   return providers
@@ -34,7 +36,6 @@ const formatAccreditationItems = (accreditations) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.providerPartnershipsList = async (req, res) => {
-  // Clear session data
   delete req.session.data.partnership
   delete req.session.data.search
   delete req.session.data.provider
@@ -44,63 +45,119 @@ exports.providerPartnershipsList = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 25
   const offset = (page - 1) * limit
 
-  // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
-
-  // get the current provider
   const provider = await Provider.findByPk(providerId)
+  const today = new Date()
 
-  // calculate if the provider is accredited
-  const isAccredited = await isAccreditedProvider({ providerId })
+  // --- Fetch all partnerships involving this provider ---
+  const [asAccredited, asPartner] = await Promise.all([
+    // Provider is accredited: find partnerships via their accreditations
+    ProviderAccreditationPartnership.findAll({
+      where: { deletedAt: null },
+      include: [
+        {
+          model: ProviderAccreditation,
+          as: 'providerAccreditation',
+          where: {
+            providerId,
+            deletedAt: null,
+            startsOn: { [Op.lte]: today },
+            [Op.or]: [
+              { endsOn: null },
+              { endsOn: { [Op.gte]: today } }
+            ]
+          },
+          include: [
+            {
+              model: Provider,
+              as: 'provider',
+              attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+            }
+          ]
+        },
+        {
+          model: Provider,
+          as: 'partner',
+          attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+        }
+      ]
+    }),
 
-  // Get the total number of partnerships for pagination metadata
-  let totalCount = 0
-
-  if (isAccredited) {
-    totalCount = await ProviderPartnership.count({
-      where: { accreditedProviderId: providerId, deletedAt: null }
-    })
-
-    // fetch the trainingPartnerships sorted
-    provider.partnerships = await provider.getTrainingPartnerships({
-      through: {
-        where: { deletedAt: null },
+    // Provider is a training partner: find partnerships where they are listed as partner
+    ProviderAccreditationPartnership.findAll({
+      where: {
+        deletedAt: null,
+        partnerId: providerId
       },
-      order: [['operatingName', 'ASC']],
-      limit,
-      offset
+      include: [
+        {
+          model: ProviderAccreditation,
+          as: 'providerAccreditation',
+          where: {
+            deletedAt: null,
+            startsOn: { [Op.lte]: today },
+            [Op.or]: [
+              { endsOn: null },
+              { endsOn: { [Op.gte]: today } }
+            ]
+          },
+          include: [
+            {
+              model: Provider,
+              as: 'provider',
+              attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+            }
+          ]
+        },
+        {
+          model: Provider,
+          as: 'partner',
+          attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+        }
+      ]
     })
-  } else {
-    totalCount = await ProviderPartnership.count({
-      where: { trainingProviderId: providerId, deletedAt: null }
-    })
+  ])
 
-    // fetch the accreditedPartnerships sorted
-    provider.partnerships = await provider.getAccreditedPartnerships({
-      through: {
-        where: { deletedAt: null },
-      },
-      order: [['operatingName', 'ASC']],
-      limit,
-      offset
-    })
-  }
+  // --- Normalize data into unified list ---
+  const combined = [...asAccredited, ...asPartner]
 
-  // Create your Pagination object
-  // using the chunk + the overall total count
-  const pagination = new Pagination(provider.partnerships, totalCount, page, limit)
+  const partnerships = combined.map(partnership => {
+    const isAccreditedSide = partnership.providerAccreditation.providerId === provider.id
+
+    return {
+      id: partnership.id,
+      accreditedProvider: partnership.providerAccreditation.provider,
+      trainingPartner: partnership.partner,
+      accreditations: [{
+        id: partnership.providerAccreditation.id,
+        number: partnership.providerAccreditation.number,
+        startsOn: partnership.providerAccreditation.startsOn,
+        endsOn: partnership.providerAccreditation.endsOn
+      }],
+      isAccreditedSide,
+      createdAt: partnership.createdAt
+    }
+  })
+
+  // Sort by partner operating name
+  partnerships.sort((a, b) => {
+    const aName = a.isAccreditedSide ? a.trainingPartner.operatingName : a.accreditedProvider.operatingName
+    const bName = b.isAccreditedSide ? b.trainingPartner.operatingName : b.accreditedProvider.operatingName
+    return aName.localeCompare(bName)
+  })
+
+  const totalCount = partnerships.length
+  const paginatedData = partnerships.slice(offset, offset + limit)
+  const pagination = new Pagination(paginatedData, totalCount, page, limit)
 
   res.render('providers/partnerships/index', {
     provider,
-    isAccredited,
-    // Partnerships for *this* page
     partnerships: pagination.getData(),
-    // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
       new: `/providers/${providerId}/partnerships/new`,
       delete: `/providers/${providerId}/partnerships`,
-      view: `/providers`
+      change: `/providers/${providerId}/partnerships/edit`
     }
   })
 }
