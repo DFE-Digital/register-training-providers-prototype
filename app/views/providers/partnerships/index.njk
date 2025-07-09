@@ -45,44 +45,55 @@
 
     {% if partnerships.length %}
 
-      {% for partner in partnerships %}
+      {% for item in partnerships %}
 
-        {% set cardTitleHtml %}
-          {{ partner.operatingName }}
-          {% if partner.deletedAt %}
-            {{ govukTag({
-              text: "Deleted",
-              classes: "govuk-tag--red govuk-!-margin-left-1"
-            }) }}
-          {% elif partner.archivedAt %}
-            {{ govukTag({
-              text: "Archived",
-              classes: "govuk-!-margin-left-1"
-            }) }}
+        {% set accreditedProviderHtml %}
+          {% if not item.isAccreditedSide %}
+            <a href="/providers/{{ item.accreditedProvider.id }}">
+              {{ item.accreditedProvider.operatingName }}
+            </a>
+          {% else %}
+            {{ item.accreditedProvider.operatingName }}
           {% endif %}
         {% endset %}
 
-        {% set operatingNameHtml %}
-          {% if partner.deletedAt %}
-            {{ partner.operatingName }}
-          {% else %}
-            <a href="{{ actions.view }}/{{ partner.id }}" class="govuk-link">
-              {{ partner.operatingName }}
+        {% set trainingPartnerHtml %}
+          {% if item.isAccreditedSide %}
+            <a href="/providers/{{ item.trainingPartner.id }}">
+              {{ item.trainingPartner.operatingName }}
             </a>
+          {% else %}
+            {{ item.trainingPartner.operatingName }}
           {% endif %}
+        {% endset %}
+
+        {% set accreditationsHtml %}
+          <ul class="govuk-list">
+            {% for acc in item.accreditations %}
+              <li>
+                {{ acc.number }} ({{ acc.startsOn | govukDate }}
+                {% if acc.endsOn %} to {{ acc.endsOn | govukDate }}{% else %} onward{% endif %})
+              </li>
+            {% endfor %}
+          </ul>
         {% endset %}
 
         {{ govukSummaryList({
           card: {
             title: {
-              html: cardTitleHtml
+              text: item.trainingPartner.operatingName if item.isAccreditedSide else item.accreditedProvider.operatingName
             },
             actions: {
               items: [
                 {
-                  href: actions.delete + "/" + partner.ProviderPartnership.id + "/delete",
+                  href: actions.change + "/" + item.id,
+                  text: "Change",
+                  visuallyHiddenText: "partner " + loop.index
+                },
+                {
+                  href: actions.delete + "/" + item.id + "/delete",
                   text: "Delete",
-                  visuallyHiddenText: "address " + loop.index
+                  visuallyHiddenText: "partner " + loop.index
                 }
               ]
             } if not provider.archivedAt
@@ -90,61 +101,26 @@
           rows: [
             {
               key: {
-                text: "Provider type"
+                text: "Accredited provider"
               },
               value: {
-                text: partner.type | getProviderTypeLabel if partner.type.length else "Not entered",
-                classes: "govuk-hint" if not partner.type.length
+                html: accreditedProviderHtml
               }
             },
             {
               key: {
-                text: "Accreditation type"
+                text: "Training partner"
               },
               value: {
-                text: "Accredited" if partner.isAccredited else "Not accredited"
-              }
-            } if 1==0,
-            {
-              key: {
-                text: "Operating name"
-              },
-              value: {
-                html: operatingNameHtml
+                html: trainingPartnerHtml
               }
             },
             {
               key: {
-                text: "Legal name"
+                text: "Accreditations"
               },
               value: {
-                text: partner.legalName if partner.legalName.length else "Not entered",
-                classes: "govuk-hint" if not partner.legalName.length
-              }
-            },
-            {
-              key: {
-                text: "UK provider reference number (UKPRN)"
-              },
-              value: {
-                text: partner.ukprn
-              }
-            },
-            {
-              key: {
-                text: "Unique reference number (URN)"
-              },
-              value: {
-                text: partner.urn if partner.urn.length else "Not entered",
-                classes: "govuk-hint" if not partner.urn.length
-              }
-            },
-            {
-              key: {
-                text: "Provider code"
-              },
-              value: {
-                text: partner.code
+                html: accreditationsHtml
               }
             }
           ]
