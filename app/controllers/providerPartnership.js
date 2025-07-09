@@ -554,28 +554,53 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteProviderPartnership_get = async (req, res) => {
-  // get the provider and partnership IDs from the request
   const { providerId, partnershipId } = req.params
+
   const provider = await Provider.findByPk(providerId)
-  const partnership = await ProviderPartnership.findByPk(partnershipId, {
+
+  const partnership = await ProviderAccreditationPartnership.findByPk(partnershipId, {
     include: [
       {
-        model: Provider,
-        as: 'trainingProvider'
+        model: ProviderAccreditation,
+        as: 'providerAccreditation',
+        include: [
+          {
+            model: Provider,
+            as: 'provider'
+          }
+        ]
       },
       {
         model: Provider,
-        as: 'accreditedProvider'
+        as: 'partner'
       }
     ]
   })
 
-  const isAccredited = await isAccreditedProvider({ providerId })
+  if (!provider || !partnership) {
+    return res.status(404).render('errors/404')
+  }
+
+  // Determine relationship direction
+  const isAccredited = partnership.providerAccreditation.provider.id === provider.id
+
+  const accreditedProvider = partnership.providerAccreditation.provider
+  const trainingProvider = partnership.partner
+
+  const titlePartnerName = isAccredited
+    ? trainingProvider.operatingName
+    : accreditedProvider.operatingName
+
+  const captionProviderName = isAccredited
+    ? accreditedProvider.operatingName
+    : trainingProvider.operatingName
 
   res.render('providers/partnerships/delete', {
     provider,
     partnership,
     isAccredited,
+    titlePartnerName,
+    captionProviderName,
     actions: {
       back: `/providers/${providerId}/partnerships`,
       cancel: `/providers/${providerId}/partnerships`,
@@ -587,7 +612,9 @@ exports.deleteProviderPartnership_get = async (req, res) => {
 exports.deleteProviderPartnership_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
   const { user } = req.session.passport
-  const partnership = await ProviderPartnership.findByPk(partnershipId)
+
+  const partnership = await ProviderAccreditationPartnership.findByPk(partnershipId)
+
   await partnership.update({
     deletedAt: new Date(),
     deletedById: user.id,

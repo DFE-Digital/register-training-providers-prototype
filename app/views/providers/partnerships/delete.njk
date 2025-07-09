@@ -2,14 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% if isAccredited %}
-  {% set partner = partnership.trainingProvider %}
-{% else %}
-  {% set partner = partnership.accreditedProvider %}
-{% endif %}
-
-{% set title = "Confirm you want to delete the partnership with " + partner.operatingName %}
-{% set caption = "Delete partnership - " + provider.operatingName %}
+{% set title = "Confirm you want to delete the partnership with " + titlePartnerName %}
+{% set caption = "Delete partnership - " + captionProviderName %}
 
 {% block beforeContent %}
 {{ govukBackLink({
