@@ -157,7 +157,7 @@ exports.providerPartnershipsList = async (req, res) => {
     actions: {
       new: `/providers/${providerId}/partnerships/new`,
       delete: `/providers/${providerId}/partnerships`,
-      change: `/providers/${providerId}/partnerships/edit`
+      change: `/providers/${providerId}/partnerships`
     }
   })
 }
@@ -546,6 +546,161 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   delete req.session.data.accreditations
 
   req.flash('success', 'Partnership added')
+  res.redirect(`/providers/${providerId}/partnerships`)
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Edit provider partnership
+/// ------------------------------------------------------------------------ ///
+
+exports.editProviderPartnershipAccreditations_get = async (req, res) => {
+  res.send('Edit partnership')
+  // const { providerId } = req.params
+  // const isAccredited = await isAccreditedProvider({ providerId })
+
+  // const selectedProviderId = req.session.data?.provider?.id
+
+  // const selectedAccreditations = req.session.data?.accreditations
+
+  // const providers = isAccredited
+  // ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
+  // : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+
+  // const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
+  // const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+
+  // const providerAccreditations = await ProviderAccreditation.findAll({
+  //   where: {
+  //     providerId: providers.accreditedProviderId,
+  //     deletedAt: null
+  //   }
+  // })
+
+  // const accreditationItems = formatAccreditationItems(providerAccreditations)
+
+  // res.render('providers/partnerships/accreditations', {
+  //   accreditedProvider,
+  //   trainingProvider,
+  //   isAccredited,
+  //   accreditationItems,
+  //   selectedAccreditations,
+  //   actions: {
+  //     back: `/providers/${providerId}/partnerships/new`,
+  //     cancel: `/providers/${providerId}/partnerships`,
+  //     save: `/providers/${providerId}/partnerships/new/accreditations`
+  //   }
+  // })
+}
+
+exports.editProviderPartnershipAccreditations_post = async (req, res) => {
+  // const { providerId } = req.params
+  // const isAccredited = await isAccreditedProvider({ providerId })
+
+  // const selectedProviderId = req.session.data?.provider?.id
+
+  // const selectedAccreditations = req.session.data?.accreditations
+
+  // const providers = isAccredited
+  // ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
+  // : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+
+  // const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
+  // const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+
+  // const providerAccreditations = await ProviderAccreditation.findAll({
+  //   where: {
+  //     providerId: providers.accreditedProviderId,
+  //     deletedAt: null
+  //   }
+  // })
+
+  // const accreditationItems = formatAccreditationItems(providerAccreditations)
+
+  // const errors = []
+
+  // if (!selectedAccreditations.length) {
+  //   const error = {}
+  //   error.fieldName = 'accreditations'
+  //   error.href = '#accreditations'
+  //   error.text = 'Select an accreditation'
+  //   errors.push(error)
+  // }
+
+  // if (errors.length > 0) {
+  //   res.render('providers/partnerships/accreditations', {
+  //     accreditedProvider,
+  //     trainingProvider,
+  //     isAccredited,
+  //     accreditationItems,
+  //     selectedAccreditations,
+  //     errors,
+  //     actions: {
+  //       back: `/providers/${providerId}/partnerships/new`,
+  //       cancel: `/providers/${providerId}/partnerships`,
+  //       save: `/providers/${providerId}/partnerships/new/accreditations`
+  //     }
+  //   })
+  // } else {
+  //   res.redirect(`/providers/${providerId}/partnerships/new/check`)
+  // }
+}
+
+exports.editProviderPartnershipCheck_get = async (req, res) => {
+  // const { providerId } = req.params
+  // const isAccredited = await isAccreditedProvider({ providerId })
+
+  // const selectedProviderId = req.session.data?.provider?.id
+
+  // const providers = isAccredited
+  //   ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
+  //   : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+
+  // const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
+  // const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+
+  // // get the selected accreditations
+  // const selectedAccreditations = await getAccreditationDetails(req.session.data?.accreditations)
+
+  // const accreditationItems = formatAccreditationItems(selectedAccreditations)
+
+  // res.render('providers/partnerships/check-your-answers', {
+  //   accreditedProvider,
+  //   trainingProvider,
+  //   isAccredited,
+  //   accreditationItems,
+  //   actions: {
+  //     back: `/providers/${providerId}/partnerships/new/accreditations?referrer=check`,
+  //     cancel: `/providers/${providerId}/partnerships`,
+  //     change: `/providers/${providerId}/partnerships/new`,
+  //     save: `/providers/${providerId}/partnerships/new/check`
+  //   }
+  // })
+}
+
+exports.editProviderPartnershipCheck_post = async (req, res) => {
+  // // get the providerId from the request for use in subsequent queries
+  // const { providerId } = req.params
+
+  // // get the provider from the session data
+  // const { provider } = req.session.data
+
+  // // get the signed in user
+  // const { user } = req.session.passport
+
+  // // calculate if the provider is accredited
+  // const isAccredited = await isAccreditedProvider({ providerId })
+
+  // await savePartnerships({
+  //   accreditationIds: req.session.data?.accreditations,
+  //   partnerId: isAccredited ? provider.id : providerId,
+  //   userId: user.id
+  // })
+
+  // delete req.session.data.search
+  // delete req.session.data.provider
+  // delete req.session.data.accreditations
+
+  req.flash('success', 'Partnership updated')
   res.redirect(`/providers/${providerId}/partnerships`)
 }
 
