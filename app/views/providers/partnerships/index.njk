@@ -71,8 +71,9 @@
           <ul class="govuk-list">
             {% for accreditation in partnership.accreditations %}
               <li>
-                {{ accreditation.number }} ({{ accreditation.startsOn | govukDate }}
-                {% if accreditation.endsOn %} to {{ accreditation.endsOn | govukDate }}{% else %} onward{% endif %})
+                {{ accreditation.number }}<br>
+                <span class="govuk-hint">Starts on {{ accreditation.startsOn | govukDate -}}
+                {% if accreditation.endsOn %}, ends on {{ accreditation.endsOn | govukDate }}{% endif %}</span>
               </li>
             {% endfor %}
           </ul>

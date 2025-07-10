@@ -35,9 +35,11 @@
 
       {% set accreditations %}
         <ul class="govuk-list">
+
           {% for accreditation in accreditationItems %}
             <li>
-              {{ accreditation.text }}
+              {{ accreditation.text }}<br>
+              <span class="govuk-hint">{{ accreditation.hint.text }}</span>
             </li>
           {% endfor %}
         </ul>
