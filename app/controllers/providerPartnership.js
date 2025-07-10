@@ -5,8 +5,6 @@ const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/ac
 const { govukDate } = require('../helpers/date')
 const { hasPartnership, getEligiblePartnerProviders } = require('../helpers/partnership')
 
-const { Op } = require('sequelize')
-
 const formatProviderItems = (providers) => {
   return providers
     .map(provider => ({
@@ -24,7 +22,7 @@ const formatAccreditationItems = (accreditations) => {
     const endsOn = accreditation.endsOn ? `, ends on ${govukDate(accreditation.endsOn)}` : ''
 
     return {
-      text: `Accreditation ${accreditation.number}`,
+      text: accreditation.number,
       value: accreditation.id,
       hint: { text: `Starts on ${startsOn}${endsOn}` }
     }
@@ -47,97 +45,72 @@ exports.providerPartnershipsList = async (req, res) => {
 
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
-  const today = new Date()
 
-  // --- Fetch all partnerships involving this provider ---
-  const [asAccredited, asPartner] = await Promise.all([
-    // Provider is accredited: find partnerships via their accreditations
-    ProviderAccreditationPartnership.findAll({
-      where: { deletedAt: null },
-      include: [
-        {
-          model: ProviderAccreditation,
-          as: 'providerAccreditation',
-          where: {
-            providerId,
-            deletedAt: null,
-            startsOn: { [Op.lte]: today },
-            [Op.or]: [
-              { endsOn: null },
-              { endsOn: { [Op.gte]: today } }
-            ]
-          },
-          include: [
-            {
-              model: Provider,
-              as: 'provider',
-              attributes: ['id', 'operatingName', 'legalName', 'ukprn']
-            }
-          ]
+  // Fetch all active partnership rows involving this provider
+  const allPartnershipRows = await ProviderAccreditationPartnership.findAll({
+    where: {
+      deletedAt: null
+    },
+    include: [
+      {
+        model: ProviderAccreditation,
+        as: 'providerAccreditation',
+        where: {
+          deletedAt: null,
         },
-        {
-          model: Provider,
-          as: 'partner',
-          attributes: ['id', 'operatingName', 'legalName', 'ukprn']
-        }
-      ]
-    }),
-
-    // Provider is a training partner: find partnerships where they are listed as partner
-    ProviderAccreditationPartnership.findAll({
-      where: {
-        deletedAt: null,
-        partnerId: providerId
+        include: [
+          {
+            model: Provider,
+            as: 'provider',
+            attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+          }
+        ]
       },
-      include: [
-        {
-          model: ProviderAccreditation,
-          as: 'providerAccreditation',
-          where: {
-            deletedAt: null,
-            startsOn: { [Op.lte]: today },
-            [Op.or]: [
-              { endsOn: null },
-              { endsOn: { [Op.gte]: today } }
-            ]
-          },
-          include: [
-            {
-              model: Provider,
-              as: 'provider',
-              attributes: ['id', 'operatingName', 'legalName', 'ukprn']
-            }
-          ]
-        },
-        {
-          model: Provider,
-          as: 'partner',
-          attributes: ['id', 'operatingName', 'legalName', 'ukprn']
-        }
-      ]
-    })
-  ])
-
-  // --- Normalize data into unified list ---
-  const combined = [...asAccredited, ...asPartner]
-
-  const partnerships = combined.map(partnership => {
-    const isAccreditedSide = partnership.providerAccreditation.providerId === provider.id
-
-    return {
-      id: partnership.id,
-      accreditedProvider: partnership.providerAccreditation.provider,
-      trainingPartner: partnership.partner,
-      accreditations: [{
-        id: partnership.providerAccreditation.id,
-        number: partnership.providerAccreditation.number,
-        startsOn: partnership.providerAccreditation.startsOn,
-        endsOn: partnership.providerAccreditation.endsOn
-      }],
-      isAccreditedSide,
-      createdAt: partnership.createdAt
-    }
+      {
+        model: Provider,
+        as: 'partner',
+        attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+      }
+    ]
   })
+
+  // Only keep rows where this provider is *either* the accredited provider or the partner
+  const filteredRows = allPartnershipRows.filter(row =>
+    row.partnerId === provider.id || row.providerAccreditation.providerId === provider.id
+  )
+
+  // Group by trainingProviderId + accreditedProviderId
+  const grouped = {}
+
+  for (const row of filteredRows) {
+    const accreditedProvider = row.providerAccreditation.provider
+    const accreditedProviderId = accreditedProvider.id
+    const trainingPartner = row.partner
+    const trainingPartnerId = trainingPartner.id
+
+    const isAccreditedSide = provider.id === accreditedProviderId
+    const key = `${trainingPartnerId}::${accreditedProviderId}`
+
+    if (!grouped[key]) {
+      grouped[key] = {
+        id: row.id,
+        accreditedProvider,
+        trainingPartner,
+        accreditations: [],
+        isAccreditedSide,
+        createdAt: row.createdAt
+      }
+    }
+
+    grouped[key].accreditations.push({
+      id: row.providerAccreditation.id,
+      number: row.providerAccreditation.number,
+      startsOn: row.providerAccreditation.startsOn,
+      endsOn: row.providerAccreditation.endsOn
+    })
+  }
+
+  const partnerships = Object.values(grouped)
 
   // Sort by partner operating name
   partnerships.sort((a, b) => {
@@ -145,6 +118,10 @@ exports.providerPartnershipsList = async (req, res) => {
     const bName = b.isAccreditedSide ? b.trainingPartner.operatingName : b.accreditedProvider.operatingName
     return aName.localeCompare(bName)
   })
+
+  for (const p of partnerships) {
+    p.accreditations.sort((a, b) => a.number.localeCompare(b.number))
+  }
 
   const totalCount = partnerships.length
   const paginatedData = partnerships.slice(offset, offset + limit)
