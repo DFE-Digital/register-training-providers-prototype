@@ -53,13 +53,13 @@
             actions: {
               items: [
                 {
-                  href: actions.delete + "/" + accreditation.id + "/delete",
-                  text: "Delete",
+                  href: actions.change + "/" + accreditation.id + "/edit",
+                  text: "Change",
                   visuallyHiddenText: "accreditation " + loop.index
                 },
                 {
-                  href: actions.change + "/" + accreditation.id + "/edit",
-                  text: "Change",
+                  href: actions.delete + "/" + accreditation.id + "/delete",
+                  text: "Delete",
                   visuallyHiddenText: "accreditation " + loop.index
                 }
               ]
