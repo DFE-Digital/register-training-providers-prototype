@@ -45,34 +45,34 @@
 
     {% if partnerships.length %}
 
-      {% for item in partnerships %}
+      {% for partnership in partnerships %}
 
         {% set accreditedProviderHtml %}
-          {% if not item.isAccreditedSide %}
-            <a href="/providers/{{ item.accreditedProvider.id }}">
-              {{ item.accreditedProvider.operatingName }}
+          {% if not partnership.isAccreditedSide %}
+            <a href="/providers/{{ partnership.accreditedProvider.id }}">
+              {{ partnership.accreditedProvider.operatingName }}
             </a>
           {% else %}
-            {{ item.accreditedProvider.operatingName }}
+            {{ partnership.accreditedProvider.operatingName }}
           {% endif %}
         {% endset %}
 
         {% set trainingPartnerHtml %}
-          {% if item.isAccreditedSide %}
-            <a href="/providers/{{ item.trainingPartner.id }}">
-              {{ item.trainingPartner.operatingName }}
+          {% if partnership.isAccreditedSide %}
+            <a href="/providers/{{ partnership.trainingPartner.id }}">
+              {{ partnership.trainingPartner.operatingName }}
             </a>
           {% else %}
-            {{ item.trainingPartner.operatingName }}
+            {{ partnership.trainingPartner.operatingName }}
           {% endif %}
         {% endset %}
 
         {% set accreditationsHtml %}
           <ul class="govuk-list">
-            {% for acc in item.accreditations %}
+            {% for accreditation in partnership.accreditations %}
               <li>
-                {{ acc.number }} ({{ acc.startsOn | govukDate }}
-                {% if acc.endsOn %} to {{ acc.endsOn | govukDate }}{% else %} onward{% endif %})
+                {{ accreditation.number }} ({{ accreditation.startsOn | govukDate }}
+                {% if accreditation.endsOn %} to {{ accreditation.endsOn | govukDate }}{% else %} onward{% endif %})
               </li>
             {% endfor %}
           </ul>
@@ -81,17 +81,17 @@
         {{ govukSummaryList({
           card: {
             title: {
-              text: item.trainingPartner.operatingName if item.isAccreditedSide else item.accreditedProvider.operatingName
+              text: partnership.trainingPartner.operatingName if partnership.isAccreditedSide else partnership.accreditedProvider.operatingName
             },
             actions: {
               items: [
                 {
-                  href: actions.change + "/" + item.id + "/accreditations",
+                  href: actions.change + "/" + partnership.id + "/accreditations",
                   text: "Change",
                   visuallyHiddenText: "partner " + loop.index
                 },
                 {
-                  href: actions.delete + "/" + item.id + "/delete",
+                  href: actions.delete + "/" + partnership.id + "/delete",
                   text: "Delete",
                   visuallyHiddenText: "partner " + loop.index
                 }
