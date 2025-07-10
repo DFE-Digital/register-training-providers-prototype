@@ -534,7 +534,6 @@ exports.editProviderPartnershipAccreditations_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
 
   const currentProvider = await Provider.findByPk(providerId)
-  // if (!currentProvider) return res.status(404).send('Provider not found')
 
   // Load the original partnership record (one row)
   const initial = await ProviderAccreditationPartnership.findByPk(partnershipId, {
@@ -584,11 +583,8 @@ exports.editProviderPartnershipAccreditations_get = async (req, res) => {
     ]
   })
 
-  const selectedAccreditations = activePartnerships.map(p => p.providerAccreditationId)
+  const selectedAccreditations = req.session.data.accreditations || activePartnerships.map(p => p.providerAccreditationId)
   const accreditationItems = formatAccreditationItems(providerAccreditations)
-
-  // req.session.data = req.session.data || {}
-  // req.session.data.accreditations = selectedAccreditations
 
   res.render('providers/partnerships/accreditations', {
     currentProvider,
@@ -635,7 +631,6 @@ exports.editProviderPartnershipAccreditations_post = async (req, res) => {
   const trainingProvider = initial.partner
   const accreditedProvider = initial.providerAccreditation.provider
   const accreditedProviderId = accreditedProvider.id
-  // const partnerId = initial.partnerId
 
   const providerAccreditations = await ProviderAccreditation.findAll({
     where: {
@@ -678,13 +673,8 @@ exports.editProviderPartnershipAccreditations_post = async (req, res) => {
 exports.editProviderPartnershipCheck_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
   const currentProvider = await Provider.findByPk(providerId)
-  // if (!currentProvider) return res.status(404).send('Provider not found')
 
   const selectedAccreditations = req.session.data?.accreditations || []
-
-  // if (!selectedAccreditations.length) {
-  //   return res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/accreditations`)
-  // }
 
   // Load one row from the partnership to reconstruct both providers
   const initial = await ProviderAccreditationPartnership.findByPk(partnershipId, {
@@ -701,8 +691,6 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     ]
   })
 
-  // if (!initial) return res.status(404).send('Partnership not found')
-
   const trainingProvider = initial.partner
   const accreditedProvider = initial.providerAccreditation.provider
   const accreditedProviderId = accreditedProvider.id
@@ -715,7 +703,6 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     }
   })
 
-    // Optional: sort accreditations by number or startsOn
   providerAccreditations.sort((a, b) => a.number.localeCompare(b.number))
 
   const accreditationItems = formatAccreditationItems(providerAccreditations)
@@ -728,6 +715,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     accreditationItems,
     actions: {
       back: `/providers/${providerId}/partnerships/${partnershipId}/accreditations`,
+      change: `/providers/${providerId}/partnerships/${partnershipId}`,
       cancel: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/partnerships/${partnershipId}/check`
     }
