@@ -10,10 +10,12 @@
   {% set providerName = trainingProvider.operatingName %}
 {% endif %}
 
-{% if currentPartnership %}
+{% if currentProvider %}
   {% set caption = providerName %}
+  {% set showChangeLinks = false %}
 {% else %}
   {% set caption = "Add partnership - " + providerName %}
+  {% set showChangeLinks = true %}
 {% endif %}
 
 {% block beforeContent %}
@@ -58,7 +60,7 @@
                   visuallyHiddenText: "accredited provider"
                 }
               ]
-            } if not isAccredited
+            } if (not isAccredited) and showChangeLinks
           },
           {
             key: {
@@ -75,7 +77,7 @@
                   visuallyHiddenText: "training partner"
                 }
               ]
-            } if isAccredited
+            } if isAccredited and showChangeLinks
           },
           {
             key: {
