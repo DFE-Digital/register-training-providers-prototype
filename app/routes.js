@@ -191,6 +191,12 @@ router.post('/providers/:providerId/partnerships/new/accreditations', checkIsAut
 router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
 router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
 
+router.get('/providers/:providerId/partnerships/:partnershipId/accreditations', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAccreditations_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/accreditations', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAccreditations_post)
+
+router.get('/providers/:providerId/partnerships/:partnershipId/check', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipCheck_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/check', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipCheck_post)
+
 router.get('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_get)
 router.post('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_post)
 

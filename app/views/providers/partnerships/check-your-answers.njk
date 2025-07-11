@@ -10,10 +10,12 @@
   {% set providerName = trainingProvider.operatingName %}
 {% endif %}
 
-{% if currentPartnership %}
+{% if currentProvider %}
   {% set caption = providerName %}
+  {% set showChangeLinks = false %}
 {% else %}
   {% set caption = "Add partnership - " + providerName %}
+  {% set showChangeLinks = true %}
 {% endif %}
 
 {% block beforeContent %}
@@ -33,9 +35,11 @@
 
       {% set accreditations %}
         <ul class="govuk-list">
+
           {% for accreditation in accreditationItems %}
             <li>
-              {{ accreditation.text }}
+              {{ accreditation.text }}<br>
+              <span class="govuk-hint">{{ accreditation.hint.text }}</span>
             </li>
           {% endfor %}
         </ul>
@@ -58,7 +62,7 @@
                   visuallyHiddenText: "accredited provider"
                 }
               ]
-            } if not isAccredited
+            } if (not isAccredited) and showChangeLinks
           },
           {
             key: {
@@ -75,7 +79,7 @@
                   visuallyHiddenText: "training partner"
                 }
               ]
-            } if isAccredited
+            } if isAccredited and showChangeLinks
           },
           {
             key: {
