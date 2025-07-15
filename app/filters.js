@@ -1,6 +1,8 @@
 const govukPrototypeKit = require('govuk-prototype-kit')
 const addFilter = govukPrototypeKit.views.addFilter
 
+const marked = require('marked')
+const { gfmHeadingId } = require('marked-gfm-heading-id')
 const numeral = require('numeral')
 
 const {
@@ -123,3 +125,29 @@ example: {{ 5 | getFeedbackRatingLabel }}
 outputs: "Very satisfiled"
 ------------------------------------------------------------------ */
 addFilter('getFeedbackRatingLabel', getFeedbackRatingLabel)
+
+/* ------------------------------------------------------------------
+utility function to parse markdown as HTML
+example: {{ "## Title" | markdownToHtml }}
+outputs: "<h2>Title</h2>"
+------------------------------------------------------------------ */
+addFilter('markdownToHtml', (markdown) => {
+  if (!markdown) {
+    return null
+  }
+
+  marked.use(gfmHeadingId())
+
+  const text = markdown.replace(/\\r/g, '\n').replace(/\\t/g, ' ')
+  const html = marked.parse(text)
+
+  // Add govuk-* classes
+  let govukHtml = html.replace(/<p>/g, '<p class="govuk-body">')
+  govukHtml = govukHtml.replace(/<ol>/g, '<ol class="govuk-list govuk-list--number">')
+  govukHtml = govukHtml.replace(/<ul>/g, '<ul class="govuk-list govuk-list--bullet">')
+  govukHtml = govukHtml.replace(/<h2/g, '<h2 class="govuk-heading-l"')
+  govukHtml = govukHtml.replace(/<h3/g, '<h3 class="govuk-heading-m"')
+  govukHtml = govukHtml.replace(/<h4/g, '<h4 class="govuk-heading-s"')
+
+  return govukHtml
+})
