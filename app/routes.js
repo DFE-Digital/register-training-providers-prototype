@@ -30,6 +30,7 @@ const passport = {
 /// ------------------------------------------------------------------------ ///
 const accountController = require('./controllers/account')
 const activityController = require('./controllers/activity')
+const contentController = require('./controllers/content')
 const errorController = require('./controllers/error')
 const feedbackController = require('./controllers/feedback')
 const providerAccreditationController = require('./controllers/providerAccreditation')
@@ -288,6 +289,12 @@ router.get('/feedback/confirmation', feedbackController.newFeedbackConfirmation_
 /// ------------------------------------------------------------------------ ///
 /// GENERAL ROUTES
 /// ------------------------------------------------------------------------ ///
+
+router.get('/accessibility', contentController.accessibility)
+
+router.get('/cookies', contentController.cookies)
+
+router.get('/privacy', contentController.privacy)
 
 router.get('/404', checkIsAuthenticated, errorController.pageNotFound)
 router.get('/page-not-found', checkIsAuthenticated, errorController.pageNotFound)
