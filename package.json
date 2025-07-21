@@ -21,7 +21,7 @@
     "gray-matter": "^4.0.3",
     "inflection": "^3.0.2",
     "luxon": "^3.7.1",
-    "marked": "^16.1.0",
+    "marked": "^16.1.1",
     "marked-gfm-heading-id": "^4.1.2",
     "numeral": "^2.0.6",
     "sequelize": "^6.37.7",
