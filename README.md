@@ -7,6 +7,8 @@ This prototype is based on the:
 - [GOV.UK Design System](https://design-system.service.gov.uk/)
 - [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk/docs/)
 
+You can read more about this register on the [design history website](https://becoming-a-teacher.design-history.education.gov.uk/register-of-training-providers/).
+
 ## Requirements
 
 - Node.js - version 22.x.x
