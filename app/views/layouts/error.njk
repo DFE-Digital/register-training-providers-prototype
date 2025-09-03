@@ -2,8 +2,6 @@
 
 {% set govukRebrand = true %}
 
-{% from "_components/footer/macro.njk" import appFooter %}
-
 {% block pageTitle -%}
   {{ subtitle + " - " if subtitle }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
 {%- endblock %}
