@@ -16,25 +16,25 @@
   {{ govukHeader({
     rebrand: true,
     homepageUrl: "/",
-    containerClasses: "govuk-width-container",
-    navigationClasses: "govuk-header__navigation--end",
-    navigation: [
-      {
-        href: "/account",
-        text: "Your account",
-        active: headerNavId == "account"
-      },
-      {
-        href: "/sign-out",
-        text: "Sign out"
-      }
-    ] if not hideAccountNavigation
+    containerClasses: "govuk-width-container"
   }) }}
+
+  {% set navigationEndHtml %}
+    <li class="govuk-service-navigation__item {{- ' govuk-service-navigation__item--active' if primaryNavId == 'account' }} app-service-navigation__align-right">
+      <a class="govuk-service-navigation__link" href="/account" {{- ' aria-current="true"' if primaryNavId == "account" }}>Your account</a>
+    </li>
+    <li class="govuk-service-navigation__item">
+      <a class="govuk-service-navigation__link" href="/">Sign out</a>
+    </li>
+  {% endset %}
 
   {{ govukServiceNavigation({
     navigationId: "primaryNavigation",
     serviceName: serviceName,
-    serviceUrl: "/"
+    serviceUrl: "/",
+    slots: {
+      navigationEnd: navigationEndHtml
+    }
   }) }}
 
   {% include "_includes/phase-banner.njk" %}
