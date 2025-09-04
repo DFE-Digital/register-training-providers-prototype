@@ -2,3 +2,13 @@
   position: relative;
   top: -7px;
 }
+
+.govuk-service-navigation__wrapper {
+  flex-grow: 1;
+}
+
+.app-service-navigation__align-right {
+  @include govuk-media-query($from: tablet) {
+    margin-left: auto;
+  }
+}
