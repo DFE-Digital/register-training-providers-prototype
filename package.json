@@ -20,7 +20,7 @@
     "govuk-prototype-kit": "^13.18.0",
     "gray-matter": "^4.0.3",
     "inflection": "^3.0.2",
-    "luxon": "^3.7.1",
+    "luxon": "^3.7.2",
     "marked": "^16.2.1",
     "marked-gfm-heading-id": "^4.1.2",
     "numeral": "^2.0.6",
