@@ -12,6 +12,9 @@ const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces
 /// ------------------------------------------------------------------------ ///
 
 exports.providerAddressesList = async (req, res) => {
+  delete req.session.data.address
+  delete req.session.data.find
+
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 50
   const offset = (page - 1) * limit
