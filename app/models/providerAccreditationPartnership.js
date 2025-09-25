@@ -2,22 +2,43 @@ const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
   class ProviderAccreditationPartnership extends Model {
+    /**
+     * Wire up ProviderAccreditationPartnership associations.
+     * @param {object} models
+     */
     static associate(models) {
+      /**
+       * Partnership belongs to the **training provider** (the partner).
+       * FK lives on ProviderAccreditationPartnership.partnerId.
+       */
       ProviderAccreditationPartnership.belongsTo(models.Provider, {
         foreignKey: 'partnerId',
         as: 'partner'
       })
 
+      /**
+       * Partnership belongs to a specific **accreditation** (owned by an accredited provider).
+       * FK lives on ProviderAccreditationPartnership.providerAccreditationId.
+       * To reach the accredited provider: providerAccreditation → provider.
+       */
       ProviderAccreditationPartnership.belongsTo(models.ProviderAccreditation, {
         foreignKey: 'providerAccreditationId',
         as: 'providerAccreditation'
       })
 
+      /**
+       * Metadata: created by user.
+       * FK lives on ProviderAccreditationPartnership.createdById.
+       */
       ProviderAccreditationPartnership.belongsTo(models.User, {
         foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
+      /**
+       * Metadata: updated by user.
+       * FK lives on ProviderAccreditationPartnership.updatedById.
+       */
       ProviderAccreditationPartnership.belongsTo(models.User, {
         foreignKey: 'updatedById',
         as: 'updatedByUser'
