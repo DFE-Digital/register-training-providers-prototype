@@ -6,7 +6,7 @@ const {
   ProviderAddressRevision,
   ProviderContactRevision,
   ProviderRevision,
-  ProviderPartnershipRevision,
+  // ProviderPartnershipRevision,
   User,
   UserRevision
 } = require('../models')
@@ -36,7 +36,7 @@ const revisionModels = {
   provider_accreditation_revisions: ProviderAccreditationRevision,
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
-  provider_partnership_revisions: ProviderPartnershipRevision,
+  // provider_partnership_revisions: ProviderPartnershipRevision,
   user_revisions: UserRevision
 }
 
@@ -133,14 +133,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         as: 'providerContactRevision',
         include: [{ model: Provider, as: 'provider' }]
       },
-      {
-        model: ProviderPartnershipRevision,
-        as: 'providerPartnershipRevision',
-        include: [
-          { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
-        ]
-      },
+      // {
+      //   model: ProviderPartnershipRevision,
+      //   as: 'providerPartnershipRevision',
+      //   include: [
+      //     { model: Provider, as: 'accreditedProvider' },
+      //     { model: Provider, as: 'trainingProvider' }
+      //   ]
+      // },
       {
         model: UserRevision,
         as: 'userRevision'
@@ -203,27 +203,27 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
-  queries.push(ActivityLog.findAll({
-    where: { revisionTable: 'provider_partnership_revisions' },
-    include: [
-      {
-        model: ProviderPartnershipRevision,
-        as: 'providerPartnershipRevision',
-        required: true,
-        where: {
-          [Op.or]: [
-            { accreditedProviderId: providerId },
-            { trainingProviderId: providerId }
-          ]
-        },
-        include: [
-          { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
-        ]
-      },
-      { model: User, as: 'changedByUser' }
-    ]
-  }))
+  // queries.push(ActivityLog.findAll({
+  //   where: { revisionTable: 'provider_partnership_revisions' },
+  //   include: [
+  //     {
+  //       model: ProviderPartnershipRevision,
+  //       as: 'providerPartnershipRevision',
+  //       required: true,
+  //       where: {
+  //         [Op.or]: [
+  //           { accreditedProviderId: providerId },
+  //           { trainingProviderId: providerId }
+  //         ]
+  //       },
+  //       include: [
+  //         { model: Provider, as: 'accreditedProvider' },
+  //         { model: Provider, as: 'trainingProvider' }
+  //       ]
+  //     },
+  //     { model: User, as: 'changedByUser' }
+  //   ]
+  // }))
 
   const allLogs = (await Promise.all(queries)).flat()
 
@@ -290,22 +290,22 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
         }
       ]
     }),
-    ActivityLog.count({
-      where: { revisionTable: 'provider_partnership_revisions' },
-      include: [
-        {
-          model: ProviderPartnershipRevision,
-          as: 'providerPartnershipRevision',
-          required: true,
-          where: {
-            [Op.or]: [
-              { accreditedProviderId: providerId },
-              { trainingProviderId: providerId }
-            ]
-          }
-        }
-      ]
-    })
+    // ActivityLog.count({
+    //   where: { revisionTable: 'provider_partnership_revisions' },
+    //   include: [
+    //     {
+    //       model: ProviderPartnershipRevision,
+    //       as: 'providerPartnershipRevision',
+    //       required: true,
+    //       where: {
+    //         [Op.or]: [
+    //           { accreditedProviderId: providerId },
+    //           { trainingProviderId: providerId }
+    //         ]
+    //       }
+    //     }
+    //   ]
+    // })
   ])
 
   return results.reduce((sum, count) => sum + count, 0)
@@ -354,14 +354,14 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'providerContactRevision',
         include: [{ model: Provider, as: 'provider' }]
       },
-      {
-        model: ProviderPartnershipRevision,
-        as: 'providerPartnershipRevision',
-        include: [
-          { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
-        ]
-      },
+      // {
+      //   model: ProviderPartnershipRevision,
+      //   as: 'providerPartnershipRevision',
+      //   include: [
+      //     { model: Provider, as: 'accreditedProvider' },
+      //     { model: Provider, as: 'trainingProvider' }
+      //   ]
+      // },
       {
         model: UserRevision,
         as: 'userRevision'
@@ -426,14 +426,14 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         required: false,
         include: [{ model: Provider, as: 'provider' }]
       },
-      {
-        model: ProviderPartnershipRevision,
-        as: 'providerPartnershipRevision',
-        include: [
-          { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
-        ]
-      },
+      // {
+      //   model: ProviderPartnershipRevision,
+      //   as: 'providerPartnershipRevision',
+      //   include: [
+      //     { model: Provider, as: 'accreditedProvider' },
+      //     { model: Provider, as: 'trainingProvider' }
+      //   ]
+      // },
       {
         model: UserRevision,
         as: 'userRevision',
@@ -553,22 +553,21 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
-    case 'provider_partnership_revisions': {
-      const accredited = revision.accreditedProvider
-      const training = revision.trainingProvider
+    // case 'provider_partnership_revisions': {
+    //   const accredited = revision.accreditedProvider
+    //   const training = revision.trainingProvider
 
-      const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
-      const trainingName = training?.operatingName || training?.legalName || 'Training provider'
+    //   const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
+    //   const trainingName = training?.operatingName || training?.legalName || 'Training provider'
 
-      label = `${accreditedName} – ${trainingName}`
-      activity = `Provider partnership ${log.action}d`
-      href = `/providers/${revision.accreditedProviderId}/partnerships`
+    //   label = `${accreditedName} – ${trainingName}`
+    //   activity = `Provider partnership ${log.action}d`
+    //   href = `/providers/${revision.accreditedProviderId}/partnerships`
 
-      fields.push({ key: 'Accredited provider', value: accreditedName })
-      fields.push({ key: 'Training provider', value: trainingName })
-      break
-    }
-
+    //   fields.push({ key: 'Accredited provider', value: accreditedName })
+    //   fields.push({ key: 'Training provider', value: trainingName })
+    //   break
+    // }
 
     case 'user_revisions':
       activity = `User ${log.action}d`
