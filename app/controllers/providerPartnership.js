@@ -1,4 +1,4 @@
-const { Provider, ProviderPartnership, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
+const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
 const { savePartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
@@ -143,45 +143,45 @@ exports.providerPartnershipsList = async (req, res) => {
 /// Show single provider partnership
 /// ------------------------------------------------------------------------ ///
 
-exports.providerPartnershipDetails = async (req, res) => {
-  // clear session partnership data
-  delete req.session.data.search
-  delete req.session.data.provider
-  delete req.session.data.accreditations
+// exports.providerPartnershipDetails = async (req, res) => {
+//   // clear session partnership data
+//   delete req.session.data.search
+//   delete req.session.data.provider
+//   delete req.session.data.accreditations
 
-  // get the provider and partnership IDs from the request
-  const { providerId, partnershipId } = req.params
+//   // get the provider and partnership IDs from the request
+//   const { providerId, partnershipId } = req.params
 
-  // get the current provider
-  const provider = await Provider.findByPk(providerId)
+//   // get the current provider
+//   const provider = await Provider.findByPk(providerId)
 
-  // calculate if the provider is accredited
-  const isAccredited = await isAccreditedProvider({ providerId })
+//   // calculate if the provider is accredited
+//   const isAccredited = await isAccreditedProvider({ providerId })
 
-  const partnership = await ProviderPartnership.findByPk(partnershipId, {
-    include: [
-      {
-        model: Provider,
-        as: 'trainingProvider'
-      },
-      {
-        model: Provider,
-        as: 'accreditedProvider'
-      }
-    ]
-  })
+//   const partnership = await ProviderPartnership.findByPk(partnershipId, {
+//     include: [
+//       {
+//         model: Provider,
+//         as: 'trainingProvider'
+//       },
+//       {
+//         model: Provider,
+//         as: 'accreditedProvider'
+//       }
+//     ]
+//   })
 
-  res.render('providers/partnerships/show', {
-    provider,
-    partnership,
-    isAccredited,
-    actions: {
-      back: `/providers/${providerId}`,
-      cancel: `/providers/${providerId}/partnerships`,
-      delete: `/providers/${providerId}/partnerships`
-    }
-  })
-}
+//   res.render('providers/partnerships/show', {
+//     provider,
+//     partnership,
+//     isAccredited,
+//     actions: {
+//       back: `/providers/${providerId}`,
+//       cancel: `/providers/${providerId}/partnerships`,
+//       delete: `/providers/${providerId}/partnerships`
+//     }
+//   })
+// }
 
 /// ------------------------------------------------------------------------ ///
 /// New provider partnership
