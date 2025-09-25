@@ -201,7 +201,7 @@ router.post('/providers/:providerId/partnerships/:partnershipId/check', checkIsA
 router.get('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_get)
 router.post('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_post)
 
-router.get('/providers/:providerId/partnerships/:partnershipId', checkIsAuthenticated, providerPartnershipController.providerPartnershipDetails)
+// router.get('/providers/:providerId/partnerships/:partnershipId', checkIsAuthenticated, providerPartnershipController.providerPartnershipDetails)
 
 router.get('/providers/:providerId/partnerships', checkIsAuthenticated, providerPartnershipController.providerPartnershipsList)
 

@@ -23,19 +23,19 @@ module.exports = (sequelize) => {
         as: 'contacts'
       })
 
-      Provider.belongsToMany(models.Provider, {
-        through: models.ProviderPartnership,
-        as: 'accreditedPartnerships',
-        foreignKey: 'trainingProviderId',
-        otherKey: 'accreditedProviderId'
-      })
+      // Provider.belongsToMany(models.Provider, {
+      //   through: models.ProviderPartnership,
+      //   as: 'accreditedPartnerships',
+      //   foreignKey: 'trainingProviderId',
+      //   otherKey: 'accreditedProviderId'
+      // })
 
-      Provider.belongsToMany(models.Provider, {
-        through: models.ProviderPartnership,
-        as: 'trainingPartnerships',
-        foreignKey: 'accreditedProviderId',
-        otherKey: 'trainingProviderId'
-      })
+      // Provider.belongsToMany(models.Provider, {
+      //   through: models.ProviderPartnership,
+      //   as: 'trainingPartnerships',
+      //   foreignKey: 'accreditedProviderId',
+      //   otherKey: 'trainingProviderId'
+      // })
 
       Provider.belongsTo(models.User, {
         foreignKey: 'createdById',
