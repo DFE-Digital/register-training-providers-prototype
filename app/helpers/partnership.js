@@ -1,27 +1,59 @@
 const { Op, literal } = require('sequelize')
-const { Provider, ProviderAccreditation,ProviderPartnership } = require('../models')
+const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
 
 /**
- * Checks whether a partnership exists between an accredited provider
- * and a training provider.
+ * Determine whether a partnership already exists between an accrediting provider and a training provider.
  *
- * @async
- * @function hasPartnership
- * @param {Object} params - The parameters for the partnership check.
- * @param {string} params.accreditedProviderId - The ID of the accredited provider.
- * @param {string} params.trainingProviderId - The ID of the training provider.
- * @returns {Promise<boolean>} A promise that resolves to `true` if a partnership exists, `false` otherwise.
+ * The check succeeds if there exists at least one **non-deleted** `ProviderAccreditationPartnership`
+ * with `partnerId === trainingProviderId` whose joined `ProviderAccreditation` row has
+ * `providerId === accreditedProviderId` (also **non-deleted**).
+ *
+ * Note:
+ * - This checks for a partnership under **any** accreditation owned by the accrediting provider.
+ * - If you need to limit to *active* accreditations, add date conditions using `startsOn`/`endsOn`.
+ * - The models aren’t `paranoid`, so we explicitly filter `deletedAt: null`.
+ *
+ * @param {HasPartnershipParams} params - Identifiers for the provider pair.
+ * @param {HasPartnershipOptions} [options] - Optional query options.
+ * @returns {Promise<boolean>} Resolves `true` if a matching partnership exists; otherwise `false`.
+ * @throws {Error} If `accreditedProviderId` or `trainingProviderId` is missing.
+ *
+ * @example
+ * // Keep your existing route code:
+ * const hasExistingPartnership = await hasPartnership(
+ *   isAccredited
+ *     ? { accreditedProviderId: providerId,        trainingProviderId: selectedProviderId }
+ *     : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+ * )
  */
-const hasPartnership = async (params) => {
-  const partnershipCount = await ProviderPartnership.count({
+const hasPartnership = async (
+  { accreditedProviderId, trainingProviderId } = {},
+  { transaction } = {}
+) => {
+  if (!accreditedProviderId) throw new Error('accreditedProviderId is required')
+  if (!trainingProviderId) throw new Error('trainingProviderId is required')
+
+  const existing = await ProviderAccreditationPartnership.findOne({
     where: {
-      accreditedProviderId: params.accreditedProviderId,
-      trainingProviderId: params.trainingProviderId,
+      partnerId: trainingProviderId,
+      // model isn't paranoid, so exclude soft-deleted rows explicitly
       deletedAt: null
-    }
+    },
+    include: [{
+      model: ProviderAccreditation,
+      as: 'providerAccreditation', // matches your association
+      required: true,
+      attributes: ['id'],
+      where: {
+        providerId: accreditedProviderId, // <-- THIS is the accrediting provider FK
+        deletedAt: null
+      }
+    }],
+    attributes: ['id'],
+    transaction
   })
 
-  return !!partnershipCount
+  return Boolean(existing)
 }
 
 /**
