@@ -2,46 +2,75 @@ const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize) => {
   class Provider extends Model {
+    /**
+     * Wire up Provider associations.
+     * @param {object} models
+     */
     static associate(models) {
+      /**
+       * One provider → many ProviderRevision rows (revision history).
+       * FK lives on ProviderRevision.providerId.
+       */
       Provider.hasMany(models.ProviderRevision, {
         foreignKey: 'providerId',
         as: 'revisions'
       })
 
+      /**
+       * One provider (the accredited provider) → many ProviderAccreditation rows.
+       * FK lives on ProviderAccreditation.providerId.
+       */
       Provider.hasMany(models.ProviderAccreditation, {
         foreignKey: 'providerId',
         as: 'accreditations'
       })
 
+      /**
+       * One provider → many ProviderAddress rows.
+       * FK lives on ProviderAddress.providerId.
+       */
       Provider.hasMany(models.ProviderAddress, {
         foreignKey: 'providerId',
         as: 'addresses'
       })
 
+      /**
+       * One provider → many ProviderContact rows.
+       * FK lives on ProviderContact.providerId.
+       */
       Provider.hasMany(models.ProviderContact, {
         foreignKey: 'providerId',
         as: 'contacts'
       })
 
-      // Provider.belongsToMany(models.Provider, {
-      //   through: models.ProviderPartnership,
-      //   as: 'accreditedPartnerships',
-      //   foreignKey: 'trainingProviderId',
-      //   otherKey: 'accreditedProviderId'
-      // })
+      /**
+       * One provider (as the **training** partner) → many ProviderAccreditationPartnership rows.
+       * FK lives on ProviderAccreditationPartnership.partnerId (this provider is the training provider).
+       *
+       * To reach the accredited provider:
+       *   this Provider
+       *     → (hasMany) accreditedPartnerships
+       *     → (belongsTo) providerAccreditation
+       *     → (belongsTo) provider  // the **accredited** provider
+       */
+      Provider.hasMany(models.ProviderAccreditationPartnership, {
+        foreignKey: 'partnerId',
+        as: 'accreditedPartnerships'
+      })
 
-      // Provider.belongsToMany(models.Provider, {
-      //   through: models.ProviderPartnership,
-      //   as: 'trainingPartnerships',
-      //   foreignKey: 'accreditedProviderId',
-      //   otherKey: 'trainingProviderId'
-      // })
-
+      /**
+       * Provider was created by a User.
+       * FK lives on Provider.createdById.
+       */
       Provider.belongsTo(models.User, {
         foreignKey: 'createdById',
         as: 'createdByUser'
       })
 
+      /**
+       * Provider was last updated by a User.
+       * FK lives on Provider.updatedById.
+       */
       Provider.belongsTo(models.User, {
         foreignKey: 'updatedById',
         as: 'updatedByUser'
