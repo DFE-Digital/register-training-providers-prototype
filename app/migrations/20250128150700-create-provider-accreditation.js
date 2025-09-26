@@ -45,6 +45,12 @@ module.exports = {
         type: Sequelize.UUID
       }
     })
+
+    // indexes
+    await queryInterface.addIndex('provider_accreditations', {
+      fields: ['provider_id'],
+      name: 'idx_provider_accreditations_provider_id'
+    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('provider_accreditations')
