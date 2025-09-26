@@ -50,6 +50,12 @@ module.exports = {
         type: Sequelize.UUID
       }
     })
+
+    // indexes
+    await queryInterface.addIndex('provider_contacts', {
+      fields: ['provider_id'],
+      name: 'idx_provider_contacts_provider_id'
+    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('provider_contacts')
