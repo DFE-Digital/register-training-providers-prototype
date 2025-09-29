@@ -3,7 +3,7 @@ const { savePartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
 const { govukDate } = require('../helpers/date')
-const { hasPartnership, getEligiblePartnerProviders } = require('../helpers/partnership')
+const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 
 const formatProviderItems = (providers) => {
   return providers
@@ -260,7 +260,7 @@ exports.newProviderPartnership_post = async (req, res) => {
   } else {
     const selectedProviderId = req.session.data?.provider?.id
 
-    const hasExistingPartnership = await hasPartnership(
+    const hasExistingPartnership = await partnershipExistsForProviderPair(
       isAccredited
         ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
         : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
@@ -340,7 +340,7 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
         : 'Select an accredited provider'
     })
   } else {
-    const hasExistingPartnership = await hasPartnership(
+    const hasExistingPartnership = await partnershipExistsForProviderPair(
       isAccredited
         ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
         : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
