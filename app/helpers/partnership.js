@@ -57,6 +57,36 @@ const hasPartnership = async (
 }
 
 /**
+ * Determine whether a ProviderAccreditation has any linked partnerships.
+ *
+ * Checks for at least one non-deleted row in `provider_accreditation_partnerships`
+ * with `providerAccreditationId === accreditationId`.
+ *
+ * Models are not `paranoid`, so we explicitly filter `deletedAt: null`.
+ *
+ * @param {string} accreditationId - UUID from `provider_accreditations.id`.
+ * @param {{ transaction?: import('sequelize').Transaction }} [options]
+ * @returns {Promise<boolean>} True if one or more partnerships exist; otherwise false.
+ */
+const hasLinkedPartnerships = async (accreditationId, { transaction } = {}) => {
+  if (!accreditationId) {
+    throw new Error('hasLinkedPartnerships: accreditationId is required')
+  }
+
+  const existing = await ProviderAccreditationPartnership.findOne({
+    where: {
+      providerAccreditationId: accreditationId,
+      // model isn't paranoid, so exclude soft-deleted rows explicitly
+      deletedAt: null
+    },
+    attributes: ['id'],
+    transaction
+  })
+
+  return Boolean(existing)
+}
+
+/**
  * Get eligible partners for a provider, depending on whether they are accredited or not.
  *
  * @param {Object} options
@@ -127,5 +157,6 @@ const getEligiblePartnerProviders = async ({ isAccredited, query = '', today = n
 
 module.exports = {
   hasPartnership,
+  hasLinkedPartnerships,
   getEligiblePartnerProviders
 }
