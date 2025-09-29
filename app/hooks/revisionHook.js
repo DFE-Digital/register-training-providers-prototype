@@ -6,51 +6,56 @@ const createRevisionHook = ({ revisionModelName, modelKey }) => {
     const RevisionModel = sequelize.models[revisionModelName]
     const trackedFields = revisionFields[modelKey] || []
 
-    // Determine revisionById (if possible)
-    const revisionById = instance.get('updatedById') || instance.get('createdById') || null
+    // Compute revisionById from the source row (fallback to null)
+    const revisionById =
+      instance.get('updatedById') ||
+      instance.get('createdById') ||
+      null
+
+    // Only copy fields that actually exist on the revision model
+    const src = instance.get({ plain: true })
+    const revisionAttrs = Object.keys(RevisionModel.rawAttributes)
+    const pickForRevision = (obj) =>
+      Object.fromEntries(
+        Object.entries(obj).filter(([k]) => revisionAttrs.includes(k))
+      )
+
+    // Helper to build the payload consistently
+    const buildPayload = (overrides = {}) => ({
+      ...pickForRevision(src),
+      [`${modelKey}Id`]: instance.id,
+      revisionById,
+      // let DB default set revisionAt, or set here:
+      // revisionAt: new Date(),
+      ...overrides
+    })
 
     // Always create revision on creation
     if (options?.hookName === 'afterCreate') {
-      await RevisionModel.create({
-        ...instance.get({ plain: true }),
-        [`${modelKey}Id`]: instance.id,
-        revisionNumber: 1,
-        revisionById: revisionById
-      })
+      await RevisionModel.create(buildPayload({ revisionNumber: 1 }))
       return
     }
 
-    // Get the latest revision
+    // Get latest revision
     const latest = await RevisionModel.findOne({
       where: { [`${modelKey}Id`]: instance.id },
       order: [['revisionNumber', 'DESC']]
     })
 
     if (!latest) {
-      await RevisionModel.create({
-        ...instance.get({ plain: true }),
-        [`${modelKey}Id`]: instance.id,
-        revisionNumber: 1,
-        revisionById: revisionById
-      })
+      await RevisionModel.create(buildPayload({ revisionNumber: 1 }))
       return
     }
 
+    // Compare only tracked fields
     const hasChanged = trackedFields.some(field => {
       return instance.get(field) !== latest.get(field)
     })
-
     if (!hasChanged) return
 
-    const revisionData = {
-      ...instance.get({ plain: true }),
-      [`${modelKey}Id`]: instance.id,
-      revisionNumber: latest.revisionNumber + 1,
-      revisionById: revisionById
-    }
-
-    delete revisionData.id
-    await RevisionModel.create(revisionData)
+    await RevisionModel.create(
+      buildPayload({ revisionNumber: latest.revisionNumber + 1 })
+    )
   }
 }
 
