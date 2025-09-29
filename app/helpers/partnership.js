@@ -26,7 +26,7 @@ const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = re
  *     : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
  * )
  */
-const hasPartnership = async (
+const partnershipExistsForProviderPair = async (
   { accreditedProviderId, trainingProviderId } = {},
   { transaction } = {}
 ) => {
@@ -68,9 +68,9 @@ const hasPartnership = async (
  * @param {{ transaction?: import('sequelize').Transaction }} [options]
  * @returns {Promise<boolean>} True if one or more partnerships exist; otherwise false.
  */
-const hasLinkedPartnerships = async (accreditationId, { transaction } = {}) => {
+const partnershipsExistForAccreditation = async (accreditationId, { transaction } = {}) => {
   if (!accreditationId) {
-    throw new Error('hasLinkedPartnerships: accreditationId is required')
+    throw new Error('accreditationId is required')
   }
 
   const existing = await ProviderAccreditationPartnership.findOne({
@@ -156,7 +156,7 @@ const getEligiblePartnerProviders = async ({ isAccredited, query = '', today = n
 }
 
 module.exports = {
-  hasPartnership,
-  hasLinkedPartnerships,
+  partnershipExistsForProviderPair,
+  partnershipsExistForAccreditation,
   getEligiblePartnerProviders
 }
