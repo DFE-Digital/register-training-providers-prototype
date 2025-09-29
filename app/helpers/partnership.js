@@ -20,9 +20,9 @@ const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = re
  *
  * @example
  * // Keep your existing route code:
- * const hasExistingPartnership = await hasPartnership(
+ * const hasExistingPartnership = await partnershipExistsForProviderPair(
  *   isAccredited
- *     ? { accreditedProviderId: providerId,        trainingProviderId: selectedProviderId }
+ *     ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
  *     : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
  * )
  */
@@ -67,6 +67,7 @@ const partnershipExistsForProviderPair = async (
  * @param {string} accreditationId - UUID from `provider_accreditations.id`.
  * @param {{ transaction?: import('sequelize').Transaction }} [options]
  * @returns {Promise<boolean>} True if one or more partnerships exist; otherwise false.
+ * @throws {Error} If `accreditationId` is missing.
  */
 const partnershipsExistForAccreditation = async (accreditationId, { transaction } = {}) => {
   if (!accreditationId) {
