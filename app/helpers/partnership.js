@@ -30,8 +30,8 @@ const partnershipExistsForProviderPair = async (
   { accreditedProviderId, trainingProviderId } = {},
   { transaction } = {}
 ) => {
-  if (!accreditedProviderId) throw new Error('accreditedProviderId is required')
-  if (!trainingProviderId) throw new Error('trainingProviderId is required')
+  if (!accreditedProviderId) throw new Error('partnershipExistsForProviderPair: accreditedProviderId is required')
+  if (!trainingProviderId) throw new Error('partnershipExistsForProviderPair: trainingProviderId is required')
 
   const existing = await ProviderAccreditationPartnership.findOne({
     where: {
@@ -71,7 +71,7 @@ const partnershipExistsForProviderPair = async (
  */
 const partnershipsExistForAccreditation = async (accreditationId, { transaction } = {}) => {
   if (!accreditationId) {
-    throw new Error('accreditationId is required')
+    throw new Error('partnershipsExistForAccreditation: accreditationId is required')
   }
 
   const existing = await ProviderAccreditationPartnership.findOne({
@@ -85,6 +85,46 @@ const partnershipsExistForAccreditation = async (accreditationId, { transaction 
   })
 
   return Boolean(existing)
+}
+
+
+/**
+ * Get the number of (non-deleted) partnerships linked to a ProviderAccreditation.
+ *
+ * Counts rows in `provider_accreditation_partnerships` where
+ * `providerAccreditationId === accreditationId`. By default this excludes
+ * soft-deleted rows (`deletedAt IS NULL`) since the model is not `paranoid`.
+ *
+ * @param {string} accreditationId
+ *   UUID from `provider_accreditations.id`.
+ * @param {{
+ *   transaction?: import('sequelize').Transaction,
+ *   includeDeleted?: boolean
+ * }} [options]
+ *   Optional Sequelize options:
+ *   - transaction: pass an existing transaction.
+ *   - includeDeleted: set true to include soft-deleted partnerships.
+ *
+ * @returns {Promise<number>} Number of partnerships for the accreditation.
+ *
+ * @example
+ * const count = await getPartnershipCountForAccreditation(accreditation.id, { transaction })
+ * if (count > 0) {
+ *   // Block deletion or adapt UI
+ * }
+ */
+const getPartnershipCountForAccreditation = async (
+  accreditationId,
+  { transaction, includeDeleted = false } = {}
+) => {
+  if (!accreditationId) {
+    throw new Error('getPartnershipCountForAccreditation: accreditationId is required')
+  }
+
+  const where = { providerAccreditationId: accreditationId }
+  if (!includeDeleted) where.deletedAt = null
+
+  return ProviderAccreditationPartnership.count({ where, transaction })
 }
 
 /**
@@ -157,7 +197,8 @@ const getEligiblePartnerProviders = async ({ isAccredited, query = '', today = n
 }
 
 module.exports = {
+  getEligiblePartnerProviders,
+  getPartnershipCountForAccreditation,
   partnershipExistsForProviderPair,
-  partnershipsExistForAccreditation,
-  getEligiblePartnerProviders
+  partnershipsExistForAccreditation
 }

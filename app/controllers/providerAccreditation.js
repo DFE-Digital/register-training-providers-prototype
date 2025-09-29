@@ -1,7 +1,7 @@
 const { Provider, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { partnershipsExistForAccreditation } = require('../helpers/partnership')
+const { getPartnershipCountForAccreditation, partnershipsExistForAccreditation } = require('../helpers/partnership')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 
@@ -349,14 +349,17 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
   const provider = await Provider.findByPk(providerId)
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   const hasPartnerships = await partnershipsExistForAccreditation(accreditationId)
+  const partnershipCount = await getPartnershipCountForAccreditation(accreditationId)
 
   res.render('providers/accreditations/delete', {
     provider,
     accreditation,
     hasPartnerships,
+    partnershipCount,
     actions: {
       back: `/providers/${providerId}`,
       cancel: `/providers/${providerId}/accreditations`,
+      partnerships: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/accreditations/${accreditationId}/delete`
     }
   })
