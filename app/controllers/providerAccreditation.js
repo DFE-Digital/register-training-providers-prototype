@@ -1,6 +1,7 @@
 const { Provider, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
+const { hasLinkedPartnerships } = require('../helpers/partnership')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 
@@ -347,9 +348,12 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
   const { accreditationId, providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
+  const hasPartnerships = await hasLinkedPartnerships(accreditationId)
+
   res.render('providers/accreditations/delete', {
     provider,
     accreditation,
+    hasPartnerships,
     actions: {
       back: `/providers/${providerId}`,
       cancel: `/providers/${providerId}/accreditations`,
@@ -362,12 +366,19 @@ exports.deleteProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
   const { user } = req.session.passport
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
-  await accreditation.update({
-    deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
-  })
+  const hasPartnerships = await hasLinkedPartnerships(accreditationId)
 
-  req.flash('success', 'Accreditation deleted')
-  res.redirect(`/providers/${providerId}/accreditations`)
+  if (hasPartnerships) {
+    res.redirect(`/providers/${providerId}/accreditations/${accreditationId}/delete`)
+  } else {
+    await accreditation.update({
+      deletedAt: new Date(),
+      deletedById: user.id,
+      updatedById: user.id
+    })
+
+    req.flash('success', 'Accreditation deleted')
+    res.redirect(`/providers/${providerId}/accreditations`)
+  }
+
 }
