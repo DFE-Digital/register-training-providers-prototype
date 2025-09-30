@@ -108,6 +108,8 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'ActivityLog',
       tableName: 'activity_logs',
+      // Important: no automatic timestamps on this table
+      timestamps: false, // disables both createdAt/updatedAt automation
       underscored: true
     }
   )
