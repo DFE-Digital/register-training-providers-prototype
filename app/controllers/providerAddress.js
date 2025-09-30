@@ -255,7 +255,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
-    error.text = "Enter address line 1"
+    error.text = "Enter address line 1, typically the building and street"
     errors.push(error)
   }
 
@@ -408,7 +408,7 @@ exports.editProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
-    error.text = "Enter address line 1"
+    error.text = "Enter address line 1, typically the building and street"
     errors.push(error)
   }
 
