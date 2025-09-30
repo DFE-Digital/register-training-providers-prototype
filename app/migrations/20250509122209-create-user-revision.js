@@ -51,12 +51,6 @@ module.exports = {
         allowNull: true
       }
     })
-
-    // indexes
-    await queryInterface.addIndex('user_revisions', {
-      fields: ['user_id'],
-      name: 'idx_user_revisions_user_id'
-    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('user_revisions')

@@ -53,16 +53,6 @@ module.exports = {
         allowNull: true
       }
     })
-
-    // indexes
-    await queryInterface.addIndex('provider_contact_revisions', {
-      fields: ['provider_id'],
-      name: 'idx_provider_contact_revisions_provider_id'
-    })
-    await queryInterface.addIndex('provider_contact_revisions', {
-      fields: ['provider_contact_id'],
-      name: 'idx_provider_contact_revisions_provider_contact_id'
-    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('provider_contact_revisions')

@@ -33,16 +33,6 @@ module.exports = {
         allowNull: true
       }
     })
-
-    // indexes
-    await queryInterface.addIndex('provider_accreditation_partnership_revisions', {
-      fields: ['provider_accreditation_id'],
-      name: 'idx_provider_accreditation_partnership_revisions_provider_accreditation_id'
-    })
-    await queryInterface.addIndex('provider_accreditation_partnership_revisions', {
-      fields: ['partner_id'],
-      name: 'idx_provider_accreditation_partnership_revisions_partner_id'
-    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('provider_accreditation_partnership_revisions')
