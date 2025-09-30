@@ -62,34 +62,6 @@ module.exports = (sequelize) => {
           is: /^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$/
         }
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'created_at'
-      },
-      createdById: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'created_by_id'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'updated_at'
-      },
-      updatedById: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'updated_by_id'
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at'
-      },
-      deletedById: {
-        type: DataTypes.UUID,
-        field: 'deleted_by_id'
-      },
       revisionNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,

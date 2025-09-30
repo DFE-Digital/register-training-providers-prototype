@@ -38,6 +38,16 @@ module.exports = {
         type: Sequelize.UUID
       }
     })
+
+    // indexes
+    await queryInterface.addIndex('provider_accreditation_partnerships', {
+      fields: ['provider_accreditation_id'],
+      name: 'idx_provider_accreditation_partnerships_provider_accreditation_id'
+    })
+    await queryInterface.addIndex('provider_accreditation_partnerships', {
+      fields: ['partner_id'],
+      name: 'idx_provider_accreditation_partnerships_partner_id'
+    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('provider_accreditation_partnerships')

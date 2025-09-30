@@ -34,28 +34,6 @@ module.exports = {
       ends_on: {
         type: Sequelize.DATE
       },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      created_by_id: {
-        type: Sequelize.UUID,
-        allowNull: false
-      },
-      updated_at: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      updated_by_id: {
-        type: Sequelize.UUID,
-        allowNull: false
-      },
-      deleted_at: {
-        type: Sequelize.DATE
-      },
-      deleted_by_id: {
-        type: Sequelize.UUID
-      },
       revision_number: {
         type: Sequelize.INTEGER,
         allowNull: false

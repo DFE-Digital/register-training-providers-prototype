@@ -70,26 +70,6 @@ module.exports = (sequelize) => {
           isURL: true
         }
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'created_at'
-      },
-      createdById: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'created_by_id'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'updated_at'
-      },
-      updatedById: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'updated_by_id'
-      },
       archivedAt: {
         type: DataTypes.DATE,
         field: 'archived_at'
@@ -97,14 +77,6 @@ module.exports = (sequelize) => {
       archivedById: {
         type: DataTypes.UUID,
         field: 'archived_by_id'
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at'
-      },
-      deletedById: {
-        type: DataTypes.UUID,
-        field: 'deleted_by_id'
       },
       revisionNumber: {
         type: DataTypes.INTEGER,

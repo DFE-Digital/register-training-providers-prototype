@@ -1,47 +1,76 @@
+/**
+ * Activity logging hook for revision tables.
+ * Infers or accepts an explicit action and writes an activity log entry.
+ */
+
 const { logActivity } = require('../utils/activityLogger')
 
 /**
- * Creates a Sequelize-compatible hook to log activity when a revision is created.
+ * @typedef {'create'|'update'|'delete'} ActivityAction
+ */
+
+/**
+ * @typedef {Object} ActivityHookConfig
+ * @property {string} entityType     - Logical entity type (e.g. 'provider_contact')
+ * @property {string} revisionTable  - Name of the revision table (e.g. 'provider_contact_revisions')
+ * @property {string} entityIdField  - FK field on the revision model that links back to the entity (e.g. 'providerContactId')
+ */
+
+/**
+ * Options passed through Sequelize into hooks when a revision is created.
+ * We extend the normal Sequelize CreateOptions with our own optional `activityAction`.
+ * @typedef {Object} ActivityHookOptions
+ * @property {ActivityAction} [activityAction] - Explicit action to log; if omitted, it is inferred from revisionNumber.
+ * // Note: Sequelize also passes many other properties on options (transaction, logging, etc.).
+ */
+
+/**
+ * A Sequelize `afterCreate`-compatible hook factory that records activity
+ * for each new revision row.
  *
- * @param {Object} config
- * @param {string} config.entityType - Logical type of the entity (e.g. 'user', 'provider')
- * @param {string} config.revisionTable - Name of the revision table in the DB
- * @param {string} config.entityIdField - Field name on the revision model that links to the entity
- * @returns {Function} Sequelize hook function (instance, options) => void
+ * It expects the `instance` to be a *revision* row with at least:
+ *  - `id` (UUID)
+ *  - `revisionNumber` (number)
+ *  - `revisionById` (UUID|null)
+ *  - `revisionAt` (Date|null)
+ *  - The FK defined by `entityIdField` (e.g. `providerContactId`)
+ *
+ * @param {ActivityHookConfig} param0 - Hook configuration
+ * @returns {(instance: import('sequelize').Model, options: ActivityHookOptions) => Promise<void>}
  */
 const createActivityHook = ({ entityType, revisionTable, entityIdField }) => {
-  return async (instance, options) => {
+  return async (instance, options = {}) => {
     const revisionId = instance.id
     const entityId = instance[entityIdField]
     const revisionNumber = instance.revisionNumber
-    const changedById = instance.updatedById
-    const changedAt = instance.updatedAt
 
-    // infer action from some data
-    const action = instance?.revisionNumber === 1 ? 'create'
-      : instance?.deletedAt !== null ? 'delete'
-      : 'update'
+    /** @type {ActivityAction} */
+    const action = options.activityAction ?? (revisionNumber === 1 ? 'create' : 'update')
 
-    // TODO: infer action from hook name
-    // const action = options?.hookName === 'afterCreate' ? 'create'
-    //   : options?.hookName === 'afterDestroy' ? 'delete'
-    //   : 'update'
+    // Use revision fields (these exist on revision rows)
+    const changedById = instance.revisionById ?? null
+    const changedAt = instance.revisionAt ?? new Date()
 
     if (!revisionId || !entityId) {
-      console.warn(`[ActivityHook] Skipped logging activity — missing revisionId (${revisionId}) or entityId (${entityId})`)
+      console.warn(
+        `[ActivityHook] Skipped logging — missing revisionId (${revisionId}) or entityId (${entityId})`
+      )
       return
     }
 
-    await logActivity({
-      revisionTable,
-      revisionId,
-      entityType,
-      entityId,
-      revisionNumber,
-      action,
-      changedById,
-      changedAt
-    }, options)
+    await logActivity(
+      {
+        revisionTable,
+        revisionId,
+        entityType,
+        entityId,
+        revisionNumber,
+        action,
+        changedById,
+        changedAt
+      },
+      options
+    )
   }
 }
 

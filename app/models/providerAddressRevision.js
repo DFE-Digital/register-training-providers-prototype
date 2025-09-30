@@ -82,34 +82,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         field: 'google_place_id'
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'created_at'
-      },
-      createdById: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'created_by_id'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'updated_at'
-      },
-      updatedById: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'updated_by_id'
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at'
-      },
-      deletedById: {
-        type: DataTypes.UUID,
-        field: 'deleted_by_id'
-      },
       revisionNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,

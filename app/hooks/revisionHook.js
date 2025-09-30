@@ -1,56 +1,110 @@
+/**
+ * Generic revisioning hook.
+ * Creates a new revision row for a model whenever tracked fields change.
+ */
+
 const revisionFields = require('../constants/revisionFields')
 
+/**
+ * @typedef {Object} RevisionHookConfig
+ * @property {string} revisionModelName - The Sequelize model name of the revision table (e.g. 'ProviderContactRevision').
+ * @property {string} modelKey          - Key used in `revisionFields` and to construct FK (e.g. 'providerContact' -> 'providerContactId').
+ */
+
+/**
+ * @typedef {Object} RevisionHookOptions
+ * @property {'afterCreate'|'afterUpdate'|'afterDestroy'} [hookName] - Name of the lifecycle hook that invoked this function.
+ * // Note: Sequelize will pass many other options (transaction, logging, etc.); we keep the type open.
+ */
+
+/**
+ * Factory that returns a Sequelize hook to create revision rows.
+ *
+ * Behaviour:
+ *  - On creation (`afterCreate`), writes revision #1.
+ *  - On updates, compares only fields listed in `revisionFields[modelKey]`;
+ *    if any changed, increments `revisionNumber` and writes a new row.
+ *  - Sets `revisionById` from `updatedById` falling back to `createdById`.
+ *  - Sets `revisionAt` on write (so activities have a stable timestamp).
+ *  - Emits an `activityAction` alongside the create so the activity hook
+ *    can log 'create'/'update' (and 'delete' if you detect soft delete).
+ *
+ * Soft deletes:
+ *  - If you soft-delete on the *source* model (set `deletedAt` then save),
+ *    detect that change here and pass `activityAction: 'delete'`.
+ *
+ * @param {RevisionHookConfig} param0
+ * @returns {(instance: import('sequelize').Model, options?: RevisionHookOptions) => Promise<void>}
+ */
 const createRevisionHook = ({ revisionModelName, modelKey }) => {
-  return async (instance, options) => {
+  return async (instance, options = {}) => {
     const sequelize = instance.sequelize
     const RevisionModel = sequelize.models[revisionModelName]
     const trackedFields = revisionFields[modelKey] || []
 
-    // Determine revisionById (if possible)
-    const revisionById = instance.get('updatedById') || instance.get('createdById') || null
+    // Who caused the change
+    const revisionById =
+      instance.get('updatedById') ||
+      instance.get('createdById') ||
+      null
 
-    // Always create revision on creation
+    // Safely pick only attributes that exist on the revision model
+    const src = instance.get({ plain: true })
+    const pickForRevision = (obj) => {
+      const revisionAttrs = Object.keys(RevisionModel.rawAttributes)
+      const omit = new Set(['id']) // avoid copying PK from source into revision
+      return Object.fromEntries(
+        Object.entries(obj).filter(([k]) => revisionAttrs.includes(k) && !omit.has(k))
+      )
+    }
+
+    const buildPayload = (overrides = {}) => ({
+      ...pickForRevision(src),
+      [`${modelKey}Id`]: instance.id,
+      revisionById,
+      revisionAt: new Date(),
+      ...overrides
+    })
+
+    // First revision on create
     if (options?.hookName === 'afterCreate') {
-      await RevisionModel.create({
-        ...instance.get({ plain: true }),
-        [`${modelKey}Id`]: instance.id,
-        revisionNumber: 1,
-        revisionById: revisionById
-      })
+      await RevisionModel.create(
+        buildPayload({ revisionNumber: 1 }),
+        /** @type {import('sequelize').CreateOptions & { activityAction?: 'create' }} */ ({
+          activityAction: 'create'
+        })
+      )
       return
     }
 
-    // Get the latest revision
+    // Find latest existing revision
     const latest = await RevisionModel.findOne({
       where: { [`${modelKey}Id`]: instance.id },
       order: [['revisionNumber', 'DESC']]
     })
 
     if (!latest) {
-      await RevisionModel.create({
-        ...instance.get({ plain: true }),
-        [`${modelKey}Id`]: instance.id,
-        revisionNumber: 1,
-        revisionById: revisionById
-      })
+      // Shouldn't usually happen, but be resilient
+      await RevisionModel.create(
+        buildPayload({ revisionNumber: 1 }),
+        { activityAction: 'create' }
+      )
       return
     }
 
-    const hasChanged = trackedFields.some(field => {
-      return instance.get(field) !== latest.get(field)
-    })
-
+    // Only write a new revision if tracked fields changed
+    const hasChanged = trackedFields.some((field) => instance.get(field) !== latest.get(field))
     if (!hasChanged) return
 
-    const revisionData = {
-      ...instance.get({ plain: true }),
-      [`${modelKey}Id`]: instance.id,
-      revisionNumber: latest.revisionNumber + 1,
-      revisionById: revisionById
-    }
+    // Optional: treat soft delete (deletedAt changed to non-null) as a 'delete'
+    const deletedAtChanged =
+      typeof instance.changed === 'function' ? instance.changed('deletedAt') : false
+    const isDelete = deletedAtChanged && instance.get('deletedAt') != null
 
-    delete revisionData.id
-    await RevisionModel.create(revisionData)
+    await RevisionModel.create(
+      buildPayload({ revisionNumber: latest.revisionNumber + 1 }),
+      { activityAction: isDelete ? 'delete' : 'update' }
+    )
   }
 }
 

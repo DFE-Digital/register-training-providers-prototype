@@ -39,32 +39,10 @@ module.exports = {
       website: {
         type: Sequelize.STRING,
       },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      created_by_id: {
-        type: Sequelize.UUID,
-        allowNull: false
-      },
-      updated_at: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      updated_by_id: {
-        type: Sequelize.UUID,
-        allowNull: false
-      },
       archived_at: {
         type: Sequelize.DATE
       },
       archived_by_id: {
-        type: Sequelize.UUID
-      },
-      deleted_at: {
-        type: Sequelize.DATE
-      },
-      deleted_by_id: {
         type: Sequelize.UUID
       },
       revision_number: {
