@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "connect-flash": "^0.1.1",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "govuk-frontend": "^5.12.0",
     "govuk-prototype-kit": "^13.18.1",
     "gray-matter": "^4.0.3",
