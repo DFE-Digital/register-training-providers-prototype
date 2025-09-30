@@ -54,6 +54,7 @@ module.exports = (sequelize) => {
       },
       revisionAt: {
         type: DataTypes.DATE,
+        allowNull: false,
         field: 'revision_at'
       },
       revisionById: {
