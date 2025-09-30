@@ -14,11 +14,13 @@ const createRevisionHook = ({ revisionModelName, modelKey }) => {
 
     // Only copy fields that actually exist on the revision model
     const src = instance.get({ plain: true })
-    const revisionAttrs = Object.keys(RevisionModel.rawAttributes)
-    const pickForRevision = (obj) =>
-      Object.fromEntries(
-        Object.entries(obj).filter(([k]) => revisionAttrs.includes(k))
+    const pickForRevision = (obj) => {
+      const revisionAttrs = Object.keys(RevisionModel.rawAttributes)
+      const omit = new Set(['id']) // add other auto fields if you like
+      return Object.fromEntries(
+        Object.entries(obj).filter(([k]) => revisionAttrs.includes(k) && !omit.has(k))
       )
+    }
 
     // Helper to build the payload consistently
     const buildPayload = (overrides = {}) => ({
