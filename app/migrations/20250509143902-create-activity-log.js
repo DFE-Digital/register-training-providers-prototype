@@ -4,31 +4,31 @@ module.exports = {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
+        primaryKey: true
       },
       revision_table: {
         type: Sequelize.STRING,
         allowNull: false,
-        comment: 'The name of the table where the revision occurred (e.g. provider_revisions)',
+        comment: 'The name of the table where the revision occurred (e.g. provider_revisions)'
       },
       revision_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        comment: 'The ID of the revision record (e.g. in provider_revisions)',
+        comment: 'The ID of the revision record (e.g. in provider_revisions)'
       },
       entity_type: {
         type: Sequelize.STRING,
         allowNull: false,
-        comment: 'High-level type of entity (e.g. provider, user)',
+        comment: 'High-level type of entity (e.g. provider, user)'
       },
       entity_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        comment: 'The ID of the entity affected by the revision (e.g. provider.id)',
+        comment: 'The ID of the entity affected by the revision (e.g. provider.id)'
       },
       revision_number: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       action: {
         type: Sequelize.STRING,
@@ -38,23 +38,29 @@ module.exports = {
       changed_by_id: {
         type: Sequelize.UUID,
         allowNull: true,
-        comment: 'The user who made the change',
+        comment: 'The user who made the change'
       },
       changed_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
+    })
+
+    // indexes
+    await queryInterface.addIndex('activity_logs', {
+      fields: ['revision_id'],
+      name: 'idx_activity_logs_revision_id'
     })
   },
 

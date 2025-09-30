@@ -37,6 +37,20 @@ module.exports = {
         allowNull: true
       }
     })
+
+    // indexes
+    await queryInterface.addIndex('provider_partnership_revisions', {
+      fields: ['provider_partnership_id'],
+      name: 'idx_provider_partnership_revisions_provider_partnership_id'
+    })
+    await queryInterface.addIndex('provider_partnership_revisions', {
+      fields: ['accredited_provider_id'],
+      name: 'idx_provider_partnership_revisions_accredited_provider_id'
+    })
+    await queryInterface.addIndex('provider_partnership_revisions', {
+      fields: ['training_provider_id'],
+      name: 'idx_provider_partnership_revisions_training_provider_id'
+    })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('provider_partnership_revisions')

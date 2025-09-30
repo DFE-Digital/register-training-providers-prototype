@@ -35,13 +35,13 @@ module.exports = {
     })
 
     // indexes
-    await queryInterface.addIndex('provider_accreditation_partnerships', {
+    await queryInterface.addIndex('provider_accreditation_partnership_revisions', {
       fields: ['provider_accreditation_id'],
-      name: 'idx_pap_provider_accreditation_id'
+      name: 'idx_provider_accreditation_partnership_revisions_provider_accreditation_id'
     })
-    await queryInterface.addIndex('provider_accreditation_partnerships', {
+    await queryInterface.addIndex('provider_accreditation_partnership_revisions', {
       fields: ['partner_id'],
-      name: 'idx_pap_partner_id'
+      name: 'idx_provider_accreditation_partnership_revisions_partner_id'
     })
   },
   async down(queryInterface, Sequelize) {
