@@ -20,9 +20,7 @@ const createActivityLog = async ({
     revision_number: revisionNumber,
     action: 'create',
     changed_by_id: changedById,
-    changed_at: now,
-    created_at: now,
-    updated_at: now
+    changed_at: now
   }], { transaction })
 }
 
