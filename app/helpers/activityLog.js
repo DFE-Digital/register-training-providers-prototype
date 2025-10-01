@@ -2,11 +2,12 @@ const { Op } = require('sequelize')
 const {
   ActivityLog,
   Provider,
+  ProviderAccreditation,
   ProviderAccreditationRevision,
   ProviderAddressRevision,
   ProviderContactRevision,
   ProviderRevision,
-  // ProviderPartnershipRevision,
+  ProviderAccreditationPartnershipRevision,
   User,
   UserRevision
 } = require('../models')
@@ -23,7 +24,7 @@ const revisionAssociationMap = {
   provider_accreditation_revisions: 'providerAccreditationRevision',
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
-  provider_partnership_revisions: 'providerPartnershipRevision',
+  provider_accreditation_partnership_revisions: 'providerAccreditationPartnershipRevision',
   user_revisions: 'userRevision'
 }
 
@@ -36,7 +37,7 @@ const revisionModels = {
   provider_accreditation_revisions: ProviderAccreditationRevision,
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
-  // provider_partnership_revisions: ProviderPartnershipRevision,
+  provider_accreditation_partnership_revisions: ProviderAccreditationPartnershipRevision,
   user_revisions: UserRevision
 }
 
@@ -49,7 +50,10 @@ const revisionModels = {
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
 /**
- * Returns the foreign key(s) used by the revision table.
+ * Returns the foreign key(s) used by the revision table for previous/latest lookups.
+ *
+ * NOTE: For partnership *revision* tables, the entity is the partnership itself,
+ * so we use `providerAccreditationPartnershipId`.
  *
  * @param {string} revisionTable - Name of the revision table.
  * @returns {string[]} Array of foreign key fields.
@@ -58,9 +62,10 @@ const getEntityKeys = (revisionTable) => {
   switch (revisionTable) {
     case 'user_revisions':
       return ['userId']
-    case 'provider_partnership_revisions':
-      return ['accreditedProviderId', 'trainingProviderId']
+    case 'provider_accreditation_partnership_revisions':
+      return ['providerAccreditationPartnershipId']
     default:
+      // provider_*, provider_accreditation_*, provider_address_*, provider_contact_*
       return ['providerId']
   }
 }
@@ -77,7 +82,7 @@ const formatActivityLog = async (log) => {
     const logJson = log.toJSON()
     const alias = revisionAssociationMap[log.revisionTable]
     const revision = log[alias] || null
-    logJson.revision = revision ? revision.toJSON?.() || revision : null
+    logJson.revision = revision ? (revision.toJSON?.() || revision) : null
     logJson.summary = await getRevisionSummary({
       revision: logJson.revision,
       revisionTable: log.revisionTable,
@@ -133,14 +138,18 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         as: 'providerContactRevision',
         include: [{ model: Provider, as: 'provider' }]
       },
-      // {
-      //   model: ProviderPartnershipRevision,
-      //   as: 'providerPartnershipRevision',
-      //   include: [
-      //     { model: Provider, as: 'accreditedProvider' },
-      //     { model: Provider, as: 'trainingProvider' }
-      //   ]
-      // },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
       {
         model: UserRevision,
         as: 'userRevision'
@@ -150,12 +159,12 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         as: 'changedByUser'
       }
     ],
-    order: [['changedAt', 'DESC']],
+    order: [['changedAt', 'DESC'], ['id', 'DESC']],
     limit,
     offset
   })
 
-  return await Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -203,35 +212,41 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
-  // queries.push(ActivityLog.findAll({
-  //   where: { revisionTable: 'provider_partnership_revisions' },
-  //   include: [
-  //     {
-  //       model: ProviderPartnershipRevision,
-  //       as: 'providerPartnershipRevision',
-  //       required: true,
-  //       where: {
-  //         [Op.or]: [
-  //           { accreditedProviderId: providerId },
-  //           { trainingProviderId: providerId }
-  //         ]
-  //       },
-  //       include: [
-  //         { model: Provider, as: 'accreditedProvider' },
-  //         { model: Provider, as: 'trainingProvider' }
-  //       ]
-  //     },
-  //     { model: User, as: 'changedByUser' }
-  //   ]
-  // }))
+  // Partnerships where this provider is either the accredited provider (via accreditation.providerId)
+  // or the training partner (partnerId === providerId)
+  queries.push(ActivityLog.findAll({
+    where: { revisionTable: 'provider_accreditation_partnership_revisions' },
+    include: [
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: true,
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            required: false,
+            include: [{ model: Provider, as: 'provider', required: false, where: { id: providerId } }]
+          },
+          {
+            model: Provider,
+            as: 'partner',
+            required: false,
+            where: { id: providerId }
+          }
+        ]
+      },
+      { model: User, as: 'changedByUser' }
+    ]
+  }))
 
   const allLogs = (await Promise.all(queries)).flat()
 
   // Sort and paginate manually
-  allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+  allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt) || (b.id > a.id ? 1 : -1))
   const activityLogs = allLogs.slice(offset, offset + limit)
 
-  return await Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -248,64 +263,57 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
   const results = await Promise.all([
     ActivityLog.count({
       where: { revisionTable: 'provider_revisions' },
-      include: [
-        {
-          model: ProviderRevision,
-          as: 'providerRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderRevision,
+        as: 'providerRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
     ActivityLog.count({
       where: { revisionTable: 'provider_accreditation_revisions' },
-      include: [
-        {
-          model: ProviderAccreditationRevision,
-          as: 'providerAccreditationRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderAccreditationRevision,
+        as: 'providerAccreditationRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
     ActivityLog.count({
       where: { revisionTable: 'provider_address_revisions' },
-      include: [
-        {
-          model: ProviderAddressRevision,
-          as: 'providerAddressRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderAddressRevision,
+        as: 'providerAddressRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
     ActivityLog.count({
       where: { revisionTable: 'provider_contact_revisions' },
-      include: [
-        {
-          model: ProviderContactRevision,
-          as: 'providerContactRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderContactRevision,
+        as: 'providerContactRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
-    // ActivityLog.count({
-    //   where: { revisionTable: 'provider_partnership_revisions' },
-    //   include: [
-    //     {
-    //       model: ProviderPartnershipRevision,
-    //       as: 'providerPartnershipRevision',
-    //       required: true,
-    //       where: {
-    //         [Op.or]: [
-    //           { accreditedProviderId: providerId },
-    //           { trainingProviderId: providerId }
-    //         ]
-    //       }
-    //     }
-    //   ]
-    // })
+    ActivityLog.count({
+      where: { revisionTable: 'provider_accreditation_partnership_revisions' },
+      include: [{
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: true,
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            required: false,
+            include: [{ model: Provider, as: 'provider', required: false, where: { id: providerId } }]
+          },
+          { model: Provider, as: 'partner', required: false, where: { id: providerId } }
+        ]
+      }]
+    })
   ])
 
   return results.reduce((sum, count) => sum + count, 0)
@@ -326,7 +334,6 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
   if (!userId) throw new Error('userId is required')
 
   const whereClause = { changedById: userId }
-
   if (revisionTable) {
     whereClause.revisionTable = Array.isArray(revisionTable) ? { [Op.in]: revisionTable } : revisionTable
   }
@@ -354,14 +361,18 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'providerContactRevision',
         include: [{ model: Provider, as: 'provider' }]
       },
-      // {
-      //   model: ProviderPartnershipRevision,
-      //   as: 'providerPartnershipRevision',
-      //   include: [
-      //     { model: Provider, as: 'accreditedProvider' },
-      //     { model: Provider, as: 'trainingProvider' }
-      //   ]
-      // },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
       {
         model: UserRevision,
         as: 'userRevision'
@@ -371,12 +382,12 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'changedByUser'
       }
     ],
-    order: [['changedAt', 'DESC']],
+    order: [['changedAt', 'DESC'], ['id', 'DESC']],
     limit,
     offset
   })
 
-  return await Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -392,11 +403,8 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
   if (!userId) throw new Error('userId is required')
 
   const whereClause = { changedById: userId }
-
   if (revisionTable) {
-    whereClause.revisionTable = Array.isArray(revisionTable)
-      ? { [Op.in]: revisionTable }
-      : revisionTable
+    whereClause.revisionTable = Array.isArray(revisionTable) ? { [Op.in]: revisionTable } : revisionTable
   }
 
   const totalCount = await ActivityLog.count({
@@ -426,14 +434,19 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         required: false,
         include: [{ model: Provider, as: 'provider' }]
       },
-      // {
-      //   model: ProviderPartnershipRevision,
-      //   as: 'providerPartnershipRevision',
-      //   include: [
-      //     { model: Provider, as: 'accreditedProvider' },
-      //     { model: Provider, as: 'trainingProvider' }
-      //   ]
-      // },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: false,
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
       {
         model: UserRevision,
         as: 'userRevision',
@@ -454,18 +467,14 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
  * @param {string} options.revisionTable - Name of the revision table.
  * @param {string} options.action - Type of action (e.g. 'create', 'update', 'delete').
  * @param {string} options.revisionId - ID of the revision.
- * @param {string} options.entityId - ID of the provider or user.
+ * @param {string} options.entityId - ID of the provider or user (or partnership for partnership logs).
  * @returns {Promise<Object>} Structured summary object with `label`, `activity`, `href`, and `fields`.
  */
 const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   if (!revision) {
-    return {
-      label: 'Revision details unavailable',
-      fields: []
-    }
+    return { label: 'Revision details unavailable', fields: [] }
   }
 
-  // Set default summary
   const action = log.action
   let activity = ''
   let label = ''
@@ -473,7 +482,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   const fields = []
 
   switch (revisionTable) {
-    case 'provider_revisions':
+    case 'provider_revisions': {
       const previousRevision = await getPreviousRevision({
         revisionTable,
         revisionId: log.revisionId,
@@ -489,11 +498,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
           activity = 'Provider updated'
         }
       } else {
-        const actionLabel = {
-          create: 'created',
-          delete: 'deleted'
-        }[log.action] || `${log.action}d`
-
+        const actionLabel = { create: 'created', delete: 'deleted' }[log.action] || `${log.action}d`
         activity = `Provider ${actionLabel}`
       }
 
@@ -507,12 +512,13 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Unique reference number (URN)', value: revision.urn })
       fields.push({ key: 'Provider code', value: revision.code })
       break
+    }
 
     case 'provider_address_revisions': {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider address ${log.action}d`
-      label = providerName // `${providerName} – address details`
+      label = providerName
       href = `/providers/${revision.providerId}/addresses`
 
       fields.push({ key: 'Address line 1', value: revision.line1 })
@@ -530,7 +536,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider contact ${log.action}d`
-      label = providerName // `${providerName} – contact details`
+      label = providerName
       href = `/providers/${revision.providerId}/contacts`
 
       fields.push({ key: 'First name', value: revision.firstName })
@@ -544,7 +550,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider accreditation ${log.action}d`
-      label = providerName // `${providerName} – accreditation`
+      label = providerName
       href = `/providers/${revision.providerId}/accreditations`
 
       fields.push({ key: 'Accreditation number', value: revision.number })
@@ -553,23 +559,30 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
-    // case 'provider_partnership_revisions': {
-    //   const accredited = revision.accreditedProvider
-    //   const training = revision.trainingProvider
+    case 'provider_accreditation_partnership_revisions': {
+      // Eager-loaded associations:
+      // - revision.providerAccreditation.provider (accredited provider)
+      // - revision.partner (training provider)
+      const accreditedProvider =
+        revision.providerAccreditation?.provider ||
+        null
+      const trainingProvider = revision.partner || null
 
-    //   const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
-    //   const trainingName = training?.operatingName || training?.legalName || 'Training provider'
+      const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
+      const trainingName = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training provider'
 
-    //   label = `${accreditedName} – ${trainingName}`
-    //   activity = `Provider partnership ${log.action}d`
-    //   href = `/providers/${revision.accreditedProviderId}/partnerships`
+      activity = `Provider partnership ${log.action}d`
+      label = `${accreditedName} – ${trainingName}`
+      // Link to the accredited provider’s partnerships list
+      const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+      href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
 
-    //   fields.push({ key: 'Accredited provider', value: accreditedName })
-    //   fields.push({ key: 'Training provider', value: trainingName })
-    //   break
-    // }
+      fields.push({ key: 'Accredited provider', value: accreditedName })
+      fields.push({ key: 'Training provider', value: trainingName })
+      break
+    }
 
-    case 'user_revisions':
+    case 'user_revisions': {
       activity = `User ${log.action}d`
       label = `${revision.firstName} ${revision.lastName}` || revision.email || 'User'
       href = `/users/${revision.userId}`
@@ -578,18 +591,13 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Last name', value: revision.lastName })
       fields.push({ key: 'Email address', value: revision.email })
       break
+    }
 
     default:
       label = 'Unknown revision'
   }
 
-  return {
-    action,
-    activity,
-    label,
-    href,
-    fields
-  }
+  return { action, activity, label, href, fields }
 }
 
 /**
@@ -607,10 +615,7 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
   const entityKeys = getEntityKeys(revisionTable)
-
-  const whereClause = {
-    [Op.or]: entityKeys.map(key => ({ [key]: entityId }))
-  }
+  const whereClause = { [Op.or]: entityKeys.map(key => ({ [key]: entityId })) }
 
   const revisions = await revisionModel.findAll({
     where: whereClause,
@@ -618,7 +623,6 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   })
 
   const index = revisions.findIndex(r => r.id === revisionId)
-
   return index > 0 ? revisions[index - 1] : null
 }
 
@@ -636,12 +640,9 @@ const getLatestRevision = async ({ revisionTable, entityId }) => {
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
   const entityKeys = getEntityKeys(revisionTable)
+  const whereClause = { [Op.or]: entityKeys.map(key => ({ [key]: entityId })) }
 
-  const whereClause = {
-    [Op.or]: entityKeys.map(key => ({ [key]: entityId }))
-  }
-
-  return await revisionModel.findOne({
+  return revisionModel.findOne({
     where: whereClause,
     order: [['revisionNumber', 'DESC']]
   })
@@ -668,10 +669,7 @@ const groupActivityLogsByDate = (logs) => {
       label = govukDate(date)
     }
 
-    if (!groups[label]) {
-      groups[label] = []
-    }
-
+    if (!groups[label]) groups[label] = []
     groups[label].push(log)
   }
 
