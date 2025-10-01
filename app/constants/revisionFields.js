@@ -49,7 +49,9 @@ module.exports = {
   ],
   providerAccreditationPartnership: [
     'providerAccreditationId',
-    'partnerId'
+    'partnerId',
+    'deletedAt',
+    'deletedById'
   ],
   user: [
     'firstName',
