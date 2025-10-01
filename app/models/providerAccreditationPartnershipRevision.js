@@ -42,11 +42,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'partner_id'
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'created_at'
-      },
       revisionNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,
