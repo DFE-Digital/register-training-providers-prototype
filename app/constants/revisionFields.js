@@ -47,6 +47,10 @@ module.exports = {
     'deletedAt',
     'deletedById'
   ],
+  providerAccreditationPartnership: [
+    'providerAccreditationId',
+    'partnerId'
+  ],
   user: [
     'firstName',
     'lastName',
