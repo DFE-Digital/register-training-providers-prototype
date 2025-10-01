@@ -569,26 +569,85 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
+    // case 'provider_accreditation_partnership_revisions': {
+    //   // Eager-loaded associations:
+    //   // - revision.providerAccreditation.provider (accredited provider)
+    //   // - revision.partner (training provider)
+    //   const accreditedProvider =
+    //     revision.providerAccreditation?.provider ||
+    //     null
+    //   const trainingProvider = revision.partner || null
+
+    //   const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
+    //   const trainingName = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
+
+    //   activity = `Provider partnership ${log.action}d`
+    //   label = `${accreditedName} – ${trainingName}`
+    //   // Link to the accredited provider’s partnerships list
+    //   const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+    //   href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
+
+    //   fields.push({ key: 'Accredited provider', value: accreditedName })
+    //   fields.push({ key: 'Training partner', value: trainingName })
+    //   break
+    // }
+
     case 'provider_accreditation_partnership_revisions': {
-      // Eager-loaded associations:
-      // - revision.providerAccreditation.provider (accredited provider)
-      // - revision.partner (training provider)
-      const accreditedProvider =
-        revision.providerAccreditation?.provider ||
-        null
+      // We included these in getActivityLogs / getProviderActivityLogs
+      const accreditedProvider = revision.providerAccreditation?.provider || null
       const trainingProvider = revision.partner || null
 
       const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
-      const trainingName = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
+      const trainingName = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training provider'
 
       activity = `Provider partnership ${log.action}d`
       label = `${accreditedName} – ${trainingName}`
-      // Link to the accredited provider’s partnerships list
       const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
       href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
 
+      // --- NEW: show linked accreditations as-of this change ---
+      const sequelize = require('../models').sequelize
+      const asOf = new Date(log.changedAt)
+      const partnerId = revision.partnerId
+
+      // Current snapshot (as of this activity)
+      const nowLinked = accreditedProviderId && partnerId
+        ? await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId, asOf })
+        : []
+
+      // Previous snapshot (for diffs), if we can resolve a previous revision time
+      let added = [], removed = []
+      const prev = await getPreviousRevision({
+        revisionTable,
+        revisionId: log.revisionId,
+        entityId: log.entityId
+      })
+      if (prev && accreditedProviderId && partnerId) {
+        // Look just before the current timestamp to avoid equality edge cases
+        const prevAsOf = new Date(asOf.getTime() - 1)
+        const prevLinked = await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId, asOf: prevAsOf })
+
+        const prevIds = new Set(prevLinked.map(a => a.id))
+        const nowIds  = new Set(nowLinked.map(a => a.id))
+
+        added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number)
+        removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number)
+      }
+
+      // Fields to render on the card
       fields.push({ key: 'Accredited provider', value: accreditedName })
-      fields.push({ key: 'Training partner', value: trainingName })
+      fields.push({ key: 'Training provider', value: trainingName })
+
+      // Always show the linked accreditations as-of the change
+      fields.push({
+        key: `Linked accreditations`, // (as of ${govukDate(asOf)})
+        value: nowLinked.length ? nowLinked.map(a => a.number).sort().join(', ') : 'None'
+      })
+
+      // If there’s a meaningful diff, surface it
+      if (added.length)  fields.push({ key: 'Accreditations added',   value: added.sort().join(', ') })
+      if (removed.length) fields.push({ key: 'Accreditations removed', value: removed.sort().join(', ') })
+
       break
     }
 
@@ -687,6 +746,39 @@ const groupActivityLogsByDate = (logs) => {
   return Object.entries(groups)
     .map(([label, entries]) => ({ label, entries }))
     .sort((a, b) => new Date(b.entries[0].changedAt) - new Date(a.entries[0].changedAt))
+}
+
+// Fetch all accreditations linking the accredited provider to the training partner *as of* a time.
+const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, partnerId, asOf }) => {
+  const { ProviderAccreditationPartnership, ProviderAccreditation } = sequelize.models
+
+  // Load all rows for the pair (paranoid: false so we can time-filter soft-deletes)
+  const joins = await ProviderAccreditationPartnership.findAll({
+    paranoid: false,
+    where: { partnerId },
+    include: [{
+      model: ProviderAccreditation,
+      as: 'providerAccreditation',
+      required: true,
+      where: { providerId: accreditedProviderId },
+      attributes: ['id', 'number', 'startsOn', 'endsOn']
+    }],
+    attributes: ['createdAt', 'deletedAt']
+  })
+
+  // Keep rows that existed at 'asOf'
+  return joins
+    .filter(j => {
+      const created = j.createdAt ? new Date(j.createdAt) : new Date(0)
+      const deleted = j.deletedAt ? new Date(j.deletedAt) : null
+      return created <= asOf && (deleted === null || deleted > asOf)
+    })
+    .map(j => ({
+      id: j.providerAccreditation.id,
+      number: j.providerAccreditation.number,
+      startsOn: j.providerAccreditation.startsOn || null,
+      endsOn: j.providerAccreditation.endsOn || null
+    }))
 }
 
 module.exports = {
