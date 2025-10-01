@@ -100,13 +100,13 @@
             actions: {
               items: [
                 {
-                  href: actions.delete + "/" + address.id + "/delete",
-                  text: "Delete",
+                  href: actions.change + "/" + address.id + "/edit",
+                  text: "Change",
                   visuallyHiddenText: "address " + loop.index
                 },
                 {
-                  href: actions.change + "/" + address.id + "/edit",
-                  text: "Change",
+                  href: actions.delete + "/" + address.id + "/delete",
+                  text: "Delete",
                   visuallyHiddenText: "address " + loop.index
                 }
               ]

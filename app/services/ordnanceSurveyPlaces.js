@@ -1,6 +1,6 @@
 const inflection = require('inflection')
 
-const apiKey = process.env.OS_PLACES_API_KEY
+const apiKey = process.env.ORDNANCE_SURVEY_API_KEY
 
 /**
  * Helper function: Converts text to Title Case if not empty, otherwise returns null.

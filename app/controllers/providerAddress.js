@@ -12,6 +12,9 @@ const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces
 /// ------------------------------------------------------------------------ ///
 
 exports.providerAddressesList = async (req, res) => {
+  delete req.session.data.find
+  delete req.session.data.address
+
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 50
   const offset = (page - 1) * limit
@@ -255,7 +258,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
-    error.text = "Enter address line 1"
+    error.text = "Enter address line 1, typically the building and street"
     errors.push(error)
   }
 
@@ -408,7 +411,7 @@ exports.editProviderAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-line-1"
     error.href = "#address-line-1"
-    error.text = "Enter address line 1"
+    error.text = "Enter address line 1, typically the building and street"
     errors.push(error)
   }
 
