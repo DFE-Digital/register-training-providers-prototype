@@ -85,10 +85,12 @@ module.exports = (sequelize) => {
       },
       deletedAt: {
         type: DataTypes.DATE,
+        allowNull: true,
         field: 'deleted_at'
       },
       deletedById: {
         type: DataTypes.UUID,
+        allowNull: true,
         field: 'deleted_by_id'
       }
     },
