@@ -569,29 +569,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
-    // case 'provider_accreditation_partnership_revisions': {
-    //   // Eager-loaded associations:
-    //   // - revision.providerAccreditation.provider (accredited provider)
-    //   // - revision.partner (training provider)
-    //   const accreditedProvider =
-    //     revision.providerAccreditation?.provider ||
-    //     null
-    //   const trainingProvider = revision.partner || null
-
-    //   const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
-    //   const trainingName = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
-
-    //   activity = `Provider partnership ${log.action}d`
-    //   label = `${accreditedName} – ${trainingName}`
-    //   // Link to the accredited provider’s partnerships list
-    //   const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
-    //   href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
-
-    //   fields.push({ key: 'Accredited provider', value: accreditedName })
-    //   fields.push({ key: 'Training partner', value: trainingName })
-    //   break
-    // }
-
     case 'provider_accreditation_partnership_revisions': {
       // We included these in getActivityLogs / getProviderActivityLogs
       const accreditedProvider = revision.providerAccreditation?.provider || null
@@ -748,7 +725,42 @@ const groupActivityLogsByDate = (logs) => {
     .sort((a, b) => new Date(b.entries[0].changedAt) - new Date(a.entries[0].changedAt))
 }
 
-// Fetch all accreditations linking the accredited provider to the training partner *as of* a time.
+/**
+ * Fetch the set of accreditations that **linked** a given accredited provider
+ * to a given training partner **as of** a specific point in time.
+ *
+ * This function inspects the join table (`ProviderAccreditationPartnership`) with
+ * `paranoid: false` so it can “time-travel”: a row is considered linked at `asOf`
+ * if it was created **on or before** `asOf` and either not deleted or deleted
+ * **after** `asOf`. It returns a simplified list of accreditation details.
+ *
+ * ### Requirements
+ * - Associations:
+ *   - `ProviderAccreditationPartnership.belongsTo(ProviderAccreditation, { as: 'providerAccreditation' })`
+ *   - `ProviderAccreditation.belongsTo(Provider, { as: 'provider' })` (not used directly here, but typical)
+ *
+ * ### Performance
+ * - Uses a single query to load all partnerships for the provider pair and filters in memory.
+ *   If the dataset becomes large, consider pushing the time-window predicates into the SQL `where`
+ *   (e.g., `createdAt <= asOf AND (deletedAt IS NULL OR deletedAt > asOf)`).
+ *
+ * @param {Object} params - Function parameters.
+ * @param {import('sequelize').Sequelize} params.sequelize - The Sequelize instance (used to access models).
+ * @param {string} params.accreditedProviderId - ID of the **accredited** provider.
+ * @param {string} params.partnerId - ID of the **training** provider.
+ * @param {Date} params.asOf - Point in time to evaluate the link state (usually the activity's `changedAt`).
+ * @returns {Promise<LinkedAccreditation[]>} A list of accreditations that were in force for the pair at `asOf`.
+ *
+ * @example
+ * // Show accreditations linking accredited A to training partner T on 12 Sep 2025
+ * const links = await getLinkedAccreditationsAsOf({
+ *   sequelize,
+ *   accreditedProviderId: '4b8…-A',
+ *   partnerId: '7c2…-T',
+ *   asOf: new Date('2025-09-12T10:05:00Z')
+ * })
+ * // -> [{ id: 'acc-1', number: 'A123', startsOn: '2024-08-01', endsOn: null }]
+ */
 const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, partnerId, asOf }) => {
   const { ProviderAccreditationPartnership, ProviderAccreditation } = sequelize.models
 
