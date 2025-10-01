@@ -31,12 +31,12 @@ module.exports = (sequelize) => {
         as: 'providerContactRevision'
       })
 
-      // ActivityLog.belongsTo(models.ProviderPartnershipRevision, {
-      //   foreignKey: 'revisionId',
-      //   targetKey: 'id',
-      //   constraints: false,
-      //   as: 'providerPartnershipRevision'
-      // })
+      ActivityLog.belongsTo(models.ProviderAccreditationPartnershipRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerAccreditationPartnershipRevision'
+      })
 
       ActivityLog.belongsTo(models.UserRevision, {
         foreignKey: 'revisionId',
