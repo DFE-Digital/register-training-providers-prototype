@@ -212,10 +212,16 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
-  // Partnerships where this provider is either the accredited provider (via accreditation.providerId)
-  // or the training partner (partnerId === providerId)
   queries.push(ActivityLog.findAll({
-    where: { revisionTable: 'provider_accreditation_partnership_revisions' },
+    where: {
+      revisionTable: 'provider_accreditation_partnership_revisions',
+      [Op.or]: [
+        // provider is the *training partner*
+        { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
+        // provider is the *accredited provider* (through the accreditation’s provider)
+        { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
+      ]
+    },
     include: [
       {
         model: ProviderAccreditationPartnershipRevision,
@@ -225,20 +231,17 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
           {
             model: ProviderAccreditation,
             as: 'providerAccreditation',
-            required: false,
-            include: [{ model: Provider, as: 'provider', required: false, where: { id: providerId } }]
+            include: [{ model: Provider, as: 'provider' }]
           },
-          {
-            model: Provider,
-            as: 'partner',
-            required: false,
-            where: { id: providerId }
-          }
+          { model: Provider, as: 'partner' }
         ]
       },
       { model: User, as: 'changedByUser' }
-    ]
+    ],
+    // Important so Sequelize applies the $…$ filter against the main query
+    subQuery: false
   }))
+
 
   const allLogs = (await Promise.all(queries)).flat()
 
@@ -298,7 +301,13 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
       }]
     }),
     ActivityLog.count({
-      where: { revisionTable: 'provider_accreditation_partnership_revisions' },
+      where: {
+        revisionTable: 'provider_accreditation_partnership_revisions',
+        [Op.or]: [
+          { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
+          { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
+        ]
+      },
       include: [{
         model: ProviderAccreditationPartnershipRevision,
         as: 'providerAccreditationPartnershipRevision',
@@ -307,12 +316,13 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
           {
             model: ProviderAccreditation,
             as: 'providerAccreditation',
-            required: false,
-            include: [{ model: Provider, as: 'provider', required: false, where: { id: providerId } }]
+            include: [{ model: Provider, as: 'provider' }]
           },
-          { model: Provider, as: 'partner', required: false, where: { id: providerId } }
+          { model: Provider, as: 'partner' }
         ]
-      }]
+      }],
+      distinct: true,
+      subQuery: false
     })
   ])
 
