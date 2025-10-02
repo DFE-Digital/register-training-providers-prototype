@@ -49,16 +49,18 @@
             </div>
             <div class="govuk-summary-card__content">
               {% for field in item.summary.fields %}
-                <dl class="govuk-summary-list">
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      {{ field.key }}
-                    </dt>
-                    <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-                      {{ field.value if field.value else "Not entered" }}
-                    </dd>
-                  </div>
-                </dl>
+                {% if not (field.key == "Linked accreditations" and field.value == "None") %}
+                  <dl class="govuk-summary-list">
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">
+                        {{ field.key }}
+                      </dt>
+                      <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+                        {{ field.value if field.value else "Not entered" }}
+                      </dd>
+                    </div>
+                  </dl>
+                {% endif %}
               {% endfor %}
             </div>
           </div>
