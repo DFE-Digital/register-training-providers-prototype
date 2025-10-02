@@ -49,6 +49,25 @@ const revisionModels = {
  */
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
+/**
+ * Safely escape a string for inclusion in HTML by replacing the five
+ * special characters `&`, `<`, `>`, `"` and `'` with their entity forms.
+ *
+ * This is useful when rendering untrusted text into HTML to prevent
+ * injection/XSS via text nodes or attribute values.
+ *
+ * Note:
+ * - This function **does not** decode entities.
+ * - It assumes plain text input; if you pass already-escaped HTML,
+ *   it will escape the ampersands again (idempotent for safe text usage).
+ *
+ * @param {string} [s=''] - The input string to escape. `null`/`undefined` are coerced to `''`.
+ * @returns {string} The escaped HTML-safe string.
+ *
+ * @example
+ * escapeHtml(`<a href="?q=tea & biscuits">"Click"</a>`);
+ * // "&lt;a href=&quot;?q=tea &amp; biscuits&quot;&gt;&quot;Click&quot;&lt;/a&gt;"
+ */
 const escapeHtml = (s = '') =>
   String(s)
     .replaceAll('&','&amp;')
@@ -601,13 +620,23 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
       // Current snapshot (as of this activity)
       const nowLinked = (accreditedProviderId && trainingProviderId)
-        ? await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId: trainingProviderId, asOf })
+        ? await getLinkedAccreditationsAsOf({
+            sequelize,
+            accreditedProviderId,
+            partnerId: trainingProviderId,
+            asOf
+          })
         : []
 
-      // Previous snapshot: always compute as (asOf - 1ms), no dependency on getPreviousRevision
-      const prevAsOf = new Date(asOf.getTime() - 2000)
+      // Previous snapshot using the epsilon wrapper
       const prevLinked = (accreditedProviderId && trainingProviderId)
-        ? await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId: trainingProviderId, asOf: prevAsOf })
+        ? await getPrevLinkedAccreditations({
+            sequelize,
+            accreditedProviderId,
+            partnerId: trainingProviderId,
+            asOf,
+            epsilonMs: 2000   // <- can omit; defaults to 2000
+          })
         : []
 
       // Diffs (by accreditation id)
@@ -616,13 +645,14 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number).sort()
       const removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number).sort()
 
-      // --- Activity label rules (ordered) ---
-      if (log.action === 'create') {
-        activity = 'Provider partnership created'
-      } else if (nowLinked.length === 0) {
-        // No accreditations remain for the pair => partnership effectively gone
+      // ---- Activity label (order matters) ----
+      if (nowLinked.length === 0) {
         activity = 'Provider partnership deleted'
-      } else if (added.length || removed.length) {
+      } else if (prevLinked.length === 0 && log.action === 'create') {
+        // first ever link for this provider pair
+        activity = 'Provider partnership created'
+      } else if (added.length || removed.length || (log.action === 'create' && prevLinked.length > 0)) {
+        // adding a *new* join row after an existing one(s)
         activity = 'Provider partnership accreditations updated'
       } else {
         activity = 'Provider partnership updated'
@@ -747,48 +777,30 @@ const groupActivityLogsByDate = (logs) => {
 }
 
 /**
- * Fetch the set of accreditations that **linked** a given accredited provider
- * to a given training partner **as of** a specific point in time.
+ * Fetch the accreditations that link an accredited provider to a training partner
+ * as of a specific timestamp. Uses `paranoid:false` to evaluate historical state.
  *
- * This function inspects the join table (`ProviderAccreditationPartnership`) with
- * `paranoid: false` so it can “time-travel”: a row is considered linked at `asOf`
- * if it was created **on or before** `asOf` and either not deleted or deleted
- * **after** `asOf`. It returns a simplified list of accreditation details.
- *
- * ### Requirements
- * - Associations:
- *   - `ProviderAccreditationPartnership.belongsTo(ProviderAccreditation, { as: 'providerAccreditation' })`
- *   - `ProviderAccreditation.belongsTo(Provider, { as: 'provider' })` (not used directly here, but typical)
- *
- * ### Performance
- * - Uses a single query to load all partnerships for the provider pair and filters in memory.
- *   If the dataset becomes large, consider pushing the time-window predicates into the SQL `where`
- *   (e.g., `createdAt <= asOf AND (deletedAt IS NULL OR deletedAt > asOf)`).
- *
- * @param {Object} params - Function parameters.
- * @param {import('sequelize').Sequelize} params.sequelize - The Sequelize instance (used to access models).
- * @param {string} params.accreditedProviderId - ID of the **accredited** provider.
- * @param {string} params.partnerId - ID of the **training** provider.
- * @param {Date} params.asOf - Point in time to evaluate the link state (usually the activity's `changedAt`).
- * @returns {Promise<LinkedAccreditation[]>} A list of accreditations that were in force for the pair at `asOf`.
- *
- * @example
- * // Show accreditations linking accredited A to training partner T on 12 Sep 2025
- * const links = await getLinkedAccreditationsAsOf({
- *   sequelize,
- *   accreditedProviderId: '4b8…-A',
- *   partnerId: '7c2…-T',
- *   asOf: new Date('2025-09-12T10:05:00Z')
- * })
- * // -> [{ id: 'acc-1', number: 'A123', startsOn: '2024-08-01', endsOn: null }]
+ * @param {Object} params
+ * @param {import('sequelize').Sequelize} params.sequelize
+ * @param {string} params.accreditedProviderId
+ * @param {string} params.partnerId
+ * @param {Date} params.asOf
+ * @returns {Promise<LinkedAccreditation[]>}
  */
 const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, partnerId, asOf }) => {
-  const { ProviderAccreditationPartnership, ProviderAccreditation } = sequelize.models
+  const { Op } = require('sequelize')
+  const {
+    ProviderAccreditationPartnership,
+    ProviderAccreditation
+  } = sequelize.models
 
-  // Load all rows for the pair (paranoid: false so we can time-filter soft-deletes)
   const joins = await ProviderAccreditationPartnership.findAll({
     paranoid: false,
-    where: { partnerId },
+    where: {
+      partnerId,
+      createdAt: { [Op.lte]: asOf },
+      [Op.or]: [{ deletedAt: null }, { deletedAt: { [Op.gt]: asOf } }]
+    },
     include: [{
       model: ProviderAccreditation,
       as: 'providerAccreditation',
@@ -799,19 +811,35 @@ const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, pa
     attributes: ['createdAt', 'deletedAt']
   })
 
-  // Keep rows that existed at 'asOf'
-  return joins
-    .filter(j => {
-      const created = j.createdAt ? new Date(j.createdAt) : new Date(0)
-      const deleted = j.deletedAt ? new Date(j.deletedAt) : null
-      return created <= asOf && (deleted === null || deleted > asOf)
-    })
-    .map(j => ({
-      id: j.providerAccreditation.id,
-      number: j.providerAccreditation.number,
-      startsOn: j.providerAccreditation.startsOn || null,
-      endsOn: j.providerAccreditation.endsOn || null
-    }))
+  return joins.map(j => ({
+    id: j.providerAccreditation.id,
+    number: j.providerAccreditation.number,
+    startsOn: j.providerAccreditation.startsOn || null,
+    endsOn: j.providerAccreditation.endsOn || null
+  }))
+}
+
+/**
+ * Convenience wrapper to fetch the **previous** snapshot by stepping back `epsilonMs`
+ * from `asOf`. Helpful with SQLite’s second-level timestamp precision.
+ *
+ * @param {Object} params
+ * @param {import('sequelize').Sequelize} params.sequelize
+ * @param {string} params.accreditedProviderId
+ * @param {string} params.partnerId
+ * @param {Date} params.asOf
+ * @param {number} [params.epsilonMs=2000]
+ * @returns {Promise<LinkedAccreditation[]>}
+ */
+const getPrevLinkedAccreditations = async ({
+  sequelize,
+  accreditedProviderId,
+  partnerId,
+  asOf,
+  epsilonMs = 2000
+}) => {
+  const prevAsOf = new Date(asOf.getTime() - epsilonMs)
+  return getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId, asOf: prevAsOf })
 }
 
 module.exports = {
@@ -822,5 +850,7 @@ module.exports = {
   getUserActivityTotalCount,
   getPreviousRevision,
   getLatestRevision,
-  groupActivityLogsByDate
+  groupActivityLogsByDate,
+  getLinkedAccreditationsAsOf,
+  getPrevLinkedAccreditations
 }
