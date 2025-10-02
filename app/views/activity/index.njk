@@ -38,7 +38,13 @@
           <div class="govuk-summary-card">
             <div class="govuk-summary-card__title-wrapper">
               <h2 class="govuk-summary-card__title">
-                {{ item.summary.label }}
+                {% if item.summary.labelHtml | length %}
+                  {{ item.summary.labelHtml | safe }}
+                {% else %}
+                  <a href="{{ item.summary.href }}" class="govuk-link">
+                    {{ item.summary.label }}
+                  </a>
+                {% endif %}
               </h2>
             </div>
             <div class="govuk-summary-card__content">
