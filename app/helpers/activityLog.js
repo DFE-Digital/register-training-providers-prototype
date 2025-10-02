@@ -240,13 +240,14 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
+  // Partnerships: show items where this provider is EITHER the accredited provider OR the training partner
   queries.push(ActivityLog.findAll({
     where: {
       revisionTable: 'provider_accreditation_partnership_revisions',
       [Op.or]: [
-        // provider is the *training partner*
+        // training partner side
         { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
-        // provider is the *accredited provider* (through the accreditation’s provider)
+        // accredited provider side (via the accreditation’s provider)
         { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
       ]
     },
@@ -266,18 +267,23 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
       },
       { model: User, as: 'changedByUser' }
     ],
-    // Important so Sequelize applies the $…$ filter against the main query
-    subQuery: false
+    // Prevent duplicate ActivityLog rows when JOINs fan out
+    distinct: true,
+    subQuery: false, // needed so $…$ paths filter the main query
+    order: [['changedAt', 'DESC']],
+    limit,
+    offset
   }))
 
-
   const allLogs = (await Promise.all(queries)).flat()
-
-  // Sort and paginate manually
-  allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt) || (b.id > a.id ? 1 : -1))
-  const activityLogs = allLogs.slice(offset, offset + limit)
+  const byId = new Map()
+  for (const row of allLogs) byId.set(row.id, row)
+  const activityLogs = Array.from(byId.values())
+    .sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+    .slice(offset, offset + limit)
 
   return Promise.all(activityLogs.map(formatActivityLog))
+
 }
 
 /**
@@ -336,20 +342,23 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
           { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
         ]
       },
-      include: [{
-        model: ProviderAccreditationPartnershipRevision,
-        as: 'providerAccreditationPartnershipRevision',
-        required: true,
-        include: [
-          {
-            model: ProviderAccreditation,
-            as: 'providerAccreditation',
-            include: [{ model: Provider, as: 'provider' }]
-          },
-          { model: Provider, as: 'partner' }
-        ]
-      }],
+      include: [
+        {
+          model: ProviderAccreditationPartnershipRevision,
+          as: 'providerAccreditationPartnershipRevision',
+          required: true,
+          include: [
+            {
+              model: ProviderAccreditation,
+              as: 'providerAccreditation',
+              include: [{ model: Provider, as: 'provider' }]
+            },
+            { model: Provider, as: 'partner' }
+          ]
+        }
+      ],
       distinct: true,
+      col: 'id',
       subQuery: false
     })
   ])
