@@ -83,22 +83,6 @@ const createRevisionHook = ({ revisionModelName, modelKey }) => {
       order: [['revisionNumber', 'DESC']]
     })
 
-    // 🔎 Add your debug log right here:
-    // console.log('[revHook]', {
-    //   modelKey,
-    //   hook: options?.hookName || 'afterUpdate',
-    //   changed_deletedAt: typeof instance.changed === 'function' && instance.changed('deletedAt'),
-    //   deletedAt: instance.get('deletedAt'),
-    //   tracked: trackedFields,
-    //   // Optional extra context that’s often handy:
-    //   latestRevisionNumber: latest?.revisionNumber,
-    //   // show which tracked fields differ from latest
-    //   diffs: trackedFields.reduce((acc, f) => {
-    //     acc[f] = { now: instance.get(f), latest: latest?.get?.(f) }
-    //     return acc
-    //   }, {})
-    // })
-
     if (!latest) {
       // Shouldn't usually happen, but be resilient
       await RevisionModel.create(
