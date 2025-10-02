@@ -578,9 +578,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     }
 
     case 'provider_accreditation_partnership_revisions': {
-      // Associations included in your queries:
-      // - revision.providerAccreditation.provider  (accredited provider)
-      // - revision.partner                         (training provider)
       const accreditedProvider = revision.providerAccreditation?.provider || null
       const trainingProvider   = revision.partner || null
 
@@ -590,81 +587,67 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
       const trainingProviderId   = trainingProvider?.id || revision.partnerId
 
-      // Separate links for each provider (and rich label for display)
       const accreditedHref = accreditedProviderId ? `/providers/${accreditedProviderId}` : ''
       const trainingHref   = trainingProviderId   ? `/providers/${trainingProviderId}`   : ''
 
       label = `${accreditedName} – ${trainingName}`
-      // Provide an HTML label you can render unescaped in the template
       const labelHtml = `${accreditedHref ? `<a class="govuk-link" href="${accreditedHref}">${escapeHtml(accreditedName)}</a>` : escapeHtml(accreditedName)} – ${trainingHref ? `<a class="govuk-link" href="${trainingHref}">${escapeHtml(trainingName)}</a>` : escapeHtml(trainingName)}`
 
-      // For “view partnership” we’ll point to the accredited provider’s partnerships list
       const href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
 
-      // --- Linked accreditations snapshot(s) ---
+      // --- Snapshots ---
       const sequelize = require('../models').sequelize
       const asOf = new Date(log.changedAt)
+
+      // Current snapshot (as of this activity)
       const nowLinked = (accreditedProviderId && trainingProviderId)
         ? await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId: trainingProviderId, asOf })
         : []
 
-      // Compute previous snapshot to derive diffs
-      let added = [], removed = []
-      const prev = await getPreviousRevision({
-        revisionTable,
-        revisionId: log.revisionId,
-        entityId: log.entityId
-      })
-      if (prev && accreditedProviderId && trainingProviderId) {
-        const prevAsOf = new Date(asOf.getTime() - 1)
-        const prevLinked = await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId: trainingProviderId, asOf: prevAsOf })
+      // Previous snapshot: always compute as (asOf - 1ms), no dependency on getPreviousRevision
+      const prevAsOf = new Date(asOf.getTime() - 2000)
+      const prevLinked = (accreditedProviderId && trainingProviderId)
+        ? await getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId: trainingProviderId, asOf: prevAsOf })
+        : []
 
-        const prevIds = new Set(prevLinked.map(a => a.id))
-        const nowIds  = new Set(nowLinked.map(a => a.id))
+      // Diffs (by accreditation id)
+      const prevIds = new Set(prevLinked.map(a => a.id))
+      const nowIds  = new Set(nowLinked.map(a => a.id))
+      const added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number).sort()
+      const removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number).sort()
 
-        added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number)
-        removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number)
-      }
-
-      // --- Activity label rules you asked for ---
-      if (nowLinked.length === 0) {
+      // --- Activity label rules (ordered) ---
+      if (log.action === 'create') {
+        activity = 'Provider partnership created'
+      } else if (nowLinked.length === 0) {
+        // No accreditations remain for the pair => partnership effectively gone
         activity = 'Provider partnership deleted'
       } else if (added.length || removed.length) {
         activity = 'Provider partnership accreditations updated'
-      } else if (log.action === 'create') {
-        // keep create explicit when a partnership first appears
-        activity = 'Provider partnership created'
       } else {
-        // fallback if nothing else applies
         activity = 'Provider partnership updated'
       }
 
-      // Fields for the card
+      // Fields
       fields.push({ key: 'Accredited provider', value: accreditedName, href: accreditedHref })
-      fields.push({ key: 'Training partner',   value: trainingName,   href: trainingHref  })
-
+      fields.push({ key: 'Training partner',    value: trainingName,   href: trainingHref  })
       fields.push({
-        key: `Linked accreditations`,
+        key: 'Linked accreditations',
         value: nowLinked.length ? nowLinked.map(a => a.number).sort().join(', ') : 'None'
       })
-      if (added.length)   fields.push({ key: 'Accreditations added',   value: added.sort().join(', ') })
-      if (removed.length) fields.push({ key: 'Accreditations removed', value: removed.sort().join(', ') })
+      if (added.length) fields.push({ key: 'Accreditations added', value: added.join(', ') })
+      if (removed.length) fields.push({ key: 'Accreditations removed', value: removed.join(', ') })
 
-      // Return extra fields alongside the usual summary
       return {
         action: log.action,
         activity,
         label,
         labelHtml,
         href,
-        links: {
-          accreditedProvider: accreditedHref,
-          trainingProvider: trainingHref
-        },
+        links: { accreditedProvider: accreditedHref, trainingProvider: trainingHref },
         fields
       }
     }
-
 
     case 'user_revisions': {
       activity = `User ${log.action}d`
