@@ -2,11 +2,12 @@ const { Op } = require('sequelize')
 const {
   ActivityLog,
   Provider,
+  ProviderAccreditation,
   ProviderAccreditationRevision,
   ProviderAddressRevision,
   ProviderContactRevision,
   ProviderRevision,
-  // ProviderPartnershipRevision,
+  ProviderAccreditationPartnershipRevision,
   User,
   UserRevision
 } = require('../models')
@@ -23,7 +24,7 @@ const revisionAssociationMap = {
   provider_accreditation_revisions: 'providerAccreditationRevision',
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
-  provider_partnership_revisions: 'providerPartnershipRevision',
+  provider_accreditation_partnership_revisions: 'providerAccreditationPartnershipRevision',
   user_revisions: 'userRevision'
 }
 
@@ -36,7 +37,7 @@ const revisionModels = {
   provider_accreditation_revisions: ProviderAccreditationRevision,
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
-  // provider_partnership_revisions: ProviderPartnershipRevision,
+  provider_accreditation_partnership_revisions: ProviderAccreditationPartnershipRevision,
   user_revisions: UserRevision
 }
 
@@ -49,7 +50,37 @@ const revisionModels = {
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
 /**
- * Returns the foreign key(s) used by the revision table.
+ * Safely escape a string for inclusion in HTML by replacing the five
+ * special characters `&`, `<`, `>`, `"` and `'` with their entity forms.
+ *
+ * This is useful when rendering untrusted text into HTML to prevent
+ * injection/XSS via text nodes or attribute values.
+ *
+ * Note:
+ * - This function **does not** decode entities.
+ * - It assumes plain text input; if you pass already-escaped HTML,
+ *   it will escape the ampersands again (idempotent for safe text usage).
+ *
+ * @param {string} [s=''] - The input string to escape. `null`/`undefined` are coerced to `''`.
+ * @returns {string} The escaped HTML-safe string.
+ *
+ * @example
+ * escapeHtml(`<a href="?q=tea & biscuits">"Click"</a>`);
+ * // "&lt;a href=&quot;?q=tea &amp; biscuits&quot;&gt;&quot;Click&quot;&lt;/a&gt;"
+ */
+const escapeHtml = (s = '') =>
+  String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#39;')
+
+/**
+ * Returns the foreign key(s) used by the revision table for previous/latest lookups.
+ *
+ * NOTE: For partnership *revision* tables, the entity is the partnership itself,
+ * so we use `providerAccreditationPartnershipId`.
  *
  * @param {string} revisionTable - Name of the revision table.
  * @returns {string[]} Array of foreign key fields.
@@ -58,9 +89,10 @@ const getEntityKeys = (revisionTable) => {
   switch (revisionTable) {
     case 'user_revisions':
       return ['userId']
-    case 'provider_partnership_revisions':
-      return ['accreditedProviderId', 'trainingProviderId']
+    case 'provider_accreditation_partnership_revisions':
+      return ['providerAccreditationPartnershipId']
     default:
+      // provider_*, provider_accreditation_*, provider_address_*, provider_contact_*
       return ['providerId']
   }
 }
@@ -77,7 +109,7 @@ const formatActivityLog = async (log) => {
     const logJson = log.toJSON()
     const alias = revisionAssociationMap[log.revisionTable]
     const revision = log[alias] || null
-    logJson.revision = revision ? revision.toJSON?.() || revision : null
+    logJson.revision = revision ? (revision.toJSON?.() || revision) : null
     logJson.summary = await getRevisionSummary({
       revision: logJson.revision,
       revisionTable: log.revisionTable,
@@ -133,14 +165,18 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         as: 'providerContactRevision',
         include: [{ model: Provider, as: 'provider' }]
       },
-      // {
-      //   model: ProviderPartnershipRevision,
-      //   as: 'providerPartnershipRevision',
-      //   include: [
-      //     { model: Provider, as: 'accreditedProvider' },
-      //     { model: Provider, as: 'trainingProvider' }
-      //   ]
-      // },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
       {
         model: UserRevision,
         as: 'userRevision'
@@ -150,12 +186,12 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         as: 'changedByUser'
       }
     ],
-    order: [['changedAt', 'DESC']],
+    order: [['changedAt', 'DESC'], ['id', 'DESC']],
     limit,
     offset
   })
 
-  return await Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -203,35 +239,44 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
-  // queries.push(ActivityLog.findAll({
-  //   where: { revisionTable: 'provider_partnership_revisions' },
-  //   include: [
-  //     {
-  //       model: ProviderPartnershipRevision,
-  //       as: 'providerPartnershipRevision',
-  //       required: true,
-  //       where: {
-  //         [Op.or]: [
-  //           { accreditedProviderId: providerId },
-  //           { trainingProviderId: providerId }
-  //         ]
-  //       },
-  //       include: [
-  //         { model: Provider, as: 'accreditedProvider' },
-  //         { model: Provider, as: 'trainingProvider' }
-  //       ]
-  //     },
-  //     { model: User, as: 'changedByUser' }
-  //   ]
-  // }))
+  queries.push(ActivityLog.findAll({
+    where: {
+      revisionTable: 'provider_accreditation_partnership_revisions',
+      [Op.or]: [
+        // provider is the *training partner*
+        { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
+        // provider is the *accredited provider* (through the accreditation’s provider)
+        { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
+      ]
+    },
+    include: [
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: true,
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
+      { model: User, as: 'changedByUser' }
+    ],
+    // Important so Sequelize applies the $…$ filter against the main query
+    subQuery: false
+  }))
+
 
   const allLogs = (await Promise.all(queries)).flat()
 
   // Sort and paginate manually
-  allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+  allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt) || (b.id > a.id ? 1 : -1))
   const activityLogs = allLogs.slice(offset, offset + limit)
 
-  return await Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -248,64 +293,64 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
   const results = await Promise.all([
     ActivityLog.count({
       where: { revisionTable: 'provider_revisions' },
-      include: [
-        {
-          model: ProviderRevision,
-          as: 'providerRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderRevision,
+        as: 'providerRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
     ActivityLog.count({
       where: { revisionTable: 'provider_accreditation_revisions' },
-      include: [
-        {
-          model: ProviderAccreditationRevision,
-          as: 'providerAccreditationRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderAccreditationRevision,
+        as: 'providerAccreditationRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
     ActivityLog.count({
       where: { revisionTable: 'provider_address_revisions' },
-      include: [
-        {
-          model: ProviderAddressRevision,
-          as: 'providerAddressRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderAddressRevision,
+        as: 'providerAddressRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
     ActivityLog.count({
       where: { revisionTable: 'provider_contact_revisions' },
-      include: [
-        {
-          model: ProviderContactRevision,
-          as: 'providerContactRevision',
-          required: true,
-          where: { providerId }
-        }
-      ]
+      include: [{
+        model: ProviderContactRevision,
+        as: 'providerContactRevision',
+        required: true,
+        where: { providerId }
+      }]
     }),
-    // ActivityLog.count({
-    //   where: { revisionTable: 'provider_partnership_revisions' },
-    //   include: [
-    //     {
-    //       model: ProviderPartnershipRevision,
-    //       as: 'providerPartnershipRevision',
-    //       required: true,
-    //       where: {
-    //         [Op.or]: [
-    //           { accreditedProviderId: providerId },
-    //           { trainingProviderId: providerId }
-    //         ]
-    //       }
-    //     }
-    //   ]
-    // })
+    ActivityLog.count({
+      where: {
+        revisionTable: 'provider_accreditation_partnership_revisions',
+        [Op.or]: [
+          { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
+          { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
+        ]
+      },
+      include: [{
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: true,
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      }],
+      distinct: true,
+      subQuery: false
+    })
   ])
 
   return results.reduce((sum, count) => sum + count, 0)
@@ -326,7 +371,6 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
   if (!userId) throw new Error('userId is required')
 
   const whereClause = { changedById: userId }
-
   if (revisionTable) {
     whereClause.revisionTable = Array.isArray(revisionTable) ? { [Op.in]: revisionTable } : revisionTable
   }
@@ -354,14 +398,18 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'providerContactRevision',
         include: [{ model: Provider, as: 'provider' }]
       },
-      // {
-      //   model: ProviderPartnershipRevision,
-      //   as: 'providerPartnershipRevision',
-      //   include: [
-      //     { model: Provider, as: 'accreditedProvider' },
-      //     { model: Provider, as: 'trainingProvider' }
-      //   ]
-      // },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
       {
         model: UserRevision,
         as: 'userRevision'
@@ -371,12 +419,12 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'changedByUser'
       }
     ],
-    order: [['changedAt', 'DESC']],
+    order: [['changedAt', 'DESC'], ['id', 'DESC']],
     limit,
     offset
   })
 
-  return await Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(activityLogs.map(formatActivityLog))
 }
 
 /**
@@ -392,11 +440,8 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
   if (!userId) throw new Error('userId is required')
 
   const whereClause = { changedById: userId }
-
   if (revisionTable) {
-    whereClause.revisionTable = Array.isArray(revisionTable)
-      ? { [Op.in]: revisionTable }
-      : revisionTable
+    whereClause.revisionTable = Array.isArray(revisionTable) ? { [Op.in]: revisionTable } : revisionTable
   }
 
   const totalCount = await ActivityLog.count({
@@ -426,14 +471,19 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         required: false,
         include: [{ model: Provider, as: 'provider' }]
       },
-      // {
-      //   model: ProviderPartnershipRevision,
-      //   as: 'providerPartnershipRevision',
-      //   include: [
-      //     { model: Provider, as: 'accreditedProvider' },
-      //     { model: Provider, as: 'trainingProvider' }
-      //   ]
-      // },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: false,
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            include: [{ model: Provider, as: 'provider' }]
+          },
+          { model: Provider, as: 'partner' }
+        ]
+      },
       {
         model: UserRevision,
         as: 'userRevision',
@@ -454,18 +504,14 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
  * @param {string} options.revisionTable - Name of the revision table.
  * @param {string} options.action - Type of action (e.g. 'create', 'update', 'delete').
  * @param {string} options.revisionId - ID of the revision.
- * @param {string} options.entityId - ID of the provider or user.
+ * @param {string} options.entityId - ID of the provider or user (or partnership for partnership logs).
  * @returns {Promise<Object>} Structured summary object with `label`, `activity`, `href`, and `fields`.
  */
 const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   if (!revision) {
-    return {
-      label: 'Revision details unavailable',
-      fields: []
-    }
+    return { label: 'Revision details unavailable', fields: [] }
   }
 
-  // Set default summary
   const action = log.action
   let activity = ''
   let label = ''
@@ -473,7 +519,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   const fields = []
 
   switch (revisionTable) {
-    case 'provider_revisions':
+    case 'provider_revisions': {
       const previousRevision = await getPreviousRevision({
         revisionTable,
         revisionId: log.revisionId,
@@ -489,11 +535,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
           activity = 'Provider updated'
         }
       } else {
-        const actionLabel = {
-          create: 'created',
-          delete: 'deleted'
-        }[log.action] || `${log.action}d`
-
+        const actionLabel = { create: 'created', delete: 'deleted' }[log.action] || `${log.action}d`
         activity = `Provider ${actionLabel}`
       }
 
@@ -507,12 +549,13 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Unique reference number (URN)', value: revision.urn })
       fields.push({ key: 'Provider code', value: revision.code })
       break
+    }
 
     case 'provider_address_revisions': {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider address ${log.action}d`
-      label = providerName // `${providerName} – address details`
+      label = providerName
       href = `/providers/${revision.providerId}/addresses`
 
       fields.push({ key: 'Address line 1', value: revision.line1 })
@@ -530,7 +573,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider contact ${log.action}d`
-      label = providerName // `${providerName} – contact details`
+      label = providerName
       href = `/providers/${revision.providerId}/contacts`
 
       fields.push({ key: 'First name', value: revision.firstName })
@@ -544,7 +587,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       activity = `Provider accreditation ${log.action}d`
-      label = providerName // `${providerName} – accreditation`
+      label = providerName
       href = `/providers/${revision.providerId}/accreditations`
 
       fields.push({ key: 'Accreditation number', value: revision.number })
@@ -553,23 +596,90 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
-    // case 'provider_partnership_revisions': {
-    //   const accredited = revision.accreditedProvider
-    //   const training = revision.trainingProvider
+    case 'provider_accreditation_partnership_revisions': {
+      const accreditedProvider = revision.providerAccreditation?.provider || null
+      const trainingProvider   = revision.partner || null
 
-    //   const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
-    //   const trainingName = training?.operatingName || training?.legalName || 'Training provider'
+      const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
+      const trainingName   = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
 
-    //   label = `${accreditedName} – ${trainingName}`
-    //   activity = `Provider partnership ${log.action}d`
-    //   href = `/providers/${revision.accreditedProviderId}/partnerships`
+      const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+      const trainingProviderId   = trainingProvider?.id || revision.partnerId
 
-    //   fields.push({ key: 'Accredited provider', value: accreditedName })
-    //   fields.push({ key: 'Training provider', value: trainingName })
-    //   break
-    // }
+      const accreditedHref = accreditedProviderId ? `/providers/${accreditedProviderId}` : ''
+      const trainingHref   = trainingProviderId   ? `/providers/${trainingProviderId}`   : ''
 
-    case 'user_revisions':
+      label = `${accreditedName} – ${trainingName}`
+      const labelHtml = `${accreditedHref ? `<a class="govuk-link" href="${accreditedHref}">${escapeHtml(accreditedName)}</a>` : escapeHtml(accreditedName)} – ${trainingHref ? `<a class="govuk-link" href="${trainingHref}">${escapeHtml(trainingName)}</a>` : escapeHtml(trainingName)}`
+
+      const href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
+
+      // --- Snapshots ---
+      const sequelize = require('../models').sequelize
+      const asOf = new Date(log.changedAt)
+
+      // Current snapshot (as of this activity)
+      const nowLinked = (accreditedProviderId && trainingProviderId)
+        ? await getLinkedAccreditationsAsOf({
+            sequelize,
+            accreditedProviderId,
+            partnerId: trainingProviderId,
+            asOf
+          })
+        : []
+
+      // Previous snapshot using the epsilon wrapper
+      const prevLinked = (accreditedProviderId && trainingProviderId)
+        ? await getPrevLinkedAccreditations({
+            sequelize,
+            accreditedProviderId,
+            partnerId: trainingProviderId,
+            asOf,
+            epsilonMs: 2000   // <- can omit; defaults to 2000
+          })
+        : []
+
+      // Diffs (by accreditation id)
+      const prevIds = new Set(prevLinked.map(a => a.id))
+      const nowIds  = new Set(nowLinked.map(a => a.id))
+      const added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number).sort()
+      const removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number).sort()
+
+      // ---- Activity label (order matters) ----
+      if (nowLinked.length === 0) {
+        activity = 'Provider partnership deleted'
+      } else if (prevLinked.length === 0 && log.action === 'create') {
+        // first ever link for this provider pair
+        activity = 'Provider partnership created'
+      } else if (added.length || removed.length || (log.action === 'create' && prevLinked.length > 0)) {
+        // adding a *new* join row after an existing one(s)
+        activity = 'Provider partnership accreditations updated'
+      } else {
+        activity = 'Provider partnership updated'
+      }
+
+      // Fields
+      fields.push({ key: 'Accredited provider', value: accreditedName, href: accreditedHref })
+      fields.push({ key: 'Training partner',    value: trainingName,   href: trainingHref  })
+      fields.push({
+        key: 'Linked accreditations',
+        value: nowLinked.length ? nowLinked.map(a => a.number).sort().join(', ') : 'None'
+      })
+      if (added.length) fields.push({ key: 'Accreditations added', value: added.join(', ') })
+      if (removed.length) fields.push({ key: 'Accreditations removed', value: removed.join(', ') })
+
+      return {
+        action: log.action,
+        activity,
+        label,
+        labelHtml,
+        href,
+        links: { accreditedProvider: accreditedHref, trainingProvider: trainingHref },
+        fields
+      }
+    }
+
+    case 'user_revisions': {
       activity = `User ${log.action}d`
       label = `${revision.firstName} ${revision.lastName}` || revision.email || 'User'
       href = `/users/${revision.userId}`
@@ -578,18 +688,13 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Last name', value: revision.lastName })
       fields.push({ key: 'Email address', value: revision.email })
       break
+    }
 
     default:
       label = 'Unknown revision'
   }
 
-  return {
-    action,
-    activity,
-    label,
-    href,
-    fields
-  }
+  return { action, activity, label, href, fields }
 }
 
 /**
@@ -607,10 +712,7 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
   const entityKeys = getEntityKeys(revisionTable)
-
-  const whereClause = {
-    [Op.or]: entityKeys.map(key => ({ [key]: entityId }))
-  }
+  const whereClause = { [Op.or]: entityKeys.map(key => ({ [key]: entityId })) }
 
   const revisions = await revisionModel.findAll({
     where: whereClause,
@@ -618,7 +720,6 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
   })
 
   const index = revisions.findIndex(r => r.id === revisionId)
-
   return index > 0 ? revisions[index - 1] : null
 }
 
@@ -636,12 +737,9 @@ const getLatestRevision = async ({ revisionTable, entityId }) => {
   if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
 
   const entityKeys = getEntityKeys(revisionTable)
+  const whereClause = { [Op.or]: entityKeys.map(key => ({ [key]: entityId })) }
 
-  const whereClause = {
-    [Op.or]: entityKeys.map(key => ({ [key]: entityId }))
-  }
-
-  return await revisionModel.findOne({
+  return revisionModel.findOne({
     where: whereClause,
     order: [['revisionNumber', 'DESC']]
   })
@@ -668,10 +766,7 @@ const groupActivityLogsByDate = (logs) => {
       label = govukDate(date)
     }
 
-    if (!groups[label]) {
-      groups[label] = []
-    }
-
+    if (!groups[label]) groups[label] = []
     groups[label].push(log)
   }
 
@@ -679,6 +774,72 @@ const groupActivityLogsByDate = (logs) => {
   return Object.entries(groups)
     .map(([label, entries]) => ({ label, entries }))
     .sort((a, b) => new Date(b.entries[0].changedAt) - new Date(a.entries[0].changedAt))
+}
+
+/**
+ * Fetch the accreditations that link an accredited provider to a training partner
+ * as of a specific timestamp. Uses `paranoid:false` to evaluate historical state.
+ *
+ * @param {Object} params
+ * @param {import('sequelize').Sequelize} params.sequelize
+ * @param {string} params.accreditedProviderId
+ * @param {string} params.partnerId
+ * @param {Date} params.asOf
+ * @returns {Promise<LinkedAccreditation[]>}
+ */
+const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, partnerId, asOf }) => {
+  const { Op } = require('sequelize')
+  const {
+    ProviderAccreditationPartnership,
+    ProviderAccreditation
+  } = sequelize.models
+
+  const joins = await ProviderAccreditationPartnership.findAll({
+    paranoid: false,
+    where: {
+      partnerId,
+      createdAt: { [Op.lte]: asOf },
+      [Op.or]: [{ deletedAt: null }, { deletedAt: { [Op.gt]: asOf } }]
+    },
+    include: [{
+      model: ProviderAccreditation,
+      as: 'providerAccreditation',
+      required: true,
+      where: { providerId: accreditedProviderId },
+      attributes: ['id', 'number', 'startsOn', 'endsOn']
+    }],
+    attributes: ['createdAt', 'deletedAt']
+  })
+
+  return joins.map(j => ({
+    id: j.providerAccreditation.id,
+    number: j.providerAccreditation.number,
+    startsOn: j.providerAccreditation.startsOn || null,
+    endsOn: j.providerAccreditation.endsOn || null
+  }))
+}
+
+/**
+ * Convenience wrapper to fetch the **previous** snapshot by stepping back `epsilonMs`
+ * from `asOf`. Helpful with SQLite’s second-level timestamp precision.
+ *
+ * @param {Object} params
+ * @param {import('sequelize').Sequelize} params.sequelize
+ * @param {string} params.accreditedProviderId
+ * @param {string} params.partnerId
+ * @param {Date} params.asOf
+ * @param {number} [params.epsilonMs=2000]
+ * @returns {Promise<LinkedAccreditation[]>}
+ */
+const getPrevLinkedAccreditations = async ({
+  sequelize,
+  accreditedProviderId,
+  partnerId,
+  asOf,
+  epsilonMs = 2000
+}) => {
+  const prevAsOf = new Date(asOf.getTime() - epsilonMs)
+  return getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId, asOf: prevAsOf })
 }
 
 module.exports = {
@@ -689,5 +850,7 @@ module.exports = {
   getUserActivityTotalCount,
   getPreviousRevision,
   getLatestRevision,
-  groupActivityLogsByDate
+  groupActivityLogsByDate,
+  getLinkedAccreditationsAsOf,
+  getPrevLinkedAccreditations
 }
