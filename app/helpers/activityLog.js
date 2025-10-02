@@ -8,6 +8,7 @@ const {
   ProviderContactRevision,
   ProviderRevision,
   ProviderAccreditationPartnershipRevision,
+  ProviderAccreditationPartnership,
   User,
   UserRevision
 } = require('../models')
@@ -788,12 +789,6 @@ const groupActivityLogsByDate = (logs) => {
  * @returns {Promise<LinkedAccreditation[]>}
  */
 const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, partnerId, asOf }) => {
-  const { Op } = require('sequelize')
-  const {
-    ProviderAccreditationPartnership,
-    ProviderAccreditation
-  } = sequelize.models
-
   const joins = await ProviderAccreditationPartnership.findAll({
     paranoid: false,
     where: {
