@@ -1,9 +1,10 @@
+const { getProviderLastUpdated } = require('../helpers/activityLog')
+const { govukDate } = require('../helpers/date')
+const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
+const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
 const { savePartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
-const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
-const { govukDate } = require('../helpers/date')
-const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 
 const formatProviderItems = (providers) => {
   return providers
@@ -45,6 +46,12 @@ exports.providerPartnershipsList = async (req, res) => {
 
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
+
+  // Run in parallel: accreditation flag + last update (by providerId)
+  const [isAccredited, lastUpdate] = await Promise.all([
+    isAccreditedProvider({ providerId }),
+    getProviderLastUpdated(providerId, { includeDeletedChildren: true })
+  ])
 
   // Fetch all active partnership rows involving this provider
   const allPartnershipRows = await ProviderAccreditationPartnership.findAll({
@@ -129,6 +136,8 @@ exports.providerPartnershipsList = async (req, res) => {
 
   res.render('providers/partnerships/index', {
     provider,
+    isAccredited,
+    lastUpdate,
     partnerships: pagination.getData(),
     pagination,
     actions: {

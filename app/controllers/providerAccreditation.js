@@ -1,9 +1,10 @@
-const { Provider, ProviderAccreditation } = require('../models')
-const Pagination = require('../helpers/pagination')
-const { isAccreditedProvider } = require('../helpers/accreditation')
 const { getPartnershipCountForAccreditation, partnershipsExistForAccreditation } = require('../helpers/partnership')
+const { getProviderLastUpdated } = require('../helpers/activityLog')
+const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { isValidAccreditedProviderNumber } = require('../helpers/validation')
+const { Provider, ProviderAccreditation } = require('../models')
+const Pagination = require('../helpers/pagination')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider accreditations
@@ -20,8 +21,11 @@ exports.providerAccreditationsList = async (req, res) => {
   // get the current provider
   const provider = await Provider.findByPk(providerId)
 
-  // calculate if the provider is accredited
-  const isAccredited = await isAccreditedProvider({ providerId })
+  // Run in parallel: accreditation flag + last update (by providerId)
+  const [isAccredited, lastUpdate] = await Promise.all([
+    isAccreditedProvider({ providerId }),
+    getProviderLastUpdated(providerId, { includeDeletedChildren: true })
+  ])
 
   // Get the total number of accreditations for pagination metadata
   const totalCount = await ProviderAccreditation.count({
@@ -52,6 +56,7 @@ exports.providerAccreditationsList = async (req, res) => {
   res.render('providers/accreditations/index', {
     provider,
     isAccredited,
+    lastUpdate,
     // Accreditations for *this* page
     accreditations: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)

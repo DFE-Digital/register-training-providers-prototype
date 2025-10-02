@@ -1,5 +1,6 @@
 const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
+const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
 const { isoDateFromDateInput } = require('../helpers/date')
 const { nullIfEmpty } = require('../helpers/string')
@@ -314,34 +315,43 @@ exports.removeKeywordSearch = (req, res) => {
 /// Show provider
 /// ------------------------------------------------------------------------ ///
 
-exports.providerDetails = async (req, res) => {
-  // Clear session provider data
-  delete req.session.data.provider
-  delete req.session.data.accreditation
-  delete req.session.data.address
-  delete req.session.data.search
-  delete req.session.data.keywords
-  delete req.session.data.filters
-  delete req.session.data.find
+exports.providerDetails = async (req, res, next) => {
+  try {
+    // Clear session provider data
+    delete req.session.data.provider
+    delete req.session.data.accreditation
+    delete req.session.data.address
+    delete req.session.data.search
+    delete req.session.data.keywords
+    delete req.session.data.filters
+    delete req.session.data.find
 
-  // get the providerId from the request for use in subsequent queries
-  const { providerId } = req.params
+    // get the providerId from the request for use in subsequent queries
+    const { providerId } = req.params
 
-  // calculate if the provider is accredited
-  const isAccredited = await isAccreditedProvider({ providerId })
+    // Fetch the provider (404 if missing)
+    const provider = await Provider.findByPk(providerId)
+    if (!provider) return res.sendStatus(404)
 
-  // Fetch the provider
-  const provider = await Provider.findByPk(providerId)
+    // Run in parallel: accreditation flag + last update (by providerId)
+    const [isAccredited, lastUpdate] = await Promise.all([
+      isAccreditedProvider({ providerId }),
+      getProviderLastUpdated(providerId, { includeDeletedChildren: true })
+    ])
 
-  res.render('providers/show', {
-    provider,
-    isAccredited,
-    actions: {
-      archive: `/providers/${providerId}/archive`,
-      delete: `/providers/${providerId}/delete`,
-      restore: `/providers/${providerId}/restore`
-    }
-   })
+    res.render('providers/show', {
+      provider,
+      isAccredited,
+      lastUpdate,
+      actions: {
+        archive: `/providers/${providerId}/archive`,
+        delete: `/providers/${providerId}/delete`,
+        restore: `/providers/${providerId}/restore`
+      }
+    })
+  } catch (err) {
+    next(err)
+  }
 }
 
 /// ------------------------------------------------------------------------ ///
