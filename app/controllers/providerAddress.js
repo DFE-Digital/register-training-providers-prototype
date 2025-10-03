@@ -1,11 +1,12 @@
+const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
+const { geocodeAddress } = require('../services/googleMaps')
+const { getProviderLastUpdated } = require('../helpers/activityLog')
+const { isAccreditedProvider } = require('../helpers/accreditation')
+const { isValidPostcode } = require('../helpers/validation')
+const { nullIfEmpty } = require('../helpers/string')
+const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
 const { Provider, ProviderAddress } = require('../models')
 const Pagination = require('../helpers/pagination')
-const { isAccreditedProvider } = require('../helpers/accreditation')
-const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
-const { nullIfEmpty } = require('../helpers/string')
-const { isValidPostcode } = require('../helpers/validation')
-const { geocodeAddress } = require('../services/googleMaps')
-const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
 
 /// ------------------------------------------------------------------------ ///
 /// List provider addresses
@@ -25,8 +26,11 @@ exports.providerAddressesList = async (req, res) => {
   // get the current provider
   const provider = await Provider.findByPk(providerId)
 
-  // calculate if the provider is accredited
-  const isAccredited = await isAccreditedProvider({ providerId })
+  // Run in parallel: accreditation flag + last update (by providerId)
+  const [isAccredited, lastUpdate] = await Promise.all([
+    isAccreditedProvider({ providerId }),
+    getProviderLastUpdated(providerId, { includeDeletedChildren: true })
+  ])
 
   // Get the total number of addresses for pagination metadata
   const totalCount = await ProviderAddress.count({
@@ -57,6 +61,7 @@ exports.providerAddressesList = async (req, res) => {
   res.render('providers/addresses/index', {
     provider,
     isAccredited,
+    lastUpdate,
     // Addresses for *this* page
     addresses: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)

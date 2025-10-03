@@ -1,9 +1,10 @@
+const { getProviderLastUpdated } = require('../helpers/activityLog')
+const { govukDate } = require('../helpers/date')
+const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
+const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
 const { savePartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
-const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
-const { govukDate } = require('../helpers/date')
-const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 
 const formatProviderItems = (providers) => {
   return providers
@@ -45,6 +46,12 @@ exports.providerPartnershipsList = async (req, res) => {
 
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
+
+  // Run in parallel: accreditation flag + last update (by providerId)
+  const [isAccredited, lastUpdate] = await Promise.all([
+    isAccreditedProvider({ providerId }),
+    getProviderLastUpdated(providerId, { includeDeletedChildren: true })
+  ])
 
   // Fetch all active partnership rows involving this provider
   const allPartnershipRows = await ProviderAccreditationPartnership.findAll({
@@ -129,6 +136,8 @@ exports.providerPartnershipsList = async (req, res) => {
 
   res.render('providers/partnerships/index', {
     provider,
+    isAccredited,
+    lastUpdate,
     partnerships: pagination.getData(),
     pagination,
     actions: {
@@ -860,15 +869,64 @@ exports.deleteProviderPartnership_get = async (req, res) => {
 exports.deleteProviderPartnership_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
   const { user } = req.session.passport
+  const sequelize = require('../models').sequelize
+  const t = await sequelize.transaction()
 
-  const partnership = await ProviderAccreditationPartnership.findByPk(partnershipId)
+  try {
+    // 1) Load the clicked row to reconstruct the pair
+    const clicked = await ProviderAccreditationPartnership.findByPk(partnershipId, {
+      include: [
+        {
+          model: ProviderAccreditation,
+          as: 'providerAccreditation',
+          include: [{ model: Provider, as: 'provider' }]
+        }
+      ],
+      transaction: t
+    })
 
-  await partnership.update({
-    deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
-  })
+    if (!clicked) {
+      await t.rollback()
+      return res.status(404).send('Partnership not found')
+    }
 
-  req.flash('success', 'Partnership deleted')
-  res.redirect(`/providers/${providerId}/partnerships`)
+    const partnerId = clicked.partnerId
+    const accreditedProviderId = clicked.providerAccreditation.provider.id
+    const now = new Date()
+
+    // 2) Load ALL active rows for this pair (one per accreditation)
+    const allActiveRowsForPair = await ProviderAccreditationPartnership.findAll({
+      where: { partnerId, deletedAt: null },
+      include: [{
+        model: ProviderAccreditation,
+        as: 'providerAccreditation',
+        required: true,
+        where: { providerId: accreditedProviderId, deletedAt: null }
+      }],
+      transaction: t
+    })
+
+    if (allActiveRowsForPair.length === 0) {
+      // Nothing to delete; treat as already deleted
+      await t.commit()
+      req.flash('success', 'Partnership deleted')
+      return res.redirect(`/providers/${providerId}/partnerships`)
+    }
+
+    // 3) Soft-delete every row with instance.update so hooks fire per row
+    for (const row of allActiveRowsForPair) {
+      await row.update(
+        { deletedAt: now, deletedById: user.id, updatedById: user.id },
+        { transaction: t } // instance.update => runs afterUpdate hook
+      )
+    }
+
+    await t.commit()
+    req.flash('success', 'Partnership deleted')
+    res.redirect(`/providers/${providerId}/partnerships`)
+  } catch (err) {
+    await t.rollback()
+    console.error('[delete partnership]', err)
+    res.status(500).send('Failed to delete partnership')
+  }
 }

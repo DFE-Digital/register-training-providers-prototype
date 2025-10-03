@@ -21,6 +21,8 @@
 
     {% if provider.deletedAt %}
       <p class="govuk-body">Provider deleted on {{ provider.deletedAt | govukDateTime }}</p>
+    {% elseif lastUpdate %}
+      <p class="govuk-hint govuk-!-font-size-16">{{ lastUpdate | formatLastUpdatedDisplay }}</p>
     {% endif %}
 
   </div>

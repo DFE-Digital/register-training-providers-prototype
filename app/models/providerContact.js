@@ -94,17 +94,17 @@ module.exports = (sequelize) => {
     }
   )
 
-  const createRevisionHook = require('../hooks/revisionHook')
+  const revisionHook = require('../hooks/revisionHook')
 
   ProviderContact.addHook('afterCreate', (instance, options) =>
-    createRevisionHook({ revisionModelName: 'ProviderContactRevision', modelKey: 'providerContact' })(instance, {
+    revisionHook({ revisionModelName: 'ProviderContactRevision', modelKey: 'providerContact' })(instance, {
       ...options,
       hookName: 'afterCreate'
     })
   )
 
   ProviderContact.addHook('afterUpdate',
-    createRevisionHook({ revisionModelName: 'ProviderContactRevision', modelKey: 'providerContact' })
+    revisionHook({ revisionModelName: 'ProviderContactRevision', modelKey: 'providerContact' })
   )
 
   return ProviderContact

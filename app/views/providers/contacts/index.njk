@@ -53,13 +53,13 @@
             actions: {
               items: [
                 {
-                  href: actions.delete + "/" + contact.id + "/delete",
-                  text: "Delete",
+                  href: actions.change + "/" + contact.id + "/edit",
+                  text: "Change",
                   visuallyHiddenText: "contact " + loop.index
                 },
                 {
-                  href: actions.change + "/" + contact.id + "/edit",
-                  text: "Change",
+                  href: actions.delete + "/" + contact.id + "/delete",
+                  text: "Delete",
                   visuallyHiddenText: "contact " + loop.index
                 }
               ]

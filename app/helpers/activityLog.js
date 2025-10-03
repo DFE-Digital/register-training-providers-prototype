@@ -3,11 +3,14 @@ const {
   ActivityLog,
   Provider,
   ProviderAccreditation,
+  ProviderAccreditationPartnership,
+  ProviderAccreditationPartnershipRevision,
   ProviderAccreditationRevision,
+  ProviderAddress,
   ProviderAddressRevision,
+  ProviderContact,
   ProviderContactRevision,
   ProviderRevision,
-  ProviderAccreditationPartnershipRevision,
   User,
   UserRevision
 } = require('../models')
@@ -239,13 +242,14 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
   }))
 
+  // Partnerships: show items where this provider is EITHER the accredited provider OR the training partner
   queries.push(ActivityLog.findAll({
     where: {
       revisionTable: 'provider_accreditation_partnership_revisions',
       [Op.or]: [
-        // provider is the *training partner*
+        // training partner side
         { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
-        // provider is the *accredited provider* (through the accreditation’s provider)
+        // accredited provider side (via the accreditation’s provider)
         { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
       ]
     },
@@ -265,18 +269,23 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
       },
       { model: User, as: 'changedByUser' }
     ],
-    // Important so Sequelize applies the $…$ filter against the main query
-    subQuery: false
+    // Prevent duplicate ActivityLog rows when JOINs fan out
+    distinct: true,
+    subQuery: false, // needed so $…$ paths filter the main query
+    order: [['changedAt', 'DESC']],
+    limit,
+    offset
   }))
 
-
   const allLogs = (await Promise.all(queries)).flat()
-
-  // Sort and paginate manually
-  allLogs.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt) || (b.id > a.id ? 1 : -1))
-  const activityLogs = allLogs.slice(offset, offset + limit)
+  const byId = new Map()
+  for (const row of allLogs) byId.set(row.id, row)
+  const activityLogs = Array.from(byId.values())
+    .sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+    .slice(offset, offset + limit)
 
   return Promise.all(activityLogs.map(formatActivityLog))
+
 }
 
 /**
@@ -335,20 +344,23 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
           { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
         ]
       },
-      include: [{
-        model: ProviderAccreditationPartnershipRevision,
-        as: 'providerAccreditationPartnershipRevision',
-        required: true,
-        include: [
-          {
-            model: ProviderAccreditation,
-            as: 'providerAccreditation',
-            include: [{ model: Provider, as: 'provider' }]
-          },
-          { model: Provider, as: 'partner' }
-        ]
-      }],
+      include: [
+        {
+          model: ProviderAccreditationPartnershipRevision,
+          as: 'providerAccreditationPartnershipRevision',
+          required: true,
+          include: [
+            {
+              model: ProviderAccreditation,
+              as: 'providerAccreditation',
+              include: [{ model: Provider, as: 'provider' }]
+            },
+            { model: Provider, as: 'partner' }
+          ]
+        }
+      ],
       distinct: true,
+      col: 'id',
       subQuery: false
     })
   ])
@@ -788,12 +800,6 @@ const groupActivityLogsByDate = (logs) => {
  * @returns {Promise<LinkedAccreditation[]>}
  */
 const getLinkedAccreditationsAsOf = async ({ sequelize, accreditedProviderId, partnerId, asOf }) => {
-  const { Op } = require('sequelize')
-  const {
-    ProviderAccreditationPartnership,
-    ProviderAccreditation
-  } = sequelize.models
-
   const joins = await ProviderAccreditationPartnership.findAll({
     paranoid: false,
     where: {
@@ -842,6 +848,162 @@ const getPrevLinkedAccreditations = async ({
   return getLinkedAccreditationsAsOf({ sequelize, accreditedProviderId, partnerId, asOf: prevAsOf })
 }
 
+/**
+ * Get the last update for a provider across:
+ * - provider (itself)
+ * - accreditations (owned by the provider)
+ * - addresses (owned by the provider)
+ * - contacts (owned by the provider)
+ * - partnerships (either provider is the accrediting provider via its accreditations OR provider is the partner)
+ *
+ * Any action counts (create/update/delete/archive/restore/etc.).
+ *
+ * @param {string} providerId - UUID of the provider.
+ * @param {object} [opts]
+ * @param {object} [opts.transaction] - Optional Sequelize transaction.
+ * @param {boolean} [opts.includeDeletedChildren=false] - Include soft-deleted children when gathering IDs.
+ * @param {object} [opts.entityTypes] - Override entity_type strings used in activity_logs.
+ * @returns {Promise<{
+ *   changedAt: Date|null,
+ *   changedByUser: { id: string, firstName?: string, lastName?: string, email?: string }|null,
+ *   action: string|null,
+ *   entityType?: string,
+ *   entityId?: string,
+ *   revisionTable?: string,
+ *   revisionId?: string,
+ *   revisionNumber?: number
+ * }>}
+ */
+const getProviderLastUpdated = async (providerId, opts = {}) => {
+  const {
+    transaction,
+    includeDeletedChildren = false,
+    entityTypes = {
+      provider: 'provider',
+      accreditation: 'provider_accreditation',
+      address: 'provider_address',
+      contact: 'provider_contact',
+      partnership: 'provider_accreditation_partnership'
+    }
+  } = opts
+
+  // 1) Gather related IDs (optionally exclude soft-deleted)
+  const childWhere = (extra = {}) =>
+    includeDeletedChildren ? extra : { ...extra, deletedAt: null }
+
+  const [accreditationRows, addressRows, contactRows] = await Promise.all([
+    ProviderAccreditation.findAll({
+      attributes: ['id'],
+      where: childWhere({ providerId }),
+      transaction
+    }),
+    ProviderAddress.findAll({
+      attributes: ['id'],
+      where: childWhere({ providerId }),
+      transaction
+    }),
+    ProviderContact.findAll({
+      attributes: ['id'],
+      where: childWhere({ providerId }),
+      transaction
+    })
+  ])
+
+  const accreditationIds = accreditationRows.map(r => r.id)
+  const addressIds = addressRows.map(r => r.id)
+  const contactIds = contactRows.map(r => r.id)
+
+  // Partnerships: either linked via the provider's accreditations OR as partnerId
+  const partnershipWhere = includeDeletedChildren ? {} : { deletedAt: null }
+  const partnershipOr = []
+  if (accreditationIds.length) partnershipOr.push({ providerAccreditationId: { [Op.in]: accreditationIds } })
+  partnershipOr.push({ partnerId: providerId })
+
+  const partnershipRows = await ProviderAccreditationPartnership.findAll({
+    attributes: ['id'],
+    where: { ...partnershipWhere, [Op.or]: partnershipOr },
+    transaction
+  })
+  const partnershipIds = partnershipRows.map(r => r.id)
+
+  // 2) Pull the latest log per entity type (no action filter — any action counts)
+  const latestFinds = await Promise.all([
+    // provider itself
+    ActivityLog.findOne({
+      where: { entityType: entityTypes.provider, entityId: providerId },
+      include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
+      order: [['changedAt', 'DESC']],
+      transaction
+    }),
+
+    // accreditations
+    accreditationIds.length
+      ? ActivityLog.findOne({
+          where: { entityType: entityTypes.accreditation, entityId: { [Op.in]: accreditationIds } },
+          include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
+          order: [['changedAt', 'DESC']],
+          transaction
+        })
+      : null,
+
+    // addresses
+    addressIds.length
+      ? ActivityLog.findOne({
+          where: { entityType: entityTypes.address, entityId: { [Op.in]: addressIds } },
+          include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
+          order: [['changedAt', 'DESC']],
+          transaction
+        })
+      : null,
+
+    // contacts
+    contactIds.length
+      ? ActivityLog.findOne({
+          where: { entityType: entityTypes.contact, entityId: { [Op.in]: contactIds } },
+          include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
+          order: [['changedAt', 'DESC']],
+          transaction
+        })
+      : null,
+
+    // partnerships
+    partnershipIds.length
+      ? ActivityLog.findOne({
+          where: { entityType: entityTypes.partnership, entityId: { [Op.in]: partnershipIds } },
+          include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
+          order: [['changedAt', 'DESC']],
+          transaction
+        })
+      : null
+  ])
+
+  // 3) Choose the most recent
+  const candidates = latestFinds.filter(Boolean)
+  if (!candidates.length) {
+    return { changedAt: null, changedByUser: null, action: null }
+  }
+  candidates.sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+  const log = candidates[0]
+
+  return {
+    changedAt: log.changedAt ?? null,
+    changedByUser: log.changedByUser
+      ? {
+          id: log.changedByUser.id,
+          firstName: log.changedByUser.firstName,
+          lastName: log.changedByUser.lastName,
+          email: log.changedByUser.email
+        }
+      : null,
+    action: log.action ?? null,
+    entityType: log.entityType,
+    entityId: log.entityId,
+    revisionTable: log.revisionTable,
+    revisionId: log.revisionId,
+    revisionNumber: log.revisionNumber
+  }
+}
+
 module.exports = {
   getActivityLogs,
   getProviderActivityLogs,
@@ -852,5 +1014,6 @@ module.exports = {
   getLatestRevision,
   groupActivityLogsByDate,
   getLinkedAccreditationsAsOf,
-  getPrevLinkedAccreditations
+  getPrevLinkedAccreditations,
+  getProviderLastUpdated
 }

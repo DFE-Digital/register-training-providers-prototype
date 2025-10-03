@@ -1,4 +1,5 @@
 const { toBoolean } = require('./boolean')
+const { govukDateTime } = require('../helpers/date')
 
 const getAccreditationTypeLabel = (code) => {
   if (!code) {
@@ -69,7 +70,24 @@ const getFeedbackRatingLabel = (code) => {
   return label
 }
 
+const formatLastUpdatedDisplay = (result) => {
+  if (!result || !result.changedAt) return null
+
+  const date = new Date(result.changedAt)
+  const dateStr = govukDateTime(date)
+
+  const name = result.changedByUser
+    ? [result.changedByUser.firstName, result.changedByUser.lastName]
+        .filter(Boolean)
+        .join(' ') || result.changedByUser.email || 'Unknown'
+    : 'Unknown'
+
+  const verb = result.action === 'create' ? 'Created' : 'Last updated'
+  return `${verb} ${dateStr} by ${name}`
+}
+
 module.exports = {
+  formatLastUpdatedDisplay,
   getAccreditationTypeLabel,
   getFeedbackRatingLabel,
   getProviderTypeLabel

@@ -38,7 +38,7 @@ const { logActivity } = require('../utils/activityLogger')
  * @param {ActivityHookConfig} param0 - Hook configuration
  * @returns {(instance: import('sequelize').Model, options: ActivityHookOptions) => Promise<void>}
  */
-const createActivityHook = ({ entityType, revisionTable, entityIdField }) => {
+const activityHook = ({ entityType, revisionTable, entityIdField }) => {
   return async (instance, options = {}) => {
     const revisionId = instance.id
     const entityId = instance[entityIdField]
@@ -74,4 +74,4 @@ const createActivityHook = ({ entityType, revisionTable, entityIdField }) => {
   }
 }
 
-module.exports = createActivityHook
+module.exports = activityHook

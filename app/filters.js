@@ -16,6 +16,7 @@ const {
   getYear } = require('./helpers/date')
 
 const {
+  formatLastUpdatedDisplay,
   getAccreditationTypeLabel,
   getFeedbackRatingLabel,
   getProviderTypeLabel
@@ -151,3 +152,10 @@ addFilter('markdownToHtml', (markdown) => {
 
   return govukHtml
 })
+
+/* ------------------------------------------------------------------
+utility function to parse markdown as HTML
+example: {{ lastUpdated | formatLastUpdatedDisplay }}
+outputs: "Created 2 October 2025 at 3:20pm by Anne Wilson"
+------------------------------------------------------------------ */
+addFilter('formatLastUpdatedDisplay', formatLastUpdatedDisplay)

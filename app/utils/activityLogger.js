@@ -1,45 +1,30 @@
 /**
- * Log a revision to the activity log
+ * Log a revision to the activity log.
  *
- * @param {Object} options
- * @param {String} options.revisionTable - Name of the revision table (e.g. 'provider_revisions')
- * @param {String} options.revisionId - ID of the new revision
- * @param {String} options.entityType - Type of the entity being changed (e.g. 'provider')
- * @param {String} options.entityId - ID of the entity (e.g. provider.id)
- * @param {Number} options.revisionNumber - Incrementing revision number
- * @param {String} [options.changedById] - User ID who made the change
- * @param {Date} [options.changedAt] - Timestamp of the change
+ * @param {Object} payload
+ * @param {string} payload.revisionTable
+ * @param {string} payload.revisionId
+ * @param {string} payload.entityType
+ * @param {string} payload.entityId
+ * @param {number} payload.revisionNumber
+ * @param {'create'|'update'|'delete'} payload.action
+ * @param {string} [payload.changedById]
+ * @param {Date}   [payload.changedAt]
+ * @param {Object} [options] - Passed straight to Sequelize .create() (e.g., { transaction, logging }).
+ * @param {import('sequelize').Transaction} [options.transaction]
+ * @param {Function|boolean} [options.logging]
+ * @returns {Promise<void>}
  */
-
-// utils/activityLogger.js
 let ActivityLog
 
-const logActivity = async ({
-  revisionTable,
-  revisionId,
-  entityType,
-  entityId,
-  revisionNumber,
-  action,
-  changedById,
-  changedAt
-}) => {
+const logActivity = async (payload, options = {}) => {
   if (!ActivityLog) {
-    // Lazy-load after all models have been registered
     const db = require('../models')
     ActivityLog = db.ActivityLog
   }
 
-  await ActivityLog.create({
-    revisionTable,
-    revisionId,
-    entityType,
-    entityId,
-    revisionNumber,
-    action,
-    changedById,
-    changedAt
-  })
+  const { transaction, logging } = options
+  await ActivityLog.create(payload, { transaction, logging })
 }
 
 module.exports = { logActivity }

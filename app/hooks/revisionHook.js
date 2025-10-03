@@ -36,23 +36,23 @@ const revisionFields = require('../constants/revisionFields')
  * @param {RevisionHookConfig} param0
  * @returns {(instance: import('sequelize').Model, options?: RevisionHookOptions) => Promise<void>}
  */
-const createRevisionHook = ({ revisionModelName, modelKey }) => {
+const revisionHook = ({ revisionModelName, modelKey }) => {
   return async (instance, options = {}) => {
     const sequelize = instance.sequelize
     const RevisionModel = sequelize.models[revisionModelName]
     const trackedFields = revisionFields[modelKey] || []
 
-    // Who caused the change
+    const tx = options?.transaction // use the same transaction as the caller
+
     const revisionById =
       instance.get('updatedById') ||
       instance.get('createdById') ||
       null
 
-    // Safely pick only attributes that exist on the revision model
     const src = instance.get({ plain: true })
     const pickForRevision = (obj) => {
       const revisionAttrs = Object.keys(RevisionModel.rawAttributes)
-      const omit = new Set(['id']) // avoid copying PK from source into revision
+      const omit = new Set(['id'])
       return Object.fromEntries(
         Object.entries(obj).filter(([k]) => revisionAttrs.includes(k) && !omit.has(k))
       )
@@ -70,58 +70,38 @@ const createRevisionHook = ({ revisionModelName, modelKey }) => {
     if (options?.hookName === 'afterCreate') {
       await RevisionModel.create(
         buildPayload({ revisionNumber: 1 }),
-        /** @type {import('sequelize').CreateOptions & { activityAction?: 'create' }} */ ({
-          activityAction: 'create'
-        })
+        { transaction: tx, activityAction: 'create' }
       )
       return
     }
 
-    // Find latest existing revision
+    // Load latest inside the same transaction
     const latest = await RevisionModel.findOne({
       where: { [`${modelKey}Id`]: instance.id },
-      order: [['revisionNumber', 'DESC']]
+      order: [['revisionNumber', 'DESC']],
+      transaction: tx
     })
 
-    // 🔎 Add your debug log right here:
-    // console.log('[revHook]', {
-    //   modelKey,
-    //   hook: options?.hookName || 'afterUpdate',
-    //   changed_deletedAt: typeof instance.changed === 'function' && instance.changed('deletedAt'),
-    //   deletedAt: instance.get('deletedAt'),
-    //   tracked: trackedFields,
-    //   // Optional extra context that’s often handy:
-    //   latestRevisionNumber: latest?.revisionNumber,
-    //   // show which tracked fields differ from latest
-    //   diffs: trackedFields.reduce((acc, f) => {
-    //     acc[f] = { now: instance.get(f), latest: latest?.get?.(f) }
-    //     return acc
-    //   }, {})
-    // })
-
     if (!latest) {
-      // Shouldn't usually happen, but be resilient
       await RevisionModel.create(
         buildPayload({ revisionNumber: 1 }),
-        { activityAction: 'create' }
+        { transaction: tx, activityAction: 'create' }
       )
       return
     }
 
-    // Only write a new revision if tracked fields changed
     const hasChanged = trackedFields.some((field) => instance.get(field) !== latest.get(field))
     if (!hasChanged) return
 
-    // Optional: treat soft delete (deletedAt changed to non-null) as a 'delete'
     const deletedAtChanged =
       typeof instance.changed === 'function' ? instance.changed('deletedAt') : false
     const isDelete = deletedAtChanged && instance.get('deletedAt') != null
 
     await RevisionModel.create(
       buildPayload({ revisionNumber: latest.revisionNumber + 1 }),
-      { activityAction: isDelete ? 'delete' : 'update' }
+      { transaction: tx, activityAction: isDelete ? 'delete' : 'update' }
     )
   }
 }
 
-module.exports = createRevisionHook
+module.exports = revisionHook

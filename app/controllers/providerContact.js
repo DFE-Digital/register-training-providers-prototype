@@ -1,7 +1,8 @@
-const { Provider, ProviderContact } = require('../models')
+const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { nullIfEmpty } = require('../helpers/string')
 const { isValidEmail,isValidTelephone } = require('../helpers/validation')
+const { nullIfEmpty } = require('../helpers/string')
+const { Provider, ProviderContact } = require('../models')
 const Pagination = require('../helpers/pagination')
 
 /// ------------------------------------------------------------------------ ///
@@ -19,8 +20,11 @@ exports.providerContactsList = async (req, res) => {
   // get the current provider
   const provider = await Provider.findByPk(providerId)
 
-  // calculate if the provider is accredited
-  const isAccredited = await isAccreditedProvider({ providerId })
+  // Run in parallel: accreditation flag + last update (by providerId)
+  const [isAccredited, lastUpdate] = await Promise.all([
+    isAccreditedProvider({ providerId }),
+    getProviderLastUpdated(providerId, { includeDeletedChildren: true })
+  ])
 
   // Get the total number of contacts for pagination metadata
   const totalCount = await ProviderContact.count({
@@ -51,6 +55,7 @@ exports.providerContactsList = async (req, res) => {
   res.render('providers/contacts/index', {
     provider,
     isAccredited,
+    lastUpdate,
     // Contacts for *this* page
     contacts: pagination.getData(),
     // The pagination metadata (pageItems, nextPage, etc.)
