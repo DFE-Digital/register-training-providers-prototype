@@ -19,8 +19,8 @@
     </div>
   {% endif %}
   <div class="govuk-summary-card__content">
-    {% for field in item.summary.fields %}
-      <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list">
+      {% for field in item.summary.fields %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             {{ field.key }}
@@ -29,7 +29,7 @@
             {{ field.value if field.value else "Not entered" }}
           </dd>
         </div>
-      </dl>
-    {% endfor %}
+      {% endfor %}
+    </dl>
   </div>
 </div>
