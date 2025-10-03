@@ -1,3 +1,10 @@
+{% set isPartnershipDeleted = false %}
+{% for field in item.summary.fields %}
+  {% if field.key == "Linked accreditations" and field.value == "None" %}
+    {% set isPartnershipDeleted = true %}
+  {% endif %}
+{% endfor %}
+
 <h3 class="govuk-summary-card__title">
   {{ item.summary.activity }}
 </h3>
@@ -19,19 +26,32 @@
     </div>
   {% endif %}
   <div class="govuk-summary-card__content">
-    {% for field in item.summary.fields %}
-      {# {% if not (field.key == "Linked accreditations" and field.value == "None") %} #}
-        <dl class="govuk-summary-list">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              {{ field.key }}
-            </dt>
-            <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-              {{ field.value if field.value else "Not entered" }}
-            </dd>
-          </div>
-        </dl>
-      {# {% endif %} #}
-    {% endfor %}
+    <dl class="govuk-summary-list">
+      {% for field in item.summary.fields %}
+        {% if isPartnershipDeleted %}
+          {% if field.key in ["Accredited provider", "Training partner"] %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {{ field.key }}
+              </dt>
+              <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+                {{ field.value if field.value else "Not entered" }}
+              </dd>
+            </div>
+          {% endif %}
+        {% else %}
+          {% if not field.key in ["Accreditations added", "Accreditations removed"] %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {{ field.key }}
+              </dt>
+              <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+                {{ field.value if field.value else "Not entered" }}
+              </dd>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </dl>
   </div>
 </div>
