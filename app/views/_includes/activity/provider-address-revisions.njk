@@ -1,0 +1,58 @@
+<h3 class="govuk-summary-card__title">
+  {{ item.summary.activity }}
+</h3>
+<p class="govuk-body">
+  By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+</p>
+<div class="govuk-summary-card">
+  {% if showSummaryCardTitle %}
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        {% if item.summary.labelHtml | length %}
+          {{ item.summary.labelHtml | safe }}
+        {% else %}
+          <a href="{{ item.summary.href }}" class="govuk-link">
+            {{ item.summary.label }}
+          </a>
+        {% endif %}
+      </h2>
+    </div>
+  {% endif %}
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+        {% for field in item.summary.fields %}
+          {% if field.key in ["Address line 1", "Address line 2", "Address line 3", "Town or city", "Postcode"] %}
+            {{ field.value if field.value }}{% if field.value | length %}<br>{% endif %}
+          {% endif %}
+        {% endfor %}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Location
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <dl class="govuk-summary-list">
+            {% for field in item.summary.fields %}
+              {% if field.key in ["Latitude", "Longitude"] %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ field.key }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ field.value if field.value }}
+                  </dd>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </dl>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

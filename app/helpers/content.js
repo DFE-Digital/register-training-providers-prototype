@@ -77,13 +77,9 @@ const formatLastUpdatedDisplay = (result) => {
   const dateStr = govukDateTime(date)
 
   const name = result.changedByUser
-    ? [result.changedByUser.firstName, result.changedByUser.lastName]
-        .filter(Boolean)
-        .join(' ') || result.changedByUser.email || 'Unknown'
+    ? [result.changedByUser.firstName, result.changedByUser.lastName].filter(Boolean).join(' ') || result.changedByUser.email || 'Unknown'
     : 'Unknown'
-
-  const verb = result.action === 'create' ? 'Created' : 'Last updated'
-  return `${verb} ${dateStr} by ${name}`
+  return `Last updated ${dateStr} by ${name}`
 }
 
 module.exports = {

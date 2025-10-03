@@ -25,45 +25,14 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
         {% for item in group.entries %}
-          <h3 class="govuk-summary-card__title">
-            {{ item.summary.activity }}
-          </h3>
-          <p class="govuk-body">
-            {% if item.changedByUser.deleteById %}
-              By Deleted user on {{ item.changedAt | govukDateTime }}
-            {% else %}
-              By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
-            {% endif %}
-          </p>
-          <div class="govuk-summary-card">
-            <div class="govuk-summary-card__title-wrapper">
-              <h2 class="govuk-summary-card__title">
-                {% if item.summary.labelHtml | length %}
-                  {{ item.summary.labelHtml | safe }}
-                {% else %}
-                  <a href="{{ item.summary.href }}" class="govuk-link">
-                    {{ item.summary.label }}
-                  </a>
-                {% endif %}
-              </h2>
-            </div>
-            <div class="govuk-summary-card__content">
-              {% for field in item.summary.fields %}
-                {% if not (field.key == "Linked accreditations" and field.value == "None") %}
-                  <dl class="govuk-summary-list">
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ field.key }}
-                      </dt>
-                      <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-                        {{ field.value if field.value else "Not entered" }}
-                      </dd>
-                    </div>
-                  </dl>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
+          {% set showSummaryCardTitle = true %}
+          {% if item.revisionTable == "provider_accreditation_partnership_revisions" %}
+            {% include "_includes/activity/provider-accreditation-partnership-revisions.njk" %}
+          {% elif item.revisionTable == "provider_address_revisions" %}
+            {% include "_includes/activity/provider-address-revisions.njk" %}
+          {% else %}
+            {% include "_includes/activity/provider-revisions.njk" %}
+          {% endif %}
         {% endfor %}
       {% endfor %}
 
