@@ -79,7 +79,7 @@ const formatLastUpdatedDisplay = (result) => {
   const name = result.changedByUser
     ? [result.changedByUser.firstName, result.changedByUser.lastName].filter(Boolean).join(' ') || result.changedByUser.email || 'Unknown'
     : 'Unknown'
-  return `Last updated ${dateStr} by ${name}`
+  return `Last updated by ${name} on ${dateStr}`
 }
 
 module.exports = {
