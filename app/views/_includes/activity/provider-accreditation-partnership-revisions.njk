@@ -17,10 +17,12 @@
       <h2 class="govuk-summary-card__title">
         {% if item.summary.labelHtml | length %}
           {{ item.summary.labelHtml | safe }}
-        {% else %}
+        {% elif item.summary.href | length %}
           <a href="{{ item.summary.href }}" class="govuk-link">
             {{ item.summary.label }}
           </a>
+        {% else %}
+          {{ item.summary.label }}
         {% endif %}
       </h2>
     </div>
