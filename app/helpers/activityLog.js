@@ -80,6 +80,70 @@ const escapeHtml = (s = '') =>
     .replaceAll("'",'&#39;')
 
 /**
+ * Decide whether a provider should be linkable (listed) in the register UI.
+ *
+ * A provider is considered "listable" only if it has not been soft-deleted
+ * and is not archived. Extend this predicate if you have additional gating
+ * flags (e.g. `isActive`).
+ *
+ * @param {import('../models').Provider | null | undefined} provider
+ *   A Sequelize Provider instance fetched with `{ paranoid: false }`, or null/undefined.
+ * @returns {boolean}
+ *   `true` if the provider is currently listable (safe to link to), otherwise `false`.
+ *
+ * @example
+ * const provider = await Provider.findByPk(id, { paranoid: false });
+ * if (isProviderListable(provider)) {
+ *   // render link
+ * } else {
+ *   // render plain text
+ * }
+ */
+const isProviderListable = (provider) =>
+  provider && provider.deletedAt == null // && provider.archivedAt == null
+
+/**
+ * Build a safe provider link (or plain text) depending on its current listable state.
+ *
+ * This helper:
+ *  - Looks up the provider with `{ paranoid: false }` so soft-deleted rows are visible.
+ *  - Returns a *link* only if the provider passes `isProviderListable`.
+ *  - Falls back to plain text (no link) when the provider is missing or not listable.
+ *
+ * @async
+ * @param {string | null | undefined} providerId
+ *   The provider's UUID (or undefined/null). If falsy, the function uses the fallback name.
+ * @param {string | null | undefined} fallbackName
+ *   A label to use if the provider name can't be resolved (e.g. from the log payload).
+ * @returns {Promise<{text: string, href: string, html: string}>}
+ *   - `text`: The chosen display name (resolved from provider or `fallbackName`).
+ *   - `href`: The canonical provider URL (empty string if not listable).
+ *   - `html`: A safe HTML string (linked when listable, escaped plain text otherwise).
+ *
+ * @example
+ * const { text, href, html } = await buildProviderLink(revision.providerId, revision.operatingName);
+ * // Use `text` for non-HTML contexts, `html` for inline rich rendering, and `href` for tables.
+ *
+ * @example
+ * // Composing a section-specific link when listable:
+ * const { href } = await buildProviderLink(revision.providerId, 'Provider');
+ * const contactsHref = href ? `${href}/contacts` : ''; // empty string when not listable
+ */
+const buildProviderLink = async (providerId, fallbackName) => {
+  if (!providerId) return { text: fallbackName || 'Provider', href: '', html: escapeHtml(fallbackName || 'Provider') }
+
+  const provider = await Provider.findByPk(providerId, {
+    paranoid: false,
+    attributes: ['id', 'operatingName', 'legalName', 'deletedAt', 'archivedAt']
+  })
+
+  const text = provider?.operatingName || provider?.legalName || fallbackName || 'Provider'
+  const href = isProviderListable(provider) ? `/providers/${provider.id}` : ''
+  const html = href ? `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>` : escapeHtml(text)
+  return { text, href, html }
+}
+
+/**
  * Returns the foreign key(s) used by the revision table for previous/latest lookups.
  *
  * NOTE: For partnership *revision* tables, the entity is the partnership itself,
@@ -551,8 +615,12 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         activity = `Provider ${actionLabel}`
       }
 
-      label = revision.operatingName || revision.name || 'Provider'
-      href = `/providers/${revision.providerId}/`
+      // label = revision.operatingName || revision.name || 'Provider'
+      // href = `/providers/${revision.providerId}/`
+
+      const { text, href: safeHref } = await buildProviderLink(revision.providerId, revision.operatingName || revision.name)
+      label = text
+      href = safeHref
 
       fields.push({ key: 'Provider type', value: getProviderTypeLabel(revision.type) })
       fields.push({ key: 'Operating name', value: revision.operatingName })
@@ -566,9 +634,11 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     case 'provider_address_revisions': {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
+      const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
       activity = `Provider address ${log.action}d`
       label = providerName
-      href = `/providers/${revision.providerId}/addresses`
+      // href = `/providers/${revision.providerId}/addresses`
+      href = safeHref ? `${safeHref}/addresses` : ''
 
       fields.push({ key: 'Address line 1', value: revision.line1 })
       fields.push({ key: 'Address line 2', value: revision.line2 })
@@ -584,9 +654,11 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     case 'provider_contact_revisions': {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
+      const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
       activity = `Provider contact ${log.action}d`
       label = providerName
-      href = `/providers/${revision.providerId}/contacts`
+      // href = `/providers/${revision.providerId}/contacts`
+      href = safeHref ? `${safeHref}/contacts` : ''
 
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
@@ -598,9 +670,11 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     case 'provider_accreditation_revisions': {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
+      const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
       activity = `Provider accreditation ${log.action}d`
       label = providerName
-      href = `/providers/${revision.providerId}/accreditations`
+      // href = `/providers/${revision.providerId}/accreditations`
+      href = safeHref ? `${safeHref}/accreditations` : ''
 
       fields.push({ key: 'Accreditation number', value: revision.number })
       fields.push({ key: 'Date accreditation starts', value: govukDate(revision.startsOn) })
@@ -615,16 +689,29 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
       const trainingName   = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
 
+      // const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+      // const trainingProviderId   = trainingProvider?.id || revision.partnerId
+
+      // const accreditedHref = accreditedProviderId ? `/providers/${accreditedProviderId}` : ''
+      // const trainingHref   = trainingProviderId   ? `/providers/${trainingProviderId}`   : ''
+
+      // label = `${accreditedName} – ${trainingName}`
+      // const labelHtml = `${accreditedHref ? `<a class="govuk-link" href="${accreditedHref}">${escapeHtml(accreditedName)}</a>` : escapeHtml(accreditedName)} – ${trainingHref ? `<a class="govuk-link" href="${trainingHref}">${escapeHtml(trainingName)}</a>` : escapeHtml(trainingName)}`
+
+      // const href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
+
       const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
       const trainingProviderId   = trainingProvider?.id || revision.partnerId
 
-      const accreditedHref = accreditedProviderId ? `/providers/${accreditedProviderId}` : ''
-      const trainingHref   = trainingProviderId   ? `/providers/${trainingProviderId}`   : ''
+      const { text: accreditedText, href: accreditedHref, html: accreditedHtml } =
+        await buildProviderLink(accreditedProviderId, accreditedName)
+      const { text: trainingText, href: trainingHref, html: trainingHtml } =
+        await buildProviderLink(trainingProviderId, trainingName)
 
-      label = `${accreditedName} – ${trainingName}`
-      const labelHtml = `${accreditedHref ? `<a class="govuk-link" href="${accreditedHref}">${escapeHtml(accreditedName)}</a>` : escapeHtml(accreditedName)} – ${trainingHref ? `<a class="govuk-link" href="${trainingHref}">${escapeHtml(trainingName)}</a>` : escapeHtml(trainingName)}`
+      label = `${accreditedText} – ${trainingText}`
+      const labelHtml = `${accreditedHtml} – ${trainingHtml}`
 
-      const href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
+      const href = accreditedHref ? `${accreditedHref}/partnerships` : ''
 
       // --- Snapshots ---
       const sequelize = require('../models').sequelize
@@ -671,8 +758,8 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       }
 
       // Fields
-      fields.push({ key: 'Accredited provider', value: accreditedName, href: accreditedHref })
-      fields.push({ key: 'Training partner',    value: trainingName,   href: trainingHref  })
+      fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
+      fields.push({ key: 'Training partner',    value: trainingText,   href: trainingHref  })
       fields.push({
         key: 'Linked accreditations',
         value: nowLinked.length ? nowLinked.map(a => a.number).sort().join(', ') : 'None'
