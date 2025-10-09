@@ -144,6 +144,82 @@ const buildProviderLink = async (providerId, fallbackName) => {
 }
 
 /**
+ * Decide whether a user should be linkable (listed) in the UI.
+ *
+ * A user is considered "listable" only if they have not been soft-deleted
+ * (i.e. `deletedAt == null`). If you also require an active flag, the check
+ * includes `isActive !== false`. Adjust this predicate to your needs.
+ *
+ * @param {import('../models').User | null | undefined} user
+ *   A Sequelize User instance fetched with `{ paranoid: false }`, or null/undefined.
+ * @returns {boolean}
+ *   `true` if the user is currently listable (safe to link to), otherwise `false`.
+ *
+ * @example
+ * const user = await User.findByPk(id, { paranoid: false });
+ * if (isUserListable(user)) {
+ *   // render link
+ * } else {
+ *   // render plain text
+ * }
+ */
+const isUserListable = (user) =>
+  !!user && user.deletedAt == null && user.isActive !== false
+
+/**
+ * Build a safe user link (or plain text) depending on current listable state.
+ *
+ * This helper:
+ *  - Looks up the user with `{ paranoid: false }` so soft-deleted rows are visible.
+ *  - Returns a *link* only if the user passes `isUserListable`.
+ *  - Falls back to plain text (no link) when the user is missing or not listable.
+ *
+ * @async
+ * @param {string | null | undefined} userId
+ *   The user's UUID (or undefined/null). If falsy, the function uses the fallback name.
+ * @param {string | null | undefined} [fallbackName]
+ *   A label to use if the user’s name can't be resolved (e.g. from the log payload).
+ * @returns {Promise<{text: string, href: string, html: string}>}
+ *   - `text`: The chosen display name (resolved from user or `fallbackName`).
+ *   - `href`: The canonical user URL (empty string if not listable).
+ *   - `html`: A safe HTML string (linked when listable, escaped plain text otherwise).
+ *
+ * @example
+ * const { text, href, html } = await buildUserLink(log.changedById, 'Unknown user');
+ * // Use `text` for non-HTML contexts, `html` for inline rendering, and `href` for tables.
+ *
+ * @example
+ * // Composing a section-specific link when listable:
+ * const { href } = await buildUserLink(log.changedById, 'User');
+ * const activityHref = href ? `${href}/activity` : ''; // empty string when not listable
+ */
+const buildUserLink = async (userId, fallbackName) => {
+  if (!userId) {
+    const text = fallbackName || 'User'
+    return { text, href: '', html: escapeHtml(text) }
+  }
+
+  const user = await User.findByPk(userId, {
+    paranoid: false,
+    attributes: ['id', 'firstName', 'lastName', 'email', 'deletedAt', 'isActive']
+  })
+
+  // Prefer a proper name; fall back to email; then to the provided fallback.
+  const derivedName = user
+    ? [user.firstName, user.lastName].filter(Boolean).join(' ').trim()
+    : ''
+  const text = derivedName || user?.email || fallbackName || 'User'
+
+  // TODO: If your route isn’t `/users/:id`, change the href here.
+  const href = isUserListable(user) ? `/users/${user.id}` : ''
+  const html = href
+    ? `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>`
+    : escapeHtml(text)
+
+  return { text, href, html }
+}
+
+/**
  * Returns the foreign key(s) used by the revision table for previous/latest lookups.
  *
  * NOTE: For partnership *revision* tables, the entity is the partnership itself,
