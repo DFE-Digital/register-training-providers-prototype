@@ -839,8 +839,18 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
     case 'user_revisions': {
       activity = `User ${log.action}d`
-      label = `${revision.firstName} ${revision.lastName}` || revision.email || 'User'
-      href = `/users/${revision.userId}`
+
+      // Prefer a proper name, otherwise email, then a generic fallback.
+      const fallbackName =
+        [revision.firstName, revision.lastName].filter(Boolean).join(' ').trim() ||
+        revision.email ||
+        'User'
+
+      // Conditionally link if the user is listable; otherwise plain text.
+      const { text: userText, href: userHref } = await buildUserLink(revision.userId, fallbackName)
+
+      label = userText
+      href = userHref
 
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
