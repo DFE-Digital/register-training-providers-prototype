@@ -691,9 +691,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         activity = `Provider ${actionLabel}`
       }
 
-      // label = revision.operatingName || revision.name || 'Provider'
-      // href = `/providers/${revision.providerId}/`
-
       const { text, href: safeHref } = await buildProviderLink(revision.providerId, revision.operatingName || revision.name)
       label = text
       href = safeHref
@@ -713,7 +710,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
       activity = `Provider address ${log.action}d`
       label = providerName
-      // href = `/providers/${revision.providerId}/addresses`
       href = safeHref ? `${safeHref}/addresses` : ''
 
       fields.push({ key: 'Address line 1', value: revision.line1 })
@@ -733,7 +729,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
       activity = `Provider contact ${log.action}d`
       label = providerName
-      // href = `/providers/${revision.providerId}/contacts`
       href = safeHref ? `${safeHref}/contacts` : ''
 
       fields.push({ key: 'First name', value: revision.firstName })
@@ -749,7 +744,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
       activity = `Provider accreditation ${log.action}d`
       label = providerName
-      // href = `/providers/${revision.providerId}/accreditations`
       href = safeHref ? `${safeHref}/accreditations` : ''
 
       fields.push({ key: 'Accreditation number', value: revision.number })
@@ -764,17 +758,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
       const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
       const trainingName   = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
-
-      // const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
-      // const trainingProviderId   = trainingProvider?.id || revision.partnerId
-
-      // const accreditedHref = accreditedProviderId ? `/providers/${accreditedProviderId}` : ''
-      // const trainingHref   = trainingProviderId   ? `/providers/${trainingProviderId}`   : ''
-
-      // label = `${accreditedName} – ${trainingName}`
-      // const labelHtml = `${accreditedHref ? `<a class="govuk-link" href="${accreditedHref}">${escapeHtml(accreditedName)}</a>` : escapeHtml(accreditedName)} – ${trainingHref ? `<a class="govuk-link" href="${trainingHref}">${escapeHtml(trainingName)}</a>` : escapeHtml(trainingName)}`
-
-      // const href = accreditedProviderId ? `/providers/${accreditedProviderId}/partnerships` : ''
 
       const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
       const trainingProviderId   = trainingProvider?.id || revision.partnerId
