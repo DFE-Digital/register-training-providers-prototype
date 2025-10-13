@@ -45,25 +45,52 @@
 
     {% if partnerships.length %}
 
-      {% for partnership in partnerships %}
 
-        {% set accreditedProviderHtml %}
-          {% if not partnership.isAccreditedSide %}
-            <a href="/providers/{{ partnership.accreditedProvider.id }}">
-              {{ partnership.accreditedProvider.operatingName }}
-            </a>
+    {% for partnership in partnerships %}
+
+        {% set summaryCardTitleHtml %}
+          {% if partnership.isAccreditedSide %}
+            {% if partnership.partnerIsLinkable %}
+              <a href="/providers/{{ partnership.trainingPartner.id }}">
+                {{ partnership.trainingPartner.operatingName }}
+              </a>
+            {% else %}
+              {{ partnership.trainingPartner.operatingName }}
+            {% endif %}
           {% else %}
-            {{ partnership.accreditedProvider.operatingName }}
+            {% if partnership.accreditedIsLinkable %}
+              <a href="/providers/{{ partnership.accreditedProvider.id }}">
+                {{ partnership.accreditedProvider.operatingName }}
+              </a>
+            {% else %}
+              {{ partnership.accreditedProvider.operatingName }}
+            {% endif %}
           {% endif %}
         {% endset %}
 
-        {% set trainingPartnerHtml %}
+        {% set summaryActionsHtml %}
           {% if partnership.isAccreditedSide %}
-            <a href="/providers/{{ partnership.trainingPartner.id }}">
-              {{ partnership.trainingPartner.operatingName }}
-            </a>
+            {% if partnership.partnerIsLinkable %}
+              <ul class="govuk-summary-card__actions">
+                <li class="govuk-summary-card__action">
+                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/accreditations">Change<span class="govuk-visually-hidden"> {{ partnership.trainingPartner.operatingName }} partnership</span></a>
+                </li>
+                <li class="govuk-summary-card__action">
+                  <a class="govuk-link" href="{{ actions.delete }}/{{ partnership.id }}/delete">Delete<span class="govuk-visually-hidden"> {{ partnership.accreditedProvider.operatingName }} partnership</span></a>
+                </li>
+              </ul>
+            {% endif %}
           {% else %}
-            {{ partnership.trainingPartner.operatingName }}
+            {% if partnership.accreditedIsLinkable %}
+              <ul class="govuk-summary-card__actions">
+                <li class="govuk-summary-card__action">
+                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/accreditations">Change<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>
+                </li>
+                <li class="govuk-summary-card__action">
+                  <a class="govuk-link" href="{{ actions.delete }}/{{ partnership.id }}/delete">Delete<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>
+                </li>
+              </ul>
+            {% endif %}
           {% endif %}
         {% endset %}
 
@@ -79,53 +106,43 @@
           </ul>
         {% endset %}
 
-        {{ govukSummaryList({
-          card: {
-            title: {
-              text: partnership.trainingPartner.operatingName if partnership.isAccreditedSide else partnership.accreditedProvider.operatingName
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "/" + partnership.id + "/accreditations",
-                  text: "Change",
-                  visuallyHiddenText: "partner " + loop.index
-                },
-                {
-                  href: actions.delete + "/" + partnership.id + "/delete",
-                  text: "Delete",
-                  visuallyHiddenText: "partner " + loop.index
-                }
-              ]
-            } if not provider.archivedAt
-          },
-          rows: [
-            {
-              key: {
-                text: "Accredited provider"
-              },
-              value: {
-                html: accreditedProviderHtml
-              }
-            },
-            {
-              key: {
-                text: "Training partner"
-              },
-              value: {
-                html: trainingPartnerHtml
-              }
-            },
-            {
-              key: {
-                text: "Linked accreditation" + ("s" if partnership.accreditations > 1)
-              },
-              value: {
-                html: accreditationsHtml
-              }
-            }
-          ]
-        }) }}
+        <div class="govuk-summary-card">
+          <div class="govuk-summary-card__title-wrapper">
+            <h2 class="govuk-summary-card__title">
+              {{ summaryCardTitleHtml | safe }}
+            </h2>
+            {{ summaryActionsHtml | safe }}
+          </div>
+
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Accredited provider
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ partnership.accreditedProvider.operatingName }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Training partner
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ partnership.trainingPartner.operatingName }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Linked accreditations
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ accreditationsHtml | safe }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
 
       {% endfor %}
 
