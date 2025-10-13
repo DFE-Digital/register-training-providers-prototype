@@ -80,6 +80,34 @@ const escapeHtml = (s = '') =>
     .replaceAll("'",'&#39;')
 
 /**
+ * Append a section path (e.g. "partnerships") to a base provider href.
+ * - Returns an empty string if `href` is falsy (provider not listable).
+ * - Normalises slashes to avoid double slashes.
+ *
+ * @param {string | null | undefined} href - Base provider URL (e.g. "/providers/12345").
+ * @param {string} section - Section path to append (e.g. "partnerships" or "/partnerships/").
+ * @returns {string} The combined URL, or '' if `href` is falsy.
+ *
+ * @example
+ * appendSection('/providers/abc', 'partnerships')
+ * // → "/providers/abc/partnerships"
+ *
+ * @example
+ * appendSection('/providers/abc/', '/partnerships/')
+ * // → "/providers/abc/partnerships"
+ *
+ * @example
+ * appendSection('', 'partnerships')
+ * // → ""
+ */
+const appendSection = (href, section) => {
+  if (!href) return ''
+  const base = String(href).replace(/\/+$/, '')           // trim trailing slashes
+  const sec  = String(section || '').replace(/^\/+|\/+$/g, '') // trim leading/trailing slashes
+  return sec ? `${base}/${sec}` : base
+}
+
+/**
  * Decide whether a provider should be linkable (listed) in the register UI.
  *
  * A provider is considered "listable" only if it has not been soft-deleted
@@ -657,7 +685,24 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
  * @param {string} options.action - Type of action (e.g. 'create', 'update', 'delete').
  * @param {string} options.revisionId - ID of the revision.
  * @param {string} options.entityId - ID of the provider or user (or partnership for partnership logs).
- * @returns {Promise<Object>} Structured summary object with `label`, `activity`, `href`, and `fields`.
+ * @returns {Promise<{
+ *   action: string,
+ *   activity: string,
+ *   label: string,
+ *   href: string,
+ *   fields: Array<{ key: string, value: string, href?: string }>,
+ *   // extra, case-specific structured data for views/partials:
+ *   links?: { accreditedProvider?: string, trainingProvider?: string },
+ *   labelHtml?: string,
+ *   // partnership case only:
+ *   linkedAccreditations?: Array<{ id: string, number: string, startsOn: string|null, endsOn: string|null }>,
+ *   accreditationsAdded?: Array<{ id: string, number: string, startsOn: string|null, endsOn: string|null }>,
+ *   accreditationsRemoved?: Array<{ id: string, number: string, startsOn: string|null, endsOn: string|null }>,
+ *   parties?: {
+ *     accredited: { text: string, href: string, html: string },
+ *     training:   { text: string, href: string, html: string }
+ *   }
+ * }>}
  */
 const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   if (!revision) {
@@ -669,6 +714,14 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   let label = ''
   let href = ''
   const fields = []
+
+  // OPTIONAL extras (only set in certain cases)
+  let labelHtml = ''
+  let links = null
+  let linkedAccreditations = []
+  let accreditationsAdded = []
+  let accreditationsRemoved = []
+  let parties = null
 
   switch (revisionTable) {
     case 'provider_revisions': {
@@ -752,31 +805,292 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
+    // case 'provider_accreditation_partnership_revisions': {
+    //   const accreditedProvider = revision.providerAccreditation?.provider || null
+    //   const trainingProvider   = revision.partner || null
+
+    //   const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
+    //   const trainingName   = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
+
+    //   const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+    //   const trainingProviderId   = trainingProvider?.id || revision.partnerId
+
+    //   const { text: accreditedText, href: accreditedHref, html: accreditedHtml } =
+    //     await buildProviderLink(accreditedProviderId, accreditedName)
+    //   const { text: trainingText, href: trainingHref, html: trainingHtml } =
+    //     await buildProviderLink(trainingProviderId, trainingName)
+
+    //   label = `${accreditedText} – ${trainingText}`
+    //   const labelHtml = `${accreditedHtml} – ${trainingHtml}`
+
+    //   const href = accreditedHref ? `${accreditedHref}/partnerships` : ''
+
+    //   // --- Snapshots ---
+    //   const sequelize = require('../models').sequelize
+    //   const asOf = new Date(log.changedAt)
+
+    //   // Current snapshot (as of this activity)
+    //   const nowLinked = (accreditedProviderId && trainingProviderId)
+    //     ? await getLinkedAccreditationsAsOf({
+    //         sequelize,
+    //         accreditedProviderId,
+    //         partnerId: trainingProviderId,
+    //         asOf
+    //       })
+    //     : []
+
+    //   // Previous snapshot using the epsilon wrapper
+    //   const prevLinked = (accreditedProviderId && trainingProviderId)
+    //     ? await getPrevLinkedAccreditations({
+    //         sequelize,
+    //         accreditedProviderId,
+    //         partnerId: trainingProviderId,
+    //         asOf,
+    //         epsilonMs: 2000   // <- can omit; defaults to 2000
+    //       })
+    //     : []
+
+    //   // Diffs (by accreditation id)
+    //   const prevIds = new Set(prevLinked.map(a => a.id))
+    //   const nowIds  = new Set(nowLinked.map(a => a.id))
+    //   const added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number).sort()
+    //   const removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number).sort()
+
+    //   // ---- Activity label (order matters) ----
+    //   if (nowLinked.length === 0) {
+    //     activity = 'Provider partnership deleted'
+    //   } else if (prevLinked.length === 0 && log.action === 'create') {
+    //     // first ever link for this provider pair
+    //     activity = 'Provider partnership created'
+    //   } else if (added.length || removed.length || (log.action === 'create' && prevLinked.length > 0)) {
+    //     // adding a *new* join row after an existing one(s)
+    //     activity = 'Provider partnership accreditations updated'
+    //   } else {
+    //     activity = 'Provider partnership updated'
+    //   }
+
+    //   // Fields
+    //   fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
+    //   fields.push({ key: 'Training partner',    value: trainingText,   href: trainingHref  })
+    //   fields.push({
+    //     key: 'Linked accreditations',
+    //     value: nowLinked.length ? nowLinked.map(a => a.number).sort().join(', ') : 'None'
+    //   })
+    //   if (added.length) fields.push({ key: 'Accreditations added', value: added.join(', ') })
+    //   if (removed.length) fields.push({ key: 'Accreditations removed', value: removed.join(', ') })
+
+    //   return {
+    //     action: log.action,
+    //     activity,
+    //     label,
+    //     labelHtml,
+    //     href,
+    //     links: { accreditedProvider: accreditedHref, trainingProvider: trainingHref },
+    //     fields
+    //   }
+    // }
+
+    // case 'provider_accreditation_partnership_revisions': {
+    //   const accreditedProvider = revision.providerAccreditation?.provider || null
+    //   const trainingProvider   = revision.partner || null
+
+    //   const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
+    //   const trainingName   = trainingProvider?.operatingName   || trainingProvider?.legalName   || 'Training partner'
+
+    //   const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+    //   const trainingProviderId   = trainingProvider?.id   || revision.partnerId
+
+    //   const { text: accreditedText, href: accreditedHref } =
+    //     await buildProviderLink(accreditedProviderId, accreditedName)
+    //   const { text: trainingText, href: trainingHref } =
+    //     await buildProviderLink(trainingProviderId, trainingName)
+
+    //   label = `${accreditedText} – ${trainingText}`
+    //   href = accreditedHref ? `${accreditedHref}/partnerships` : ''
+
+    //   // --- Snapshots (as-of + previous) ---
+    //   const sequelize = require('../models').sequelize
+    //   const asOf = new Date(log.changedAt)
+
+    //   const nowLinked = (accreditedProviderId && trainingProviderId)
+    //     ? await getLinkedAccreditationsAsOf({
+    //         sequelize,
+    //         accreditedProviderId,
+    //         partnerId: trainingProviderId,
+    //         asOf
+    //       })
+    //     : []
+
+    //   const prevLinked = (accreditedProviderId && trainingProviderId)
+    //     ? await getPrevLinkedAccreditations({
+    //         sequelize,
+    //         accreditedProviderId,
+    //         partnerId: trainingProviderId,
+    //         asOf,           // epsilon defaults to 2000ms inside helper
+    //       })
+    //     : []
+
+    //   // --- Diff (by accreditation id) ---
+    //   const prevById = new Map(prevLinked.map(a => [a.id, a]))
+    //   const nowById  = new Map(nowLinked.map(a => [a.id, a]))
+    //   const addedObjs   = nowLinked.filter(a => !prevById.has(a.id))
+    //   const removedObjs = prevLinked.filter(a => !nowById.has(a.id))
+
+    //   // --- Activity label (order matters) ---
+    //   if (nowLinked.length === 0) {
+    //     activity = 'Provider partnership deleted'
+    //   } else if (prevLinked.length === 0 && log.action === 'create') {
+    //     activity = 'Provider partnership created'
+    //   } else if (addedObjs.length || removedObjs.length || (log.action === 'create' && prevLinked.length > 0)) {
+    //     activity = 'Provider partnership accreditations updated'
+    //   } else {
+    //     activity = 'Provider partnership updated'
+    //   }
+
+    //   // --- Helpers for date rendering ---
+    //   const describe = (a) => {
+    //     const startStr = a.startsOn ? govukDate(a.startsOn) : 'No start date'
+    //     const endStr   = a.endsOn   ? govukDate(a.endsOn)   : 'No end date'
+    //     return `${a.number} (${startStr} – ${endStr})`
+    //   }
+
+    //   // --- Fields (include dates) ---
+    //   fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
+    //   fields.push({ key: 'Training partner',    value: trainingText,   href: trainingHref  })
+
+    //   fields.push({
+    //     key: 'Linked accreditations',
+    //     value: nowLinked.length ? nowLinked.map(describe).sort().join(', ') : 'None'
+    //   })
+
+    //   if (addedObjs.length) {
+    //     fields.push({
+    //       key: 'Accreditations added',
+    //       value: addedObjs.map(describe).sort().join(', ')
+    //     })
+    //   }
+
+    //   if (removedObjs.length) {
+    //     fields.push({
+    //       key: 'Accreditations removed',
+    //       value: removedObjs.map(describe).sort().join(', ')
+    //     })
+    //   }
+
+    //   break
+    // }
+
+    // case 'provider_accreditation_partnership_revisions': {
+    //   const accreditedProvider = revision.providerAccreditation?.provider || null
+    //   const trainingProvider   = revision.partner || null
+
+    //   const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
+    //   const trainingName   = trainingProvider?.operatingName   || trainingProvider?.legalName   || 'Training partner'
+
+    //   const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
+    //   const trainingProviderId   = trainingProvider?.id   || revision.partnerId
+
+    //   const { text: accreditedText, href: accreditedHref, html: accreditedHtml } =
+    //     await buildProviderLink(accreditedProviderId, accreditedName)
+    //   const { text: trainingText, href: trainingHref, html: trainingHtml } =
+    //     await buildProviderLink(trainingProviderId, trainingName)
+
+    //   label = `${accreditedText} – ${trainingText}`
+    //   labelHtml = `${accreditedHtml} – ${trainingHtml}`
+    //   href = accreditedHref ? `${accreditedHref}/partnerships` : ''
+
+    //   // --- Snapshot the state at the time of this log, and just before it
+    //   const sequelize = require('../models').sequelize
+    //   const asOf = new Date(log.changedAt)
+
+    //   const nowLinked = (accreditedProviderId && trainingProviderId)
+    //     ? await getLinkedAccreditationsAsOf({
+    //         sequelize,
+    //         accreditedProviderId,
+    //         partnerId: trainingProviderId,
+    //         asOf
+    //       })
+    //     : []
+
+    //   const prevLinked = (accreditedProviderId && trainingProviderId)
+    //     ? await getPrevLinkedAccreditations({
+    //         sequelize,
+    //         accreditedProviderId,
+    //         partnerId: trainingProviderId,
+    //         asOf
+    //       })
+    //     : []
+
+    //   // --- Diff (by accreditation id) -> keep full objects (id, number, startsOn, endsOn)
+    //   const prevById = new Map(prevLinked.map(a => [a.id, a]))
+    //   const nowById  = new Map(nowLinked.map(a => [a.id, a]))
+
+    //   accreditationsAdded   = nowLinked.filter(a => !prevById.has(a.id))
+    //   accreditationsRemoved = prevLinked.filter(a => !nowById.has(a.id))
+    //   linkedAccreditations  = nowLinked
+
+    //   // --- Activity label
+    //   if (nowLinked.length === 0) {
+    //     activity = 'Provider partnership deleted'
+    //   } else if (prevLinked.length === 0 && log.action === 'create') {
+    //     activity = 'Provider partnership created'
+    //   } else if (accreditationsAdded.length || accreditationsRemoved.length || (log.action === 'create' && prevLinked.length > 0)) {
+    //     activity = 'Provider partnership accreditations updated'
+    //   } else {
+    //     activity = 'Provider partnership updated'
+    //   }
+
+    //   // --- Fields: keep providers; don’t format accreditation lists (view will render raw arrays)
+    //   fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
+    //   fields.push({ key: 'Training partner',    value: trainingText,   href: trainingHref  })
+
+    //   // Optional: small counts so index tables stay informative without formatting dates
+    //   fields.push({ key: 'Linked accreditations (count)', value: String(linkedAccreditations.length) })
+    //   if (accreditationsAdded.length)   fields.push({ key: 'Accreditations added (count)',   value: String(accreditationsAdded.length) })
+    //   if (accreditationsRemoved.length) fields.push({ key: 'Accreditations removed (count)', value: String(accreditationsRemoved.length) })
+
+    //   // Extras for consumers that want direct links / html
+    //   links = { accreditedProvider: accreditedHref, trainingProvider: trainingHref }
+    //   parties = {
+    //     accredited: { text: accreditedText, href: accreditedHref, html: accreditedHtml },
+    //     training:   { text: trainingText,   href: trainingHref,   html: trainingHtml }
+    //   }
+
+    //   break
+    // }
+
     case 'provider_accreditation_partnership_revisions': {
       const accreditedProvider = revision.providerAccreditation?.provider || null
       const trainingProvider   = revision.partner || null
 
       const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
-      const trainingName   = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
+      const trainingName   = trainingProvider?.operatingName   || trainingProvider?.legalName   || 'Training partner'
 
       const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
-      const trainingProviderId   = trainingProvider?.id || revision.partnerId
+      const trainingProviderId   = trainingProvider?.id   || revision.partnerId
 
-      const { text: accreditedText, href: accreditedHref, html: accreditedHtml } =
+      // Base provider links (to provider root)
+      const { text: accreditedText, href: accreditedHrefBase, html: accreditedHtml } =
         await buildProviderLink(accreditedProviderId, accreditedName)
-      const { text: trainingText, href: trainingHref, html: trainingHtml } =
+      const { text: trainingText, href: trainingHrefBase, html: trainingHtml } =
         await buildProviderLink(trainingProviderId, trainingName)
 
+      // Force both links to their /partnerships sections
+      const accreditedHref = appendSection(accreditedHrefBase, 'partnerships')
+      const trainingHref   = appendSection(trainingHrefBase, 'partnerships')
+
       label = `${accreditedText} – ${trainingText}`
-      const labelHtml = `${accreditedHtml} – ${trainingHtml}`
+      labelHtml = accreditedHtml && trainingHtml
+        ? `${accreditedHref ? `<a class="govuk-link" href="${accreditedHref}">${escapeHtml(accreditedText)}</a>` : escapeHtml(accreditedText)} – ${
+            trainingHref ? `<a class="govuk-link" href="${trainingHref}">${escapeHtml(trainingText)}</a>` : escapeHtml(trainingText)
+          }`
+        : `${escapeHtml(accreditedText)} – ${escapeHtml(trainingText)}`
+      href = accreditedHref // primary row click → accredited provider’s partnerships
 
-      const href = accreditedHref ? `${accreditedHref}/partnerships` : ''
-
-      // --- Snapshots ---
+      // --- Snapshots at/just-before this log’s timestamp (raw data with dates) ---
       const sequelize = require('../models').sequelize
       const asOf = new Date(log.changedAt)
 
-      // Current snapshot (as of this activity)
       const nowLinked = (accreditedProviderId && trainingProviderId)
         ? await getLinkedAccreditationsAsOf({
             sequelize,
@@ -786,55 +1100,48 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
           })
         : []
 
-      // Previous snapshot using the epsilon wrapper
       const prevLinked = (accreditedProviderId && trainingProviderId)
         ? await getPrevLinkedAccreditations({
             sequelize,
             accreditedProviderId,
             partnerId: trainingProviderId,
-            asOf,
-            epsilonMs: 2000   // <- can omit; defaults to 2000
+            asOf
           })
         : []
 
-      // Diffs (by accreditation id)
-      const prevIds = new Set(prevLinked.map(a => a.id))
-      const nowIds  = new Set(nowLinked.map(a => a.id))
-      const added   = nowLinked.filter(a => !prevIds.has(a.id)).map(a => a.number).sort()
-      const removed = prevLinked.filter(a => !nowIds.has(a.id)).map(a => a.number).sort()
+      // Diff on accreditation id — keep FULL objects (id, number, startsOn, endsOn)
+      const prevById = new Map(prevLinked.map(a => [a.id, a]))
+      const nowById  = new Map(nowLinked.map(a => [a.id, a]))
+      accreditationsAdded   = nowLinked.filter(a => !prevById.has(a.id))
+      accreditationsRemoved = prevLinked.filter(a => !nowById.has(a.id))
+      linkedAccreditations  = nowLinked
 
-      // ---- Activity label (order matters) ----
+      // Activity label
       if (nowLinked.length === 0) {
         activity = 'Provider partnership deleted'
       } else if (prevLinked.length === 0 && log.action === 'create') {
-        // first ever link for this provider pair
         activity = 'Provider partnership created'
-      } else if (added.length || removed.length || (log.action === 'create' && prevLinked.length > 0)) {
-        // adding a *new* join row after an existing one(s)
+      } else if (accreditationsAdded.length || accreditationsRemoved.length || (log.action === 'create' && prevLinked.length > 0)) {
         activity = 'Provider partnership accreditations updated'
       } else {
         activity = 'Provider partnership updated'
       }
 
-      // Fields
+      // Fields: keep simple; dates are deliberately left for the view via structured arrays
       fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
       fields.push({ key: 'Training partner',    value: trainingText,   href: trainingHref  })
-      fields.push({
-        key: 'Linked accreditations',
-        value: nowLinked.length ? nowLinked.map(a => a.number).sort().join(', ') : 'None'
-      })
-      if (added.length) fields.push({ key: 'Accreditations added', value: added.join(', ') })
-      if (removed.length) fields.push({ key: 'Accreditations removed', value: removed.join(', ') })
+      fields.push({ key: 'Linked accreditations (count)', value: String(linkedAccreditations.length) })
+      if (accreditationsAdded.length)   fields.push({ key: 'Accreditations added (count)',   value: String(accreditationsAdded.length) })
+      if (accreditationsRemoved.length) fields.push({ key: 'Accreditations removed (count)', value: String(accreditationsRemoved.length) })
 
-      return {
-        action: log.action,
-        activity,
-        label,
-        labelHtml,
-        href,
-        links: { accreditedProvider: accreditedHref, trainingProvider: trainingHref },
-        fields
+      // expose structured links if your unified return spreads them
+      links = { accreditedProvider: accreditedHref, trainingProvider: trainingHref }
+      parties = {
+        accredited: { text: accreditedText, href: accreditedHref, html: accreditedHtml },
+        training:   { text: trainingText,   href: trainingHref,   html: trainingHtml }
       }
+
+      break
     }
 
     case 'user_revisions': {
@@ -862,7 +1169,20 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       label = 'Unknown revision'
   }
 
-  return { action, activity, label, href, fields }
+
+  return {
+    action,
+    activity,
+    label,
+    href,
+    fields,
+    ...(labelHtml && { labelHtml }),
+    ...(links && { links }),
+    ...(linkedAccreditations.length || accreditationsAdded.length || accreditationsRemoved.length
+        ? { linkedAccreditations, accreditationsAdded, accreditationsRemoved }
+        : {}),
+    ...(parties && { parties })
+  }
 }
 
 /**
