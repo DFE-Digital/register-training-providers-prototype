@@ -30,30 +30,33 @@
   <div class="govuk-summary-card__content">
     <dl class="govuk-summary-list">
       {% for field in item.summary.fields %}
-        {% if isPartnershipDeleted %}
-          {% if field.key in ["Accredited provider", "Training partner", "Accreditations removed"] %}
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                {{ field.key }}
-              </dt>
-              <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-                {{ field.value if field.value else "Not entered" }}
-              </dd>
-            </div>
-          {% endif %}
-        {% else %}
-          {% if not field.key in ["Accreditations added", "Accreditations removed"] %}
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                {{ field.key }}
-              </dt>
-              <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-                {{ field.value if field.value else "Not entered" }}
-              </dd>
-            </div>
-          {% endif %}
+        {% if field.key in ["Accredited provider", "Training partner"] %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              {{ field.key }}
+            </dt>
+            <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+              {{ field.value if field.value else "Not entered" }}
+            </dd>
+          </div>
         {% endif %}
       {% endfor %}
+      {% if item.summary.linkedAccreditations | length %}
+        <div class="govuk-summary-list__row">
+          <div class="govuk-summary-list__key">Linked accreditations</div>
+          <div class="govuk-summary-list__value">
+            <ul class="govuk-list govuk-list--bullet">
+              {% for accreditation in item.summary.linkedAccreditations %}
+                <li>
+                  {{ accreditation.number }}<br>
+                  <span class="govuk-hint">Starts on {{ accreditation.startsOn | govukDate -}}
+                  {% if accreditation.endsOn %}, ends on {{ accreditation.endsOn | govukDate }}{% endif %}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
     </dl>
   </div>
 </div>
