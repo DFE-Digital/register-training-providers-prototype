@@ -907,7 +907,6 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       label = 'Unknown revision'
   }
 
-
   return {
     action,
     activity,
