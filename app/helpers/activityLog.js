@@ -802,10 +802,10 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const trainingProvider   = revision.partner || null
 
       const accreditedName = accreditedProvider?.operatingName || accreditedProvider?.legalName || 'Accredited provider'
-      const trainingName   = trainingProvider?.operatingName   || trainingProvider?.legalName   || 'Training partner'
+      const trainingName   = trainingProvider?.operatingName || trainingProvider?.legalName || 'Training partner'
 
       const accreditedProviderId = accreditedProvider?.id || revision.providerAccreditation?.providerId
-      const trainingProviderId   = trainingProvider?.id   || revision.partnerId
+      const trainingProviderId = trainingProvider?.id || revision.partnerId
 
       // Base provider links (to provider root)
       const { text: accreditedText, href: accreditedHrefBase, html: accreditedHtml } =
