@@ -30,6 +30,26 @@ const formatAccreditationItems = (accreditations) => {
   })
 }
 
+/**
+ * Append a section path (e.g. "partnerships") to a base provider href.
+ * - Returns an empty string if `href` is falsy (provider not listable).
+ * - Normalises slashes to avoid double slashes.
+ * - **Won’t duplicate** the section if the base URL already ends with it.
+ *
+ * @param {string | null | undefined} href - Base provider URL (e.g. "/providers/12345").
+ * @param {string} section - Section path to append (e.g. "partnerships" or "/partnerships/").
+ * @returns {string} The combined URL, or '' if `href` is falsy.
+ */
+const appendSection = (href, section) => {
+  if (!href) return ''
+  const base = String(href).replace(/\/+$/, '')                 // trim trailing slashes
+  const sec  = String(section || '').replace(/^\/+|\/+$/g, '')  // trim leading/trailing slashes
+  if (!sec) return base
+  // Guard against duplication: if base already ends with "/section", return base
+  if (base.endsWith(`/${sec}`)) return base
+  return `${base}/${sec}`
+}
+
 /// ------------------------------------------------------------------------ ///
 /// List provider partnerships
 /// ------------------------------------------------------------------------ ///
@@ -69,14 +89,14 @@ exports.providerPartnershipsList = async (req, res) => {
           {
             model: Provider,
             as: 'provider',
-            attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+            attributes: ['id', 'operatingName', 'legalName', 'ukprn', 'deletedAt']
           }
         ]
       },
       {
         model: Provider,
         as: 'partner',
-        attributes: ['id', 'operatingName', 'legalName', 'ukprn']
+        attributes: ['id', 'operatingName', 'legalName', 'ukprn', 'deletedAt']
       }
     ]
   })
@@ -119,7 +139,25 @@ exports.providerPartnershipsList = async (req, res) => {
 
   const partnerships = Object.values(grouped)
 
-  // Sort by partner operating name
+  // ▼ Add linkability + hrefs based on soft-delete flags
+  for (const p of partnerships) {
+    const partnerDeleted = !!p.trainingPartner.deletedAt
+    const accreditedDeleted = !!p.accreditedProvider.deletedAt
+
+    p.partnerIsLinkable = !partnerDeleted
+    p.accreditedIsLinkable = !accreditedDeleted
+
+    // Build hrefs only when linkable; append `/partnerships` once.
+    p.partnerHref = p.partnerIsLinkable
+      ? appendSection(`/providers/${p.trainingPartner.id}`, 'partnerships')
+      : null
+
+    p.accreditedHref = p.accreditedIsLinkable
+      ? appendSection(`/providers/${p.accreditedProvider.id}`, 'partnerships')
+      : null
+  }
+
+  // Sort and paginate (unchanged)
   partnerships.sort((a, b) => {
     const aName = a.isAccreditedSide ? a.trainingPartner.operatingName : a.accreditedProvider.operatingName
     const bName = b.isAccreditedSide ? b.trainingPartner.operatingName : b.accreditedProvider.operatingName
