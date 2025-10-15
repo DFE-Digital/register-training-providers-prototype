@@ -41,6 +41,38 @@
           </div>
         {% endif %}
       {% endfor %}
+      {# {% if item.summary.accreditationsAdded | length %}
+        <div class="govuk-summary-list__row">
+          <div class="govuk-summary-list__key">Linked accreditations (added)</div>
+          <div class="govuk-summary-list__value">
+            <ul class="govuk-list govuk-list--bullet">
+              {% for accreditation in item.summary.accreditationsAdded %}
+                <li>
+                  {{ accreditation.number }}<br>
+                  <span class="govuk-hint">Starts on {{ accreditation.startsOn | govukDate -}}
+                  {% if accreditation.endsOn %}, ends on {{ accreditation.endsOn | govukDate }}{% endif %}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %} #}
+      {# {% if item.summary.accreditationsRemoved | length %}
+        <div class="govuk-summary-list__row">
+          <div class="govuk-summary-list__key">Linked accreditations (removed)</div>
+          <div class="govuk-summary-list__value">
+            <ul class="govuk-list govuk-list--bullet">
+              {% for accreditation in item.summary.accreditationsRemoved %}
+                <li>
+                  {{ accreditation.number }}<br>
+                  <span class="govuk-hint">Starts on {{ accreditation.startsOn | govukDate -}}
+                  {% if accreditation.endsOn %}, ends on {{ accreditation.endsOn | govukDate }}{% endif %}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %} #}
       {% if item.summary.linkedAccreditations | length %}
         <div class="govuk-summary-list__row">
           <div class="govuk-summary-list__key">Linked accreditations</div>
