@@ -5,10 +5,10 @@
     "node": "22.x"
   },
   "scripts": {
-    "build-database": "npm run migrate && npm run seed",
-    "migrate": "npx sequelize db:migrate --migrations-path ./app/migrations --config ./app/config/config.json",
-    "seed": "npx sequelize db:seed:all --seeders-path ./app/seeders --config ./app/config/config.json",
-    "postinstall": "npm run build-database",
+    "db:build": "npm run db:migrate && npm run db:seed",
+    "db:migrate": "npx sequelize db:migrate --migrations-path ./app/migrations --config ./app/config/config.json",
+    "db:seed": "npx sequelize db:seed:all --seeders-path ./app/seeders --config ./app/config/config.json",
+    "postinstall": "npm run db:build",
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
     "start": "govuk-prototype-kit start"
