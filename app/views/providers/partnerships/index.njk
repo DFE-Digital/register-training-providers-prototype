@@ -45,8 +45,7 @@
 
     {% if partnerships.length %}
 
-
-    {% for partnership in partnerships %}
+      {% for partnership in partnerships %}
 
         {% set summaryCardTitleHtml %}
           {% if partnership.isAccreditedSide %}
@@ -111,7 +110,7 @@
             <h2 class="govuk-summary-card__title">
               {{ summaryCardTitleHtml | safe }}
             </h2>
-            {{ summaryActionsHtml | safe }}
+            {{ summaryActionsHtml | safe if not provider.archivedAt }}
           </div>
 
           <div class="govuk-summary-card__content">

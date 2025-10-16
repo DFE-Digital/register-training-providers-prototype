@@ -42,23 +42,23 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-    {{ govukCheckboxes({
-      idPrefix: "accreditations",
-      name: "accreditations[]",
-      fieldset: {
-        legend: {
-          html: headingHtml,
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
-        }
-      },
-      hint: {
-        text: "Select all that apply"
-      },
-      errorMessage: errors | getErrorMessage("accreditations"),
-      values: selectedAccreditations,
-      items: accreditationItems
-    }) }}
+      {{ govukCheckboxes({
+        idPrefix: "accreditations",
+        name: "accreditations[]",
+        fieldset: {
+          legend: {
+            html: headingHtml,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "Select all that apply"
+        },
+        errorMessage: errors | getErrorMessage("accreditations"),
+        values: selectedAccreditations,
+        items: accreditationItems
+      }) }}
 
       {{ govukButton({
         text: "Continue"

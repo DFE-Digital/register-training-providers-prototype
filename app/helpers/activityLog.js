@@ -709,11 +709,9 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
   // OPTIONAL extras (only set in certain cases)
   let labelHtml = ''
-  let links = null
   let linkedAccreditations = []
   let accreditationsAdded = []
   let accreditationsRemoved = []
-  let parties = null
 
   switch (revisionTable) {
     case 'provider_revisions': {
@@ -865,19 +863,8 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         activity = 'Provider partnership updated'
       }
 
-      // Fields: keep simple; dates are deliberately left for the view via structured arrays
       fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
-      fields.push({ key: 'Training partner',    value: trainingText,   href: trainingHref  })
-      fields.push({ key: 'Linked accreditations (count)', value: String(linkedAccreditations.length) })
-      if (accreditationsAdded.length)   fields.push({ key: 'Accreditations added (count)',   value: String(accreditationsAdded.length) })
-      if (accreditationsRemoved.length) fields.push({ key: 'Accreditations removed (count)', value: String(accreditationsRemoved.length) })
-
-      // expose structured links if your unified return spreads them
-      links = { accreditedProvider: accreditedHref, trainingProvider: trainingHref }
-      parties = {
-        accredited: { text: accreditedText, href: accreditedHref, html: accreditedHtml },
-        training:   { text: trainingText,   href: trainingHref,   html: trainingHtml }
-      }
+      fields.push({ key: 'Training partner', value: trainingText, href: trainingHref  })
 
       break
     }
@@ -914,11 +901,9 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     href,
     fields,
     ...(labelHtml && { labelHtml }),
-    ...(links && { links }),
     ...(linkedAccreditations.length || accreditationsAdded.length || accreditationsRemoved.length
         ? { linkedAccreditations, accreditationsAdded, accreditationsRemoved }
-        : {}),
-    ...(parties && { parties })
+        : {})
   }
 }
 
