@@ -22,6 +22,9 @@ const {
   getProviderTypeLabel
 } = require('./helpers/content')
 
+// Configure marked once at module load time (instead of on every call)
+marked.use(gfmHeadingId())
+
 /* ------------------------------------------------------------------
   numeral filter for use in Nunjucks
   example: {{ params.number | numeral("0,00.0") }}
@@ -136,8 +139,6 @@ addFilter('markdownToHtml', (markdown) => {
   if (!markdown) {
     return null
   }
-
-  marked.use(gfmHeadingId())
 
   const text = markdown.replace(/\\r/g, '\n').replace(/\\t/g, ' ')
   const html = marked.parse(text)
