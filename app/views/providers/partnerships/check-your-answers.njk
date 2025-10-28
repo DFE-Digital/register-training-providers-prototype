@@ -34,7 +34,7 @@
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
       {% set accreditations %}
-        <ul class="govuk-list govuk-list--bullet">
+        <ul class="govuk-list {{- ' govuk-list--bullet' if accreditationItems == 1 }}">
           {% for accreditation in accreditationItems %}
             <li>
               {{ accreditation.text }}<br>
