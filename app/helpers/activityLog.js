@@ -341,6 +341,8 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
 /**
  * Fetches activity logs related to a specific provider across all relevant revision tables.
  *
+ * Optimized to use a single database query instead of 5 separate queries.
+ *
  * @async
  * @param {Object} options
  * @param {string} options.providerId - The ID of the provider.
@@ -351,54 +353,69 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
 const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) => {
   if (!providerId) throw new Error('providerId is required')
 
-  const queries = []
-
-  const sharedIncludes = (model, as) => [
-    {
-      model,
-      as,
-      where: { providerId },
-      include: [{ model: Provider, as: 'provider' }]
-    },
-    { model: User, as: 'changedByUser' }
-  ]
-
-  queries.push(ActivityLog.findAll({
-    where: { revisionTable: 'provider_revisions' },
-    include: sharedIncludes(ProviderRevision, 'providerRevision')
-  }))
-
-  queries.push(ActivityLog.findAll({
-    where: { revisionTable: 'provider_accreditation_revisions' },
-    include: sharedIncludes(ProviderAccreditationRevision, 'providerAccreditationRevision')
-  }))
-
-  queries.push(ActivityLog.findAll({
-    where: { revisionTable: 'provider_address_revisions' },
-    include: sharedIncludes(ProviderAddressRevision, 'providerAddressRevision')
-  }))
-
-  queries.push(ActivityLog.findAll({
-    where: { revisionTable: 'provider_contact_revisions' },
-    include: sharedIncludes(ProviderContactRevision, 'providerContactRevision')
-  }))
-
-  // Partnerships: show items where this provider is EITHER the accredited provider OR the training partner
-  queries.push(ActivityLog.findAll({
+  // Single optimized query with complex WHERE clause to handle all revision types
+  const activityLogs = await ActivityLog.findAll({
     where: {
-      revisionTable: 'provider_accreditation_partnership_revisions',
       [Op.or]: [
-        // training partner side
-        { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
-        // accredited provider side (via the accreditation’s provider)
-        { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
+        // Provider revisions: direct match
+        {
+          revisionTable: 'provider_revisions',
+          '$providerRevision.providerId$': providerId
+        },
+        // Accreditation revisions: match via providerId
+        {
+          revisionTable: 'provider_accreditation_revisions',
+          '$providerAccreditationRevision.providerId$': providerId
+        },
+        // Address revisions: match via providerId
+        {
+          revisionTable: 'provider_address_revisions',
+          '$providerAddressRevision.providerId$': providerId
+        },
+        // Contact revisions: match via providerId
+        {
+          revisionTable: 'provider_contact_revisions',
+          '$providerContactRevision.providerId$': providerId
+        },
+        // Partnership revisions: match if provider is EITHER the accredited provider OR the training partner
+        {
+          revisionTable: 'provider_accreditation_partnership_revisions',
+          [Op.or]: [
+            { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
+            { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
+          ]
+        }
       ]
     },
     include: [
       {
+        model: ProviderRevision,
+        as: 'providerRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderAccreditationRevision,
+        as: 'providerAccreditationRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderAddressRevision,
+        as: 'providerAddressRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
+        model: ProviderContactRevision,
+        as: 'providerContactRevision',
+        required: false,
+        include: [{ model: Provider, as: 'provider' }]
+      },
+      {
         model: ProviderAccreditationPartnershipRevision,
         as: 'providerAccreditationPartnershipRevision',
-        required: true,
+        required: false,
         include: [
           {
             model: ProviderAccreditation,
@@ -408,29 +425,25 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
           { model: Provider, as: 'partner' }
         ]
       },
-      { model: User, as: 'changedByUser' }
+      {
+        model: User,
+        as: 'changedByUser'
+      }
     ],
-    // Prevent duplicate ActivityLog rows when JOINs fan out
-    distinct: true,
-    subQuery: false, // needed so $…$ paths filter the main query
-    order: [['changedAt', 'DESC']],
+    order: [['changedAt', 'DESC'], ['id', 'DESC']],
     limit,
-    offset
-  }))
-
-  const allLogs = (await Promise.all(queries)).flat()
-  const byId = new Map()
-  for (const row of allLogs) byId.set(row.id, row)
-  const activityLogs = Array.from(byId.values())
-    .sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
-    .slice(offset, offset + limit)
+    offset,
+    subQuery: false, // Needed for $...$ paths to filter the main query
+    distinct: true   // Prevent duplicates from JOIN fan-out
+  })
 
   return Promise.all(activityLogs.map(formatActivityLog))
-
 }
 
 /**
  * Returns the total count of activity logs for a specific provider across all revision types.
+ *
+ * Optimized to use a single database query instead of 5 separate queries.
  *
  * @async
  * @param {Object} options
@@ -440,73 +453,80 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
 const getProviderActivityTotalCount = async ({ providerId }) => {
   if (!providerId) throw new Error('providerId is required')
 
-  const results = await Promise.all([
-    ActivityLog.count({
-      where: { revisionTable: 'provider_revisions' },
-      include: [{
-        model: ProviderRevision,
-        as: 'providerRevision',
-        required: true,
-        where: { providerId }
-      }]
-    }),
-    ActivityLog.count({
-      where: { revisionTable: 'provider_accreditation_revisions' },
-      include: [{
-        model: ProviderAccreditationRevision,
-        as: 'providerAccreditationRevision',
-        required: true,
-        where: { providerId }
-      }]
-    }),
-    ActivityLog.count({
-      where: { revisionTable: 'provider_address_revisions' },
-      include: [{
-        model: ProviderAddressRevision,
-        as: 'providerAddressRevision',
-        required: true,
-        where: { providerId }
-      }]
-    }),
-    ActivityLog.count({
-      where: { revisionTable: 'provider_contact_revisions' },
-      include: [{
-        model: ProviderContactRevision,
-        as: 'providerContactRevision',
-        required: true,
-        where: { providerId }
-      }]
-    }),
-    ActivityLog.count({
-      where: {
-        revisionTable: 'provider_accreditation_partnership_revisions',
-        [Op.or]: [
-          { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
-          { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
-        ]
-      },
-      include: [
+  // Single optimized count query matching the same WHERE logic as getProviderActivityLogs
+  return ActivityLog.count({
+    where: {
+      [Op.or]: [
         {
-          model: ProviderAccreditationPartnershipRevision,
-          as: 'providerAccreditationPartnershipRevision',
-          required: true,
-          include: [
-            {
-              model: ProviderAccreditation,
-              as: 'providerAccreditation',
-              include: [{ model: Provider, as: 'provider' }]
-            },
-            { model: Provider, as: 'partner' }
+          revisionTable: 'provider_revisions',
+          '$providerRevision.providerId$': providerId
+        },
+        {
+          revisionTable: 'provider_accreditation_revisions',
+          '$providerAccreditationRevision.providerId$': providerId
+        },
+        {
+          revisionTable: 'provider_address_revisions',
+          '$providerAddressRevision.providerId$': providerId
+        },
+        {
+          revisionTable: 'provider_contact_revisions',
+          '$providerContactRevision.providerId$': providerId
+        },
+        {
+          revisionTable: 'provider_accreditation_partnership_revisions',
+          [Op.or]: [
+            { '$providerAccreditationPartnershipRevision.partner.id$': providerId },
+            { '$providerAccreditationPartnershipRevision.providerAccreditation.provider.id$': providerId }
           ]
         }
-      ],
-      distinct: true,
-      col: 'id',
-      subQuery: false
-    })
-  ])
-
-  return results.reduce((sum, count) => sum + count, 0)
+      ]
+    },
+    include: [
+      {
+        model: ProviderRevision,
+        as: 'providerRevision',
+        required: false,
+        attributes: []
+      },
+      {
+        model: ProviderAccreditationRevision,
+        as: 'providerAccreditationRevision',
+        required: false,
+        attributes: []
+      },
+      {
+        model: ProviderAddressRevision,
+        as: 'providerAddressRevision',
+        required: false,
+        attributes: []
+      },
+      {
+        model: ProviderContactRevision,
+        as: 'providerContactRevision',
+        required: false,
+        attributes: []
+      },
+      {
+        model: ProviderAccreditationPartnershipRevision,
+        as: 'providerAccreditationPartnershipRevision',
+        required: false,
+        attributes: [],
+        include: [
+          {
+            model: ProviderAccreditation,
+            as: 'providerAccreditation',
+            attributes: [],
+            include: [{ model: Provider, as: 'provider', attributes: [] }]
+          },
+          { model: Provider, as: 'partner', attributes: [] }
+        ]
+      }
+    ],
+    distinct: true,
+    col: 'id',
+    subQuery: false
+  })
 }
 
 /**
