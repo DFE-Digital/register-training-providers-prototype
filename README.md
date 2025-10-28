@@ -9,6 +9,11 @@ This prototype is based on the:
 
 You can read more about this register on the [design history website](https://becoming-a-teacher.design-history.education.gov.uk/register-of-training-providers/).
 
+## Documentation
+
+- **[Architecture documentation](ARCHITECTURE.md)** - Technical architecture, design patterns, and codebase structure
+- **[Deployment guide](DEPLOYMENT.md)** - Deployment instructions for various platforms and environments
+
 ## Requirements
 
 - Node.js - version 22.x.x
@@ -42,7 +47,8 @@ The prototype uses environment variables to help configure the application. Thes
 
 | Variable | Type | Description |
 | --- | --- | --- |
-| `OS_PLACES_API_KEY` | string | The API key needed to access the Ordnance Survey Places API |
+| `ORDNANCE_SURVEY_API_KEY` | string | The API key needed to access the Ordnance Survey Places API |
+| `ORDNANCE_SURVEY_API_SECRET` | string | The API secret needed to access the Ordnance Survey Places API |
 | `GOOGLE_MAPS_API_KEY` | string | The API key needed to access the Google Maps API |
 
 ## Tools
