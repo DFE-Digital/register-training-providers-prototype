@@ -1,3 +1,25 @@
+/**
+ * Converts empty values to null for consistent data handling.
+ *
+ * - `null` or `undefined` → `null`
+ * - `NaN` → `null`
+ * - Empty string or whitespace-only string → `null`
+ * - Valid numbers (including 0, -1) → unchanged
+ * - Non-empty strings → unchanged
+ *
+ * @param {*} value - The value to check (can be any type).
+ * @returns {*|null} The original value if non-empty, or `null` if empty.
+ *
+ * @example
+ * nullIfEmpty(null)        // null
+ * nullIfEmpty(undefined)   // null
+ * nullIfEmpty('')          // null
+ * nullIfEmpty('  ')        // null
+ * nullIfEmpty('hello')     // 'hello'
+ * nullIfEmpty(0)           // 0
+ * nullIfEmpty(42)          // 42
+ * nullIfEmpty(NaN)         // null
+ */
 const nullIfEmpty = (value) => {
   // If it's null or undefined outright
   if (value == null) return null;
