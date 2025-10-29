@@ -95,7 +95,7 @@
         {% endset %}
 
         {% set accreditationsHtml %}
-          <ul class="govuk-list {{- ' govuk-list--bullet' if partnership.accreditations == 1 }}">
+          <ul class="govuk-list {{- ' govuk-list--bullet' if partnership.accreditations.length > 1 }}">
             {% for accreditation in partnership.accreditations %}
               <li>
                 {{ accreditation.number }}<br>
@@ -134,7 +134,7 @@
               </div>
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                  Linked accreditation {{- "s" if partnership.accreditations > 1 }}
+                  Linked accreditation {{- "s" if partnership.accreditations.length > 1 }}
                 </dt>
                 <dd class="govuk-summary-list__value">
                   {{ accreditationsHtml | safe }}

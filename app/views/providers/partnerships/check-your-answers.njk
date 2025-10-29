@@ -34,7 +34,7 @@
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
       {% set accreditations %}
-        <ul class="govuk-list {{- ' govuk-list--bullet' if accreditationItems == 1 }}">
+        <ul class="govuk-list {{- ' govuk-list--bullet' if accreditationItems.length > 1 }}">
           {% for accreditation in accreditationItems %}
             <li>
               {{ accreditation.text }}<br>
@@ -82,7 +82,7 @@
           },
           {
             key: {
-              text: "Linked accreditation" + ("s" if accreditationItems > 1)
+              text: "Linked accreditation" + ("s" if accreditationItems.length > 1)
             },
             value: {
               html: accreditations
