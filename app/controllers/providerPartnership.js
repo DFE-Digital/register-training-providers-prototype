@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize')
+
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { govukDate } = require('../helpers/date')
 const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
@@ -423,7 +425,18 @@ exports.newProviderPartnershipAccreditations_get = async (req, res) => {
     where: {
       providerId: providers.accreditedProviderId,
       deletedAt: null
-    }
+    },
+    order: [
+      // 1) earliest start first
+      ['startsOn', 'ASC'],
+
+      // 2) end date: real dates first, nulls last, then earliest end first
+      [Sequelize.literal('"ProviderAccreditation"."ends_on" IS NULL'), 'ASC'],
+      ['endsOn', 'ASC'],
+
+      // 3) accreditation number (cast in case it's stored as TEXT)
+      [Sequelize.cast(Sequelize.col('number'), 'INTEGER'), 'ASC']
+    ]
   })
 
   const accreditationItems = formatAccreditationItems(providerAccreditations)
@@ -461,7 +474,18 @@ exports.newProviderPartnershipAccreditations_post = async (req, res) => {
     where: {
       providerId: providers.accreditedProviderId,
       deletedAt: null
-    }
+    },
+    order: [
+      // 1) earliest start first
+      ['startsOn', 'ASC'],
+
+      // 2) end date: real dates first, nulls last, then earliest end first
+      [Sequelize.literal('"ProviderAccreditation"."ends_on" IS NULL'), 'ASC'],
+      ['endsOn', 'ASC'],
+
+      // 3) accreditation number (cast in case it's stored as TEXT)
+      [Sequelize.cast(Sequelize.col('number'), 'INTEGER'), 'ASC']
+    ]
   })
 
   const accreditationItems = formatAccreditationItems(providerAccreditations)
