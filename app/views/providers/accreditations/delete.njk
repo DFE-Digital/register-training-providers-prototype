@@ -4,11 +4,11 @@
 
 {% if hasPartnerships %}
   {% set title = "You cannot delete this accreditation" %}
+  {% set caption = "Delete accreditation - "  + provider.operatingName %}
 {% else %}
   {% set title = "Confirm you want to delete " + provider.operatingName + "’s accreditation" %}
+  {% set caption = "Delete accreditation" %}
 {% endif %}
-
-{% set caption = "Delete accreditation" %}
 
 {% block beforeContent %}
 {{ govukBackLink({

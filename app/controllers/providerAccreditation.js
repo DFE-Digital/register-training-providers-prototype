@@ -362,7 +362,7 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
     hasPartnerships,
     partnershipCount,
     actions: {
-      back: `/providers/${providerId}`,
+      back: `/providers/${providerId}/accreditations`,
       cancel: `/providers/${providerId}/accreditations`,
       partnerships: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/accreditations/${accreditationId}/delete`

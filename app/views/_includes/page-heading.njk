@@ -1,6 +1,6 @@
-<h1 class="govuk-heading-l">
+<h1 class="govuk-heading-l {{ headingClasses if headingClasses | length }}">
   {% if caption.length %}
-    <span class="govuk-caption-l">
+    <span class="govuk-caption-l {{ captionClasses if captionClasses | length }}">
       {{ caption }}
     </span>
   {% endif %}
