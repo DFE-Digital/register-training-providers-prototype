@@ -147,7 +147,8 @@ exports.providersList = async (req, res) => {
           { operatingName: { [Op.like]: `%${keywords}%` } },
           { legalName: { [Op.like]: `%${keywords}%` } },
           { ukprn: { [Op.like]: `%${keywords}%` } },
-          { urn: { [Op.like]: `%${keywords}%` } }
+          { urn: { [Op.like]: `%${keywords}%` } },
+          { code: { [Op.like]: `%${keywords}%` } }
         ]
       }
     ]
