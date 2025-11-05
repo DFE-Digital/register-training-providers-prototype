@@ -832,7 +832,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
       fields.push({ key: 'Email address', value: revision.email })
-      fields.push({ key: 'Telephone', value: revision.telephone })
+      fields.push({ key: 'Phone number', value: revision.telephone })
       break
     }
 
