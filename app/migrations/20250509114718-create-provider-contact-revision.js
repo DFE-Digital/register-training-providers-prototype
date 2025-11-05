@@ -37,7 +37,7 @@ module.exports = {
       },
       telephone: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       revision_number: {
         type: Sequelize.INTEGER,
