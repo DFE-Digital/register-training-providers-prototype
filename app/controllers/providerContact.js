@@ -124,7 +124,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
-    error.text = "Enter first name"
+    error.text = "Enter a first name"
     errors.push(error)
   }
 
@@ -132,7 +132,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
-    error.text = "Enter last name"
+    error.text = "Enter a last name"
     errors.push(error)
   }
 
@@ -140,7 +140,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
-    error.text = "Enter email address"
+    error.text = "Enter an email address"
     errors.push(error)
   } else if (!isValidEmail(contact.email)) {
     const error = {}
@@ -150,17 +150,11 @@ exports.newProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!contact.telephone.length) {
-    const error = {}
-    error.fieldName = "telephone"
-    error.href = "#telephone"
-    error.text = "Enter telephone number"
-    errors.push(error)
-  } else if (!isValidTelephone(contact.telephone)) {
+  if (contact.telephone.length && !isValidTelephone(contact.telephone)) {
     const error = {}
     error.fieldName = 'telephone'
     error.href = '#telephone'
-    error.text = 'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
+    error.text = 'Enter a phone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
     errors.push(error)
   }
 
@@ -267,7 +261,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
-    error.text = "Enter first name"
+    error.text = "Enter a first name"
     errors.push(error)
   }
 
@@ -275,7 +269,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
-    error.text = "Enter last name"
+    error.text = "Enter a last name"
     errors.push(error)
   }
 
@@ -283,7 +277,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
-    error.text = "Enter email address"
+    error.text = "Enter an email address"
     errors.push(error)
   } else if (!isValidEmail(contact.email)) {
     const error = {}
@@ -293,17 +287,11 @@ exports.editProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!contact.telephone.length) {
-    const error = {}
-    error.fieldName = "telephone"
-    error.href = "#telephone"
-    error.text = "Enter telephone number"
-    errors.push(error)
-  } else if (!isValidTelephone(contact.telephone)) {
+  if (contact.telephone.length && !isValidTelephone(contact.telephone)) {
     const error = {}
     error.fieldName = 'telephone'
     error.href = '#telephone'
-    error.text = 'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
+    error.text = 'Enter a phone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
     errors.push(error)
   }
 

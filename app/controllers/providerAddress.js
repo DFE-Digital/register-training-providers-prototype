@@ -388,7 +388,7 @@ exports.editProviderAddress_get = async (req, res) => {
     address = await ProviderAddress.findByPk(addressId)
   }
 
-  let back = `/providers/${providerId}`
+  let back = `/providers/${providerId}/addresses`
   if (req.query.referrer === 'check') {
     back = `/providers/${providerId}/addresses/${addressId}/edit/check`
   }
@@ -443,7 +443,7 @@ exports.editProviderAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/providers/${providerId}/addresses`
     if (req.query.referrer === 'check') {
       back = `/providers/${providerId}/addresses/${addressId}/edit/check`
     }
