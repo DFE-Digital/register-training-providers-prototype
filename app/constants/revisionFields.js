@@ -53,5 +53,13 @@ module.exports = {
     'email',
     'deletedAt',
     'deletedById'
+  ],
+  academicYear: [
+    'code',
+    'name',
+    'startsOn',
+    'endsOn',
+    'deletedAt',
+    'deletedById'
   ]
 }

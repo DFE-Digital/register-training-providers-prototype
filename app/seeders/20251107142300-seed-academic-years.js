@@ -3,55 +3,51 @@ const path = require('path')
 
 const createRevision = require('./helpers/createRevision')
 const createActivityLog = require('./helpers/createActivityLog')
-const { nullIfEmpty } = require('../helpers/string')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction()
 
     try {
-      await queryInterface.bulkDelete('providers', null, { transaction })
-      await queryInterface.bulkDelete('provider_revisions', null, { transaction })
+      await queryInterface.bulkDelete('academic_years', null, { transaction })
+      await queryInterface.bulkDelete('academic_year_revisions', null, { transaction })
       await queryInterface.bulkDelete('activity_logs', {
-        entity_type: 'provider'
+        entity_type: 'academic_year'
       }, { transaction })
 
-      const dataPath = path.join(__dirname, '/data/20250129161557-seed-providers.json')
+      const dataPath = path.join(__dirname, '/data/20251107142300-seed-academic-years.json')
       const rawData = fs.readFileSync(dataPath, 'utf8')
-      const providers = JSON.parse(rawData)
+      const academicYears = JSON.parse(rawData)
 
       const createdAt = new Date()
       const userId = '354751f2-c5f7-483c-b9e4-b6103f50f970'
 
-      for (const provider of providers) {
-        const providerId = provider.id
+      for (const academicYear of academicYears) {
+        const academicYearId = academicYear.id
         const revisionNumber = 1
 
         // Prepare base fields for both insert and revision
         const baseFields = {
-          id: providerId,
-          operating_name: provider.operatingName,
-          legal_name: provider.legalName,
-          type: provider.type,
-          ukprn: provider.ukprn,
-          urn: nullIfEmpty(provider.urn),
-          code: provider.code,
-          website: provider.website,
+          id: academicYearId,
+          code: academicYear.code,
+          name: academicYear.name,
+          starts_on: academicYear.startsOn,
+          ends_on: academicYear.endsOn,
           created_at: createdAt,
           created_by_id: userId,
           updated_at: createdAt,
           updated_by_id: userId
         }
 
-        // 1. Insert provider
-        await queryInterface.bulkInsert('providers', [baseFields], { transaction })
+        // 1. Insert academic year
+        await queryInterface.bulkInsert('academic_years', [baseFields], { transaction })
 
         // 2. Insert revision using helper
         const { id: _, ...revisionData } = baseFields
 
         const revisionId = await createRevision({
-          revisionTable: 'provider_revisions',
-          entityId: providerId,
+          revisionTable: 'academic_year_revisions',
+          entityId: academicYearId,
           revisionData,
           revisionNumber,
           userId,
@@ -60,10 +56,10 @@ module.exports = {
 
         // 3. Insert activity log using helper
         await createActivityLog({
-          revisionTable: 'provider_revisions',
+          revisionTable: 'academic_year_revisions',
           revisionId,
-          entityType: 'provider',
-          entityId: providerId,
+          entityType: 'academic_year',
+          entityId: academicYearId,
           revisionNumber,
           changedById: userId,
           changedAt: createdAt
@@ -72,7 +68,7 @@ module.exports = {
 
       await transaction.commit()
     } catch (error) {
-      console.error('Provider seeding error with revisions and activity logs:', error)
+      console.error('Academic year seeding error with revisions and activity logs:', error)
       await transaction.rollback()
       throw error
     }
@@ -80,9 +76,9 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('activity_logs', {
-      entity_type: 'provider'
+      entity_type: 'academic_year'
     })
-    await queryInterface.bulkDelete('provider_revisions', null, {})
-    await queryInterface.bulkDelete('providers', null, {})
+    await queryInterface.bulkDelete('academic_year_revisions', null, {})
+    await queryInterface.bulkDelete('academic_years', null, {})
   }
 }

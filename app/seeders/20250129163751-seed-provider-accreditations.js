@@ -15,7 +15,7 @@ module.exports = {
         entity_type: 'provider_accreditation'
       }, { transaction })
 
-      const dataPath = path.join(__dirname, '20250129163751-seed-provider-accreditations.json')
+      const dataPath = path.join(__dirname, '/data/20250129163751-seed-provider-accreditations.json')
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const accreditations = JSON.parse(rawData)
 
