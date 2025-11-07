@@ -39,7 +39,7 @@ module.exports = {
       }, { transaction })
 
       // 2) Read previous partnership pairings
-      const dataPath = path.join(__dirname, '20250207143556-seed-provider-partnership.json')
+      const dataPath = path.join(__dirname, '/data/20250207143556-seed-provider-partnership.json')
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const providerPartnerships = JSON.parse(rawData)
 
