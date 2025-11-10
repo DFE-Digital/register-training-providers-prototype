@@ -12,7 +12,9 @@ const {
   ProviderContactRevision,
   ProviderRevision,
   User,
-  UserRevision
+  UserRevision,
+  AcademicYear,
+  AcademicYearRevision
 } = require('../models')
 
 const { govukDate, isToday, isYesterday } = require('./date')
@@ -29,7 +31,8 @@ const revisionAssociationMap = {
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
   provider_accreditation_partnership_revisions: 'providerAccreditationPartnershipRevision',
-  user_revisions: 'userRevision'
+  user_revisions: 'userRevision',
+  academic_year_revisions: 'academicYearRevision'
 }
 
 /**
@@ -42,7 +45,8 @@ const revisionModels = {
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
   provider_accreditation_partnership_revisions: ProviderAccreditationPartnershipRevision,
-  user_revisions: UserRevision
+  user_revisions: UserRevision,
+  academic_year_revisions: AcademicYearRevision
 }
 
 /**
@@ -221,6 +225,82 @@ const buildUserLink = async (userId, fallbackName) => {
 }
 
 /**
+ * Decide whether an academic year should be linkable (listed) in the UI.
+ *
+ * An academic year is considered "listable" only if they have not been soft-deleted
+ * (i.e. `deletedAt == null`). If you also require an active flag, the check
+ * includes `isActive !== false`. Adjust this predicate to your needs.
+ *
+ * @param {import('../models').AcademicYear | null | undefined} academicYear
+ *   A Sequelize Academic Year instance fetched with `{ paranoid: false }`, or null/undefined.
+ * @returns {boolean}
+ *   `true` if the academic year is currently listable (safe to link to), otherwise `false`.
+ *
+ * @example
+ * const academicYear = await AcademicYear.findByPk(id, { paranoid: false });
+ * if (isAcademicYearListable(academicYear)) {
+ *   // render link
+ * } else {
+ *   // render plain text
+ * }
+ */
+const isAcademicYearListable = (academicYear) =>
+  !!academicYear && academicYear.deletedAt == null
+
+/**
+ * Build a safe academic year link (or plain text) depending on current listable state.
+ *
+ * This helper:
+ *  - Looks up the academic year with `{ paranoid: false }` so soft-deleted rows are visible.
+ *  - Returns a *link* only if the academic year passes `isAcademicYearListable`.
+ *  - Falls back to plain text (no link) when the academic year is missing or not listable.
+ *
+ * @async
+ * @param {string | null | undefined} academicYearId
+ *   The academic year's UUID (or undefined/null). If falsy, the function uses the fallback name.
+ * @param {string | null | undefined} [fallbackName]
+ *   A label to use if the academic year’s name can't be resolved (e.g. from the log payload).
+ * @returns {Promise<{text: string, href: string, html: string}>}
+ *   - `text`: The chosen display name (resolved from academic year or `fallbackName`).
+ *   - `href`: The canonical academic year URL (empty string if not listable).
+ *   - `html`: A safe HTML string (linked when listable, escaped plain text otherwise).
+ *
+ * @example
+ * const { text, href, html } = await buildAcademicYearLink(log.academicYearId, 'Unknown academic year');
+ * // Use `text` for non-HTML contexts, `html` for inline rendering, and `href` for tables.
+ *
+ * @example
+ * // Composing a section-specific link when listable:
+ * const { href } = await buildAcademicYearLink(log.academicYearId, 'Academic year');
+ * const activityHref = href ? `${href}/activity` : ''; // empty string when not listable
+ */
+const buildAcademicYearLink = async (academicYearId, fallbackName) => {
+  if (!academicYearId) {
+    const text = fallbackName || 'Academic year'
+    return { text, href: '', html: escapeHtml(text) }
+  }
+
+  const academicYear = await AcademicYear.findByPk(academicYearId, {
+    paranoid: false,
+    attributes: ['id', 'code', 'name', 'deletedAt']
+  })
+
+  // Prefer a name; fall back to code; then to the provided fallback.
+  const derivedName = academicYear
+    ? academicYear.name
+    : ''
+  const text = derivedName || academicYear?.code || fallbackName || 'Academic year'
+
+  // TODO: If your route isn’t `/academic-years/:id`, change the href here.
+  const href = isAcademicYearListable(academicYear) ? `/settings/academic-years/${academicYear.id}` : ''
+  const html = href
+    ? `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>`
+    : escapeHtml(text)
+
+  return { text, href, html }
+}
+
+/**
  * Returns the foreign key(s) used by the revision table for previous/latest lookups.
  *
  * NOTE: For partnership *revision* tables, the entity is the partnership itself,
@@ -233,6 +313,8 @@ const getEntityKeys = (revisionTable) => {
   switch (revisionTable) {
     case 'user_revisions':
       return ['userId']
+    case 'academic_year_revisions':
+      return ['academicYearId']
     case 'provider_accreditation_partnership_revisions':
       return ['providerAccreditationPartnershipId']
     default:
@@ -324,6 +406,10 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
       {
         model: UserRevision,
         as: 'userRevision'
+      },
+      {
+        model: AcademicYearRevision,
+        as: 'academicYearRevision'
       },
       {
         model: User,
@@ -642,6 +728,10 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'userRevision'
       },
       {
+        model: AcademicYearRevision,
+        as: 'academicYearRevision'
+      },
+      {
         model: User,
         as: 'changedByUser'
       }
@@ -714,6 +804,11 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
       {
         model: UserRevision,
         as: 'userRevision',
+        required: false
+      },
+      {
+        model: AcademicYearRevision,
+        as: 'academicYearRevision',
         required: false
       }
     ]
@@ -942,6 +1037,24 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
       fields.push({ key: 'Email address', value: revision.email })
+      break
+    }
+
+    case 'academic_year_revisions': {
+      activity = `Academic year ${log.action}d`
+
+      // Prefer a proper name, otherwise email, then a generic fallback.
+      const fallbackName = revision.name || 'Academic year'
+
+      // Conditionally link if the user is listable; otherwise plain text.
+      const { text: academicYearText, href: academicYearHref } = await buildAcademicYearLink(revision.academicYearId, fallbackName)
+
+      label = academicYearText
+      href = academicYearHref
+
+      fields.push({ key: 'Name', value: revision.name })
+      fields.push({ key: 'Starts on', value: govukDate(revision.startsOn) })
+      fields.push({ key: 'Ends on', value: govukDate(revision.endsOn) })
       break
     }
 
