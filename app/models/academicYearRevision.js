@@ -3,9 +3,9 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class AcademicYearRevision extends Model {
     static associate(models) {
-      AcademicYearRevision.belongsTo(models.ProviderAccreditation, {
-        foreignKey: 'providerAccreditationId',
-        as: 'providerAccreditation'
+      AcademicYearRevision.belongsTo(models.AcademicYear, {
+        foreignKey: 'academicYearId',
+        as: 'academicYear'
       })
 
       AcademicYearRevision.belongsTo(models.User, {
