@@ -1,11 +1,11 @@
-const { Sequelize } = require('sequelize')
+const { Sequelize, Op } = require('sequelize')
 
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { govukDate } = require('../helpers/date')
 const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
 const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { appendSection } = require('../helpers/string')
-const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
+const { AcademicYear, Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
 const { savePartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
@@ -31,6 +31,30 @@ const formatAccreditationItems = (accreditations) => {
       hint: { text: `Starts on ${startsOn}${endsOn}` }
     }
   })
+}
+
+const formatAcademicYearItems = (academicYears) => {
+  return academicYears.map(academicYear => {
+    const startsOn = govukDate(academicYear.startsOn)
+    const endsOn = academicYear.endsOn ? `, ends on ${govukDate(academicYear.endsOn)}` : ''
+
+    return {
+      text: academicYear.name,
+      value: academicYear.id,
+      hint: { text: `Starts on ${startsOn}${endsOn}` }
+    }
+  })
+}
+
+const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone, year: 'numeric', month: 'numeric', day: 'numeric'
+  }).formatToParts(now)
+  const y = Number(parts.find(p => p.type === 'year').value)
+  const m = Number(parts.find(p => p.type === 'month').value) // 1–12
+  const d = Number(parts.find(p => p.type === 'day').value)
+  // If on/after 1 Aug => current AY starts this calendar year; else previous year
+  return (m > 8 || (m === 8 && d >= 1)) ? y : (y - 1)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -300,7 +324,7 @@ exports.newProviderPartnership_post = async (req, res) => {
       res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
     } else {
       if (selectedProviderId) {
-        res.redirect(`/providers/${providerId}/partnerships/new/accreditations`)
+        res.redirect(`/providers/${providerId}/partnerships/new/academic-years`)
       } else {
         res.redirect(`/providers/${providerId}/partnerships/new/choose`)
       }
@@ -402,17 +426,15 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/partnerships/new/accreditations`)
+    res.redirect(`/providers/${providerId}/partnerships/new/academic-years`)
   }
 }
 
-exports.newProviderPartnershipAccreditations_get = async (req, res) => {
+exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
   const { providerId } = req.params
   const isAccredited = await isAccreditedProvider({ providerId })
 
   const selectedProviderId = req.session.data?.provider?.id
-
-  const selectedAccreditations = req.session.data?.accreditations
 
   const providers = isAccredited
   ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
@@ -421,47 +443,45 @@ exports.newProviderPartnershipAccreditations_get = async (req, res) => {
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
-  const providerAccreditations = await ProviderAccreditation.findAll({
+  const currentAYStart = getCurrentAcademicYearStart()
+  const cutoffCode = currentAYStart + 1
+
+  const academicYears = await AcademicYear.findAll({
     where: {
-      providerId: providers.accreditedProviderId,
-      deletedAt: null
+      deletedAt: null,
+      // model stores code as STRING; cast to integer for numeric compare
+      [Op.and]: [
+        Sequelize.where(
+          Sequelize.cast(Sequelize.col('code'), 'INTEGER'),
+          { [Op.lte]: cutoffCode }
+        )
+      ]
     },
-    order: [
-      // 1) earliest start first
-      ['startsOn', 'ASC'],
-
-      // 2) end date: real dates first, nulls last, then earliest end first
-      [Sequelize.literal('"ProviderAccreditation"."ends_on" IS NULL'), 'ASC'],
-      ['endsOn', 'ASC'],
-
-      // 3) accreditation number (cast in case it's stored as TEXT)
-      [Sequelize.cast(Sequelize.col('number'), 'INTEGER'), 'ASC']
-    ]
+    order: [['startsOn', 'ASC']]
   })
 
-  const accreditationItems = formatAccreditationItems(providerAccreditations)
+  const academicYearItems = formatAcademicYearItems(academicYears)
+  const selectedAcademicYears = req.session.data?.academicYears
 
-  res.render('providers/partnerships/accreditations', {
+  res.render('providers/partnerships/academic-years', {
     accreditedProvider,
     trainingProvider,
     isAccredited,
-    accreditationItems,
-    selectedAccreditations,
+    academicYearItems,
+    selectedAcademicYears,
     actions: {
       back: `/providers/${providerId}/partnerships/new`,
       cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/new/accreditations`
+      save: `/providers/${providerId}/partnerships/new/academic-years`
     }
   })
 }
 
-exports.newProviderPartnershipAccreditations_post = async (req, res) => {
+exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   const { providerId } = req.params
   const isAccredited = await isAccreditedProvider({ providerId })
 
   const selectedProviderId = req.session.data?.provider?.id
-
-  const selectedAccreditations = req.session.data?.accreditations
 
   const providers = isAccredited
   ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
@@ -470,54 +490,167 @@ exports.newProviderPartnershipAccreditations_post = async (req, res) => {
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
-  const providerAccreditations = await ProviderAccreditation.findAll({
+  const currentAYStart = getCurrentAcademicYearStart()
+  const cutoffCode = currentAYStart + 1
+
+  const academicYears = await AcademicYear.findAll({
     where: {
-      providerId: providers.accreditedProviderId,
-      deletedAt: null
+      deletedAt: null,
+      // model stores code as STRING; cast to integer for numeric compare
+      [Op.and]: [
+        Sequelize.where(
+          Sequelize.cast(Sequelize.col('code'), 'INTEGER'),
+          { [Op.lte]: cutoffCode }
+        )
+      ]
     },
-    order: [
-      // 1) earliest start first
-      ['startsOn', 'ASC'],
-
-      // 2) end date: real dates first, nulls last, then earliest end first
-      [Sequelize.literal('"ProviderAccreditation"."ends_on" IS NULL'), 'ASC'],
-      ['endsOn', 'ASC'],
-
-      // 3) accreditation number (cast in case it's stored as TEXT)
-      [Sequelize.cast(Sequelize.col('number'), 'INTEGER'), 'ASC']
-    ]
+    order: [['startsOn', 'ASC']]
   })
 
-  const accreditationItems = formatAccreditationItems(providerAccreditations)
+  const academicYearItems = formatAcademicYearItems(academicYears)
+  const selectedAcademicYears = req.session.data?.academicYears
 
   const errors = []
 
-  if (!selectedAccreditations.length) {
+  if (!selectedAcademicYears.length) {
     const error = {}
-    error.fieldName = 'accreditations'
-    error.href = '#accreditations'
-    error.text = 'Select an accreditation'
+    error.fieldName = 'academicYears'
+    error.href = '#academicYears'
+    error.text = 'Select academic year'
     errors.push(error)
   }
 
   if (errors.length > 0) {
-    res.render('providers/partnerships/accreditations', {
+    res.render('providers/partnerships/academic-years', {
       accreditedProvider,
       trainingProvider,
       isAccredited,
-      accreditationItems,
-      selectedAccreditations,
+      academicYearItems,
+      selectedAcademicYears,
       errors,
       actions: {
         back: `/providers/${providerId}/partnerships/new`,
         cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/new/accreditations`
+        save: `/providers/${providerId}/partnerships/new/academic-years`
       }
     })
   } else {
     res.redirect(`/providers/${providerId}/partnerships/new/check`)
   }
 }
+
+// exports.newProviderPartnershipAccreditations_get = async (req, res) => {
+//   const { providerId } = req.params
+//   const isAccredited = await isAccreditedProvider({ providerId })
+
+//   const selectedProviderId = req.session.data?.provider?.id
+
+//   const selectedAccreditations = req.session.data?.accreditations
+
+//   const providers = isAccredited
+//   ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
+//   : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+
+//   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
+//   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+
+//   const providerAccreditations = await ProviderAccreditation.findAll({
+//     where: {
+//       providerId: providers.accreditedProviderId,
+//       deletedAt: null
+//     },
+//     order: [
+//       // 1) earliest start first
+//       ['startsOn', 'ASC'],
+
+//       // 2) end date: real dates first, nulls last, then earliest end first
+//       [Sequelize.literal('"ProviderAccreditation"."ends_on" IS NULL'), 'ASC'],
+//       ['endsOn', 'ASC'],
+
+//       // 3) accreditation number (cast in case it's stored as TEXT)
+//       [Sequelize.cast(Sequelize.col('number'), 'INTEGER'), 'ASC']
+//     ]
+//   })
+
+//   const accreditationItems = formatAccreditationItems(providerAccreditations)
+
+//   res.render('providers/partnerships/accreditations', {
+//     accreditedProvider,
+//     trainingProvider,
+//     isAccredited,
+//     accreditationItems,
+//     selectedAccreditations,
+//     actions: {
+//       back: `/providers/${providerId}/partnerships/new`,
+//       cancel: `/providers/${providerId}/partnerships`,
+//       save: `/providers/${providerId}/partnerships/new/accreditations`
+//     }
+//   })
+// }
+
+// exports.newProviderPartnershipAccreditations_post = async (req, res) => {
+//   const { providerId } = req.params
+//   const isAccredited = await isAccreditedProvider({ providerId })
+
+//   const selectedProviderId = req.session.data?.provider?.id
+
+//   const selectedAccreditations = req.session.data?.accreditations
+
+//   const providers = isAccredited
+//   ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
+//   : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+
+//   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
+//   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+
+//   const providerAccreditations = await ProviderAccreditation.findAll({
+//     where: {
+//       providerId: providers.accreditedProviderId,
+//       deletedAt: null
+//     },
+//     order: [
+//       // 1) earliest start first
+//       ['startsOn', 'ASC'],
+
+//       // 2) end date: real dates first, nulls last, then earliest end first
+//       [Sequelize.literal('"ProviderAccreditation"."ends_on" IS NULL'), 'ASC'],
+//       ['endsOn', 'ASC'],
+
+//       // 3) accreditation number (cast in case it's stored as TEXT)
+//       [Sequelize.cast(Sequelize.col('number'), 'INTEGER'), 'ASC']
+//     ]
+//   })
+
+//   const accreditationItems = formatAccreditationItems(providerAccreditations)
+
+//   const errors = []
+
+//   if (!selectedAccreditations.length) {
+//     const error = {}
+//     error.fieldName = 'accreditations'
+//     error.href = '#accreditations'
+//     error.text = 'Select an accreditation'
+//     errors.push(error)
+//   }
+
+//   if (errors.length > 0) {
+//     res.render('providers/partnerships/accreditations', {
+//       accreditedProvider,
+//       trainingProvider,
+//       isAccredited,
+//       accreditationItems,
+//       selectedAccreditations,
+//       errors,
+//       actions: {
+//         back: `/providers/${providerId}/partnerships/new`,
+//         cancel: `/providers/${providerId}/partnerships`,
+//         save: `/providers/${providerId}/partnerships/new/accreditations`
+//       }
+//     })
+//   } else {
+//     res.redirect(`/providers/${providerId}/partnerships/new/check`)
+//   }
+// }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
   const { providerId } = req.params
@@ -543,7 +676,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
     isAccredited,
     accreditationItems,
     actions: {
-      back: `/providers/${providerId}/partnerships/new/accreditations?referrer=check`,
+      back: `/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
       cancel: `/providers/${providerId}/partnerships`,
       change: `/providers/${providerId}/partnerships/new`,
       save: `/providers/${providerId}/partnerships/new/check`
