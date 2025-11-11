@@ -33,12 +33,12 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-      {% set accreditations %}
-        <ul class="govuk-list {{- ' govuk-list--bullet' if accreditationItems.length > 1 }}">
-          {% for accreditation in accreditationItems %}
+      {% set academicYears %}
+        <ul class="govuk-list {{- ' govuk-list--bullet' if academicYearItems.length > 1 }}">
+          {% for academicYear in academicYearItems %}
             <li>
-              {{ accreditation.text }}<br>
-              <span class="govuk-hint">{{ accreditation.hint.text }}</span>
+              {{ academicYear.text }}<br>
+              <span class="govuk-hint">{{ academicYear.hint.text }}</span>
             </li>
           {% endfor %}
         </ul>
@@ -82,17 +82,17 @@
           },
           {
             key: {
-              text: "Linked accreditation" + ("s" if accreditationItems.length > 1)
+              text: "Academic year" + ("s" if academicYearItems.length > 1)
             },
             value: {
-              html: accreditations
+              html: academicYears
             },
             actions: {
               items: [
                 {
-                  href: actions.change + "/accreditations?referrer=check",
+                  href: actions.change + "/academic-years?referrer=check",
                   text: "Change",
-                  visuallyHiddenText: "accreditations"
+                  visuallyHiddenText: "academic years"
                 }
               ]
             }
