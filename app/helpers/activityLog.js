@@ -11,6 +11,8 @@ const {
   ProviderContact,
   ProviderContactRevision,
   ProviderRevision,
+  ProviderPartnership,
+  ProviderPartnershipRevision,
   User,
   UserRevision,
   AcademicYear,
@@ -31,6 +33,7 @@ const revisionAssociationMap = {
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
   provider_accreditation_partnership_revisions: 'providerAccreditationPartnershipRevision',
+  provider_partnership_revisions: 'providerPartnershipRevision',
   user_revisions: 'userRevision',
   academic_year_revisions: 'academicYearRevision'
 }
@@ -45,6 +48,7 @@ const revisionModels = {
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
   provider_accreditation_partnership_revisions: ProviderAccreditationPartnershipRevision,
+  provider_partnership_revisions: ProviderPartnershipRevision,
   user_revisions: UserRevision,
   academic_year_revisions: AcademicYearRevision
 }
@@ -317,8 +321,9 @@ const getEntityKeys = (revisionTable) => {
       return ['academicYearId']
     case 'provider_accreditation_partnership_revisions':
       return ['providerAccreditationPartnershipId']
+    case 'provider_partnership_revisions':
+      return ['accreditedProviderId','trainingProviderId']
     default:
-      // provider_*, provider_accreditation_*, provider_address_*, provider_contact_*
       return ['providerId']
   }
 }
@@ -401,6 +406,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
             include: [{ model: Provider, as: 'provider' }]
           },
           { model: Provider, as: 'partner' }
+        ]
+      },
+      {
+        model: ProviderPartnershipRevision,
+        as: 'providerPartnershipRevision',
+        include: [
+          { model: Provider, as: 'accreditedProvider' },
+          { model: Provider, as: 'trainingProvider' }
         ]
       },
       {
@@ -1016,6 +1029,23 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Accredited provider', value: accreditedText, href: accreditedHref })
       fields.push({ key: 'Training partner', value: trainingText, href: trainingHref  })
 
+      break
+    }
+
+    case 'provider_partnership_revisions': {
+      const accredited = revision.accreditedProvider
+      const training = revision.trainingProvider
+
+      const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
+      const trainingName = training?.operatingName || training?.legalName || 'Training provider'
+
+      label = `${accreditedName} – ${trainingName}`
+      activity = `Partnership ${log.action}d`
+      href = ''
+      // href = `/providers/${revision.accreditedProviderId}/partnerships`
+
+      fields.push({ key: 'Accredited provider', value: accreditedName })
+      fields.push({ key: 'Training provider', value: trainingName })
       break
     }
 

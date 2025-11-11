@@ -38,6 +38,13 @@ module.exports = (sequelize) => {
         as: 'providerAccreditationPartnershipRevision'
       })
 
+      ActivityLog.belongsTo(models.ProviderPartnershipRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'providerPartnershipRevision'
+      })
+
       ActivityLog.belongsTo(models.AcademicYearRevision, {
         foreignKey: 'revisionId',
         targetKey: 'id',
