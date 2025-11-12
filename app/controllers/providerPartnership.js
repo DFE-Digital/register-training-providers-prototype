@@ -354,6 +354,10 @@ exports.newProviderPartnership_post = async (req, res) => {
   } else {
     const selectedProviderId = req.session.data?.provider?.id
 
+    if (!selectedProviderId) {
+      return res.redirect(`/providers/${providerId}/partnerships/new/choose`)
+    }
+
     const hasExistingPartnership = await partnershipExistsForProviderPair(
       isAccredited
         ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
@@ -364,11 +368,7 @@ exports.newProviderPartnership_post = async (req, res) => {
     if (hasExistingPartnership) {
       res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
     } else {
-      if (selectedProviderId) {
-        res.redirect(`/providers/${providerId}/partnerships/new/academic-years`)
-      } else {
-        res.redirect(`/providers/${providerId}/partnerships/new/choose`)
-      }
+      res.redirect(`/providers/${providerId}/partnerships/new/academic-years`)
     }
   }
 }
