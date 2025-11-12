@@ -96,7 +96,7 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: 'ProviderPartnershipAcademicYear',
-      tableName: 'provider_partnership_academic_year',
+      tableName: 'provider_partnership_academic_years',
       timestamps: true
     }
   )
