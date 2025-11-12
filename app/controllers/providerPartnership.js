@@ -3,10 +3,11 @@ const { Sequelize, Op } = require('sequelize')
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { govukDate } = require('../helpers/date')
 const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/accreditation')
+const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { appendSection } = require('../helpers/string')
-const { AcademicYear, Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
-const { savePartnerships } = require('../services/partnerships')
+const { AcademicYear, Provider, ProviderAccreditation, ProviderAccreditationPartnership, ProviderPartnership } = require('../models')
+const { saveAccreditationPartnerships, saveAcademicYearPartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
 const formatProviderItems = (providers) => {
@@ -65,7 +66,8 @@ exports.providerPartnershipsList = async (req, res) => {
   delete req.session.data.partnership
   delete req.session.data.search
   delete req.session.data.provider
-  delete req.session.data.accreditations
+  // delete req.session.data.accreditations
+  delete req.session.data.academicYears
 
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 25
@@ -666,15 +668,21 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
   // get the selected accreditations
-  const selectedAccreditations = await getAccreditationDetails(req.session.data?.accreditations)
+  // const selectedAccreditations = await getAccreditationDetails(req.session.data?.accreditations)
 
-  const accreditationItems = formatAccreditationItems(selectedAccreditations)
+  // const accreditationItems = formatAccreditationItems(selectedAccreditations)
+
+  // get the selected accreditations
+  const selectedAcademicYears = await getAcademicYearDetails(req.session.data?.academicYears)
+
+  const academicYearItems = formatAcademicYearItems(selectedAcademicYears)
 
   res.render('providers/partnerships/check-your-answers', {
     accreditedProvider,
     trainingProvider,
     isAccredited,
-    accreditationItems,
+    // accreditationItems,
+    academicYearItems,
     actions: {
       back: `/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
       cancel: `/providers/${providerId}/partnerships`,
@@ -697,15 +705,31 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
-  await savePartnerships({
-    accreditationIds: req.session.data?.accreditations,
-    partnerId: isAccredited ? provider.id : providerId,
+  // await saveAccreditationPartnerships({
+  //   accreditationIds: req.session.data?.accreditations,
+  //   partnerId: isAccredited ? provider.id : providerId,
+  //   userId: user.id
+  // })
+
+  // save the partnership and get the partnershipId
+  const partnership = await ProviderPartnership.create({
+    accreditedProviderId: isAccredited ? provider.id : providerId,
+    trainingProviderId: isAccredited ? providerId : provider.id,
+    createdById: user.id,
+    updatedById: user.id
+  })
+
+  // save the academic years for the partnership
+  await saveAcademicYearPartnerships({
+    academicYearIds: req.session.data?.academicYears,
+    partnershipId: partnership.id,
     userId: user.id
   })
 
   delete req.session.data.search
   delete req.session.data.provider
-  delete req.session.data.accreditations
+  // delete req.session.data.accreditations
+  delete req.session.data.academicYears
 
   req.flash('success', 'Partnership added')
   res.redirect(`/providers/${providerId}/partnerships`)
