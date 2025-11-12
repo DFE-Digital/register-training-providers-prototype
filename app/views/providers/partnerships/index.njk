@@ -94,13 +94,13 @@
           {% endif %}
         {% endset %}
 
-        {% set accreditationsHtml %}
-          <ul class="govuk-list {{- ' govuk-list--bullet' if partnership.accreditations.length > 1 }}">
-            {% for accreditation in partnership.accreditations %}
+        {% set academicYearsHtml %}
+          <ul class="govuk-list {{- ' govuk-list--bullet' if partnership.academicYears.length > 1 }}">
+            {% for academicYear in partnership.academicYears %}
               <li>
-                {{ accreditation.number }}<br>
-                <span class="govuk-hint">Starts on {{ accreditation.startsOn | govukDate -}}
-                {% if accreditation.endsOn %}, ends on {{ accreditation.endsOn | govukDate }}{% endif %}</span>
+                {{ academicYear.name }}<br>
+                <span class="govuk-hint">Starts on {{ academicYear.startsOn | govukDate -}}
+                {% if academicYear.endsOn %}, ends on {{ academicYear.endsOn | govukDate }}{% endif %}</span>
               </li>
             {% endfor %}
           </ul>
@@ -134,10 +134,10 @@
               </div>
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                  Linked accreditation {{- "s" if partnership.accreditations.length > 1 }}
+                  Academic year {{- "s" if partnership.academicYears.length > 1 }}
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  {{ accreditationsHtml | safe }}
+                  {{ academicYearsHtml | safe }}
                 </dd>
               </div>
             </dl>

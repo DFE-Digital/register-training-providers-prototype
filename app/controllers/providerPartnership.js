@@ -6,7 +6,7 @@ const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/ac
 const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { appendSection } = require('../helpers/string')
-const { AcademicYear, Provider, ProviderAccreditation, ProviderAccreditationPartnership, ProviderPartnership } = require('../models')
+const { AcademicYear, Provider, ProviderAccreditation, ProviderAccreditationPartnership, ProviderPartnership, ProviderPartnershipAcademicYear } = require('../models')
 const { saveAccreditationPartnerships, saveAcademicYearPartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
@@ -82,68 +82,82 @@ exports.providerPartnershipsList = async (req, res) => {
     getProviderLastUpdated(providerId, { includeDeletedChildren: true })
   ])
 
-  // Fetch all active partnership rows involving this provider
-  const allPartnershipRows = await ProviderAccreditationPartnership.findAll({
+  // Fetch all academic year links for partnerships involving this provider
+  const academicYearLinks = await ProviderPartnershipAcademicYear.findAll({
     where: {
       deletedAt: null
     },
     include: [
       {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
+        model: ProviderPartnership,
+        as: 'partnership',
         where: {
           deletedAt: null,
+          [Op.or]: [
+            { trainingProviderId: provider.id },
+            { accreditedProviderId: provider.id }
+          ]
         },
         include: [
           {
             model: Provider,
-            as: 'provider',
+            as: 'trainingProvider',
+            attributes: ['id', 'operatingName', 'legalName', 'ukprn', 'deletedAt']
+          },
+          {
+            model: Provider,
+            as: 'accreditedProvider',
             attributes: ['id', 'operatingName', 'legalName', 'ukprn', 'deletedAt']
           }
         ]
       },
       {
-        model: Provider,
-        as: 'partner',
-        attributes: ['id', 'operatingName', 'legalName', 'ukprn', 'deletedAt']
+        model: AcademicYear,
+        as: 'academicYear',
+        where: {
+          deletedAt: null
+        },
+        attributes: ['id', 'name', 'startsOn', 'endsOn', 'code']
       }
+    ],
+    order: [
+      [{ model: AcademicYear, as: 'academicYear' }, 'startsOn', 'ASC']
     ]
   })
 
-  // Only keep rows where this provider is *either* the accredited provider or the partner
-  const filteredRows = allPartnershipRows.filter(row =>
-    row.partnerId === provider.id || row.providerAccreditation.providerId === provider.id
-  )
-
-  // Group by trainingProviderId + accreditedProviderId
+  // Group by partnership id (one row per partnership when rendered)
   const grouped = {}
 
-  for (const row of filteredRows) {
-    const accreditedProvider = row.providerAccreditation.provider
-    const accreditedProviderId = accreditedProvider.id
-    const trainingPartner = row.partner
-    const trainingPartnerId = trainingPartner.id
+  for (const link of academicYearLinks) {
+    const partnership = link.partnership
+    if (!partnership) {
+      continue
+    }
 
-    const isAccreditedSide = provider.id === accreditedProviderId
-    const key = `${trainingPartnerId}::${accreditedProviderId}`
+    const accreditedProvider = partnership.accreditedProvider
+    const trainingPartner = partnership.trainingProvider
+    const partnershipId = partnership.id
+    const isAccreditedSide = provider.id === partnership.accreditedProviderId
 
-    if (!grouped[key]) {
-      grouped[key] = {
-        id: row.id,
+    if (!grouped[partnershipId]) {
+      grouped[partnershipId] = {
+        id: partnershipId,
         accreditedProvider,
         trainingPartner,
-        accreditations: [],
+        academicYears: [],
         isAccreditedSide,
-        createdAt: row.createdAt
+        createdAt: partnership.createdAt
       }
     }
 
-    grouped[key].accreditations.push({
-      id: row.providerAccreditation.id,
-      number: row.providerAccreditation.number,
-      startsOn: row.providerAccreditation.startsOn,
-      endsOn: row.providerAccreditation.endsOn
-    })
+    if (link.academicYear) {
+      grouped[partnershipId].academicYears.push({
+        id: link.academicYear.id,
+        name: link.academicYear.name,
+        startsOn: link.academicYear.startsOn,
+        endsOn: link.academicYear.endsOn
+      })
+    }
   }
 
   const partnerships = Object.values(grouped)
@@ -174,7 +188,7 @@ exports.providerPartnershipsList = async (req, res) => {
   })
 
   for (const p of partnerships) {
-    p.accreditations.sort((a, b) => a.number.localeCompare(b.number))
+    p.academicYears.sort((a, b) => new Date(a.startsOn) - new Date(b.startsOn))
   }
 
   const totalCount = partnerships.length
