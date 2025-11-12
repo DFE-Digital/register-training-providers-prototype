@@ -58,6 +58,30 @@ const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London
   return (m > 8 || (m === 8 && d >= 1)) ? y : (y - 1)
 }
 
+const listAcademicYearsForSelection = async () => {
+  const currentAYStart = getCurrentAcademicYearStart()
+  const cutoffCode = currentAYStart + 1
+
+  return AcademicYear.findAll({
+    where: {
+      deletedAt: null,
+      [Op.and]: [
+        Sequelize.where(
+          Sequelize.cast(Sequelize.col('code'), 'INTEGER'),
+          { [Op.lte]: cutoffCode }
+        )
+      ]
+    },
+    order: [['startsOn', 'ASC']]
+  })
+}
+
+const normaliseAcademicYearSelection = (selection) => {
+  if (!selection) return []
+  if (Array.isArray(selection)) return selection.filter(Boolean)
+  return selection ? [selection] : []
+}
+
 /// ------------------------------------------------------------------------ ///
 /// List provider partnerships
 /// ------------------------------------------------------------------------ ///
@@ -459,25 +483,10 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
-  const currentAYStart = getCurrentAcademicYearStart()
-  const cutoffCode = currentAYStart + 1
-
-  const academicYears = await AcademicYear.findAll({
-    where: {
-      deletedAt: null,
-      // model stores code as STRING; cast to integer for numeric compare
-      [Op.and]: [
-        Sequelize.where(
-          Sequelize.cast(Sequelize.col('code'), 'INTEGER'),
-          { [Op.lte]: cutoffCode }
-        )
-      ]
-    },
-    order: [['startsOn', 'ASC']]
-  })
+  const academicYears = await listAcademicYearsForSelection()
 
   const academicYearItems = formatAcademicYearItems(academicYears)
-  const selectedAcademicYears = req.session.data?.academicYears
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
 
   res.render('providers/partnerships/academic-years', {
     accreditedProvider,
@@ -506,25 +515,10 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
-  const currentAYStart = getCurrentAcademicYearStart()
-  const cutoffCode = currentAYStart + 1
-
-  const academicYears = await AcademicYear.findAll({
-    where: {
-      deletedAt: null,
-      // model stores code as STRING; cast to integer for numeric compare
-      [Op.and]: [
-        Sequelize.where(
-          Sequelize.cast(Sequelize.col('code'), 'INTEGER'),
-          { [Op.lte]: cutoffCode }
-        )
-      ]
-    },
-    order: [['startsOn', 'ASC']]
-  })
+  const academicYears = await listAcademicYearsForSelection()
 
   const academicYearItems = formatAcademicYearItems(academicYears)
-  const selectedAcademicYears = req.session.data?.academicYears
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
 
   const errors = []
 
@@ -753,142 +747,119 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
 /// Edit provider partnership
 /// ------------------------------------------------------------------------ ///
 
-exports.editProviderPartnershipAccreditations_get = async (req, res) => {
+exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
-
   const currentProvider = await Provider.findByPk(providerId)
-
-  // Load the original partnership record (one row)
-  const initial = await ProviderAccreditationPartnership.findByPk(partnershipId, {
+  const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
-      {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        include: [{ model: Provider, as: 'provider' }]
-      },
-      {
-        model: Provider,
-        as: 'partner'
-      }
+      { model: Provider, as: 'trainingProvider' },
+      { model: Provider, as: 'accreditedProvider' }
     ]
   })
 
-  if (!initial) return res.status(404).send('Partnership not found')
+  if (!currentProvider || !partnership) {
+    return res.status(404).render('errors/404')
+  }
 
-  const trainingProvider = initial.partner
-  const accreditedProvider = initial.providerAccreditation.provider
-  const accreditedProviderId = accreditedProvider.id
-  const partnerId = initial.partnerId
+  req.session.data = req.session.data || {}
 
-  // Get all accreditations for the accredited provider
-  const providerAccreditations = await ProviderAccreditation.findAll({
-    where: {
-      providerId: accreditedProviderId,
-      deletedAt: null
-    }
-  })
-
-  // Get all *active* rows for this same partnership
-  const activePartnerships = await ProviderAccreditationPartnership.findAll({
-    where: {
-      partnerId,
-      deletedAt: null
-    },
-    include: [
-      {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        where: {
-          providerId: accreditedProviderId,
-          deletedAt: null
+  const [academicYears, existingAcademicYears] = await Promise.all([
+    listAcademicYearsForSelection(),
+    ProviderPartnershipAcademicYear.findAll({
+      where: { partnershipId, deletedAt: null },
+      include: [
+        {
+          model: AcademicYear,
+          as: 'academicYear',
+          attributes: ['startsOn']
         }
-      }
-    ]
-  })
+      ],
+      order: [
+        [{ model: AcademicYear, as: 'academicYear' }, 'startsOn', 'ASC']
+      ]
+    })
+  ])
 
-  const selectedAccreditations = req.session.data.accreditations || activePartnerships.map(p => p.providerAccreditationId)
-  const accreditationItems = formatAccreditationItems(providerAccreditations)
+  const fallbackSelection = existingAcademicYears.map(link => link.academicYearId.toString())
+  let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
 
-  res.render('providers/partnerships/accreditations', {
+  if (!selectedAcademicYears.length && fallbackSelection.length) {
+    selectedAcademicYears = fallbackSelection
+    req.session.data.academicYears = selectedAcademicYears
+  }
+
+  const academicYearItems = formatAcademicYearItems(academicYears)
+  const cameFromCheck = req.query.referrer === 'check'
+  const saveSuffix = cameFromCheck ? '?referrer=check' : ''
+
+  res.render('providers/partnerships/academic-years', {
     currentProvider,
-    accreditedProvider,
-    trainingProvider,
-    isAccredited: currentProvider.id === accreditedProvider.id,
-    accreditationItems,
-    selectedAccreditations,
+    accreditedProvider: partnership.accreditedProvider,
+    trainingProvider: partnership.trainingProvider,
+    isAccredited: currentProvider.id === partnership.accreditedProviderId,
+    academicYearItems,
+    selectedAcademicYears,
     actions: {
-      back: `/providers/${providerId}/partnerships`,
+      back: cameFromCheck
+        ? `/providers/${providerId}/partnerships/${partnershipId}/check`
+        : `/providers/${providerId}/partnerships`,
       cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/${partnershipId}/accreditations`
+      save: `/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
     }
   })
 }
 
-
-exports.editProviderPartnershipAccreditations_post = async (req, res) => {
+exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
   const currentProvider = await Provider.findByPk(providerId)
-
-  let selectedAccreditations = req.session.data.accreditations
-  selectedAccreditations = Array.isArray(selectedAccreditations)
-    ? selectedAccreditations
-    : [selectedAccreditations]
-
-  // Load the initial row to reconstruct the full partnership
-  const initial = await ProviderAccreditationPartnership.findByPk(partnershipId, {
+  const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
-      {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        include: [{ model: Provider, as: 'provider' }]
-      },
-      {
-        model: Provider,
-        as: 'partner'
-      }
+      { model: Provider, as: 'trainingProvider' },
+      { model: Provider, as: 'accreditedProvider' }
     ]
   })
 
-  if (!initial) return res.status(404).send('Partnership not found')
+  if (!currentProvider || !partnership) {
+    return res.status(404).render('errors/404')
+  }
 
-  const trainingProvider = initial.partner
-  const accreditedProvider = initial.providerAccreditation.provider
-  const accreditedProviderId = accreditedProvider.id
+  req.session.data = req.session.data || {}
 
-  const providerAccreditations = await ProviderAccreditation.findAll({
-    where: {
-      providerId: accreditedProviderId,
-      deletedAt: null
-    }
-  })
-
-  const accreditationItems = formatAccreditationItems(providerAccreditations)
+  let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
+  const academicYears = await listAcademicYearsForSelection()
+  const academicYearItems = formatAcademicYearItems(academicYears)
 
   const errors = []
-  if (!selectedAccreditations.length) {
+  if (!selectedAcademicYears.length) {
     errors.push({
-      fieldName: 'accreditations',
-      href: '#accreditations',
-      text: 'Select an accreditation'
+      fieldName: 'academicYears',
+      href: '#academicYears',
+      text: 'Select academic year'
     })
   }
 
+  const cameFromCheck = req.query.referrer === 'check'
+  const saveSuffix = cameFromCheck ? '?referrer=check' : ''
+
   if (errors.length > 0) {
-    res.render('providers/partnerships/accreditations', {
+    res.render('providers/partnerships/academic-years', {
       currentProvider,
-      accreditedProvider,
-      trainingProvider,
-      isAccredited: currentProvider.id === accreditedProvider.id,
-      accreditationItems,
-      selectedAccreditations,
+      accreditedProvider: partnership.accreditedProvider,
+      trainingProvider: partnership.trainingProvider,
+      isAccredited: currentProvider.id === partnership.accreditedProviderId,
+      academicYearItems,
+      selectedAcademicYears,
       errors,
       actions: {
-        back: `/providers/${providerId}/partnerships`,
+        back: cameFromCheck
+          ? `/providers/${providerId}/partnerships/${partnershipId}/check`
+          : `/providers/${providerId}/partnerships`,
         cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/${partnershipId}/accreditations`
+        save: `/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
       }
     })
   } else {
+    req.session.data.academicYears = selectedAcademicYears
     res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/check`)
   }
 }
@@ -896,48 +867,42 @@ exports.editProviderPartnershipAccreditations_post = async (req, res) => {
 exports.editProviderPartnershipCheck_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
   const currentProvider = await Provider.findByPk(providerId)
-
-  const selectedAccreditations = req.session.data?.accreditations || []
-
-  // Load one row from the partnership to reconstruct both providers
-  const initial = await ProviderAccreditationPartnership.findByPk(partnershipId, {
+  const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
-      {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        include: [{ model: Provider, as: 'provider' }]
-      },
-      {
-        model: Provider,
-        as: 'partner'
-      }
+      { model: Provider, as: 'trainingProvider' },
+      { model: Provider, as: 'accreditedProvider' }
     ]
   })
 
-  const trainingProvider = initial.partner
-  const accreditedProvider = initial.providerAccreditation.provider
-  const accreditedProviderId = accreditedProvider.id
+  if (!currentProvider || !partnership) {
+    return res.status(404).render('errors/404')
+  }
 
-  const providerAccreditations = await ProviderAccreditation.findAll({
-    where: {
-      id: selectedAccreditations,
-      providerId: accreditedProviderId,
-      deletedAt: null
-    }
-  })
+  req.session.data = req.session.data || {}
 
-  providerAccreditations.sort((a, b) => a.number.localeCompare(b.number))
+  let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
 
-  const accreditationItems = formatAccreditationItems(providerAccreditations)
+  if (!selectedAcademicYears.length) {
+    const existingAcademicYears = await ProviderPartnershipAcademicYear.findAll({
+      where: { partnershipId, deletedAt: null },
+      order: [['createdAt', 'ASC']]
+    })
+    selectedAcademicYears = existingAcademicYears.map(link => link.academicYearId.toString())
+    req.session.data.academicYears = selectedAcademicYears
+  }
+
+  const academicYearDetails = await getAcademicYearDetails(selectedAcademicYears)
+  academicYearDetails.sort((a, b) => new Date(a.startsOn) - new Date(b.startsOn))
+  const academicYearItems = formatAcademicYearItems(academicYearDetails)
 
   res.render('providers/partnerships/check-your-answers', {
     currentProvider,
-    accreditedProvider,
-    trainingProvider,
-    isAccredited: currentProvider.id === accreditedProvider.id,
-    accreditationItems,
+    accreditedProvider: partnership.accreditedProvider,
+    trainingProvider: partnership.trainingProvider,
+    isAccredited: currentProvider.id === partnership.accreditedProviderId,
+    academicYearItems,
     actions: {
-      back: `/providers/${providerId}/partnerships/${partnershipId}/accreditations`,
+      back: `/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`,
       change: `/providers/${providerId}/partnerships/${partnershipId}`,
       cancel: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/partnerships/${partnershipId}/check`
@@ -948,52 +913,29 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
 exports.editProviderPartnershipCheck_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
   const { user } = req.session.passport
-  const now = new Date()
+  const partnership = await ProviderPartnership.findByPk(partnershipId)
 
-  const selectedAccreditations = req.session.data?.accreditations || []
-  if (!selectedAccreditations.length) {
-    return res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/accreditations`)
+  if (!partnership) {
+    return res.status(404).render('errors/404')
   }
 
-  // Get one existing partnership row to reconstruct the context
-  const initial = await ProviderAccreditationPartnership.findByPk(partnershipId, {
-    include: [
-      {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        include: [{ model: Provider, as: 'provider' }]
-      }
-    ]
+  req.session.data = req.session.data || {}
+
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
+  if (!selectedAcademicYears.length) {
+    return res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
+  }
+
+  const now = new Date()
+
+  const existingLinks = await ProviderPartnershipAcademicYear.findAll({
+    where: { partnershipId, deletedAt: null }
   })
 
-  if (!initial) return res.status(404).send('Partnership not found')
+  const existingIds = existingLinks.map(link => link.academicYearId.toString())
+  const toDelete = existingLinks.filter(link => !selectedAcademicYears.includes(link.academicYearId.toString()))
+  const toAdd = selectedAcademicYears.filter(id => !existingIds.includes(id))
 
-  const partnerId = initial.partnerId
-  const accreditedProviderId = initial.providerAccreditation.provider.id
-
-  // Get *all active* rows for this partnership
-  const existingPartnerships = await ProviderAccreditationPartnership.findAll({
-    where: {
-      partnerId,
-      deletedAt: null
-    },
-    include: [
-      {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        where: {
-          providerId: accreditedProviderId
-        }
-      }
-    ]
-  })
-
-  const existingIds = existingPartnerships.map(p => p.providerAccreditationId.toString())
-
-  const toDelete = existingPartnerships.filter(p => !selectedAccreditations.includes(p.providerAccreditationId.toString()))
-  const toAdd = selectedAccreditations.filter(id => !existingIds.includes(id))
-
-  // Soft-delete removed accreditations
   for (const record of toDelete) {
     await record.update({
       deletedAt: now,
@@ -1001,20 +943,20 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
     })
   }
 
-  // Add new partnerships
-  for (const accreditationId of toAdd) {
-    await ProviderAccreditationPartnership.create({
-      providerAccreditationId: accreditationId,
-      partnerId,
-      createdAt: now,
-      createdById: user.id,
-      updatedAt: now,
-      updatedById: user.id
+  if (toAdd.length) {
+    await saveAcademicYearPartnerships({
+      academicYearIds: toAdd,
+      partnershipId,
+      userId: user.id
     })
   }
 
-  // Clear session
-  delete req.session.data.accreditations
+  await partnership.update({
+    updatedAt: now,
+    updatedById: user.id
+  })
+
+  delete req.session.data.academicYears
 
   req.flash('success', 'Partnership updated')
   res.redirect(`/providers/${providerId}/partnerships`)

@@ -73,7 +73,7 @@
             {% if partnership.partnerIsLinkable %}
               <ul class="govuk-summary-card__actions">
                 <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/accreditations">Change<span class="govuk-visually-hidden"> {{ partnership.trainingPartner.operatingName }} partnership</span></a>
+                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/academic-years">Change<span class="govuk-visually-hidden"> {{ partnership.trainingPartner.operatingName }} partnership</span></a>
                 </li>
                 <li class="govuk-summary-card__action">
                   <a class="govuk-link" href="{{ actions.delete }}/{{ partnership.id }}/delete">Delete<span class="govuk-visually-hidden"> {{ partnership.accreditedProvider.operatingName }} partnership</span></a>
@@ -84,7 +84,7 @@
             {% if partnership.accreditedIsLinkable %}
               <ul class="govuk-summary-card__actions">
                 <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/accreditations">Change<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>
+                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/academic-years">Change<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>
                 </li>
                 <li class="govuk-summary-card__action">
                   <a class="govuk-link" href="{{ actions.delete }}/{{ partnership.id }}/delete">Delete<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>

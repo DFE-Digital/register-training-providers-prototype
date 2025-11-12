@@ -197,8 +197,8 @@ router.post('/providers/:providerId/partnerships/new/academic-years', checkIsAut
 router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
 router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
 
-router.get('/providers/:providerId/partnerships/:partnershipId/accreditations', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAccreditations_get)
-router.post('/providers/:providerId/partnerships/:partnershipId/accreditations', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAccreditations_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/academic-years', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAcademicYears_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/academic-years', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAcademicYears_post)
 
 router.get('/providers/:providerId/partnerships/:partnershipId/check', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipCheck_get)
 router.post('/providers/:providerId/partnerships/:partnershipId/check', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipCheck_post)
