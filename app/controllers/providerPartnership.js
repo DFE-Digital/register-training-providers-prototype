@@ -357,7 +357,8 @@ exports.newProviderPartnership_post = async (req, res) => {
     const hasExistingPartnership = await partnershipExistsForProviderPair(
       isAccredited
         ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-        : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+        : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId },
+      { bidirectional: true }
     )
 
     if (hasExistingPartnership) {
@@ -437,7 +438,8 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
     const hasExistingPartnership = await partnershipExistsForProviderPair(
       isAccredited
         ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-        : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+        : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId },
+      { bidirectional: true }
     )
 
     if (hasExistingPartnership) {
@@ -713,6 +715,25 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
 
+  if (!provider?.id) {
+    return res.redirect(`/providers/${providerId}/partnerships/new`)
+  }
+
+  const accreditedProviderId = isAccredited ? providerId : provider.id
+  const trainingProviderId = isAccredited ? provider.id : providerId
+
+  const partnershipExists = await partnershipExistsForProviderPair(
+    {
+      accreditedProviderId,
+      trainingProviderId
+    },
+    { bidirectional: true }
+  )
+
+  if (partnershipExists) {
+    return res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
+  }
+
   // await saveAccreditationPartnerships({
   //   accreditationIds: req.session.data?.accreditations,
   //   partnerId: isAccredited ? provider.id : providerId,
@@ -721,8 +742,8 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
 
   // save the partnership and get the partnershipId
   const partnership = await ProviderPartnership.create({
-    accreditedProviderId: isAccredited ? provider.id : providerId,
-    trainingProviderId: isAccredited ? providerId : provider.id,
+    accreditedProviderId,
+    trainingProviderId,
     createdById: user.id,
     updatedById: user.id
   })

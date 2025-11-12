@@ -1,17 +1,15 @@
 const { Op, literal } = require('sequelize')
-const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = require('../models')
+const { Provider, ProviderAccreditation, ProviderAccreditationPartnership, ProviderPartnership } = require('../models')
 
 /**
  * Determine whether a partnership already exists between an accrediting provider and a training provider.
  *
- * The check succeeds if there exists at least one **non-deleted** `ProviderAccreditationPartnership`
- * with `partnerId === trainingProviderId` whose joined `ProviderAccreditation` row has
- * `providerId === accreditedProviderId` (also **non-deleted**).
+ * The check succeeds if there exists at least one **non-deleted** `ProviderPartnership`
+ * row whose `accreditedProviderId` and `trainingProviderId` match the supplied identifiers.
+ * Optionally, you can set `bidirectional: true` in the options to also treat the reversed pair
+ * (training ↔ accredited) as a match.
  *
- * Note:
- * - This checks for a partnership under **any** accreditation owned by the accrediting provider.
- * - If you need to limit to *active* accreditations, add date conditions using `startsOn`/`endsOn`.
- * - The models aren’t `paranoid`, so we explicitly filter `deletedAt: null`.
+ * Models aren’t `paranoid`, so we explicitly filter `deletedAt: null`.
  *
  * @param {HasPartnershipParams} params - Identifiers for the provider pair.
  * @param {HasPartnershipOptions} [options] - Optional query options.
@@ -28,27 +26,28 @@ const { Provider, ProviderAccreditation, ProviderAccreditationPartnership } = re
  */
 const partnershipExistsForProviderPair = async (
   { accreditedProviderId, trainingProviderId } = {},
-  { transaction } = {}
+  { transaction, bidirectional = false } = {}
 ) => {
   if (!accreditedProviderId) throw new Error('partnershipExistsForProviderPair: accreditedProviderId is required')
   if (!trainingProviderId) throw new Error('partnershipExistsForProviderPair: trainingProviderId is required')
 
-  const existing = await ProviderAccreditationPartnership.findOne({
+  const clauses = [{
+    accreditedProviderId,
+    trainingProviderId
+  }]
+
+  if (bidirectional && accreditedProviderId !== trainingProviderId) {
+    clauses.push({
+      accreditedProviderId: trainingProviderId,
+      trainingProviderId: accreditedProviderId
+    })
+  }
+
+  const existing = await ProviderPartnership.findOne({
     where: {
-      partnerId: trainingProviderId,
-      // model isn't paranoid, so exclude soft-deleted rows explicitly
-      deletedAt: null
+      deletedAt: null,
+      [Op.or]: clauses
     },
-    include: [{
-      model: ProviderAccreditation,
-      as: 'providerAccreditation', // matches your association
-      required: true,
-      attributes: ['id'],
-      where: {
-        providerId: accreditedProviderId, // <-- THIS is the accrediting provider FK
-        deletedAt: null
-      }
-    }],
     attributes: ['id'],
     transaction
   })
