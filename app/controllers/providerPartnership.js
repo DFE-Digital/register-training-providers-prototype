@@ -6,7 +6,7 @@ const { isAccreditedProvider, getAccreditationDetails } = require('../helpers/ac
 const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { appendSection } = require('../helpers/string')
-const { AcademicYear, Provider, ProviderAccreditation, ProviderAccreditationPartnership, ProviderPartnership, ProviderPartnershipAcademicYear } = require('../models')
+const { AcademicYear, Provider, ProviderPartnership, ProviderPartnershipAcademicYear } = require('../models')
 const { saveAccreditationPartnerships, saveAcademicYearPartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
@@ -991,22 +991,15 @@ exports.deleteProviderPartnership_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
 
   const provider = await Provider.findByPk(providerId)
-
-  const partnership = await ProviderAccreditationPartnership.findByPk(partnershipId, {
+  const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
       {
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        include: [
-          {
-            model: Provider,
-            as: 'provider'
-          }
-        ]
+        model: Provider,
+        as: 'trainingProvider'
       },
       {
         model: Provider,
-        as: 'partner'
+        as: 'accreditedProvider'
       }
     ]
   })
@@ -1016,10 +1009,10 @@ exports.deleteProviderPartnership_get = async (req, res) => {
   }
 
   // Determine relationship direction
-  const isAccredited = partnership.providerAccreditation.provider.id === provider.id
+  const isAccredited = partnership.accreditedProviderId === provider.id
 
-  const accreditedProvider = partnership.providerAccreditation.provider
-  const trainingProvider = partnership.partner
+  const accreditedProvider = partnership.accreditedProvider
+  const trainingProvider = partnership.trainingProvider
 
   const titlePartnerName = isAccredited
     ? trainingProvider.operatingName
@@ -1050,53 +1043,41 @@ exports.deleteProviderPartnership_post = async (req, res) => {
   const t = await sequelize.transaction()
 
   try {
-    // 1) Load the clicked row to reconstruct the pair
-    const clicked = await ProviderAccreditationPartnership.findByPk(partnershipId, {
-      include: [
-        {
-          model: ProviderAccreditation,
-          as: 'providerAccreditation',
-          include: [{ model: Provider, as: 'provider' }]
-        }
-      ],
-      transaction: t
-    })
+    const partnership = await ProviderPartnership.findByPk(partnershipId, { transaction: t })
 
-    if (!clicked) {
+    if (!partnership) {
       await t.rollback()
       return res.status(404).send('Partnership not found')
     }
 
-    const partnerId = clicked.partnerId
-    const accreditedProviderId = clicked.providerAccreditation.provider.id
     const now = new Date()
 
-    // 2) Load ALL active rows for this pair (one per accreditation)
-    const allActiveRowsForPair = await ProviderAccreditationPartnership.findAll({
-      where: { partnerId, deletedAt: null },
-      include: [{
-        model: ProviderAccreditation,
-        as: 'providerAccreditation',
-        required: true,
-        where: { providerId: accreditedProviderId, deletedAt: null }
-      }],
+    const academicYearLinks = await ProviderPartnershipAcademicYear.findAll({
+      where: { partnershipId, deletedAt: null },
       transaction: t
     })
 
-    if (allActiveRowsForPair.length === 0) {
-      // Nothing to delete; treat as already deleted
-      await t.commit()
-      req.flash('success', 'Partnership deleted')
-      return res.redirect(`/providers/${providerId}/partnerships`)
-    }
-
-    // 3) Soft-delete every row with instance.update so hooks fire per row
-    for (const row of allActiveRowsForPair) {
-      await row.update(
-        { deletedAt: now, deletedById: user.id, updatedById: user.id },
-        { transaction: t } // instance.update => runs afterUpdate hook
+    for (const link of academicYearLinks) {
+      await link.update(
+        {
+          deletedAt: now,
+          deletedById: user.id,
+          updatedAt: now,
+          updatedById: user.id
+        },
+        { transaction: t }
       )
     }
+
+    await partnership.update(
+      {
+        deletedAt: now,
+        deletedById: user.id,
+        updatedAt: now,
+        updatedById: user.id
+      },
+      { transaction: t }
+    )
 
     await t.commit()
     req.flash('success', 'Partnership deleted')
