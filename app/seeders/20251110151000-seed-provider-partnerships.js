@@ -31,6 +31,7 @@ module.exports = {
           id: providerPartnershipId,
           accredited_provider_id: providerPartnership.accreditedProviderId,
           training_provider_id: providerPartnership.trainingProviderId,
+          starts_on: new Date('2024-08-01'),
           created_at: createdAt,
           created_by_id: userId,
           updated_at: createdAt,
