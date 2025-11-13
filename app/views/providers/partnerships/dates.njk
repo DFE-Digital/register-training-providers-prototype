@@ -1,0 +1,133 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "details" %}
+
+{% if isAccredited %}
+  {% set providerName = accreditedProvider.operatingName %}
+{% else %}
+  {% set providerName = trainingProvider.operatingName %}
+{% endif %}
+
+{% set title = "Partnership dates" %}
+
+{% if currentProvider %}
+  {% set caption = providerName %}
+{% else %}
+  {% set caption = "Add partnership - " + providerName %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% set startsOnValues = startsOn or {} %}
+      {% set startsOnErrors = startsOnFieldErrors or {} %}
+
+      {{ govukDateInput({
+          id: "startsOn",
+          fieldset: {
+            legend: {
+              text: "Partnership start date",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: { text: "For example, 21 3 2023" },
+          errorMessage: errors | getErrorMessage("startsOn"),
+          items: [
+            {
+              id: "startsOn-day",
+              name: "startsOn[day]",
+              label: "Day",
+              value: startsOnValues.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.day else "")
+            },
+            {
+              id: "startsOn-month",
+              name: "startsOn[month]",
+              label: "Month",
+              value: startsOnValues.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.month else "")
+            },
+            {
+              id: "startsOn-year",
+              name: "startsOn[year]",
+              label: "Year",
+              value: startsOnValues.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if startsOnErrors.year else "")
+            }
+          ]
+        }) }}
+
+        {% set endsOnValues = endsOn or {} %}
+        {% set endsOnErrors = endsOnFieldErrors or {} %}
+
+        {{ govukDateInput({
+          id: "endsOn",
+          fieldset: {
+            legend: {
+              text: "Partnership end date (optional)",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: { text: "For example, 21 3 2023" },
+          errorMessage: errors | getErrorMessage("endsOn"),
+          items: [
+            {
+              id: "endsOn-day",
+              name: "endsOn[day]",
+              label: "Day",
+              value: endsOnValues.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.day else "")
+            },
+            {
+              id: "endsOn-month",
+              name: "endsOn[month]",
+              label: "Month",
+              value: endsOnValues.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.month else "")
+            },
+            {
+              id: "endsOn-year",
+              name: "endsOn[year]",
+              label: "Year",
+              value: endsOnValues.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if endsOnErrors.year else "")
+            }
+          ]
+        }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
