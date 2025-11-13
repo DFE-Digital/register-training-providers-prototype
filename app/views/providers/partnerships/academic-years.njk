@@ -1,0 +1,75 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "details" %}
+
+{% if isAccredited %}
+  {% set providerName = accreditedProvider.operatingName %}
+{% else %}
+  {% set providerName = trainingProvider.operatingName %}
+{% endif %}
+
+{% set title = "Academic year" %}
+
+{% if currentProvider %}
+  {% set caption = providerName %}
+{% else %}
+  {% set caption = "Add partnership - " + providerName %}
+{% endif %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukCheckboxes({
+        idPrefix: "academicYears",
+        name: "academicYears[]",
+        fieldset: {
+          legend: {
+            html: headingHtml,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "Select all that apply"
+        },
+        errorMessage: errors | getErrorMessage("academicYears"),
+        values: selectedAcademicYears,
+        items: academicYearItems
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
