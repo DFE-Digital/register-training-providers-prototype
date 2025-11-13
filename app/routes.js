@@ -186,16 +186,17 @@ router.get('/providers/:providerId/partnerships/new/duplicate', checkIsAuthentic
 router.get('/providers/:providerId/partnerships/new/choose', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipChoose_get)
 router.post('/providers/:providerId/partnerships/new/choose', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipChoose_post)
 
+router.get('/providers/:providerId/partnerships/new/dates', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDates_get)
+router.post('/providers/:providerId/partnerships/new/dates', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDates_post)
+
 router.get('/providers/:providerId/partnerships/new/academic-years', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipAcademicYears_get)
 router.post('/providers/:providerId/partnerships/new/academic-years', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipAcademicYears_post)
 
-// TODO: Delete
-// router.get('/providers/:providerId/partnerships/new/accreditations', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipAccreditations_get)
-// router.post('/providers/:providerId/partnerships/new/accreditations', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipAccreditations_post)
-// ----------
-
 router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
 router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
+
+router.get('/providers/:providerId/partnerships/:partnershipId/dates', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipDates_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/dates', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipDates_post)
 
 router.get('/providers/:providerId/partnerships/:partnershipId/academic-years', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAcademicYears_get)
 router.post('/providers/:providerId/partnerships/:partnershipId/academic-years', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAcademicYears_post)
