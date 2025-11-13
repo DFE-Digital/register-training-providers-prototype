@@ -151,6 +151,41 @@ const validatePartnershipDateRange = ({ startsOnInput, endsOnInput }) => {
   }
 }
 
+const toISODateString = (value) => {
+  if (!value) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  return date.toISOString().slice(0, 10)
+}
+
+const initialisePartnershipEditSession = (req, partnership) => {
+  req.session.data = req.session.data || {}
+  const existing = req.session.data.partnershipEdit
+
+  if (!existing || existing.partnershipId !== partnership.id) {
+    req.session.data.partnershipEdit = {
+      partnershipId: partnership.id,
+      partnershipDates: {
+        startsOnIso: toISODateString(partnership.startsOn),
+        endsOnIso: toISODateString(partnership.endsOn)
+      }
+    }
+    req.session.data.startsOn = formatDateForInput(partnership.startsOn)
+    req.session.data.endsOn = formatDateForInput(partnership.endsOn)
+    delete req.session.data.academicYears
+  }
+
+  return req.session.data.partnershipEdit
+}
+
+const clearPartnershipEditSession = (req) => {
+  if (!req.session?.data) return
+  delete req.session.data.startsOn
+  delete req.session.data.endsOn
+  delete req.session.data.academicYears
+  delete req.session.data.partnershipEdit
+}
+
 /// ------------------------------------------------------------------------ ///
 /// List provider partnerships
 /// ------------------------------------------------------------------------ ///
@@ -166,6 +201,7 @@ exports.providerPartnershipsList = async (req, res) => {
   delete req.session.data.startsOn
   delete req.session.data.endsOn
   delete req.session.data.partnershipDates
+  delete req.session.data.partnershipEdit
 
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 25
@@ -946,6 +982,9 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
       back: `/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
       cancel: `/providers/${providerId}/partnerships`,
       change: `/providers/${providerId}/partnerships/new`,
+      changeProvider: `/providers/${providerId}/partnerships/new`,
+      changeDates: `/providers/${providerId}/partnerships/new/dates`,
+      changeAcademicYears: `/providers/${providerId}/partnerships/new/academic-years`,
       save: `/providers/${providerId}/partnerships/new/check`
     }
   })
@@ -1045,6 +1084,8 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
     return res.status(404).render('errors/404')
   }
 
+  initialisePartnershipEditSession(req, partnership)
+
   const fromCheck = req.query.referrer === 'check'
   const back = fromCheck
     ? `/providers/${providerId}/partnerships/${partnershipId}/check`
@@ -1058,8 +1099,8 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
     accreditedProvider: partnership.accreditedProvider,
     trainingProvider: partnership.trainingProvider,
     isAccredited: currentProvider.id === partnership.accreditedProviderId,
-    startsOn: formatDateForInput(partnership.startsOn),
-    endsOn: formatDateForInput(partnership.endsOn),
+    startsOn: req.session.data.startsOn || formatDateForInput(partnership.startsOn),
+    endsOn: req.session.data.endsOn || formatDateForInput(partnership.endsOn),
     actions: {
       back,
       cancel: `/providers/${providerId}/partnerships`,
@@ -1088,7 +1129,7 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     return res.status(404).render('errors/404')
   }
 
-  const { user } = req.session.passport
+  initialisePartnershipEditSession(req, partnership)
 
   const {
     errors,
@@ -1128,24 +1169,19 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     })
   }
 
-  await partnership.update({
-    startsOn: startsOnIso,
-    endsOn: endsOnIso,
-    updatedAt: new Date(),
-    updatedById: user.id
-  })
-
-  delete req.session.data.startsOn
-  delete req.session.data.endsOn
-  delete req.session.data.partnershipDates
-
-  req.flash('success', 'Partnership updated')
-
-  if (fromCheck) {
-    return res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/check`)
+  req.session.data.partnershipEdit = req.session.data.partnershipEdit || { partnershipId }
+  req.session.data.partnershipEdit.startsOn = req.session.data.startsOn
+  req.session.data.partnershipEdit.endsOn = req.session.data.endsOn
+  req.session.data.partnershipEdit.partnershipDates = {
+    startsOnIso,
+    endsOnIso
   }
 
-  res.redirect(`/providers/${providerId}/partnerships`)
+  const nextUrl = fromCheck
+    ? `/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`
+    : `/providers/${providerId}/partnerships/${partnershipId}/academic-years`
+
+  res.redirect(nextUrl)
 }
 
 exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
@@ -1163,6 +1199,7 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   }
 
   req.session.data = req.session.data || {}
+  initialisePartnershipEditSession(req, partnership)
 
   const [academicYears, existingAcademicYears] = await Promise.all([
     listAcademicYearsForSelection(),
@@ -1188,6 +1225,8 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
     selectedAcademicYears = fallbackSelection
     req.session.data.academicYears = selectedAcademicYears
   }
+  req.session.data.partnershipEdit = req.session.data.partnershipEdit || { partnershipId }
+  req.session.data.partnershipEdit.academicYears = selectedAcademicYears
 
   const academicYearItems = formatAcademicYearItems(academicYears)
   const cameFromCheck = req.query.referrer === 'check'
@@ -1225,6 +1264,7 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
   }
 
   req.session.data = req.session.data || {}
+  initialisePartnershipEditSession(req, partnership)
 
   let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
   const academicYears = await listAcademicYearsForSelection()
@@ -1261,6 +1301,8 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
     })
   } else {
     req.session.data.academicYears = selectedAcademicYears
+    req.session.data.partnershipEdit = req.session.data.partnershipEdit || { partnershipId }
+    req.session.data.partnershipEdit.academicYears = selectedAcademicYears
     res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/check`)
   }
 }
@@ -1280,6 +1322,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
   }
 
   req.session.data = req.session.data || {}
+  const editSession = initialisePartnershipEditSession(req, partnership)
 
   let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
 
@@ -1291,13 +1334,18 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     selectedAcademicYears = existingAcademicYears.map(link => link.academicYearId.toString())
     req.session.data.academicYears = selectedAcademicYears
   }
+  req.session.data.partnershipEdit.academicYears = selectedAcademicYears
 
   const academicYearDetails = await getAcademicYearDetails(selectedAcademicYears)
   academicYearDetails.sort((a, b) => new Date(a.startsOn) - new Date(b.startsOn))
   const academicYearItems = formatAcademicYearItems(academicYearDetails)
+  const pendingDates = editSession.partnershipDates || {}
+  const startsOnValue = pendingDates.startsOnIso || partnership.startsOn
+  const hasPendingEndDate = Object.prototype.hasOwnProperty.call(pendingDates, 'endsOnIso')
+  const endsOnValue = hasPendingEndDate ? pendingDates.endsOnIso : partnership.endsOn
   const partnershipDates = {
-    startsOn: govukDate(partnership.startsOn),
-    endsOn: partnership.endsOn ? govukDate(partnership.endsOn) : null
+    startsOn: govukDate(startsOnValue),
+    endsOn: endsOnValue ? govukDate(endsOnValue) : null
   }
 
   res.render('providers/partnerships/check-your-answers', {
@@ -1306,12 +1354,10 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     trainingProvider: partnership.trainingProvider,
     isAccredited: currentProvider.id === partnership.accreditedProviderId,
     academicYearItems,
-     partnershipDates,
+    partnershipDates,
     actions: {
       back: `/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`,
-      changeProvider: `/providers/${providerId}/partnerships/${partnershipId}`,
-      changeDates: `/providers/${providerId}/partnerships/${partnershipId}/dates`,
-      changeAcademicYears: `/providers/${providerId}/partnerships/${partnershipId}/academic-years`,
+      change: `/providers/${providerId}/partnerships/${partnershipId}`,
       cancel: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/partnerships/${partnershipId}/check`
     }
@@ -1328,6 +1374,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
   }
 
   req.session.data = req.session.data || {}
+  const editSession = initialisePartnershipEditSession(req, partnership)
 
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
   if (!selectedAcademicYears.length) {
@@ -1359,12 +1406,20 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
     })
   }
 
+  const pendingDates = editSession.partnershipDates || {}
+  const startsOnIso = pendingDates.startsOnIso || partnership.startsOn
+  const endsOnIso = Object.prototype.hasOwnProperty.call(pendingDates, 'endsOnIso')
+    ? pendingDates.endsOnIso
+    : partnership.endsOn
+
   await partnership.update({
+    startsOn: startsOnIso,
+    endsOn: endsOnIso,
     updatedAt: now,
     updatedById: user.id
   })
 
-  delete req.session.data.academicYears
+  clearPartnershipEditSession(req)
 
   req.flash('success', 'Partnership updated')
   res.redirect(`/providers/${providerId}/partnerships`)
