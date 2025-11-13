@@ -45,45 +45,15 @@ const isDigits = (s) => typeof s === 'string' && /^\s*\d+\s*$/.test(s)
  */
 const capFirst = (s = '') => s.replace(/^(\s*)([a-z])/, (_, ws, ch) => ws + ch.toUpperCase())
 
-/**
- * Format a Y-M-D triple as ISO 8601 date (YYYY-MM-DD).
- * Does not validate the date—use for display after validation.
- * @param {number} y
- * @param {number} m 1–12
- * @param {number} d 1–31
- * @returns {string}
- */
-const toISO = (y, m, d) =>
-  `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
-
-/**
- * Construct a Date at midnight UTC for the given Y-M-D.
- * Uses UTC to avoid DST/timezone surprises.
- * @param {number} y
- * @param {number} m 1–12
- * @param {number} d 1–31
- * @returns {Date}
- */
-const asUTCDate = (y, m, d) => new Date(Date.UTC(y, m - 1, d))
-
-/**
- * Compare two Date objects for the same UTC year-month-day.
- * @param {Date} a
- * @param {Date} b
- * @returns {boolean}
- */
-const sameYMD = (a, b) =>
-  a.getUTCFullYear() === b.getUTCFullYear() &&
-  a.getUTCMonth() === b.getUTCMonth() &&
-  a.getUTCDate() === b.getUTCDate()
+const { govukDate, toISODateString, asUTCDate } = require('../date')
 
 /**
  * Get today's date at midnight UTC (no time-of-day).
  * @returns {Date}
  */
 const todayUTC = () => {
-  const now = new Date();
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const now = new Date()
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
 }
 
 /**
@@ -252,6 +222,8 @@ const validateDateInput = (parts, opts) => {
     /** Fail helper that prefixes with the (capitalised) label. */
     const failWithLabel = (suffix) => fail(`${capFirst(label)} ${suffix}`)
 
+    const formatDate = (d) => govukDate(d.toISOString())
+
     if (constraint === 'past') {
       if (!(candidate < today)) return failWithLabel('must be in the past')
     } else if (constraint === 'todayOrPast') {
@@ -262,35 +234,29 @@ const validateDateInput = (parts, opts) => {
       if (!(candidate >= today)) return failWithLabel('must be today or in the future')
     } else if ('onOrAfter' in constraint && constraint.onOrAfter instanceof Date) {
       if (candidate < constraint.onOrAfter) {
-        const d = constraint.onOrAfter
-        return failWithLabel(`must be the same as or after ${toISO(d.getUTCFullYear(), d.getUTCMonth()+1, d.getUTCDate())}`)
+        return failWithLabel(`must be the same as or after ${formatDate(constraint.onOrAfter)}`)
       }
     } else if ('after' in constraint && constraint.after instanceof Date) {
       if (candidate <= constraint.after) {
-        const d = constraint.after
-        return failWithLabel(`must be after ${toISO(d.getUTCFullYear(), d.getUTCMonth()+1, d.getUTCDate())}`)
+        return failWithLabel(`must be after ${formatDate(constraint.after)}`)
       }
     } else if ('onOrBefore' in constraint && constraint.onOrBefore instanceof Date) {
       if (candidate > constraint.onOrBefore) {
-        const d = constraint.onOrBefore
-        return failWithLabel(`must be the same as or before ${toISO(d.getUTCFullYear(), d.getUTCMonth()+1, d.getUTCDate())}`)
+        return failWithLabel(`must be the same as or before ${formatDate(constraint.onOrBefore)}`)
       }
     } else if ('before' in constraint && constraint.before instanceof Date) {
       if (candidate >= constraint.before) {
-        const d = constraint.before
-        return failWithLabel(`must be before ${toISO(d.getUTCFullYear(), d.getUTCMonth()+1, d.getUTCDate())}`)
+        return failWithLabel(`must be before ${formatDate(constraint.before)}`)
       }
     } else if ('between' in constraint && Array.isArray(constraint.between) && constraint.between.length === 2) {
       const [min, max] = constraint.between
       if (!(candidate >= min && candidate <= max)) {
-        const minIso = toISO(min.getUTCFullYear(), min.getUTCMonth()+1, min.getUTCDate())
-        const maxIso = toISO(max.getUTCFullYear(), max.getUTCMonth()+1, max.getUTCDate())
-        return failWithLabel(`must be between ${minIso} and ${maxIso}`)
+        return failWithLabel(`must be between ${formatDate(min)} and ${formatDate(max)}`)
       }
     }
   }
 
-  return { valid: true, iso: toISO(year, month, day) }
+  return { valid: true, iso: toISODateString({ year, month, day }) }
 }
 
 /**
@@ -317,6 +283,5 @@ const getDateParts = (inputDate) => {
 module.exports = {
   validateDateInput,
   getDateParts,
-  todayUTC,
-  toISO
+  todayUTC
 }

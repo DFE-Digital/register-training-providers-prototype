@@ -118,6 +118,13 @@ const isoDateFromDateInput = (object, namePrefix) => {
   }
 }
 
+const asUTCDate = (y, m, d) => new Date(Date.UTC(y, m - 1, d))
+
+const toISODateString = ({ year, month, day }) => {
+  if (!year || !month || !day) return ''
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
 /**
  * Checks whether a given value is a valid Date.
  * @param {*} value - Any input value.
@@ -243,6 +250,8 @@ module.exports = {
   govukDateTime,
   govukTime,
   isoDateFromDateInput,
+  toISODateString,
+  asUTCDate,
   isValidDate,
   getDateParts,
   getDay,
