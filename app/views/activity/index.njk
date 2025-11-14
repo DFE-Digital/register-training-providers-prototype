@@ -17,7 +17,7 @@
 
     {% include "_includes/page-heading.njk" %}
 
-      {% if activityItems.length %}
+    {% if activityItems.length %}
 
       {% for group in activityItems %}
 
@@ -26,8 +26,8 @@
 
         {% for item in group.entries %}
           {% set showSummaryCardTitle = true %}
-          {% if item.revisionTable == "provider_accreditation_partnership_revisions" %}
-            {% include "_includes/activity/provider-accreditation-partnership-revisions.njk" %}
+          {% if item.revisionTable == "provider_partnership_revisions" %}
+            {% include "_includes/activity/provider-partnership-revisions.njk" %}
           {% elif item.revisionTable == "provider_address_revisions" %}
             {% include "_includes/activity/provider-address-revisions.njk" %}
           {% else %}
