@@ -7,7 +7,7 @@ const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = require('../helpers/partnership')
 const { appendSection } = require('../helpers/string')
 const { validateDateInput, getDateParts } = require('../helpers/validation/date')
-const { AcademicYear, Provider, ProviderPartnership, ProviderPartnershipAcademicYear } = require('../models')
+const { AcademicYear, Provider, ProviderPartnership, ProviderPartnershipAcademicYear, ProviderPartnershipRevision } = require('../models')
 const { saveAccreditationPartnerships, saveAcademicYearPartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
@@ -156,6 +156,26 @@ const toISODateString = (value) => {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return null
   return date.toISOString().slice(0, 10)
+}
+
+const forcePartnershipRevision = async ({ partnership, userId }) => {
+  const latestRevision = await ProviderPartnershipRevision.findOne({
+    where: { providerPartnershipId: partnership.id },
+    order: [['revisionNumber', 'DESC']]
+  })
+
+  const revisionNumber = latestRevision ? latestRevision.revisionNumber + 1 : 1
+
+  await ProviderPartnershipRevision.create({
+    providerPartnershipId: partnership.id,
+    accreditedProviderId: partnership.accreditedProviderId,
+    trainingProviderId: partnership.trainingProviderId,
+    startsOn: partnership.startsOn,
+    endsOn: partnership.endsOn,
+    revisionNumber,
+    revisionAt: new Date(),
+    revisionById: userId
+  }, { activityAction: 'update' })
 }
 
 const initialisePartnershipEditSession = (req, partnership) => {
@@ -1390,6 +1410,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
   const existingIds = existingLinks.map(link => link.academicYearId.toString())
   const toDelete = existingLinks.filter(link => !selectedAcademicYears.includes(link.academicYearId.toString()))
   const toAdd = selectedAcademicYears.filter(id => !existingIds.includes(id))
+  const academicYearsChanged = toAdd.length > 0 || toDelete.length > 0
 
   for (const record of toDelete) {
     await record.update({
@@ -1407,10 +1428,13 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
   }
 
   const pendingDates = editSession.partnershipDates || {}
-  const startsOnIso = pendingDates.startsOnIso || partnership.startsOn
+  const previousStartsIso = toISODateString(partnership.startsOn)
+  const previousEndsIso = toISODateString(partnership.endsOn)
+  const startsOnIso = pendingDates.startsOnIso || previousStartsIso
   const endsOnIso = Object.prototype.hasOwnProperty.call(pendingDates, 'endsOnIso')
     ? pendingDates.endsOnIso
-    : partnership.endsOn
+    : previousEndsIso
+  const datesChanged = previousStartsIso !== startsOnIso || previousEndsIso !== endsOnIso
 
   await partnership.update({
     startsOn: startsOnIso,
@@ -1418,6 +1442,10 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
     updatedAt: now,
     updatedById: user.id
   })
+
+  if (academicYearsChanged && !datesChanged) {
+    await forcePartnershipRevision({ partnership, userId: user.id })
+  }
 
   clearPartnershipEditSession(req)
 

@@ -3,15 +3,15 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class ProviderPartnershipAcademicYearRevision extends Model {
     static associate(models) {
-      // ProviderPartnershipAcademicYearRevision.belongsTo(models.ProviderAccreditation, {
-      //   foreignKey: 'providerAccreditationId',
-      //   as: 'providerAccreditation'
-      // })
+      ProviderPartnershipAcademicYearRevision.belongsTo(models.ProviderPartnership, {
+        foreignKey: 'partnershipId',
+        as: 'providerPartnership'
+      })
 
-      // ProviderPartnershipAcademicYearRevision.belongsTo(models.Provider, {
-      //   foreignKey: 'partnerId',
-      //   as: 'partner'
-      // })
+      ProviderPartnershipAcademicYearRevision.belongsTo(models.AcademicYear, {
+        foreignKey: 'academicYearId',
+        as: 'academicYear'
+      })
 
       ProviderPartnershipAcademicYearRevision.belongsTo(models.User, {
         foreignKey: 'revisionById',
