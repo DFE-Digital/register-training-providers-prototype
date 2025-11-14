@@ -47,6 +47,16 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'training_provider_id'
       },
+      startsOn: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'starts_on'
+      },
+      endsOn: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'ends_on'
+      },
       revisionNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,

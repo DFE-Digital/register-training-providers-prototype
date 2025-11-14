@@ -23,6 +23,13 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
+      starts_on: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      ends_on: {
+        type: Sequelize.DATE
+      },
       revision_number: {
         type: Sequelize.INTEGER,
         allowNull: false

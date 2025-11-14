@@ -42,6 +42,15 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'training_provider_id'
       },
+      startsOn: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'starts_on'
+      },
+      endsOn: {
+        type: DataTypes.DATE,
+        field: 'ends_on'
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

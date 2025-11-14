@@ -33,7 +33,7 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-      {% set academicYears %}
+      {% set academicYearsHtml %}
         <ul class="govuk-list {{- ' govuk-list--bullet' if academicYearItems.length > 1 }}">
           {% for academicYear in academicYearItems %}
             <li>
@@ -42,6 +42,19 @@
             </li>
           {% endfor %}
         </ul>
+      {% endset %}
+
+      {% set partnershipDatesHtml %}
+        <p class="govuk-body">
+          Starts on {{ partnershipDates.startsOn }}
+        </p>
+        {% if partnershipDates.endsOn %}
+          <p class="govuk-body">
+            Ends on {{ partnershipDates.endsOn }}
+          </p>
+        {% else %}
+          <p class="govuk-hint">No end date</p>
+        {% endif %}
       {% endset %}
 
       {{ govukSummaryList({
@@ -82,10 +95,27 @@
           },
           {
             key: {
+              text: "Partnership dates"
+            },
+            value: {
+              html: partnershipDatesHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "/dates?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "partnership dates"
+                }
+              ]
+            }
+          },
+          {
+            key: {
               text: "Academic year" + ("s" if academicYearItems.length > 1)
             },
             value: {
-              html: academicYears
+              html: academicYearsHtml
             },
             actions: {
               items: [

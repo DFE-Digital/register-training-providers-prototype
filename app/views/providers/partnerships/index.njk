@@ -51,7 +51,7 @@
         {% set summaryCardTitleHtml %}
           {% if partnership.isAccreditedSide %}
             {% if partnership.partnerIsLinkable %}
-              <a href="/providers/{{ partnership.trainingPartner.id }}">
+              <a href="/providers/{{ partnership.trainingPartner.id }}/partnerships">
                 {{ partnership.trainingPartner.operatingName }}
               </a>
             {% else %}
@@ -59,7 +59,7 @@
             {% endif %}
           {% else %}
             {% if partnership.accreditedIsLinkable %}
-              <a href="/providers/{{ partnership.accreditedProvider.id }}">
+              <a href="/providers/{{ partnership.accreditedProvider.id }}/partnerships">
                 {{ partnership.accreditedProvider.operatingName }}
               </a>
             {% else %}
@@ -73,7 +73,7 @@
             {% if partnership.partnerIsLinkable %}
               <ul class="govuk-summary-card__actions">
                 <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/academic-years">Change<span class="govuk-visually-hidden"> {{ partnership.trainingPartner.operatingName }} partnership</span></a>
+                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/dates">Change<span class="govuk-visually-hidden"> {{ partnership.trainingPartner.operatingName }} partnership</span></a>
                 </li>
                 <li class="govuk-summary-card__action">
                   <a class="govuk-link" href="{{ actions.delete }}/{{ partnership.id }}/delete">Delete<span class="govuk-visually-hidden"> {{ partnership.accreditedProvider.operatingName }} partnership</span></a>
@@ -84,7 +84,7 @@
             {% if partnership.accreditedIsLinkable %}
               <ul class="govuk-summary-card__actions">
                 <li class="govuk-summary-card__action">
-                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/academic-years">Change<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>
+                  <a class="govuk-link" href="{{ actions.change }}/{{ partnership.id }}/dates">Change<span class="govuk-visually-hidden"> partner {{ loop.index }}</span></a>
                 </li>
                 <li class="govuk-summary-card__action">
                   <a class="govuk-link" href="{{ actions.delete }}/{{ partnership.id }}/delete">Delete<span class="govuk-visually-hidden"> partner {{ loop.index }}</a>
@@ -104,6 +104,19 @@
               </li>
             {% endfor %}
           </ul>
+        {% endset %}
+
+        {% set partnershipDatesHtml %}
+          <p class="govuk-body">
+            Starts on {{ partnership.startsOn | govukDate }}
+          </p>
+          {% if partnership.endsOn %}
+            <p class="govuk-body">
+              Ends on {{ partnership.endsOn | govukDate }}
+            </p>
+          {% else %}
+            <p class="govuk-hint">No end date</p>
+          {% endif %}
         {% endset %}
 
         <div class="govuk-summary-card">
@@ -130,6 +143,14 @@
                 </dt>
                 <dd class="govuk-summary-list__value">
                   {{ partnership.trainingPartner.operatingName }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Partnership dates
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ partnershipDatesHtml | safe }}
                 </dd>
               </div>
               <div class="govuk-summary-list__row">
