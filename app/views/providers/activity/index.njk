@@ -40,8 +40,8 @@
     {% if activityItems.length %}
 
       {% for item in activityItems %}
-        {% if item.revisionTable == "provider_accreditation_partnership_revisions" %}
-          {% include "_includes/activity/provider-accreditation-partnership-revisions.njk" %}
+        {% if item.revisionTable == "provider_partnership_revisions" %}
+          {% include "_includes/activity/provider-partnership-revisions.njk" %}
         {% elif item.revisionTable == "provider_address_revisions" %}
           {% include "_includes/activity/provider-address-revisions.njk" %}
         {% else %}

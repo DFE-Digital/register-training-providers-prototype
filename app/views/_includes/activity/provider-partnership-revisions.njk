@@ -1,0 +1,99 @@
+{% set accreditedField = null %}
+{% set trainingField = null %}
+{% for field in item.summary.fields %}
+  {% if field.key == "Accredited provider" %}
+    {% set accreditedField = field %}
+  {% elseif field.key == "Training partner" %}
+    {% set trainingField = field %}
+  {% endif %}
+{% endfor %}
+
+{% set partnershipDates = item.summary.partnershipDates or {
+  startsOn: "Not recorded",
+  endsOn: null
+} %}
+{% set academicYears = item.summary.linkedAcademicYears or [] %}
+
+{% macro renderField(field) -%}
+  {% if field %}
+    {{ field.value or "Not entered" }}
+  {% else %}
+    Not entered
+  {% endif %}
+{%- endmacro %}
+
+<h3 class="govuk-summary-card__title">
+  {{ item.summary.activity }}
+</h3>
+<p class="govuk-body">
+  By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+</p>
+
+<div class="govuk-summary-card">
+  {% if showSummaryCardTitle %}
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        {% if item.summary.labelHtml %}
+          {{ item.summary.labelHtml | safe }}
+        {% elif item.summary.href %}
+          <a href="{{ item.summary.href }}" class="govuk-link">{{ item.summary.label }}</a>
+        {% else %}
+          {{ item.summary.label }}
+        {% endif %}
+      </h2>
+    </div>
+  {% endif %}
+
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Accredited provider</dt>
+        <dd class="govuk-summary-list__value">
+          {{ renderField(accreditedField) }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Training partner</dt>
+        <dd class="govuk-summary-list__value">
+          {{ renderField(trainingField) }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Partnership dates</dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            Starts on {{ partnershipDates.startsOn }}
+          </p>
+          {% if partnershipDates.endsOn %}
+            <p class="govuk-body">
+              Ends on {{ partnershipDates.endsOn }}
+            </p>
+          {% else %}
+            <p class="govuk-hint">No end date</p>
+          {% endif %}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Academic years</dt>
+        <dd class="govuk-summary-list__value">
+          {% if academicYears | length %}
+            {% set listClass = "govuk-list" + (" govuk-list--bullet" if academicYears | length > 1 else "") %}
+            <ul class="{{ listClass }}">
+              {% for academicYear in academicYears %}
+                <li>
+                  {{ academicYear.name }}<br>
+                  <span class="govuk-hint">
+                    Starts on {{ academicYear.startsOn | govukDate -}}
+                    {% if academicYear.endsOn %}, ends on {{ academicYear.endsOn | govukDate }}{% endif %}
+                  </span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="govuk-hint">No academic years linked</p>
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
