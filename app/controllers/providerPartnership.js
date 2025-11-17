@@ -904,7 +904,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
 
   const selectedAcademicYears = await getAcademicYearDetails(req.session.data?.academicYears)
 
-  const academicYearItems = formatAcademicYearItems(selectedAcademicYears)
+  const academicYearItems = formatAcademicYearItems(selectedAcademicYears, { includeStatusLabels: true })
   const partnershipDates = {
     startsOn: govukDate(req.session.data.partnershipDates.startsOnIso),
     endsOn: req.session.data.partnershipDates.endsOnIso
@@ -1272,7 +1272,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
 
   const academicYearDetails = await getAcademicYearDetails(selectedAcademicYears)
   academicYearDetails.sort((a, b) => new Date(a.startsOn) - new Date(b.startsOn))
-  const academicYearItems = formatAcademicYearItems(academicYearDetails)
+  const academicYearItems = formatAcademicYearItems(academicYearDetails, { includeStatusLabels: true })
   const pendingDates = editSession.partnershipDates || {}
   const startsOnValue = pendingDates.startsOnIso || partnership.startsOn
   const hasPendingEndDate = Object.prototype.hasOwnProperty.call(pendingDates, 'endsOnIso')
