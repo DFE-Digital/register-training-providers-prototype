@@ -8,7 +8,7 @@ const { partnershipExistsForProviderPair, getEligiblePartnerProviders } = requir
 const { appendSection } = require('../helpers/string')
 const { validateDateInput, getDateParts } = require('../helpers/validation/date')
 const { AcademicYear, Provider, ProviderPartnership, ProviderPartnershipAcademicYear, ProviderPartnershipRevision } = require('../models')
-const { saveAccreditationPartnerships, saveAcademicYearPartnerships } = require('../services/partnerships')
+const { saveAcademicYearPartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
 const formatProviderItems = (providers) => {
@@ -1046,12 +1046,6 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   if (partnershipExists) {
     return res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
   }
-
-  // await saveAccreditationPartnerships({
-  //   accreditationIds: req.session.data?.accreditations,
-  //   partnerId: isAccredited ? provider.id : providerId,
-  //   userId: user.id
-  // })
 
   // save the partnership and get the partnershipId
   const partnership = await ProviderPartnership.create({
