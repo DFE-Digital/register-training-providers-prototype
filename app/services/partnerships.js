@@ -1,22 +1,4 @@
-const { ProviderAccreditationPartnership, ProviderPartnershipAcademicYear } = require('../models')
-
-const saveAccreditationPartnerships = async ({ accreditationIds, partnerId, userId }) => {
-  const timestamp = new Date()
-
-  const rows = accreditationIds.map(accreditationId => ({
-    providerAccreditationId: accreditationId,
-    partnerId,
-    createdAt: timestamp,
-    createdById: userId,
-    updatedAt: timestamp,
-    updatedById: userId
-  }))
-
-  return ProviderAccreditationPartnership.bulkCreate(rows, {
-    individualHooks: true,
-    returning: true
-  })
-}
+const { ProviderPartnershipAcademicYear } = require('../models')
 
 const saveAcademicYearPartnerships = async ({ academicYearIds, partnershipId, userId }) => {
   const timestamp = new Date()
@@ -37,6 +19,5 @@ const saveAcademicYearPartnerships = async ({ academicYearIds, partnershipId, us
 }
 
 module.exports = {
-  saveAccreditationPartnerships,
   saveAcademicYearPartnerships
 }
