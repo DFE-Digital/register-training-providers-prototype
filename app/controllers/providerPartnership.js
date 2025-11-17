@@ -35,19 +35,6 @@ const formatAccreditationItems = (accreditations) => {
   })
 }
 
-const formatAcademicYearItems = (academicYears) => {
-  return academicYears.map(academicYear => {
-    const startsOn = govukDate(academicYear.startsOn)
-    const endsOn = academicYear.endsOn ? `, ends on ${govukDate(academicYear.endsOn)}` : ''
-
-    return {
-      text: academicYear.name,
-      value: academicYear.id,
-      hint: { text: `Starts on ${startsOn}${endsOn}` }
-    }
-  })
-}
-
 const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone, year: 'numeric', month: 'numeric', day: 'numeric'
@@ -57,6 +44,52 @@ const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London
   const d = Number(parts.find(p => p.type === 'day').value)
   // If on/after 1 Aug => current AY starts this calendar year; else previous year
   return (m > 8 || (m === 8 && d >= 1)) ? y : (y - 1)
+}
+
+const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = getCurrentAcademicYearStart()) => {
+  if (!academicYear || !academicYear.startsOn) {
+    return null
+  }
+
+  const startDate = new Date(academicYear.startsOn)
+  if (Number.isNaN(startDate.getTime())) {
+    return null
+  }
+
+  const startYear = startDate.getUTCFullYear()
+
+  if (startYear === currentAcademicYearStart) {
+    return 'current'
+  }
+
+  if (startYear === currentAcademicYearStart - 1) {
+    return 'last'
+  }
+
+  if (startYear === currentAcademicYearStart + 1) {
+    return 'next'
+  }
+
+  return null
+}
+
+const formatAcademicYearItems = (academicYears, { includeStatusLabels = false } = {}) => {
+  const currentAcademicYearStart = includeStatusLabels ? getCurrentAcademicYearStart() : null
+
+  return academicYears.map(academicYear => {
+    const startsOn = govukDate(academicYear.startsOn)
+    const endsOn = academicYear.endsOn ? `, ends on ${govukDate(academicYear.endsOn)}` : ''
+    const label = includeStatusLabels
+      ? getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
+      : null
+    const text = label ? `${academicYear.name} - ${label}` : academicYear.name
+
+    return {
+      text,
+      value: academicYear.id,
+      hint: { text: `Starts on ${startsOn}${endsOn}` }
+    }
+  })
 }
 
 const listAcademicYearsForSelection = async () => {
@@ -279,6 +312,8 @@ exports.providerPartnershipsList = async (req, res) => {
     ]
   })
 
+  const currentAcademicYearStart = getCurrentAcademicYearStart()
+
   // Group by partnership id (one row per partnership when rendered)
   const grouped = {}
 
@@ -307,9 +342,12 @@ exports.providerPartnershipsList = async (req, res) => {
     }
 
     if (link.academicYear) {
+      const label = getAcademicYearStatusLabel(link.academicYear, currentAcademicYearStart)
+      const name = label ? `${link.academicYear.name} - ${label}` : link.academicYear.name
+
       grouped[partnershipId].academicYears.push({
         id: link.academicYear.id,
-        name: link.academicYear.name,
+        name,
         startsOn: link.academicYear.startsOn,
         endsOn: link.academicYear.endsOn
       })
@@ -757,7 +795,7 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
 
   const academicYears = await listAcademicYearsForSelection()
 
-  const academicYearItems = formatAcademicYearItems(academicYears)
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
   const fromCheck = req.query.referrer === 'check'
   const back = fromCheck
@@ -804,7 +842,7 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
 
   const academicYears = await listAcademicYearsForSelection()
 
-  const academicYearItems = formatAcademicYearItems(academicYears)
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
 
   const errors = []
@@ -1124,7 +1162,7 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   req.session.data.partnershipEdit = req.session.data.partnershipEdit || { partnershipId }
   req.session.data.partnershipEdit.academicYears = selectedAcademicYears
 
-  const academicYearItems = formatAcademicYearItems(academicYears)
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
   const cameFromCheck = req.query.referrer === 'check'
   const saveSuffix = cameFromCheck ? '?referrer=check' : ''
 
@@ -1164,7 +1202,7 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
 
   let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
   const academicYears = await listAcademicYearsForSelection()
-  const academicYearItems = formatAcademicYearItems(academicYears)
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
 
   const errors = []
   if (!selectedAcademicYears.length) {
