@@ -848,6 +848,8 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   // OPTIONAL extras (only set in certain cases)
   let labelHtml = ''
   let linkedAcademicYears = []
+  let previousLinkedAcademicYears = []
+  let summaryLinkedAcademicYears = []
   let academicYearsAdded = []
   let academicYearsRemoved = []
   let partnershipDatesSummary = null
@@ -963,20 +965,52 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const partnershipId = log.entityId || revision.providerPartnershipId
       const sequelize = require('../models').sequelize
       const actionIsCreate = log.action === 'create'
-      const asOf = actionIsCreate ? null : new Date(log.changedAt)
+      const changedAtDate = log.changedAt ? new Date(log.changedAt) : null
+
+      let asOf = actionIsCreate ? null : changedAtDate
+
+      if (actionIsCreate) {
+        const nextRevision = await getNextRevision({
+          revisionTable,
+          revisionId: log.revisionId,
+          entityId: log.entityId || revision.providerPartnershipId
+        })
+
+        if (nextRevision?.revisionAt) {
+          const nextChangedAt = new Date(nextRevision.revisionAt)
+          if (changedAtDate) {
+            if (nextChangedAt > changedAtDate) {
+              const midpoint = changedAtDate.getTime() + (nextChangedAt.getTime() - changedAtDate.getTime()) / 2
+              asOf = new Date(midpoint)
+            } else {
+              asOf = new Date(changedAtDate.getTime() + 1)
+            }
+          } else {
+            asOf = nextChangedAt
+          }
+        } else {
+          asOf = null
+        }
+      } else if (!changedAtDate) {
+        asOf = null
+      }
 
       if (partnershipId) {
         linkedAcademicYears = await getLinkedAcademicYearsAsOf({ sequelize, partnershipId, asOf })
-        const prevLinked = actionIsCreate
+        previousLinkedAcademicYears = actionIsCreate
           ? []
           : await getPrevLinkedAcademicYears({ sequelize, partnershipId, asOf })
 
-        const prevById = new Map(prevLinked.map(ay => [ay.id, ay]))
+        const prevById = new Map(previousLinkedAcademicYears.map(ay => [ay.id, ay]))
         const nowById = new Map(linkedAcademicYears.map(ay => [ay.id, ay]))
 
         academicYearsAdded = linkedAcademicYears.filter(ay => !prevById.has(ay.id))
-        academicYearsRemoved = prevLinked.filter(ay => !nowById.has(ay.id))
+        academicYearsRemoved = previousLinkedAcademicYears.filter(ay => !nowById.has(ay.id))
       }
+
+      summaryLinkedAcademicYears = log.action === 'delete'
+        ? previousLinkedAcademicYears
+        : linkedAcademicYears
 
       if (log.action === 'create') {
         activity = 'Provider partnership added'
@@ -986,8 +1020,8 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         activity = 'Provider partnership updated'
       }
 
-      const academicYearSummary = linkedAcademicYears.length
-        ? linkedAcademicYears.map(ay => ay.name).join(', ')
+      const academicYearSummary = summaryLinkedAcademicYears.length
+        ? summaryLinkedAcademicYears.map(ay => ay.name).join(', ')
         : 'None linked'
 
       partnershipDatesSummary = {
@@ -1055,7 +1089,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     ...(labelHtml && { labelHtml }),
     ...(revisionTable === 'provider_partnership_revisions'
         ? {
-            linkedAcademicYears,
+            linkedAcademicYears: summaryLinkedAcademicYears,
             academicYearsAdded,
             academicYearsRemoved,
             partnershipDates: partnershipDatesSummary || { startsOn: 'Not recorded', endsOn: null }
@@ -1088,6 +1122,32 @@ const getPreviousRevision = async ({ revisionTable, revisionId, entityId }) => {
 
   const index = revisions.findIndex(r => r.id === revisionId)
   return index > 0 ? revisions[index - 1] : null
+}
+
+/**
+ * Returns the next revision for a given entity (based on revisionNumber ordering).
+ *
+ * @async
+ * @param {Object} options
+ * @param {string} options.revisionTable - Name of the revision table.
+ * @param {string} options.revisionId - ID of the current revision.
+ * @param {string} options.entityId - ID of the associated entity.
+ * @returns {Promise<Object|null>} The next revision or null if none exists.
+ */
+const getNextRevision = async ({ revisionTable, revisionId, entityId }) => {
+  const revisionModel = getRevisionModel(revisionTable)
+  if (!revisionModel) throw new Error(`Unknown revision table: ${revisionTable}`)
+
+  const entityKeys = getEntityKeys(revisionTable)
+  const whereClause = { [Op.or]: entityKeys.map(key => ({ [key]: entityId })) }
+
+  const revisions = await revisionModel.findAll({
+    where: whereClause,
+    order: [['revisionNumber', 'ASC']]
+  })
+
+  const index = revisions.findIndex(r => r.id === revisionId)
+  return index >= 0 && index < revisions.length - 1 ? revisions[index + 1] : null
 }
 
 /**
@@ -1360,6 +1420,7 @@ module.exports = {
   getUserActivityLogs,
   getUserActivityTotalCount,
   getPreviousRevision,
+  getNextRevision,
   getLatestRevision,
   groupActivityLogsByDate,
   getLinkedAcademicYearsAsOf,
