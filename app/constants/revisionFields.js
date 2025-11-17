@@ -41,12 +41,6 @@ module.exports = {
     'deletedAt',
     'deletedById'
   ],
-  providerAccreditationPartnership: [
-    'providerAccreditationId',
-    'partnerId',
-    'deletedAt',
-    'deletedById'
-  ],
   providerPartnership: [
     'accreditedProviderId',
     'trainingProviderId',
