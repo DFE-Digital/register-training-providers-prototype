@@ -104,9 +104,11 @@ exports.handlerName_get = async (req, res) => {
 **Key models:**
 - `Provider` - Training providers
 - `ProviderAccreditation` - Accreditations owned by providers
-- `ProviderAccreditationPartnership` - Partnership relationships
+- `ProviderPartnership` - Accredited ↔ training provider partnerships
+- `ProviderPartnershipAcademicYear` - Academic year links for partnerships
 - `ProviderAddress` - Provider addresses
 - `ProviderContact` - Provider contacts
+- `AcademicYear` - Academic year reference data
 - `User` - System users
 - `ActivityLog` - Audit trail of all changes
 
@@ -115,8 +117,10 @@ exports.handlerName_get = async (req, res) => {
 - `ProviderAccreditationRevision`
 - `ProviderAddressRevision`
 - `ProviderContactRevision`
-- `ProviderAccreditationPartnershipRevision`
+- `ProviderPartnershipRevision`
+- `ProviderPartnershipAcademicYearRevision`
 - `UserRevision`
+- `AcademicYearRevision`
 
 **Relationships:**
 ```
@@ -124,14 +128,17 @@ Provider
   ├── hasMany ProviderAccreditation
   ├── hasMany ProviderAddress
   ├── hasMany ProviderContact
-  └── belongsToMany Provider (via ProviderAccreditationPartnership)
+  ├── hasMany ProviderPartnership (as accreditedProvider)
+  └── hasMany ProviderPartnership (as trainingProvider)
 
-ProviderAccreditation
-  └── hasMany ProviderAccreditationPartnership
+ProviderPartnership
+  ├── belongsTo Provider (accreditedProvider)
+  ├── belongsTo Provider (trainingProvider)
+  └── hasMany ProviderPartnershipAcademicYear
 
-ProviderAccreditationPartnership
-  ├── belongsTo ProviderAccreditation
-  └── belongsTo Provider (as 'partner')
+ProviderPartnershipAcademicYear
+  ├── belongsTo ProviderPartnership
+  └── belongsTo AcademicYear
 ```
 
 ### 4. Business logic layer (helpers)
