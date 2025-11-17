@@ -2,13 +2,8 @@
 
 {% set primaryNavId = "providers" %}
 
-{% if hasPartnerships %}
-  {% set title = "You cannot delete this accreditation" %}
-  {% set caption = "Delete accreditation - "  + provider.operatingName %}
-{% else %}
-  {% set title = "Confirm you want to delete " + provider.operatingName + "’s accreditation" %}
-  {% set caption = "Delete accreditation" %}
-{% endif %}
+{% set title = "Confirm you want to delete " + provider.operatingName + "’s accreditation" %}
+{% set caption = "Delete accreditation" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -24,58 +19,49 @@
 
     {% include "_includes/page-heading.njk" %}
 
-    {% if hasPartnerships %}
-      <p class="govuk-body">
-        You cannot delete this accreditation because it is linked to {{ partnershipCount }} partner provider {{- "s" if partnershipCount > 1 }}.
-      </p>
-      <p class="govuk-body">
-        To delete this accreditation, you must <a href="{{ actions.partnerships }}" class="govuk-link">review and update {{ "those partnerships" if partnershipCount > 1 else "that partnership" }} first</a>.
-      </p>
-    {% else %}
-      <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Accredited provider number"
-              },
-              value: {
-                text: accreditation.number
-              }
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Accredited provider number"
             },
-            {
-              key: {
-                text: "Date accreditation starts"
-              },
-              value: {
-                text: accreditation.startsOn | govukDate
-              }
-            },
-            {
-              key: {
-                text: "Date accreditation ends"
-              },
-              value: {
-                text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
-                classes: "govuk-hint" if not accreditation.endsOn
-              }
+            value: {
+              text: accreditation.number
             }
-          ]
-        }) }}
+          },
+          {
+            key: {
+              text: "Date accreditation starts"
+            },
+            value: {
+              text: accreditation.startsOn | govukDate
+            }
+          },
+          {
+            key: {
+              text: "Date accreditation ends"
+            },
+            value: {
+              text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
+              classes: "govuk-hint" if not accreditation.endsOn
+            }
+          }
+        ]
+      }) }}
 
-        {{ govukWarningText({
-          text: "Deleting an accreditation is permanent – you cannot undo it.",
-          iconFallbackText: "Warning"
-        }) }}
+      {{ govukWarningText({
+        text: "Deleting an accreditation is permanent – you cannot undo it.",
+        iconFallbackText: "Warning"
+      }) }}
 
-        {{ govukButton({
-          text: "Delete accreditation",
-          classes: "govuk-button--warning"
-        }) }}
+      {{ govukButton({
+        text: "Delete accreditation",
+        classes: "govuk-button--warning"
+      }) }}
 
-      </form>
-    {% endif %}
+    </form>
 
 
     <p class="govuk-body">

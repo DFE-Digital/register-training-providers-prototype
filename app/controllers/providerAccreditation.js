@@ -1,4 +1,3 @@
-const { getPartnershipCountForAccreditation, partnershipsExistForAccreditation } = require('../helpers/partnership')
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/date')
@@ -353,18 +352,12 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
   const { accreditationId, providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
-  const hasPartnerships = await partnershipsExistForAccreditation(accreditationId)
-  const partnershipCount = await getPartnershipCountForAccreditation(accreditationId)
-
   res.render('providers/accreditations/delete', {
     provider,
     accreditation,
-    hasPartnerships,
-    partnershipCount,
     actions: {
       back: `/providers/${providerId}/accreditations`,
       cancel: `/providers/${providerId}/accreditations`,
-      partnerships: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/accreditations/${accreditationId}/delete`
     }
   })
@@ -374,19 +367,12 @@ exports.deleteProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
   const { user } = req.session.passport
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
-  const hasPartnerships = await partnershipsExistForAccreditation(accreditationId)
+  await accreditation.update({
+    deletedAt: new Date(),
+    deletedById: user.id,
+    updatedById: user.id
+  })
 
-  if (hasPartnerships) {
-    res.redirect(`/providers/${providerId}/accreditations/${accreditationId}/delete`)
-  } else {
-    await accreditation.update({
-      deletedAt: new Date(),
-      deletedById: user.id,
-      updatedById: user.id
-    })
-
-    req.flash('success', 'Accreditation deleted')
-    res.redirect(`/providers/${providerId}/accreditations`)
-  }
-
+  req.flash('success', 'Accreditation deleted')
+  res.redirect(`/providers/${providerId}/accreditations`)
 }

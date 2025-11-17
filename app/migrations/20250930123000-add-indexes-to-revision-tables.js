@@ -11,7 +11,6 @@ const TABLES = [
   { table: 'provider_accreditation_revisions', modelId: 'provider_accreditation_id' },
   { table: 'provider_address_revisions', modelId: 'provider_address_id' },
   { table: 'provider_contact_revisions', modelId: 'provider_contact_id' },
-  { table: 'provider_accreditation_partnership_revisions', modelId: 'provider_accreditation_partnership_id' },
   { table: 'user_revisions', modelId: 'user_id' }
 ]
 
