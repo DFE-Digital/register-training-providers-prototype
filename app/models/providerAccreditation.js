@@ -17,15 +17,6 @@ module.exports = (sequelize) => {
       })
 
       /**
-       * One accreditation → many partnerships (each partnership links this accreditation to a training provider).
-       * FK lives on ProviderAccreditationPartnership.providerAccreditationId.
-       */
-      ProviderAccreditation.hasMany(models.ProviderAccreditationPartnership, {
-        foreignKey: 'providerAccreditationId',
-        as: 'partnerships'
-      })
-
-      /**
        * Metadata: created by user.
        * FK lives on ProviderAccreditation.createdById.
        */

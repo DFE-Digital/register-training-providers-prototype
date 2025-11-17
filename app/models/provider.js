@@ -44,21 +44,6 @@ module.exports = (sequelize) => {
       })
 
       /**
-       * One provider (as the **training** partner) → many ProviderAccreditationPartnership rows.
-       * FK lives on ProviderAccreditationPartnership.partnerId (this provider is the training provider).
-       *
-       * To reach the accredited provider:
-       *   this Provider
-       *     → (hasMany) accreditedPartnerships
-       *     → (belongsTo) providerAccreditation
-       *     → (belongsTo) provider  // the **accredited** provider
-       */
-      Provider.hasMany(models.ProviderAccreditationPartnership, {
-        foreignKey: 'partnerId',
-        as: 'accreditedPartnerships'
-      })
-
-      /**
        * Provider was created by a User.
        * FK lives on Provider.createdById.
        */
