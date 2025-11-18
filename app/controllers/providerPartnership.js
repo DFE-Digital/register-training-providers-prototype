@@ -287,10 +287,7 @@ exports.providerPartnershipsList = async (req, res) => {
   delete req.session.data.partnership
   delete req.session.data.search
   delete req.session.data.provider
-  // delete req.session.data.accreditations
   delete req.session.data.academicYears
-  delete req.session.data.startDate
-  delete req.session.data.endDate
   delete req.session.data.startsOn
   delete req.session.data.endsOn
   delete req.session.data.partnershipDates
