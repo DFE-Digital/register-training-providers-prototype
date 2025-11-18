@@ -22,6 +22,8 @@ const { v4: uuidv4 } = require('uuid')
  * @param {Object} [transaction]
  * @returns {string} revisionId
  */
+const tableColumnCache = new Map()
+
 const createRevision = async (
   {
     revisionTable,
@@ -35,8 +37,12 @@ const createRevision = async (
   queryInterface,
   transaction
 ) => {
-  // Discover actual columns on the revision table
-  const columns = await queryInterface.describeTable(revisionTable)
+  // Discover actual columns on the revision table (cached to avoid repeated PRAGMA lookups)
+  let columns = tableColumnCache.get(revisionTable)
+  if (!columns) {
+    columns = await queryInterface.describeTable(revisionTable)
+    tableColumnCache.set(revisionTable, columns)
+  }
   const allow = new Set(Object.keys(columns))
 
   // Infer FK column (e.g. 'user_revisions' -> 'user_id') unless provided

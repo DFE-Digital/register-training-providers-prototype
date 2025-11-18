@@ -2,7 +2,8 @@
   "name": "register-training-providers-prototype",
   "description": "Prototype for a ‘Register of training providers’ concept",
   "engines": {
-    "node": "22.x"
+    "node": "22.x",
+    "npm": "11.x"
   },
   "scripts": {
     "db:build": "npm run db:migrate && npm run db:seed",

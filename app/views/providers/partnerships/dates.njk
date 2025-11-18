@@ -43,79 +43,79 @@
       {% set startsOnErrors = startsOnFieldErrors or {} %}
 
       {{ govukDateInput({
-          id: "startsOn",
-          fieldset: {
-            legend: {
-              text: "Partnership start date",
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--s"
-            }
+        id: "startsOn",
+        fieldset: {
+          legend: {
+            text: "Partnership start date",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        hint: { text: "For example, 21 3 2023" },
+        errorMessage: errors | getErrorMessage("startsOn"),
+        items: [
+          {
+            id: "startsOn-day",
+            name: "startsOn[day]",
+            label: "Day",
+            value: startsOnValues.day,
+            classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.day)
           },
-          hint: { text: "For example, 21 3 2023" },
-          errorMessage: errors | getErrorMessage("startsOn"),
-          items: [
-            {
-              id: "startsOn-day",
-              name: "startsOn[day]",
-              label: "Day",
-              value: startsOnValues.day,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.day else "")
-            },
-            {
-              id: "startsOn-month",
-              name: "startsOn[month]",
-              label: "Month",
-              value: startsOnValues.month,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.month else "")
-            },
-            {
-              id: "startsOn-year",
-              name: "startsOn[year]",
-              label: "Year",
-              value: startsOnValues.year,
-              classes: "govuk-input--width-4" + (" govuk-input--error" if startsOnErrors.year else "")
-            }
-          ]
-        }) }}
-
-        {% set endsOnValues = endsOn or {} %}
-        {% set endsOnErrors = endsOnFieldErrors or {} %}
-
-        {{ govukDateInput({
-          id: "endsOn",
-          fieldset: {
-            legend: {
-              text: "Partnership end date (optional)",
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--s"
-            }
+          {
+            id: "startsOn-month",
+            name: "startsOn[month]",
+            label: "Month",
+            value: startsOnValues.month,
+            classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.month)
           },
-          hint: { text: "For example, 21 3 2023" },
-          errorMessage: errors | getErrorMessage("endsOn"),
-          items: [
-            {
-              id: "endsOn-day",
-              name: "endsOn[day]",
-              label: "Day",
-              value: endsOnValues.day,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.day else "")
-            },
-            {
-              id: "endsOn-month",
-              name: "endsOn[month]",
-              label: "Month",
-              value: endsOnValues.month,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.month else "")
-            },
-            {
-              id: "endsOn-year",
-              name: "endsOn[year]",
-              label: "Year",
-              value: endsOnValues.year,
-              classes: "govuk-input--width-4" + (" govuk-input--error" if endsOnErrors.year else "")
-            }
-          ]
-        }) }}
+          {
+            id: "startsOn-year",
+            name: "startsOn[year]",
+            label: "Year",
+            value: startsOnValues.year,
+            classes: "govuk-input--width-4" + (" govuk-input--error" if startsOnErrors.year)
+          }
+        ]
+      }) }}
+
+      {% set endsOnValues = endsOn or {} %}
+      {% set endsOnErrors = endsOnFieldErrors or {} %}
+
+      {{ govukDateInput({
+        id: "endsOn",
+        fieldset: {
+          legend: {
+            text: "Partnership end date (optional)",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        hint: { text: "For example, 21 3 2023" },
+        errorMessage: errors | getErrorMessage("endsOn"),
+        items: [
+          {
+            id: "endsOn-day",
+            name: "endsOn[day]",
+            label: "Day",
+            value: endsOnValues.day,
+            classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.day)
+          },
+          {
+            id: "endsOn-month",
+            name: "endsOn[month]",
+            label: "Month",
+            value: endsOnValues.month,
+            classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.month)
+          },
+          {
+            id: "endsOn-year",
+            name: "endsOn[year]",
+            label: "Year",
+            value: endsOnValues.year,
+            classes: "govuk-input--width-4" + (" govuk-input--error" if endsOnErrors.year)
+          }
+        ]
+      }) }}
 
       {{ govukButton({
         text: "Continue"

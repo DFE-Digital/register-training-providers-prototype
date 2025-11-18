@@ -73,6 +73,16 @@ const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = get
   return null
 }
 
+const getAcademicYearStartCodeFromDate = (value) => {
+  if (!value) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  return getCurrentAcademicYearStart(date)
+}
+
 const formatAcademicYearItems = (academicYears, { includeStatusLabels = false } = {}) => {
   const currentAcademicYearStart = includeStatusLabels ? getCurrentAcademicYearStart() : null
 
@@ -92,20 +102,50 @@ const formatAcademicYearItems = (academicYears, { includeStatusLabels = false } 
   })
 }
 
-const listAcademicYearsForSelection = async () => {
+/**
+ * List academic years that can be linked to a partnership based on the
+ * previously entered start/end dates. We expose the year containing the start
+ * date and everything after it, but stop before the year that contains the end
+ * date so users can't pick an academic year that extends beyond the partnership.
+ */
+const listAcademicYearsForSelection = async ({ startsOn, endsOn } = {}) => {
   const currentAYStart = getCurrentAcademicYearStart()
   const cutoffCode = currentAYStart + 1
+  const where = {
+    deletedAt: null,
+    [Op.and]: []
+  }
+  const codeAsInteger = Sequelize.cast(Sequelize.col('code'), 'INTEGER')
+
+  where[Op.and].push(
+    Sequelize.where(
+      codeAsInteger,
+      { [Op.lte]: cutoffCode }
+    )
+  )
+
+  const startCode = getAcademicYearStartCodeFromDate(startsOn)
+  if (startCode !== null) {
+    where[Op.and].push(
+      Sequelize.where(
+        codeAsInteger,
+        { [Op.gte]: startCode }
+      )
+    )
+  }
+
+  const endCode = getAcademicYearStartCodeFromDate(endsOn)
+  if (endCode !== null) {
+    where[Op.and].push(
+      Sequelize.where(
+        codeAsInteger,
+        { [Op.lt]: endCode }
+      )
+    )
+  }
 
   return AcademicYear.findAll({
-    where: {
-      deletedAt: null,
-      [Op.and]: [
-        Sequelize.where(
-          Sequelize.cast(Sequelize.col('code'), 'INTEGER'),
-          { [Op.lte]: cutoffCode }
-        )
-      ]
-    },
+    where,
     order: [['startsOn', 'ASC']]
   })
 }
@@ -247,10 +287,7 @@ exports.providerPartnershipsList = async (req, res) => {
   delete req.session.data.partnership
   delete req.session.data.search
   delete req.session.data.provider
-  // delete req.session.data.accreditations
   delete req.session.data.academicYears
-  delete req.session.data.startDate
-  delete req.session.data.endDate
   delete req.session.data.startsOn
   delete req.session.data.endsOn
   delete req.session.data.partnershipDates
@@ -640,7 +677,7 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
       actions: {
         back: `/providers/${providerId}/partnerships/new`,
         cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/new/choose`
+        save: `/providers/${providerId}/partnerships/new/choose`
       }
     })
   } else {
@@ -681,7 +718,7 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
   const fromCheck = req.query.referrer === 'check'
   const back = fromCheck
     ? `/providers/${providerId}/partnerships/new/check`
-    : `/providers/${providerId}/partnerships/new/choose`
+    : `/providers/${providerId}/partnerships/new`
   const save = fromCheck
     ? `/providers/${providerId}/partnerships/new/dates?referrer=check`
     : `/providers/${providerId}/partnerships/new/dates`
@@ -739,7 +776,7 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
   const fromCheck = req.query.referrer === 'check'
   const back = fromCheck
     ? `/providers/${providerId}/partnerships/new/check`
-    : `/providers/${providerId}/partnerships/new/choose`
+    : `/providers/${providerId}/partnerships/new`
   const save = fromCheck
     ? `/providers/${providerId}/partnerships/new/dates?referrer=check`
     : `/providers/${providerId}/partnerships/new/dates`
@@ -793,7 +830,11 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
-  const academicYears = await listAcademicYearsForSelection()
+  const partnershipDates = req.session.data.partnershipDates || {}
+  const academicYears = await listAcademicYearsForSelection({
+    startsOn: partnershipDates.startsOnIso,
+    endsOn: partnershipDates.endsOnIso
+  })
 
   const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
@@ -840,7 +881,11 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
   const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
 
-  const academicYears = await listAcademicYearsForSelection()
+  const partnershipDates = req.session.data.partnershipDates || {}
+  const academicYears = await listAcademicYearsForSelection({
+    startsOn: partnershipDates.startsOnIso,
+    endsOn: partnershipDates.endsOnIso
+  })
 
   const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
@@ -922,9 +967,6 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
       back: `/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
       cancel: `/providers/${providerId}/partnerships`,
       change: `/providers/${providerId}/partnerships/new`,
-      changeProvider: `/providers/${providerId}/partnerships/new`,
-      changeDates: `/providers/${providerId}/partnerships/new/dates`,
-      changeAcademicYears: `/providers/${providerId}/partnerships/new/academic-years`,
       save: `/providers/${providerId}/partnerships/new/check`
     }
   })
@@ -1135,8 +1177,13 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   req.session.data = req.session.data || {}
   initialisePartnershipEditSession(req, partnership)
 
+  const dateFilters = req.session.data.partnershipEdit?.partnershipDates || {}
+
   const [academicYears, existingAcademicYears] = await Promise.all([
-    listAcademicYearsForSelection(),
+    listAcademicYearsForSelection({
+      startsOn: dateFilters.startsOnIso,
+      endsOn: dateFilters.endsOnIso
+    }),
     ProviderPartnershipAcademicYear.findAll({
       where: { partnershipId, deletedAt: null },
       include: [
@@ -1176,7 +1223,7 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
     actions: {
       back: cameFromCheck
         ? `/providers/${providerId}/partnerships/${partnershipId}/check`
-        : `/providers/${providerId}/partnerships`,
+        : `/providers/${providerId}/partnerships/${partnershipId}/dates`,
       cancel: `/providers/${providerId}/partnerships`,
       save: `/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
     }
@@ -1201,7 +1248,11 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
   initialisePartnershipEditSession(req, partnership)
 
   let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
-  const academicYears = await listAcademicYearsForSelection()
+  const pendingDates = req.session.data.partnershipEdit?.partnershipDates || {}
+  const academicYears = await listAcademicYearsForSelection({
+    startsOn: pendingDates.startsOnIso,
+    endsOn: pendingDates.endsOnIso
+  })
   const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
 
   const errors = []
@@ -1228,7 +1279,7 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
       actions: {
         back: cameFromCheck
           ? `/providers/${providerId}/partnerships/${partnershipId}/check`
-          : `/providers/${providerId}/partnerships`,
+          : `/providers/${providerId}/partnerships/${partnershipId}/dates`,
         cancel: `/providers/${providerId}/partnerships`,
         save: `/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
       }
