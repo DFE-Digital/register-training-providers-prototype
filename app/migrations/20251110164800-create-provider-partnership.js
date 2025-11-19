@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
-      training_provider_id: {
+      training_partner_id: {
         type: Sequelize.UUID,
         allowNull: false
       },
@@ -52,8 +52,8 @@ module.exports = {
       name: 'idx_provider_partnerships_accredited_provider_id'
     })
     await queryInterface.addIndex('provider_partnerships', {
-      fields: ['training_provider_id'],
-      name: 'idx_provider_partnerships_training_provider_id'
+      fields: ['training_partner_id'],
+      name: 'idx_provider_partnerships_training_partner_id'
     })
   },
   async down(queryInterface, Sequelize) {
