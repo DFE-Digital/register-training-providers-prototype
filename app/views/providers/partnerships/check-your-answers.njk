@@ -7,7 +7,7 @@
 {% if isAccredited %}
   {% set providerName = accreditedProvider.operatingName %}
 {% else %}
-  {% set providerName = trainingProvider.operatingName %}
+  {% set providerName = trainingPartner.operatingName %}
 {% endif %}
 
 {% if currentProvider %}
@@ -81,7 +81,7 @@
               text: "Training partner"
             },
             value: {
-              text: trainingProvider.operatingName
+              text: trainingPartner.operatingName
             },
             actions: {
               items: [
