@@ -129,11 +129,11 @@ Provider
   ├── hasMany ProviderAddress
   ├── hasMany ProviderContact
   ├── hasMany ProviderPartnership (as accreditedProvider)
-  └── hasMany ProviderPartnership (as trainingProvider)
+  └── hasMany ProviderPartnership (as trainingPartner)
 
 ProviderPartnership
   ├── belongsTo Provider (accreditedProvider)
-  ├── belongsTo Provider (trainingProvider)
+  ├── belongsTo Provider (trainingPartner)
   └── hasMany ProviderPartnershipAcademicYear
 
 ProviderPartnershipAcademicYear
