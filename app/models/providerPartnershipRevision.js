@@ -14,8 +14,8 @@ module.exports = (sequelize) => {
       })
 
       ProviderPartnershipRevision.belongsTo(models.Provider, {
-        foreignKey: 'trainingProviderId',
-        as: 'trainingProvider'
+        foreignKey: 'trainingPartnerId',
+        as: 'trainingPartner'
       })
 
       ProviderPartnershipRevision.belongsTo(models.User, {
@@ -42,10 +42,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'accredited_provider_id'
       },
-      trainingProviderId: {
+      trainingPartnerId: {
         type: DataTypes.UUID,
         allowNull: false,
-        field: 'training_provider_id'
+        field: 'training_partner_id'
       },
       startsOn: {
         type: DataTypes.DATE,

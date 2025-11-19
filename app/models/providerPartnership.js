@@ -4,8 +4,8 @@ module.exports = (sequelize) => {
   class ProviderPartnership extends Model {
     static associate(models) {
       ProviderPartnership.belongsTo(models.Provider, {
-        foreignKey: 'training_provider_id',
-        as: 'trainingProvider'
+        foreignKey: 'training_partner_id',
+        as: 'trainingPartner'
       })
 
       ProviderPartnership.belongsTo(models.Provider, {
@@ -37,10 +37,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'accredited_provider_id'
       },
-      trainingProviderId: {
+      trainingPartnerId: {
         type: DataTypes.UUID,
         allowNull: false,
-        field: 'training_provider_id'
+        field: 'training_partner_id'
       },
       startsOn: {
         type: DataTypes.DATE,
