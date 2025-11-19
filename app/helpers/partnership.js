@@ -5,7 +5,7 @@ const { Provider, ProviderAccreditation, ProviderPartnership } = require('../mod
  * Determine whether a partnership already exists between an accrediting provider and a training provider.
  *
  * The check succeeds if there exists at least one **non-deleted** `ProviderPartnership`
- * row whose `accreditedProviderId` and `trainingProviderId` match the supplied identifiers.
+ * row whose `accreditedProviderId` and `trainingPartnerId` match the supplied identifiers.
  * Optionally, you can set `bidirectional: true` in the options to also treat the reversed pair
  * (training ↔ accredited) as a match. Use `overlapsWith: { startsOn, endsOn }` to only treat
  * existing partnerships as duplicates when their date range overlaps the supplied range.
@@ -15,32 +15,32 @@ const { Provider, ProviderAccreditation, ProviderPartnership } = require('../mod
  * @param {HasPartnershipParams} params - Identifiers for the provider pair.
  * @param {HasPartnershipOptions} [options] - Optional query options.
  * @returns {Promise<boolean>} Resolves `true` if a matching partnership exists; otherwise `false`.
- * @throws {Error} If `accreditedProviderId` or `trainingProviderId` is missing.
+ * @throws {Error} If `accreditedProviderId` or `trainingPartnerId` is missing.
  *
  * @example
  * // Keep your existing route code:
  * const hasExistingPartnership = await partnershipExistsForProviderPair(
  *   isAccredited
- *     ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
- *     : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+ *     ? { accreditedProviderId: providerId, trainingPartnerId: selectedProviderId }
+ *     : { accreditedProviderId: selectedProviderId, trainingPartnerId: providerId }
  * )
  */
 const partnershipExistsForProviderPair = async (
-  { accreditedProviderId, trainingProviderId } = {},
+  { accreditedProviderId, trainingPartnerId } = {},
   { transaction, bidirectional = false, overlapsWith } = {}
 ) => {
   if (!accreditedProviderId) throw new Error('partnershipExistsForProviderPair: accreditedProviderId is required')
-  if (!trainingProviderId) throw new Error('partnershipExistsForProviderPair: trainingProviderId is required')
+  if (!trainingPartnerId) throw new Error('partnershipExistsForProviderPair: trainingPartnerId is required')
 
   const clauses = [{
     accreditedProviderId,
-    trainingProviderId
+    trainingPartnerId
   }]
 
-  if (bidirectional && accreditedProviderId !== trainingProviderId) {
+  if (bidirectional && accreditedProviderId !== trainingPartnerId) {
     clauses.push({
-      accreditedProviderId: trainingProviderId,
-      trainingProviderId: accreditedProviderId
+      accreditedProviderId: trainingPartnerId,
+      trainingPartnerId: accreditedProviderId
     })
   }
 

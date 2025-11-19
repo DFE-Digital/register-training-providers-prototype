@@ -399,7 +399,7 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         as: 'providerPartnershipRevision',
         include: [
           { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
+          { model: Provider, as: 'trainingPartner' }
         ]
       },
       {
@@ -469,7 +469,7 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
           revisionTable: 'provider_partnership_revisions',
           [Op.or]: [
             { '$providerPartnershipRevision.accredited_provider_id$': providerId },
-            { '$providerPartnershipRevision.training_provider_id$': providerId }
+            { '$providerPartnershipRevision.training_partner_id$': providerId }
           ]
         }
       ]
@@ -556,7 +556,7 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
         required: false,
         include: [
           { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
+          { model: Provider, as: 'trainingPartner' }
         ]
       },
       {
@@ -612,7 +612,7 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
           revisionTable: 'provider_partnership_revisions',
           [Op.or]: [
             { '$providerPartnershipRevision.accredited_provider_id$': providerId },
-            { '$providerPartnershipRevision.training_provider_id$': providerId }
+            { '$providerPartnershipRevision.training_partner_id$': providerId }
           ]
         }
       ]
@@ -704,7 +704,7 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         as: 'providerPartnershipRevision',
         include: [
           { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
+          { model: Provider, as: 'trainingPartner' }
         ]
       },
       {
@@ -780,7 +780,7 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         required: false,
         include: [
           { model: Provider, as: 'accreditedProvider' },
-          { model: Provider, as: 'trainingProvider' }
+          { model: Provider, as: 'trainingPartner' }
         ]
       },
       {
@@ -816,7 +816,7 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
  *   href: string,
  *   fields: Array<{ key: string, value: string, href?: string }>,
  *   // extra, case-specific structured data for views/partials:
- *   links?: { accreditedProvider?: string, trainingProvider?: string },
+ *   links?: { accreditedProvider?: string, trainingPartner?: string },
  *   labelHtml?: string,
  *   // partnership case only:
  *   linkedAcademicYears?: Array<{ id: string, name: string, startsOn: string|null, endsOn: string|null }>,
@@ -938,18 +938,18 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
     case 'provider_partnership_revisions': {
       const accredited = revision.accreditedProvider
-      const training = revision.trainingProvider
+      const training = revision.trainingPartner
 
       const accreditedName = accredited?.operatingName || accredited?.legalName || 'Accredited provider'
       const trainingName = training?.operatingName || training?.legalName || 'Training partner'
 
       const accreditedProviderId = accredited?.id || revision.accreditedProviderId
-      const trainingProviderId = training?.id || revision.trainingProviderId
+      const trainingPartnerId = training?.id || revision.trainingPartnerId
 
       const { text: accreditedText, href: accreditedHrefBase, html: accreditedHtml } =
         await buildProviderLink(accreditedProviderId, accreditedName)
       const { text: trainingText, href: trainingHrefBase, html: trainingHtml } =
-        await buildProviderLink(trainingProviderId, trainingName)
+        await buildProviderLink(trainingPartnerId, trainingName)
 
       const accreditedHref = appendSection(accreditedHrefBase, 'partnerships')
       const trainingHref = appendSection(trainingHrefBase, 'partnerships')
@@ -1326,7 +1326,7 @@ const getProviderLastUpdated = async (providerId, opts = {}) => {
     where: childWhere({
       [Op.or]: [
         { accreditedProviderId: providerId },
-        { trainingProviderId: providerId }
+        { trainingPartnerId: providerId }
       ]
     }),
     transaction
