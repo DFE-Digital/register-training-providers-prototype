@@ -571,18 +571,7 @@ exports.newProviderPartnership_post = async (req, res) => {
       return res.redirect(`/providers/${providerId}/partnerships/new/choose`)
     }
 
-    const hasExistingPartnership = await partnershipExistsForProviderPair(
-      isAccredited
-        ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-        : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId },
-      { bidirectional: true }
-    )
-
-    if (hasExistingPartnership) {
-      res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
-    } else {
-      res.redirect(`/providers/${providerId}/partnerships/new/dates`)
-    }
+    res.redirect(`/providers/${providerId}/partnerships/new/dates`)
   }
 }
 
@@ -647,23 +636,6 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
         ? 'Select a training partner'
         : 'Select an accredited provider'
     })
-  } else {
-    const hasExistingPartnership = await partnershipExistsForProviderPair(
-      isAccredited
-        ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-        : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId },
-      { bidirectional: true }
-    )
-
-    if (hasExistingPartnership) {
-      errors.push({
-        fieldName: 'provider',
-        href: '#provider',
-        text: isAccredited
-          ? 'Training partner has already been added'
-          : 'Accredited provider has already been added'
-      })
-    }
   }
 
   if (errors.length > 0) {
@@ -800,6 +772,21 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
   } else {
     req.session.data.partnershipDates.startsOnIso = startsOnIso
     req.session.data.partnershipDates.endsOnIso = endsOnIso
+
+    const hasOverlappingPartnership = await partnershipExistsForProviderPair(
+      providers,
+      {
+        bidirectional: true,
+        overlapsWith: {
+          startsOn: startsOnIso,
+          endsOn: endsOnIso
+        }
+      }
+    )
+
+    if (hasOverlappingPartnership) {
+      return res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
+    }
 
     if (fromCheck) {
       res.redirect(`/providers/${providerId}/partnerships/new/check`)
@@ -1002,7 +989,13 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
       accreditedProviderId,
       trainingProviderId
     },
-    { bidirectional: true }
+    {
+      bidirectional: true,
+      overlapsWith: {
+        startsOn: req.session.data.partnershipDates.startsOnIso,
+        endsOn: req.session.data.partnershipDates.endsOnIso
+      }
+    }
   )
 
   if (partnershipExists) {

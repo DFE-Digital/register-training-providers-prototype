@@ -7,7 +7,8 @@ const { Provider, ProviderAccreditation, ProviderPartnership } = require('../mod
  * The check succeeds if there exists at least one **non-deleted** `ProviderPartnership`
  * row whose `accreditedProviderId` and `trainingProviderId` match the supplied identifiers.
  * Optionally, you can set `bidirectional: true` in the options to also treat the reversed pair
- * (training ↔ accredited) as a match.
+ * (training ↔ accredited) as a match. Use `overlapsWith: { startsOn, endsOn }` to only treat
+ * existing partnerships as duplicates when their date range overlaps the supplied range.
  *
  * Models aren’t `paranoid`, so we explicitly filter `deletedAt: null`.
  *
@@ -26,7 +27,7 @@ const { Provider, ProviderAccreditation, ProviderPartnership } = require('../mod
  */
 const partnershipExistsForProviderPair = async (
   { accreditedProviderId, trainingProviderId } = {},
-  { transaction, bidirectional = false } = {}
+  { transaction, bidirectional = false, overlapsWith } = {}
 ) => {
   if (!accreditedProviderId) throw new Error('partnershipExistsForProviderPair: accreditedProviderId is required')
   if (!trainingProviderId) throw new Error('partnershipExistsForProviderPair: trainingProviderId is required')
@@ -43,11 +44,40 @@ const partnershipExistsForProviderPair = async (
     })
   }
 
+  const where = {
+    deletedAt: null,
+    [Op.or]: clauses
+  }
+
+  if (overlapsWith?.startsOn) {
+    const overlapStart = new Date(overlapsWith.startsOn)
+    if (Number.isNaN(overlapStart.getTime())) {
+      throw new Error('partnershipExistsForProviderPair: overlapsWith.startsOn must be a valid date')
+    }
+
+    const overlapClauses = []
+
+    if (overlapsWith.endsOn) {
+      const overlapEnd = new Date(overlapsWith.endsOn)
+      if (Number.isNaN(overlapEnd.getTime())) {
+        throw new Error('partnershipExistsForProviderPair: overlapsWith.endsOn must be a valid date')
+      }
+
+      overlapClauses.push({ startsOn: { [Op.lte]: overlapEnd } })
+    }
+
+    overlapClauses.push({
+      [Op.or]: [
+        { endsOn: null },
+        { endsOn: { [Op.gte]: overlapStart } }
+      ]
+    })
+
+    where[Op.and] = where[Op.and] ? [...where[Op.and], ...overlapClauses] : overlapClauses
+  }
+
   const existing = await ProviderPartnership.findOne({
-    where: {
-      deletedAt: null,
-      [Op.or]: clauses
-    },
+    where,
     attributes: ['id'],
     transaction
   })
