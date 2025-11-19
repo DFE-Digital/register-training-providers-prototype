@@ -242,7 +242,7 @@ const forcePartnershipRevision = async ({ partnership, userId }) => {
   await ProviderPartnershipRevision.create({
     providerPartnershipId: partnership.id,
     accreditedProviderId: partnership.accreditedProviderId,
-    trainingProviderId: partnership.trainingProviderId,
+    trainingPartnerId: partnership.trainingPartnerId,
     startsOn: partnership.startsOn,
     endsOn: partnership.endsOn,
     revisionNumber,
@@ -318,14 +318,14 @@ exports.providerPartnershipsList = async (req, res) => {
         where: {
           deletedAt: null,
           [Op.or]: [
-            { trainingProviderId: provider.id },
+            { trainingPartnerId: provider.id },
             { accreditedProviderId: provider.id }
           ]
         },
         include: [
           {
             model: Provider,
-            as: 'trainingProvider',
+            as: 'trainingPartner',
             attributes: ['id', 'operatingName', 'legalName', 'ukprn', 'deletedAt']
           },
           {
@@ -361,7 +361,7 @@ exports.providerPartnershipsList = async (req, res) => {
     }
 
     const accreditedProvider = partnership.accreditedProvider
-    const trainingPartner = partnership.trainingProvider
+    const trainingPartner = partnership.trainingPartner
     const partnershipId = partnership.id
     const isAccreditedSide = provider.id === partnership.accreditedProviderId
 
@@ -463,7 +463,7 @@ exports.providerPartnershipsList = async (req, res) => {
 //     include: [
 //       {
 //         model: Provider,
-//         as: 'trainingProvider'
+//         as: 'trainingPartner'
 //       },
 //       {
 //         model: Provider,
@@ -672,11 +672,11 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
   }
 
   const providers = isAccredited
-  ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-  : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+  ? { accreditedProviderId: providerId, trainingPartnerId: selectedProviderId }
+  : { accreditedProviderId: selectedProviderId, trainingPartnerId: providerId }
 
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
-  const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+  const trainingPartner = await Provider.findByPk(providers.trainingPartnerId)
 
   const startsOnStored = req.session.data.startsOn
   const endsOnStored = req.session.data.endsOn
@@ -697,7 +697,7 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
 
   res.render('providers/partnerships/dates', {
     accreditedProvider,
-    trainingProvider,
+    trainingPartner,
     isAccredited,
     startsOn,
     endsOn,
@@ -721,11 +721,11 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
   }
 
   const providers = isAccredited
-  ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-  : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+  ? { accreditedProviderId: providerId, trainingPartnerId: selectedProviderId }
+  : { accreditedProviderId: selectedProviderId, trainingPartnerId: providerId }
 
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
-  const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+  const trainingPartner = await Provider.findByPk(providers.trainingPartnerId)
 
   req.session.data.startsOn = req.session.data.startsOn || {}
   req.session.data.endsOn = req.session.data.endsOn || {}
@@ -756,7 +756,7 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
   if (errors.length > 0) {
     res.render('providers/partnerships/dates', {
       accreditedProvider,
-      trainingProvider,
+      trainingPartner,
       isAccredited,
       startsOn: startsOnInput,
       endsOn: endsOnInput,
@@ -811,11 +811,11 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
   }
 
   const providers = isAccredited
-  ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-  : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+  ? { accreditedProviderId: providerId, trainingPartnerId: selectedProviderId }
+  : { accreditedProviderId: selectedProviderId, trainingPartnerId: providerId }
 
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
-  const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+  const trainingPartner = await Provider.findByPk(providers.trainingPartnerId)
 
   const partnershipDates = req.session.data.partnershipDates || {}
   const academicYears = await listAcademicYearsForSelection({
@@ -835,7 +835,7 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
 
   res.render('providers/partnerships/academic-years', {
     accreditedProvider,
-    trainingProvider,
+    trainingPartner,
     isAccredited,
     academicYearItems,
     selectedAcademicYears,
@@ -862,11 +862,11 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   }
 
   const providers = isAccredited
-  ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-  : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+  ? { accreditedProviderId: providerId, trainingPartnerId: selectedProviderId }
+  : { accreditedProviderId: selectedProviderId, trainingPartnerId: providerId }
 
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
-  const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+  const trainingPartner = await Provider.findByPk(providers.trainingPartnerId)
 
   const partnershipDates = req.session.data.partnershipDates || {}
   const academicYears = await listAcademicYearsForSelection({
@@ -897,7 +897,7 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   if (errors.length > 0) {
     res.render('providers/partnerships/academic-years', {
       accreditedProvider,
-      trainingProvider,
+      trainingPartner,
       isAccredited,
       academicYearItems,
       selectedAcademicYears,
@@ -928,11 +928,11 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
   }
 
   const providers = isAccredited
-    ? { accreditedProviderId: providerId, trainingProviderId: selectedProviderId }
-    : { accreditedProviderId: selectedProviderId, trainingProviderId: providerId }
+    ? { accreditedProviderId: providerId, trainingPartnerId: selectedProviderId }
+    : { accreditedProviderId: selectedProviderId, trainingPartnerId: providerId }
 
   const accreditedProvider = await Provider.findByPk(providers.accreditedProviderId)
-  const trainingProvider = await Provider.findByPk(providers.trainingProviderId)
+  const trainingPartner = await Provider.findByPk(providers.trainingPartnerId)
 
   const selectedAcademicYears = await getAcademicYearDetails(req.session.data?.academicYears)
 
@@ -946,7 +946,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
 
   res.render('providers/partnerships/check-your-answers', {
     accreditedProvider,
-    trainingProvider,
+    trainingPartner,
     isAccredited,
     academicYearItems,
     partnershipDates,
@@ -982,12 +982,12 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   }
 
   const accreditedProviderId = isAccredited ? providerId : provider.id
-  const trainingProviderId = isAccredited ? provider.id : providerId
+  const trainingPartnerId = isAccredited ? provider.id : providerId
 
   const partnershipExists = await partnershipExistsForProviderPair(
     {
       accreditedProviderId,
-      trainingProviderId
+      trainingPartnerId
     },
     {
       bidirectional: true,
@@ -1005,7 +1005,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   // save the partnership and get the partnershipId
   const partnership = await ProviderPartnership.create({
     accreditedProviderId,
-    trainingProviderId,
+    trainingPartnerId,
     startsOn: req.session.data.partnershipDates.startsOnIso,
     endsOn: req.session.data.partnershipDates.endsOnIso,
     createdById: user.id,
@@ -1043,7 +1043,7 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
     Provider.findByPk(providerId),
     ProviderPartnership.findByPk(partnershipId, {
       include: [
-        { model: Provider, as: 'trainingProvider' },
+        { model: Provider, as: 'trainingPartner' },
         { model: Provider, as: 'accreditedProvider' }
       ]
     })
@@ -1066,7 +1066,7 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
   res.render('providers/partnerships/dates', {
     currentProvider,
     accreditedProvider: partnership.accreditedProvider,
-    trainingProvider: partnership.trainingProvider,
+    trainingPartner: partnership.trainingPartner,
     isAccredited: currentProvider.id === partnership.accreditedProviderId,
     startsOn: req.session.data.startsOn || formatDateForInput(partnership.startsOn),
     endsOn: req.session.data.endsOn || formatDateForInput(partnership.endsOn),
@@ -1088,7 +1088,7 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     Provider.findByPk(providerId),
     ProviderPartnership.findByPk(partnershipId, {
       include: [
-        { model: Provider, as: 'trainingProvider' },
+        { model: Provider, as: 'trainingPartner' },
         { model: Provider, as: 'accreditedProvider' }
       ]
     })
@@ -1123,7 +1123,7 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     return res.render('providers/partnerships/dates', {
       currentProvider,
       accreditedProvider: partnership.accreditedProvider,
-      trainingProvider: partnership.trainingProvider,
+      trainingPartner: partnership.trainingPartner,
       isAccredited: currentProvider.id === partnership.accreditedProviderId,
       startsOn: req.session.data.startsOn,
       endsOn: req.session.data.endsOn,
@@ -1158,7 +1158,7 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   const currentProvider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
-      { model: Provider, as: 'trainingProvider' },
+      { model: Provider, as: 'trainingPartner' },
       { model: Provider, as: 'accreditedProvider' }
     ]
   })
@@ -1209,7 +1209,7 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   res.render('providers/partnerships/academic-years', {
     currentProvider,
     accreditedProvider: partnership.accreditedProvider,
-    trainingProvider: partnership.trainingProvider,
+    trainingPartner: partnership.trainingPartner,
     isAccredited: currentProvider.id === partnership.accreditedProviderId,
     academicYearItems,
     selectedAcademicYears,
@@ -1228,7 +1228,7 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
   const currentProvider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
-      { model: Provider, as: 'trainingProvider' },
+      { model: Provider, as: 'trainingPartner' },
       { model: Provider, as: 'accreditedProvider' }
     ]
   })
@@ -1264,7 +1264,7 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
     res.render('providers/partnerships/academic-years', {
       currentProvider,
       accreditedProvider: partnership.accreditedProvider,
-      trainingProvider: partnership.trainingProvider,
+      trainingPartner: partnership.trainingPartner,
       isAccredited: currentProvider.id === partnership.accreditedProviderId,
       academicYearItems,
       selectedAcademicYears,
@@ -1290,7 +1290,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
   const currentProvider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
-      { model: Provider, as: 'trainingProvider' },
+      { model: Provider, as: 'trainingPartner' },
       { model: Provider, as: 'accreditedProvider' }
     ]
   })
@@ -1329,7 +1329,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
   res.render('providers/partnerships/check-your-answers', {
     currentProvider,
     accreditedProvider: partnership.accreditedProvider,
-    trainingProvider: partnership.trainingProvider,
+    trainingPartner: partnership.trainingPartner,
     isAccredited: currentProvider.id === partnership.accreditedProviderId,
     academicYearItems,
     partnershipDates,
@@ -1423,7 +1423,7 @@ exports.deleteProviderPartnership_get = async (req, res) => {
     include: [
       {
         model: Provider,
-        as: 'trainingProvider'
+        as: 'trainingPartner'
       },
       {
         model: Provider,
@@ -1440,15 +1440,15 @@ exports.deleteProviderPartnership_get = async (req, res) => {
   const isAccredited = partnership.accreditedProviderId === provider.id
 
   const accreditedProvider = partnership.accreditedProvider
-  const trainingProvider = partnership.trainingProvider
+  const trainingPartner = partnership.trainingPartner
 
   const titlePartnerName = isAccredited
-    ? trainingProvider.operatingName
+    ? trainingPartner.operatingName
     : accreditedProvider.operatingName
 
   const captionProviderName = isAccredited
     ? accreditedProvider.operatingName
-    : trainingProvider.operatingName
+    : trainingPartner.operatingName
 
   res.render('providers/partnerships/delete', {
     provider,

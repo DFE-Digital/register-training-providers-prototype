@@ -1178,7 +1178,7 @@ exports.accreditedProviderSuggestions_json = async (req, res) => {
   res.json(providers)
 }
 
-exports.trainingProviderSuggestions_json = async (req, res) => {
+exports.trainingPartnerSuggestions_json = async (req, res) => {
   req.headers['Access-Control-Allow-Origin'] = true
 
   const query = req.query.search || ''
