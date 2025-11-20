@@ -3,8 +3,27 @@
 // https://prototype-kit.service.gov.uk/docs/create-routes
 //
 
+require('dotenv').config()
+
 const govukPrototypeKit = require('govuk-prototype-kit')
 const router = govukPrototypeKit.requests.setupRouter()
+const session = require('express-session')
+
+/// ------------------------------------------------------------------------ ///
+/// Session configuration
+/// ------------------------------------------------------------------------ ///
+router.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'default-insecure-secret-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 4, // 4 hours
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true
+    }
+  })
+)
 
 /// ------------------------------------------------------------------------ ///
 /// Flash messaging
@@ -13,23 +32,19 @@ const flash = require('connect-flash')
 router.use(flash())
 
 /// ------------------------------------------------------------------------ ///
-/// User authentication
+/// Passport authentication
 /// ------------------------------------------------------------------------ ///
-// TODO: Replace with Passport
-const passport = {
-  user: {
-    id: '3faa7586-951b-495c-9999-e5fc4367b507',
-    first_name: 'Colin',
-    last_name: 'Chapman',
-    email: 'colin.chapman@example.gov.uk'
-  }
-}
+const passport = require('./config/passport')
+
+router.use(passport.initialize())
+router.use(passport.session())
 
 /// ------------------------------------------------------------------------ ///
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
 const accountController = require('./controllers/account')
 const activityController = require('./controllers/activity')
+const authenticationController = require('./controllers/authentication')
 const contentController = require('./controllers/content')
 const errorController = require('./controllers/error')
 const feedbackController = require('./controllers/feedback')
@@ -45,11 +60,29 @@ const userController = require('./controllers/user')
 /// Authentication middleware
 /// ------------------------------------------------------------------------ ///
 const checkIsAuthenticated = (req, res, next) => {
-  // the signed in user
-  req.session.passport = passport
-  // the base URL for navigation
-  res.locals.baseUrl = `/providers/${req.params.providerId}`
-  next()
+  if (req.isAuthenticated()) {
+    if (!req.user.isActive) {
+      return res.redirect('/account-not-authorised')
+    }
+
+    // Set base URLs for navigation
+    res.locals.baseUrl = `/providers/${req.params.providerId}`
+    res.locals.supportBaseUrl = `/providers/${req.params.providerId}`
+    // Make user available in templates
+    res.locals.passport = {
+      user: {
+        id: req.user.id,
+        first_name: req.user.firstName,
+        last_name: req.user.lastName,
+        email: req.user.email
+      }
+    }
+    return next()
+  }
+
+  // Save the original URL to redirect after login
+  req.session.returnTo = req.originalUrl
+  res.redirect('/auth/sign-in')
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -63,6 +96,26 @@ router.all('*', (req, res, next) => {
 })
 
 /// ------------------------------------------------------------------------ ///
+/// AUTHENTICATION ROUTES
+/// ------------------------------------------------------------------------ ///
+router.get('/sign-in', (req, res) => {
+  res.redirect('/auth/sign-in')
+})
+router.get('/auth/sign-in', authenticationController.signIn_get)
+router.get('/auth/sign-in/email', authenticationController.signInEmail_get)
+router.post('/auth/sign-in/email', authenticationController.signInEmail_post)
+router.get('/auth/sign-in/password', authenticationController.signInPassword_get)
+router.post('/auth/sign-in/password', authenticationController.signInPassword_post)
+router.get('/auth/persona', authenticationController.persona_get)
+router.post('/auth/persona', authenticationController.persona_post)
+router.get('/auth/sign-out', authenticationController.signOut_get)
+
+// Redirect /support/sign-out to new auth route for backwards compatibility
+router.get('/sign-out', (req, res) => {
+  res.redirect('/auth/sign-out')
+})
+
+/// ------------------------------------------------------------------------ ///
 /// HOMEPAGE ROUTE
 /// ------------------------------------------------------------------------ ///
 router.get('/', (req, res) => {
@@ -72,7 +125,7 @@ router.get('/', (req, res) => {
 router.get('/start', (req, res) => {
   res.render('start', {
     actions: {
-      start: "/providers"
+      start: "/sign-in"
     }
   })
 })
