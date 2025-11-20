@@ -9,7 +9,7 @@
   {% set providerName = trainingPartner.operatingName %}
 {% endif %}
 
-{% set title = "Partnership dates" %}
+{% set title = "Partnership details" %}
 
 {% if currentProvider %}
   {% set caption = providerName %}
@@ -51,7 +51,7 @@
             classes: "govuk-fieldset__legend--s"
           }
         },
-        hint: { text: "For example, 1 9 2024" },
+        hint: { text: "For example, 1 8 2024" },
         errorMessage: errors | getErrorMessage("startsOn"),
         items: [
           {
@@ -78,6 +78,11 @@
         ]
       }) }}
 
+      {{ govukDetails({
+        summaryText: "I do not know the start date",
+        text: "If you do not know the start date, use today’s date, or the date the academic year starts, for example, 1 August 2024."
+      }) }}
+
       {% set endsOnValues = endsOn or {} %}
       {% set endsOnErrors = endsOnFieldErrors or {} %}
 
@@ -90,7 +95,7 @@
             classes: "govuk-fieldset__legend--s"
           }
         },
-        hint: { text: "For example, 31 8 2026" },
+        hint: { text: "For example, 31 7 2026" },
         errorMessage: errors | getErrorMessage("endsOn"),
         items: [
           {
