@@ -586,7 +586,7 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
     provider,
     partner,
     actions: {
-      back: `/providers/${providerId}/partnerships/new`,
+      back: `/providers/${providerId}/partnerships/new/dates`,
       cancel: `/providers/${providerId}/partnerships`,
       change: `/providers/${providerId}/partnerships/new`
     }
