@@ -1,0 +1,45 @@
+{% extends "layouts/auth.njk" %}
+
+{% set hideAccountNavigation = true %}
+
+{% set title = "Sign in" %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors | length }}{{ title + " - " if title }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+    <p class="govuk-body">Choose a persona to sign in to the Register of placement schools service.</p>
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukRadios({
+        name: "persona",
+        fieldset: {
+          legend: {
+            text: "Who do you want to sign in as?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        errorMessage: errors | getErrorMessage("persona"),
+        items: personas
+      }) }}
+
+      {{ govukButton({
+        text: "Sign in"
+      }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
