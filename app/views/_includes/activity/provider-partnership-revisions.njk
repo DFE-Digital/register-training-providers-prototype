@@ -61,16 +61,28 @@
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Partnership dates</dt>
         <dd class="govuk-summary-list__value">
-          <p class="govuk-body govuk-!-margin-bottom-1">
-            Starts on {{ partnershipDates.startsOn }}
-          </p>
-          {% if partnershipDates.endsOn %}
-            <p class="govuk-body">
-              Ends on {{ partnershipDates.endsOn }}
-            </p>
-          {% else %}
-            <p class="govuk-hint">No end date</p>
-          {% endif %}
+          {{ govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: "Starts on"
+                },
+                value: {
+                  text: partnershipDates.startsOn
+                }
+              },
+              {
+                key: {
+                  text: "Ends on"
+                },
+                value: {
+                  text: partnershipDates.endsOn if partnershipDates.endsOn else "Not entered",
+                  classes: "govuk-hint" if not partnershipDates.endsOn
+                },
+                classes: "govuk-summary-list__row--no-border"
+              }
+            ]
+          }) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
