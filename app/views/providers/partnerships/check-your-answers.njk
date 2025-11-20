@@ -60,7 +60,8 @@
                 text: "Ends on"
               },
               value: {
-                text: partnershipDates.endsOn if partnershipDates.endsOn else "No end date"
+                text: partnershipDates.endsOn if partnershipDates.endsOn else "Not entered",
+                classes: "govuk-hint" if not partnershipDates.endsOn
               },
               classes: "govuk-summary-list__row--no-border"
             }

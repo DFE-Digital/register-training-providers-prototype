@@ -745,14 +745,6 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
     endsOnInput
   })
 
-  const fromCheck = req.query.referrer === 'check'
-  const back = fromCheck
-    ? `/providers/${providerId}/partnerships/new/check`
-    : `/providers/${providerId}/partnerships/new`
-  const save = fromCheck
-    ? `/providers/${providerId}/partnerships/new/dates?referrer=check`
-    : `/providers/${providerId}/partnerships/new/dates`
-
   if (errors.length > 0) {
     res.render('providers/partnerships/dates', {
       accreditedProvider,
@@ -764,9 +756,9 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
       endsOnFieldErrors,
       errors,
       actions: {
-        back,
+        back: `/providers/${providerId}/partnerships/new`,
         cancel: `/providers/${providerId}/partnerships`,
-        save
+        save: `/providers/${providerId}/partnerships/new/dates`
       }
     })
   } else {
@@ -785,11 +777,7 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
     )
 
     if (hasOverlappingPartnership) {
-      return res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
-    }
-
-    if (fromCheck) {
-      res.redirect(`/providers/${providerId}/partnerships/new/check`)
+      res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
     } else {
       res.redirect(`/providers/${providerId}/partnerships/new/academic-years`)
     }
@@ -825,13 +813,6 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
 
   const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
-  const fromCheck = req.query.referrer === 'check'
-  const back = fromCheck
-    ? `/providers/${providerId}/partnerships/new/check`
-    : `/providers/${providerId}/partnerships/new/dates`
-  const save = fromCheck
-    ? `/providers/${providerId}/partnerships/new/academic-years?referrer=check`
-    : `/providers/${providerId}/partnerships/new/academic-years`
 
   res.render('providers/partnerships/academic-years', {
     accreditedProvider,
@@ -840,9 +821,9 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
     academicYearItems,
     selectedAcademicYears,
     actions: {
-      back,
+      back: `/providers/${providerId}/partnerships/new/dates`,
       cancel: `/providers/${providerId}/partnerships`,
-      save
+      save: `/providers/${providerId}/partnerships/new/academic-years`
     }
   })
 }
@@ -878,13 +859,6 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data?.academicYears)
 
   const errors = []
-  const fromCheck = req.query.referrer === 'check'
-  const back = fromCheck
-    ? `/providers/${providerId}/partnerships/new/check`
-    : `/providers/${providerId}/partnerships/new/dates`
-  const save = fromCheck
-    ? `/providers/${providerId}/partnerships/new/academic-years?referrer=check`
-    : `/providers/${providerId}/partnerships/new/academic-years`
 
   if (!selectedAcademicYears.length) {
     const error = {}
@@ -903,9 +877,9 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
       selectedAcademicYears,
       errors,
       actions: {
-        back,
+        back: `/providers/${providerId}/partnerships/new/dates`,
         cancel: `/providers/${providerId}/partnerships`,
-        save
+        save: `/providers/${providerId}/partnerships/new/academic-years`
       }
     })
   } else {
@@ -1055,14 +1029,6 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
 
   initialisePartnershipEditSession(req, partnership)
 
-  const fromCheck = req.query.referrer === 'check'
-  const back = fromCheck
-    ? `/providers/${providerId}/partnerships/${partnershipId}/check`
-    : `/providers/${providerId}/partnerships`
-  const save = fromCheck
-    ? `/providers/${providerId}/partnerships/${partnershipId}/dates?referrer=check`
-    : `/providers/${providerId}/partnerships/${partnershipId}/dates`
-
   res.render('providers/partnerships/dates', {
     currentProvider,
     accreditedProvider: partnership.accreditedProvider,
@@ -1071,9 +1037,9 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
     startsOn: req.session.data.startsOn || formatDateForInput(partnership.startsOn),
     endsOn: req.session.data.endsOn || formatDateForInput(partnership.endsOn),
     actions: {
-      back,
+      back: `/providers/${providerId}/partnerships`,
       cancel: `/providers/${providerId}/partnerships`,
-      save
+      save: `/providers/${providerId}/partnerships/${partnershipId}/dates`
     }
   })
 }
@@ -1111,14 +1077,6 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     endsOnInput: req.session.data.endsOn
   })
 
-  const fromCheck = req.query.referrer === 'check'
-  const back = fromCheck
-    ? `/providers/${providerId}/partnerships/${partnershipId}/check`
-    : `/providers/${providerId}/partnerships`
-  const save = fromCheck
-    ? `/providers/${providerId}/partnerships/${partnershipId}/dates?referrer=check`
-    : `/providers/${providerId}/partnerships/${partnershipId}/dates`
-
   if (errors.length) {
     return res.render('providers/partnerships/dates', {
       currentProvider,
@@ -1131,9 +1089,9 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
       endsOnFieldErrors,
       errors,
       actions: {
-        back,
+        back: `/providers/${providerId}/partnerships`,
         cancel: `/providers/${providerId}/partnerships`,
-        save
+        save: `/providers/${providerId}/partnerships/${partnershipId}/dates`
       }
     })
   }
@@ -1146,11 +1104,7 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     endsOnIso
   }
 
-  const nextUrl = fromCheck
-    ? `/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`
-    : `/providers/${providerId}/partnerships/${partnershipId}/academic-years`
-
-  res.redirect(nextUrl)
+  res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
 }
 
 exports.editProviderPartnershipAcademicYears_get = async (req, res) => {

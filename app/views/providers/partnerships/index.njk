@@ -122,7 +122,8 @@
                   text: "Ends on"
                 },
                 value: {
-                  text: partnership.endsOn | govukDate if partnershipDates.endsOn else "No end date"
+                  text: partnership.endsOn | govukDate if partnership.endsOn else "Not entered",
+                  classes: "govuk-hint" if not partnership.endsOn
                 }
               }
             ]
