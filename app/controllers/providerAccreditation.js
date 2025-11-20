@@ -1,9 +1,100 @@
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isoDateFromDateInput } = require('../helpers/date')
+const { validateDateInput, getDateParts } = require('../helpers/validation/date')
 const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { Provider, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
+
+const formatDateForInput = (value) => {
+  if (!value) return {}
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return {}
+  return {
+    day: String(date.getUTCDate()),
+    month: String(date.getUTCMonth() + 1),
+    year: String(date.getUTCFullYear())
+  }
+}
+
+const normaliseDateValue = (value) => {
+  if (!value) return {}
+
+  if (Array.isArray(value)) {
+    return {
+      day: value[0] !== undefined && value[0] !== null ? String(value[0]) : '',
+      month: value[1] !== undefined && value[1] !== null ? String(value[1]) : '',
+      year: value[2] !== undefined && value[2] !== null ? String(value[2]) : ''
+    }
+  }
+
+  if (value instanceof Date || typeof value === 'string' || typeof value === 'number') {
+    return formatDateForInput(value)
+  }
+
+  if (typeof value === 'object') {
+    const hasAnyKey = ['day', 'month', 'year'].some((key) =>
+      Object.prototype.hasOwnProperty.call(value, key)
+    )
+
+    if (hasAnyKey) {
+      return {
+        day: value.day !== undefined && value.day !== null ? String(value.day) : '',
+        month: value.month !== undefined && value.month !== null ? String(value.month) : '',
+        year: value.year !== undefined && value.year !== null ? String(value.year) : ''
+      }
+    }
+  }
+
+  return {}
+}
+
+const validateAccreditationDates = ({ startsOnInput, endsOnInput } = {}) => {
+  const errors = []
+  let startsOnFieldErrors = null
+  let endsOnFieldErrors = null
+
+  const startResult = validateDateInput(
+    getDateParts(startsOnInput),
+    {
+      label: 'date accreditation starts',
+      baseId: 'startsOn',
+      minYear: 1990,
+      maxYear: 2050
+    }
+  )
+
+  if (!startResult.valid) {
+    errors.push(startResult.summaryError)
+    startsOnFieldErrors = startResult.fieldFlags || null
+  }
+
+  const endParts = getDateParts(endsOnInput)
+  const hasEndInput = !!(endParts.day || endParts.month || endParts.year)
+
+  if (hasEndInput) {
+    const endResult = validateDateInput(
+      endParts,
+      {
+        label: 'date accreditation ends',
+        baseId: 'endsOn',
+        minYear: 1990,
+        maxYear: 2050
+      }
+    )
+
+    if (!endResult.valid) {
+      errors.push(endResult.summaryError)
+      endsOnFieldErrors = endResult.fieldFlags || null
+    }
+  }
+
+  return {
+    errors,
+    startsOnFieldErrors,
+    endsOnFieldErrors
+  }
+}
 
 /// ------------------------------------------------------------------------ ///
 /// List provider accreditations
@@ -94,7 +185,11 @@ exports.providerAccreditationDetails = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.newProviderAccreditation_get = async (req, res) => {
-  const { accreditation } = req.session.data
+  const accreditation = req.session.data.accreditation || {
+    number: '',
+    startsOn: {},
+    endsOn: {}
+  }
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
 
@@ -106,6 +201,8 @@ exports.newProviderAccreditation_get = async (req, res) => {
   res.render('providers/accreditations/edit', {
     provider,
     accreditation,
+    startsOn: normaliseDateValue(accreditation.startsOn),
+    endsOn: normaliseDateValue(accreditation.endsOn),
     actions: {
       back,
       cancel: `/providers/${providerId}/accreditations`,
@@ -115,7 +212,11 @@ exports.newProviderAccreditation_get = async (req, res) => {
 }
 
 exports.newProviderAccreditation_post = async (req, res) => {
-  const { accreditation } = req.session.data
+  const accreditation = req.session.data.accreditation || {
+    number: '',
+    startsOn: {},
+    endsOn: {}
+  }
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   const errors = []
@@ -138,16 +239,16 @@ exports.newProviderAccreditation_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!(accreditation.startsOn?.day.length
-    && accreditation.startsOn?.month.length
-    && accreditation.startsOn?.year.length)
-  ) {
-    const error = {}
-    error.fieldName = "startsOn"
-    error.href = "#startsOn"
-    error.text = "Enter date accreditation starts"
-    errors.push(error)
-  }
+  const {
+    errors: dateErrors,
+    startsOnFieldErrors,
+    endsOnFieldErrors
+  } = validateAccreditationDates({
+    startsOnInput: accreditation.startsOn,
+    endsOnInput: accreditation.endsOn
+  })
+
+  errors.push(...dateErrors)
 
   if (errors.length) {
     let back = `/providers/${providerId}`
@@ -158,6 +259,10 @@ exports.newProviderAccreditation_post = async (req, res) => {
     res.render('providers/accreditations/edit', {
       provider,
       accreditation,
+      startsOn: normaliseDateValue(accreditation.startsOn),
+      endsOn: normaliseDateValue(accreditation.endsOn),
+      startsOnFieldErrors,
+      endsOnFieldErrors,
       errors,
       actions: {
         back,
@@ -171,7 +276,11 @@ exports.newProviderAccreditation_post = async (req, res) => {
 }
 
 exports.newProviderAccreditationCheck_get = async (req, res) => {
-  const { accreditation } = req.session.data
+  const accreditation = req.session.data.accreditation || {
+    number: '',
+    startsOn: {},
+    endsOn: {}
+  }
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   res.render('providers/accreditations/check-your-answers', {
@@ -236,10 +345,15 @@ exports.editProviderAccreditation_get = async (req, res) => {
     back = `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
   }
 
+  const startsOn = normaliseDateValue(accreditation?.startsOn)
+  const endsOn = normaliseDateValue(accreditation?.endsOn)
+
   res.render('providers/accreditations/edit', {
     provider,
     currentAccreditation,
     accreditation,
+    startsOn,
+    endsOn,
     actions: {
       back,
       cancel: `/providers/${providerId}/accreditations`,
@@ -264,16 +378,16 @@ exports.editProviderAccreditation_post = async (req, res) => {
     errors.push(error)
   }
 
-  if (!(accreditation.startsOn?.day.length
-    && accreditation.startsOn?.month.length
-    && accreditation.startsOn?.year.length)
-  ) {
-    const error = {}
-    error.fieldName = "startsOn"
-    error.href = "#startsOn"
-    error.text = "Enter date accreditation starts"
-    errors.push(error)
-  }
+  const {
+    errors: dateErrors,
+    startsOnFieldErrors,
+    endsOnFieldErrors
+  } = validateAccreditationDates({
+    startsOnInput: accreditation.startsOn,
+    endsOnInput: accreditation.endsOn
+  })
+
+  errors.push(...dateErrors)
 
   if (errors.length) {
     let back = `/providers/${providerId}`
@@ -285,6 +399,10 @@ exports.editProviderAccreditation_post = async (req, res) => {
       provider,
       currentAccreditation,
       accreditation,
+      startsOn: normaliseDateValue(accreditation.startsOn),
+      endsOn: normaliseDateValue(accreditation.endsOn),
+      startsOnFieldErrors,
+      endsOnFieldErrors,
       errors,
       actions: {
         back,
