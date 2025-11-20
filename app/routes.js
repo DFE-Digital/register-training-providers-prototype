@@ -325,7 +325,7 @@ router.get('/account-no-organisation', errorController.accountNoOrganisation)
 
 router.get('/accredited-provider-suggestions', providerController.accreditedProviderSuggestions_json)
 
-router.get('/training-provider-suggestions', providerController.trainingProviderSuggestions_json)
+router.get('/training-partner-suggestions', providerController.trainingPartnerSuggestions_json)
 
 /// ------------------------------------------------------------------------ ///
 ///

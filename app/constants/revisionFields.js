@@ -43,7 +43,7 @@ module.exports = {
   ],
   providerPartnership: [
     'accreditedProviderId',
-    'trainingProviderId',
+    'trainingPartnerId',
     'startsOn',
     'endsOn',
     'deletedAt',

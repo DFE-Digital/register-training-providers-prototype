@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
-      training_provider_id: {
+      training_partner_id: {
         type: Sequelize.UUID,
         allowNull: false
       },

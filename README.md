@@ -11,8 +11,8 @@ You can read more about this register on the [design history website](https://be
 
 ## Documentation
 
-- **[Architecture documentation](ARCHITECTURE.md)** - Technical architecture, design patterns, and codebase structure
-- **[Deployment guide](DEPLOYMENT.md)** - Deployment instructions for various platforms and environments
+- [Architecture documentation](ARCHITECTURE.md) - Technical architecture, design patterns, and codebase structure
+- [Deployment guide](DEPLOYMENT.md) - Deployment instructions for various platforms and environments
 
 ## Requirements
 

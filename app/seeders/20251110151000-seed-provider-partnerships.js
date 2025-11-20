@@ -47,7 +47,7 @@ module.exports = {
         const baseFields = {
           id: providerPartnershipId,
           accredited_provider_id: providerPartnership.accreditedProviderId,
-          training_provider_id: providerPartnership.trainingProviderId,
+          training_partner_id: providerPartnership.trainingPartnerId,
           starts_on: startsOnDate,
           created_at: createdAt,
           created_by_id: userId,
