@@ -45,16 +45,27 @@
       {% endset %}
 
       {% set partnershipDatesHtml %}
-        <p class="govuk-body">
-          Starts on {{ partnershipDates.startsOn }}
-        </p>
-        {% if partnershipDates.endsOn %}
-          <p class="govuk-body">
-            Ends on {{ partnershipDates.endsOn }}
-          </p>
-        {% else %}
-          <p class="govuk-hint">No end date</p>
-        {% endif %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Starts on"
+              },
+              value: {
+                text: partnershipDates.startsOn
+              }
+            },
+            {
+              key: {
+                text: "Ends on"
+              },
+              value: {
+                text: partnershipDates.endsOn if partnershipDates.endsOn else "No end date"
+              },
+              classes: "govuk-summary-list__row--no-border"
+            }
+          ]
+        }) }}
       {% endset %}
 
       {{ govukSummaryList({
