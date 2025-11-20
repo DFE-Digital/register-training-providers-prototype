@@ -38,9 +38,10 @@
     {% include "_includes/page-heading.njk" %}
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
-
       {% set startsOnValues = startsOn or {} %}
       {% set startsOnErrors = startsOnFieldErrors or {} %}
+      {% set endsOnValues = endsOn or {} %}
+      {% set endsOnErrors = endsOnFieldErrors or {} %}
 
       {{ govukDateInput({
         id: "startsOn",
@@ -51,7 +52,9 @@
             classes: "govuk-fieldset__legend--s"
           }
         },
-        hint: { text: "For example, 1 8 2024" },
+        hint: {
+          text: "For example, 1 8 2024"
+        },
         errorMessage: errors | getErrorMessage("startsOn"),
         items: [
           {
@@ -83,9 +86,6 @@
         text: "If you do not know the start date, use today’s date, or the date the academic year starts, for example, 1 August 2024."
       }) }}
 
-      {% set endsOnValues = endsOn or {} %}
-      {% set endsOnErrors = endsOnFieldErrors or {} %}
-
       {{ govukDateInput({
         id: "endsOn",
         fieldset: {
@@ -95,7 +95,9 @@
             classes: "govuk-fieldset__legend--s"
           }
         },
-        hint: { text: "For example, 31 7 2026" },
+        hint: {
+          text: "For example, 31 7 2026"
+        },
         errorMessage: errors | getErrorMessage("endsOn"),
         items: [
           {
