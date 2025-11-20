@@ -9,7 +9,11 @@
   {% set providerName = trainingPartner.operatingName %}
 {% endif %}
 
-{% set title = "Academic year" %}
+{% if academicYearItems | length %}
+  {% set title = "Academic year" %}
+{% else %}
+  {% set title = "No academic years match your partnership dates" %}
+{% endif %}
 
 {% if currentProvider %}
   {% set caption = providerName %}
@@ -35,35 +39,51 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% set headingHtml %}
-      {% include "_includes/page-heading-legend.njk" %}
-    {% endset %}
+    {% if academicYearItems | length %}
 
-    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+      {% set headingHtml %}
+        {% include "_includes/page-heading-legend.njk" %}
+      {% endset %}
 
-      {{ govukCheckboxes({
-        idPrefix: "academicYears",
-        name: "academicYears[]",
-        fieldset: {
-          legend: {
-            html: headingHtml,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        hint: {
-          text: "Select all that apply"
-        },
-        errorMessage: errors | getErrorMessage("academicYears"),
-        values: selectedAcademicYears,
-        items: academicYearItems
-      }) }}
+      <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-      {{ govukButton({
-        text: "Continue"
-      }) }}
+        {{ govukCheckboxes({
+          idPrefix: "academicYears",
+          name: "academicYears[]",
+          fieldset: {
+            legend: {
+              html: headingHtml,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "Select all that apply"
+          },
+          errorMessage: errors | getErrorMessage("academicYears"),
+          values: selectedAcademicYears,
+          items: academicYearItems
+        }) }}
 
-    </form>
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    {% else %}
+
+      {% include "_includes/page-heading.njk" %}
+
+      <p class="govuk-body">
+        You cannot add the partnership because no academic years match your partnership dates.
+      </p>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ actions.back }}">Change partnership dates</a>
+      </p>
+
+    {% endif %}
 
     <p class="govuk-body">
       <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
