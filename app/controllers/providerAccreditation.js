@@ -53,6 +53,7 @@ const validateAccreditationDates = ({ startsOnInput, endsOnInput } = {}) => {
   const errors = []
   let startsOnFieldErrors = null
   let endsOnFieldErrors = null
+  let startsOnIso = null
 
   const startResult = validateDateInput(
     getDateParts(startsOnInput),
@@ -67,6 +68,8 @@ const validateAccreditationDates = ({ startsOnInput, endsOnInput } = {}) => {
   if (!startResult.valid) {
     errors.push(startResult.summaryError)
     startsOnFieldErrors = startResult.fieldFlags || null
+  } else {
+    startsOnIso = startResult.iso
   }
 
   const endParts = getDateParts(endsOnInput)
@@ -79,7 +82,8 @@ const validateAccreditationDates = ({ startsOnInput, endsOnInput } = {}) => {
         label: 'date accreditation ends',
         baseId: 'endsOn',
         minYear: 1990,
-        maxYear: 2050
+        maxYear: 2050,
+        constraint: startsOnIso ? { onOrAfter: new Date(startsOnIso) } : undefined
       }
     )
 
