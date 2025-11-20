@@ -7,6 +7,10 @@
   flex-grow: 1;
 }
 
+.govuk-summary-list__row--no-border {
+  border: 0;
+}
+
 .app-service-navigation__align-right {
   @include govuk-media-query($from: tablet) {
     margin-left: auto;

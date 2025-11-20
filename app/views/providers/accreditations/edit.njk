@@ -33,6 +33,10 @@
     {% endset %}
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+      {% set startsOnValues = startsOn or {} %}
+      {% set startsOnErrors = startsOnFieldErrors or {} %}
+      {% set endsOnValues = endsOn or {} %}
+      {% set endsOnErrors = endsOnFieldErrors or {} %}
 
       {% call govukFieldset({
         legend: {
@@ -58,6 +62,7 @@
         }) }}
 
         {{ govukDateInput({
+          id: "startsOn",
           fieldset: {
             legend: {
               text: "Date accreditation starts",
@@ -73,28 +78,29 @@
               id: "startsOn-day",
               name: "accreditation[startsOn][day]",
               label: "Day",
-              value: accreditation.startsOn | getDay or accreditation.startsOn.day,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
+              value: startsOnValues.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.day)
             },
             {
               id: "startsOn-month",
               name: "accreditation[startsOn][month]",
               label: "Month",
-              value: accreditation.startsOn | getMonth or accreditation.startsOn.month,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
+              value: startsOnValues.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if startsOnErrors.month)
             },
             {
               id: "startsOn-year",
               name: "accreditation[startsOn][year]",
               label: "Year",
-              value: accreditation.startsOn | getYear or accreditation.startsOn.year,
-              classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("startsOn"))
+              value: startsOnValues.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if startsOnErrors.year)
             }
           ],
           errorMessage: errors | getErrorMessage("startsOn")
         }) }}
 
         {{ govukDateInput({
+          id: "endsOn",
           fieldset: {
             legend: {
               text: "Date accreditation ends (optional)",
@@ -110,22 +116,22 @@
               id: "endsOn-day",
               name: "accreditation[endsOn][day]",
               label: "Day",
-              value: (accreditation.endsOn | getDay if accreditation.endsOn) or accreditation.endsOn.day,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
+              value: endsOnValues.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.day)
             },
             {
               id: "endsOn-month",
               name: "accreditation[endsOn][month]",
               label: "Month",
-              value: (accreditation.endsOn | getMonth if accreditation.endsOn) or accreditation.endsOn.month,
-              classes: "govuk-input--width-2" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
+              value: endsOnValues.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if endsOnErrors.month)
             },
             {
               id: "endsOn-year",
               name: "accreditation[endsOn][year]",
               label: "Year",
-              value: (accreditation.endsOn | getYear if accreditation.endsOn) or accreditation.endsOn.year,
-              classes: "govuk-input--width-4" + (" govuk-input--error" if errors | getErrorMessage("endsOn"))
+              value: endsOnValues.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if endsOnErrors.year)
             }
           ]
         }) }}
