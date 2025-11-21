@@ -19,6 +19,7 @@
 {% else %}
   {% set caption = "Add support user" %}
 {% endif %}
+{% set userHasSignedIn = currentUser and currentUser.lastSignedInAt %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -48,43 +49,103 @@
         }
       }) %}
 
-      {{ govukInput({
-        id: "firstName",
-        name: "user[firstName]",
-        label: {
-          text: "First name",
-          classes: "govuk-label--s"
-        },
-          errorMessage: errors | getErrorMessage("firstName"),
-        value: user.firstName,
-        classes: "govuk-!-width-two-thirds"
-      }) }}
+      {% if userHasSignedIn %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "First name"
+              },
+              value: {
+                text: currentUser.firstName
+              }
+            },
+            {
+              key: {
+                text: "Last name"
+              },
+              value: {
+                text: currentUser.lastName
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                text: currentUser.email
+              }
+            }
+          ]
+        }) }}
 
-      {{ govukInput({
-        id: "lastName",
-        name: "user[lastName]",
-        label: {
-          text: "Last name",
-          classes: "govuk-label--s"
-        },
-        errorMessage: errors | getErrorMessage("lastName"),
-        value: user.lastName,
-        classes: "govuk-!-width-two-thirds"
-      }) }}
+        <input type="hidden" name="user[firstName]" value="{{ currentUser.firstName | default('') }}">
+        <input type="hidden" name="user[lastName]" value="{{ currentUser.lastName | default('') }}">
+        <input type="hidden" name="user[email]" value="{{ currentUser.email | default('') }}">
+      {% else %}
+        {{ govukInput({
+          id: "firstName",
+          name: "user[firstName]",
+          label: {
+            text: "First name",
+            classes: "govuk-label--s"
+          },
+            errorMessage: errors | getErrorMessage("firstName"),
+          value: user.firstName,
+          classes: "govuk-!-width-two-thirds"
+        }) }}
 
-      {{ govukInput({
-        id: "email",
-        name: "user[email]",
-        label: {
-          text: "Email address",
-          classes: "govuk-label--s"
-        },
-        hint: {
-          text: "Email must be a valid Department for Education address, like name@education.gov.uk"
-        },
-        errorMessage: errors | getErrorMessage("email"),
-        value: user.email
-      }) }}
+        {{ govukInput({
+          id: "lastName",
+          name: "user[lastName]",
+          label: {
+            text: "Last name",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("lastName"),
+          value: user.lastName,
+          classes: "govuk-!-width-two-thirds"
+        }) }}
+
+        {{ govukInput({
+          id: "email",
+          name: "user[email]",
+          label: {
+            text: "Email address",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "Email must be a valid Department for Education address, like name@education.gov.uk"
+          },
+          errorMessage: errors | getErrorMessage("email"),
+          value: user.email
+        }) }}
+      {% endif %}
+
+      {% if currentUser %}
+        {{ govukRadios({
+          name: "user[isActive]",
+          fieldset: {
+            legend: {
+              text: "Is the account active?",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          errorMessage: errors | getErrorMessage("isActive"),
+          items: [
+            {
+              value: "true",
+              text: "Yes",
+              checked: user.isActive === true or user.isActive === "true"
+            },
+            {
+              value: "false",
+              text: "No",
+              checked: user.isActive === false or user.isActive === "false"
+            }
+          ]
+        }) }}
+      {% endif %}
 
       {{ govukButton({
         text: "Continue"

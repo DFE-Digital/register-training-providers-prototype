@@ -29,13 +29,11 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: 'bat'
+        allowNull: false
       },
       is_active: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
+        allowNull: false
       },
       revision_number: {
         type: Sequelize.INTEGER,
@@ -48,7 +46,8 @@ module.exports = {
       },
       revision_by_id: {
         type: Sequelize.UUID,
-        allowNull: true
+        allowNull: true,
+        comment: 'The user who made the change'
       }
     })
   },

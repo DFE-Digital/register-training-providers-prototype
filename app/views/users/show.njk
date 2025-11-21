@@ -12,7 +12,7 @@
 {% block beforeContent %}
 {{ govukBackLink({
   text: "Back",
-  href: "/users"
+  href: actions.back
 }) }}
 {% endblock %}
 
@@ -23,7 +23,22 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "_includes/page-heading.njk" %}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+      {% if caption.length %}
+        <span class="govuk-caption-l">
+          {{ caption }}
+        </span>
+      {% endif %}
+      {{ title }}
+    </h1>
+
+    <p class="govuk-hint govuk-!-font-size-16">
+      {% if user.lastSignedInAt %}
+        Last signed in on {{ user.lastSignedInAt | govukDateTime }}
+      {% else %}
+        User has never signed in
+      {% endif %}
+    </p>
 
     {# only show delete link if it's not the signed in user #}
     {% if showDeleteLink %}
@@ -49,7 +64,7 @@
                 visuallyHiddenText: "first name"
               }
             ]
-          }
+          } if showChangeLink
         },
         {
           key: {
@@ -66,11 +81,11 @@
                 visuallyHiddenText: "last name"
               }
             ]
-          }
+          } if showChangeLink
         },
         {
           key: {
-            text: "Email"
+            text: "Email address"
           },
           value: {
             text: user.email
@@ -83,7 +98,24 @@
                 visuallyHiddenText: "email"
               }
             ]
-          }
+          } if showChangeLink
+        },
+        {
+          key: {
+            text: "Is the account active?"
+          },
+          value: {
+            text: "Yes" if user.isActive else "No"
+          },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "account active status"
+              }
+            ]
+          } if showStatusChangeLink
         }
       ]
     }) }}

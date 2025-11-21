@@ -13,6 +13,7 @@
 {% else %}
   {% set caption = "Add support user" %}
 {% endif %}
+{% set allowPersonalDetailChanges = (not currentUser) or (not (currentUser.lastSignedInAt)) %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -50,7 +51,7 @@
                   visuallyHiddenText: "first name"
                 }
               ]
-            }
+            } if allowPersonalDetailChanges
           },
           {
             key: {
@@ -67,11 +68,11 @@
                   visuallyHiddenText: "last name"
                 }
               ]
-            }
+            } if allowPersonalDetailChanges
           },
           {
             key: {
-              text: "Email"
+              text: "Email address"
             },
             value: {
               text: user.email
@@ -84,8 +85,25 @@
                   visuallyHiddenText: "email"
                 }
               ]
+            } if allowPersonalDetailChanges
+          },
+          {
+            key: {
+              text: "Is the account active?"
+            },
+            value: {
+              text: "Yes" if (user.isActive === true or user.isActive === "true") else "No"
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "account active status"
+                }
+              ]
             }
-          }
+          } if currentUser
         ]
       }) }}
 

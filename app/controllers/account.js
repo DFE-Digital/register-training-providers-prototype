@@ -1,7 +1,7 @@
-const { User } = require('../models')
-
 exports.userAccount = async (req, res) => {
-  const { user } = req.session.passport
-  const accountUser = await User.findByPk(user.id)
-  res.render('account/show', { user: accountUser })
+  // req.user is provided by Passport and contains the authenticated user
+  // The user object already has all the properties we need from Sequelize
+  res.render('account/show', {
+    user: req.user
+  })
 }

@@ -1,0 +1,52 @@
+{% extends "layouts/auth.njk" %}
+
+{% set hideAccountNavigation = true %}
+
+{% set title = "Sign in" %}
+
+{% block pageTitle %}
+  {{ "Error: " if errors | length }}{{ title + " - " if title }}{{ serviceName }} - GOV.UK
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+    <p class="govuk-body">Sign in to access the Register of placement schools service.</p>
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukInput({
+        id: "email",
+        name: "email",
+        label: {
+          text: "Email address",
+          classes: "govuk-label--s"
+        },
+        errorMessage: errors | getErrorMessage("email"),
+        type: "email",
+        autocomplete: "email",
+        spellcheck: false,
+        value: email,
+        classes: "govuk-!-width-two-thirds"
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a href="#" class="govuk-link">Create a DfE Sign-in account</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,9 @@
-{% extends "layouts/auth.njk" %}
+{% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "account" %}
+
+{% set hidePrimaryNavigation = true %}
+{% set hideOrganisationSwitcher = true %}
 
 {% set title = "Your account" %}
 
@@ -20,7 +23,18 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      {% include "_includes/page-heading.njk" %}
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+        {% if caption.length %}
+          <span class="govuk-caption-l">
+            {{ caption }}
+          </span>
+        {% endif %}
+        {{ title }}
+      </h1>
+
+      <p class="govuk-hint govuk-!-font-size-16">
+        Last signed in on {{ user.lastSignedInAt | govukDateTime }}
+      </p>
 
       {{ govukSummaryList({
         rows: [

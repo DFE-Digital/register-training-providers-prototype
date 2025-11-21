@@ -54,6 +54,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: true
       },
+      lastSignedInAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'last_signed_in_at'
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -100,9 +105,13 @@ module.exports = (sequelize) => {
     })
   )
 
-  User.addHook('afterUpdate',
-    revisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })
-  )
+  User.addHook('afterUpdate', (instance, options) => {
+    const hookName = instance.deletedById !== null ? 'afterDestroy' : 'afterUpdate'
+    revisionHook({ revisionModelName: 'UserRevision', modelKey: 'user' })(instance, {
+      ...options,
+      hookName
+    })
+  })
 
   return User
 }
