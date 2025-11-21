@@ -37,7 +37,7 @@ addFilter('numeral', (number, format) => {
 /* ------------------------------------------------------------------
 utility function to get an error for a component
 example: {{ errors | getErrorMessage('title') }}
-outputs: "Enter a title"
+outputs: "Enter title"
 ------------------------------------------------------------------ */
 addFilter('getErrorMessage', (array, fieldName) => {
   if (!array || !fieldName) {

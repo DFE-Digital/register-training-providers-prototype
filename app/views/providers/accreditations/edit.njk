@@ -61,17 +61,19 @@
           classes: "govuk-input--width-4"
         }) }}
 
+        <h2 id="accreditation-dates" class="govuk-heading-m">Accreditation dates</h2>
+
         {{ govukDateInput({
           id: "startsOn",
           fieldset: {
             legend: {
-              text: "Date accreditation starts",
+              text: "Accreditation start date",
               isPageHeading: false,
               classes: "govuk-fieldset__legend--s"
             }
           },
           hint: {
-            text: "For example, 1 9 2024"
+            text: "For example, 1 8 2024"
           },
           items: [
             {
@@ -99,17 +101,22 @@
           errorMessage: errors | getErrorMessage("startsOn")
         }) }}
 
+        {{ govukDetails({
+          summaryText: "I do not know the start date",
+          text: "If you do not know the start date, use today’s date, or the date the academic year starts, for example, 1 August 2024."
+        }) }}
+
         {{ govukDateInput({
           id: "endsOn",
           fieldset: {
             legend: {
-              text: "Date accreditation ends (optional)",
+              text: "Accreditation end date (optional)",
               isPageHeading: false,
               classes: "govuk-fieldset__legend--s"
             }
           },
           hint: {
-            text: "For example, 31 8 2026"
+            text: "For example, 31 7 2026"
           },
           items: [
             {

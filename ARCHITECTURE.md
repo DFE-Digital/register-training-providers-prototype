@@ -2,32 +2,33 @@
 
 ## Overview
 
-The Register of training providers prototype is a web application built using the GOV.UK Prototype Kit, Express.js, and Sequelize ORM with SQLite. It follows an MVC (Model-View-Controller) pattern.
+The Register of training providers prototype is a server-rendered Node.js web application built on the GOV.UK Prototype Kit. It follows an MVC (Model-View-Controller) pattern with Sequelize ORM and SQLite-backed persistence. Auditing is first-class: every change is revisioned and surfaced through an activity log.
 
 ## Technology Stack
 
 - **Runtime:** Node.js 22.x
 - **Framework:** GOV.UK Prototype Kit 13.18.1
 - **Web Server:** Express.js (via Prototype Kit)
-- **Database:** SQLite3 5.1.7
+- **Database:** SQLite3 5.1.7 (all environments)
 - **ORM:** Sequelize 6.37.7
 - **Template Engine:** Nunjucks
 - **Markdown:** Marked with GFM Heading ID
 - **Frontend:** GOV.UK Frontend 5.13.0
+- **Auth:** Passport (local strategy) with server-side sessions
 
 ## Directory Structure
 
 ```
 register-training-providers-prototype/
 ├── app/
-│   ├── controllers/         # Request handlers (14 files, ~4,100 LOC)
-│   ├── models/              # Sequelize models (16 files)
-│   ├── views/               # Nunjucks templates (86 files)
-│   ├── helpers/             # Business logic utilities (10 files)
-│   ├── services/            # External API integrations (3 files)
-│   ├── hooks/               # Sequelize lifecycle hooks (2 files)
-│   ├── migrations/          # Database migrations (17 files)
-│   ├── seeders/             # Database seed data (5 files)
+│   ├── controllers/         # Request handlers
+│   ├── models/              # Sequelize models
+│   ├── views/               # Nunjucks templates
+│   ├── helpers/             # Business logic utilities
+│   ├── services/            # External API integrations
+│   ├── hooks/               # Sequelize lifecycle hooks (revision + activity)
+│   ├── migrations/          # Database migrations
+│   ├── seeders/             # Database seed data
 │   ├── filters.js           # Nunjucks template filters
 │   ├── routes.js            # Route definitions
 │   ├── config/              # Configuration files
@@ -56,6 +57,7 @@ register-training-providers-prototype/
 - Form validation with error summaries
 - Accessible markup following GOV.UK patterns
 - Markdown support for content pages
+- Scoped layouts for settings, providers, and activity sections
 
 ### 2. Controller layer (request handlers)
 
@@ -77,6 +79,7 @@ register-training-providers-prototype/
 - Query database via models
 - Render views with data
 - Handle flash messages
+- Set `createdById` / `updatedById` for audit trail
 
 **Pattern:**
 ```javascript
@@ -160,6 +163,7 @@ ProviderPartnershipAcademicYear
 - Keep controllers thin and focused
 - Provide tested, documented functions
 - Share logic across multiple controllers
+- Construct activity summaries from revision payloads
 
 ### 5. Service layer (external integrations)
 
@@ -193,6 +197,7 @@ ProviderPartnershipAcademicYear
 - Paranoid mode (soft deletes)
 - Revision tracking via hooks
 - Automatic timestamps
+- Activity logging for every revision
 
 ## Data flow
 
@@ -222,6 +227,14 @@ ProviderPartnershipAcademicYear
 9. Controller → Flash Message
 10. Controller → Redirect (PRG pattern)
 ```
+
+## Cross-cutting concerns
+
+- **Authentication:** Passport local strategy backed by server sessions; login updates `lastSignedInAt`.
+- **Audit trail:** `revisionHook` snapshots tracked fields into revision tables; `activityHook` creates `ActivityLog` rows for each revision.
+- **Data lifecycle:** Soft deletes (`deletedAt`/`deletedById`) preserve history and feed the audit trail.
+- **Config:** `app/config/config.json` uses SQLite for all environments; override via env vars if deploying elsewhere.
+- **Data seeding:** `db:seed` populates personas, providers, partnerships, and reference data for demos.
 
 ## Key design patterns
 

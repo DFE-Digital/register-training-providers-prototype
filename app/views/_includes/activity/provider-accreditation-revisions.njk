@@ -1,0 +1,80 @@
+{% set accreditedProviderNumberField = null %}
+{% for field in item.summary.fields %}
+  {% if field.key == "Accreditation number" %}
+    {% set accreditedProviderNumberField = field %}
+  {% endif %}
+{% endfor %}
+
+{% set accreditationDates = item.summary.accreditationDates or {
+  startsOn: "Not entered",
+  endsOn: null
+} %}
+
+{% macro renderField(field) -%}
+  {% if field %}
+    {{ field.value or "Not entered" }}
+  {% else %}
+    Not entered
+  {% endif %}
+{%- endmacro %}
+
+<h3 class="govuk-summary-card__title">
+  {{ item.summary.activity }}
+</h3>
+<p class="govuk-body">
+  By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+</p>
+
+<div class="govuk-summary-card">
+  {% if showSummaryCardTitle %}
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        {% if item.summary.labelHtml %}
+          {{ item.summary.labelHtml | safe }}
+        {% elif item.summary.href %}
+          <a href="{{ item.summary.href }}" class="govuk-link">{{ item.summary.label }}</a>
+        {% else %}
+          {{ item.summary.label }}
+        {% endif %}
+      </h2>
+    </div>
+  {% endif %}
+
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Accredited provider number</dt>
+        <dd class="govuk-summary-list__value">
+          {{ renderField(accreditedProviderNumberField) }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Accreditation dates</dt>
+        <dd class="govuk-summary-list__value">
+          {{ govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: "Starts on"
+                },
+                value: {
+                  text: accreditationDates.startsOn
+                }
+              },
+              {
+                key: {
+                  text: "Ends on"
+                },
+                value: {
+                  text: accreditationDates.endsOn if accreditationDates.endsOn else "Not entered",
+                  classes: "govuk-hint" if not accreditationDates.endsOn
+                },
+                classes: "govuk-summary-list__row--no-border"
+              }
+            ]
+          }) }}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

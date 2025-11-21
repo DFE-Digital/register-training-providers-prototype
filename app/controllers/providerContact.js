@@ -124,7 +124,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
-    error.text = "Enter a first name"
+    error.text = "Enter first name"
     errors.push(error)
   }
 
@@ -132,7 +132,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
-    error.text = "Enter a last name"
+    error.text = "Enter last name"
     errors.push(error)
   }
 
@@ -140,7 +140,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
-    error.text = "Enter an email address"
+    error.text = "Enter email address"
     errors.push(error)
   } else if (!isValidEmail(contact.email)) {
     const error = {}
@@ -198,7 +198,7 @@ exports.newProviderContactCheck_get = async (req, res) => {
 exports.newProviderContactCheck_post = async (req, res) => {
   const { providerId } = req.params
   const { contact } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user.id
 
   await ProviderContact.create({
     providerId,
@@ -206,8 +206,8 @@ exports.newProviderContactCheck_post = async (req, res) => {
     lastName: contact.lastName,
     email: nullIfEmpty(contact.email),
     telephone: nullIfEmpty(contact.telephone),
-    createdById: user.id,
-    updatedById: user.id
+    createdById: userId,
+    updatedById: userId
   })
 
   delete req.session.data.contact
@@ -261,7 +261,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
-    error.text = "Enter a first name"
+    error.text = "Enter first name"
     errors.push(error)
   }
 
@@ -269,7 +269,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
-    error.text = "Enter a last name"
+    error.text = "Enter last name"
     errors.push(error)
   }
 
@@ -277,7 +277,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
-    error.text = "Enter an email address"
+    error.text = "Enter email address"
     errors.push(error)
   } else if (!isValidEmail(contact.email)) {
     const error = {}
@@ -344,7 +344,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
     lastName: req.session.data.contact.lastName,
     email: nullIfEmpty(req.session.data.contact.email),
     telephone: nullIfEmpty(req.session.data.contact.telephone),
-    updatedById: req.session.passport.user.id
+    updatedById: req.user.id
   })
 
   delete req.session.data.contact
@@ -375,12 +375,12 @@ exports.deleteProviderContact_get = async (req, res) => {
 
 exports.deleteProviderContact_post = async (req, res) => {
   const { contactId, providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const contact = await ProviderContact.findByPk(contactId)
   await contact.update({
     deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
+    deletedById: userId,
+    updatedById: userId
   })
 
   req.flash('success', 'Contact deleted')

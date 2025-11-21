@@ -605,7 +605,7 @@ exports.newProviderFindAddress_post = async (req, res) => {
     const error = {}
     error.fieldName = "address-postcode"
     error.href = "#address-postcode"
-    error.text = "Enter a postcode"
+    error.text = "Enter postcode"
     errors.push(error)
   } else if (!isValidPostcode(find.postcode)) {
     const error = {}
@@ -824,7 +824,7 @@ exports.newProviderCheck_get = async (req, res) => {
 
 exports.newProviderCheck_post = async (req, res) => {
   const { address, provider } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user.id
 
   const newProvider = await Provider.create({
     operatingName: provider.operatingName,
@@ -833,8 +833,8 @@ exports.newProviderCheck_post = async (req, res) => {
     code: provider.code,
     ukprn: provider.ukprn,
     urn: nullIfEmpty(provider.urn),
-    createdById: user.id,
-    updatedById: user.id
+    createdById: userId,
+    updatedById: userId
   })
 
   if (provider.accreditation) {
@@ -852,8 +852,8 @@ exports.newProviderCheck_post = async (req, res) => {
       number: provider.accreditation.number,
       startsOn,
       endsOn,
-      createdById: user.id,
-      updatedById: user.id
+      createdById: userId,
+      updatedById: userId
     })
   }
 
@@ -1022,7 +1022,7 @@ exports.editProviderCheck_get = async (req, res) => {
 exports.editProviderCheck_post = async (req, res) => {
   const { providerId } = req.params
   const { provider } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user.id
   const currentProvider = await Provider.findByPk(providerId)
   await currentProvider.update({
     operatingName: provider.operatingName,
@@ -1031,7 +1031,7 @@ exports.editProviderCheck_post = async (req, res) => {
     code: provider.code,
     ukprn: provider.ukprn,
     urn: nullIfEmpty(provider.urn),
-    updatedById: user.id
+    updatedById: userId
   })
 
   delete req.session.data.provider
@@ -1058,12 +1058,12 @@ exports.archiveProvider_get = async (req, res) => {
 
 exports.archiveProvider_post = async (req, res) => {
   const { providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const provider = await Provider.findByPk(providerId)
   await provider.update({
     archivedAt: new Date(),
-    archivedById: user.id,
-    updatedById: user.id
+    archivedById: userId,
+    updatedById: userId
   })
 
   req.flash('success', 'Provider archived')
@@ -1088,12 +1088,12 @@ exports.restoreProvider_get = async (req, res) => {
 
 exports.restoreProvider_post = async (req, res) => {
   const { providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const provider = await Provider.findByPk(providerId)
   await provider.update({
     archivedAt: null,
     archivedById: null,
-    updatedById: user.id
+    updatedById: userId
   })
 
   req.flash('success', 'Provider restored')
@@ -1118,12 +1118,12 @@ exports.deleteProvider_get = async (req, res) => {
 
 exports.deleteProvider_post = async (req, res) => {
   const { providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const provider = await Provider.findByPk(providerId)
   await provider.update({
     deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
+    deletedById: userId,
+    updatedById: userId
   })
 
   req.flash('success', 'Provider deleted')

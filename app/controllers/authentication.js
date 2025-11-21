@@ -67,7 +67,7 @@ exports.signInEmail_post = (req, res) => {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
-    error.text = 'Enter an email address'
+    error.text = 'Enter email address'
     errors.push(error)
   } else if (!isValidEmail(email)) {
     // Second check if valid email format
@@ -125,7 +125,7 @@ exports.signInPassword_post = (req, res, next) => {
     const error = {}
     error.fieldName = 'password'
     error.href = '#password'
-    error.text = 'Enter a password'
+    error.text = 'Enter password'
     errors.push(error)
   }
 

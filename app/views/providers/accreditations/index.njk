@@ -46,6 +46,31 @@
 
     {% if accreditations.length %}
       {% for accreditation in accreditations %}
+
+        {% set accreditationDatesHtml %}
+          {{ govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: "Starts on"
+                },
+                value: {
+                  text: accreditation.startsOn | govukDate
+                }
+              },
+              {
+                key: {
+                  text: "Ends on"
+                },
+                value: {
+                  text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
+                  classes: "govuk-hint" if not accreditation.endsOn
+                }
+              }
+            ]
+          }) }}
+        {% endset %}
+
         {{ govukSummaryList({
           card: {
             title: {
@@ -77,19 +102,10 @@
             },
             {
               key: {
-                text: "Date accreditation starts"
+                text: "Accreditation dates"
               },
               value: {
-                text: accreditation.startsOn | govukDate
-              }
-            },
-            {
-              key: {
-                text: "Date accreditation ends"
-              },
-              value: {
-                text: accreditation.endsOn | govukDate if accreditation.endsOn else "Not entered",
-                classes: "govuk-hint" if not accreditation.endsOn
+                html: accreditationDatesHtml
               }
             }
           ]
