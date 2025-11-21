@@ -1413,7 +1413,8 @@ exports.deleteProviderPartnership_get = async (req, res) => {
     actions: {
       back: `/providers/${providerId}/partnerships`,
       cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/${partnershipId}/delete`
+      save: `/providers/${providerId}/partnerships/${partnershipId}/delete`,
+      change: `/providers/${providerId}/partnerships/${partnershipId}/dates`
     }
   })
 }
