@@ -34,7 +34,7 @@
                 text: "Starts on"
               },
               value: {
-                text: accreditation.startsOn | isoDateFromDateInput | govukDate
+                text: accreditationDates.startsOn
               }
             },
             {
@@ -42,8 +42,8 @@
                 text: "Ends on"
               },
               value: {
-                text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn else "Not entered",
-                classes: "govuk-hint" if not accreditation.endsOn
+                text: accreditationDates.endsOn if accreditationDates.endsOn else "Not entered",
+                classes: "govuk-hint" if not accreditationDates.endsOn
               },
               classes: "govuk-summary-list__row--no-border"
             }

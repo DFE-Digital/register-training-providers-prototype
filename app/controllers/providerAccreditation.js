@@ -1,6 +1,6 @@
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { isoDateFromDateInput } = require('../helpers/date')
+const { isoDateFromDateInput, govukDate, isValidDate } = require('../helpers/date')
 const { validateDateInput, getDateParts } = require('../helpers/validation/date')
 const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { Provider, ProviderAccreditation } = require('../models')
@@ -98,6 +98,16 @@ const validateAccreditationDates = ({ startsOnInput, endsOnInput } = {}) => {
     startsOnFieldErrors,
     endsOnFieldErrors
   }
+}
+
+const formatAccreditationDatesForSummary = (accreditation = {}) => {
+  const startsOnIso = isoDateFromDateInput(accreditation.startsOn)
+  const endsOnIso = isoDateFromDateInput(accreditation.endsOn)
+
+  const startsOn = isValidDate(startsOnIso) ? govukDate(startsOnIso) : ''
+  const endsOn = isValidDate(endsOnIso) ? govukDate(endsOnIso) : null
+
+  return { startsOn, endsOn }
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -287,9 +297,11 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
   }
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
+  const accreditationDates = formatAccreditationDatesForSummary(accreditation)
   res.render('providers/accreditations/check-your-answers', {
     provider,
     accreditation,
+    accreditationDates,
     actions: {
       back: `/providers/${providerId}/accreditations/new`,
       cancel: `/providers/${providerId}/accreditations`,
@@ -424,11 +436,13 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
   const { accreditation } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
+  const accreditationDates = formatAccreditationDatesForSummary(accreditation)
 
   res.render('providers/accreditations/check-your-answers', {
     provider,
     currentAccreditation,
     accreditation,
+    accreditationDates,
     actions: {
       back: `/providers/${providerId}/accreditations/${accreditationId}/edit`,
       cancel: `/providers/${providerId}/accreditations`,
