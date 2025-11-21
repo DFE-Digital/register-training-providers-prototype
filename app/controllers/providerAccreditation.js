@@ -314,7 +314,11 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
 exports.newProviderAccreditationCheck_post = async (req, res) => {
   const { accreditation } = req.session.data
   const { providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user?.id
+
+  if (!userId) {
+    throw new Error('User session missing while saving accreditation')
+  }
 
   let startsOn = isoDateFromDateInput(accreditation.startsOn)
   startsOn = new Date(startsOn)
@@ -330,8 +334,8 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
     number: accreditation.number,
     startsOn,
     endsOn,
-    createdById: user.id,
-    updatedById: user.id
+    createdById: userId,
+    updatedById: userId
   })
 
   delete req.session.data.accreditation
@@ -455,7 +459,11 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
 exports.editProviderAccreditationCheck_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
   const { accreditation } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user?.id
+
+  if (!userId) {
+    throw new Error('User session missing while updating accreditation')
+  }
 
   let startsOn = isoDateFromDateInput(accreditation.startsOn)
   startsOn = new Date(startsOn)
@@ -471,7 +479,7 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
     number: accreditation.number,
     startsOn,
     endsOn,
-    updatedById: user.id
+    updatedById: userId
   })
 
   delete req.session.data.accreditation
