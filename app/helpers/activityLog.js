@@ -853,6 +853,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
   let academicYearsAdded = []
   let academicYearsRemoved = []
   let partnershipDatesSummary = null
+  let accreditationDatesSummary = null
 
   switch (revisionTable) {
     case 'provider_revisions': {
@@ -930,9 +931,14 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       label = providerName
       href = safeHref ? `${safeHref}/accreditations` : ''
 
+      accreditationDatesSummary = {
+        startsOn: revision.startsOn ? govukDate(revision.startsOn) : 'Not recorded',
+        endsOn: revision.endsOn ? govukDate(revision.endsOn) : null
+      }
+
       fields.push({ key: 'Accreditation number', value: revision.number })
-      fields.push({ key: 'Date accreditation starts', value: govukDate(revision.startsOn) })
-      fields.push({ key: 'Date accreditation ends', value: revision.endsOn ? govukDate(revision.endsOn) : null })
+      fields.push({ key: 'Date accreditation starts', value: accreditationDatesSummary.startsOn })
+      fields.push({ key: 'Date accreditation ends', value: accreditationDatesSummary.endsOn || 'No end date' })
       break
     }
 
@@ -1092,7 +1098,12 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
             linkedAcademicYears: summaryLinkedAcademicYears,
             academicYearsAdded,
             academicYearsRemoved,
-            partnershipDates: partnershipDatesSummary || { startsOn: 'Not recorded', endsOn: null }
+            partnershipDates: partnershipDatesSummary || { startsOn: 'Not entered', endsOn: null }
+          }
+        : {}),
+    ...(revisionTable === 'provider_accreditation_revisions'
+        ? {
+            accreditationDates: accreditationDatesSummary || { startsOn: 'Not entered', endsOn: null }
           }
         : {})
   }
