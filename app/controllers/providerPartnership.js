@@ -990,7 +990,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   await saveAcademicYearPartnerships({
     academicYearIds: req.session.data?.academicYears,
     partnershipId: partnership.id,
-    userId: user.id
+    userId
   })
 
   delete req.session.data.search
