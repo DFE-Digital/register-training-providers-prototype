@@ -509,12 +509,12 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
 
 exports.deleteProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   await accreditation.update({
     deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
+    deletedById: userId,
+    updatedById: userId
   })
 
   req.flash('success', 'Accreditation deleted')

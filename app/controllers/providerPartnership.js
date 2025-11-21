@@ -942,7 +942,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   const { provider } = req.session.data
 
   // get the signed in user
-  const { user } = req.session.passport
+  const userId = req.user.id
 
   // calculate if the provider is accredited
   const isAccredited = await isAccreditedProvider({ providerId })
@@ -982,8 +982,8 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
     trainingPartnerId,
     startsOn: req.session.data.partnershipDates.startsOnIso,
     endsOn: req.session.data.partnershipDates.endsOnIso,
-    createdById: user.id,
-    updatedById: user.id
+    createdById: userId,
+    updatedById: userId
   })
 
   // save the academic years for the partnership
@@ -1298,7 +1298,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
 
 exports.editProviderPartnershipCheck_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const partnership = await ProviderPartnership.findByPk(partnershipId)
 
   if (!partnership) {
@@ -1327,7 +1327,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
   for (const record of toDelete) {
     await record.update({
       deletedAt: now,
-      deletedById: user.id
+      deletedById: userId
     })
   }
 
@@ -1335,7 +1335,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
     await saveAcademicYearPartnerships({
       academicYearIds: toAdd,
       partnershipId,
-      userId: user.id
+      userId
     })
   }
 
@@ -1352,11 +1352,11 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
     startsOn: startsOnIso,
     endsOn: endsOnIso,
     updatedAt: now,
-    updatedById: user.id
+    updatedById: userId
   })
 
   if (academicYearsChanged && !datesChanged) {
-    await forcePartnershipRevision({ partnership, userId: user.id })
+    await forcePartnershipRevision({ partnership, userId })
   }
 
   clearPartnershipEditSession(req)
@@ -1421,7 +1421,7 @@ exports.deleteProviderPartnership_get = async (req, res) => {
 
 exports.deleteProviderPartnership_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const sequelize = require('../models').sequelize
   const t = await sequelize.transaction()
 
@@ -1444,9 +1444,9 @@ exports.deleteProviderPartnership_post = async (req, res) => {
       await link.update(
         {
           deletedAt: now,
-          deletedById: user.id,
+          deletedById: userId,
           updatedAt: now,
-          updatedById: user.id
+          updatedById: userId
         },
         { transaction: t }
       )
@@ -1455,9 +1455,9 @@ exports.deleteProviderPartnership_post = async (req, res) => {
     await partnership.update(
       {
         deletedAt: now,
-        deletedById: user.id,
+        deletedById: userId,
         updatedAt: now,
-        updatedById: user.id
+        updatedById: userId
       },
       { transaction: t }
     )

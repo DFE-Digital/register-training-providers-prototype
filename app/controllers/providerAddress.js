@@ -347,7 +347,7 @@ exports.newProviderAddressCheck_get = async (req, res) => {
 exports.newProviderAddressCheck_post = async (req, res) => {
   const { providerId } = req.params
   const { address } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user.id
 
   await ProviderAddress.create({
     providerId,
@@ -361,8 +361,8 @@ exports.newProviderAddressCheck_post = async (req, res) => {
     latitude: nullIfEmpty(address.latitude),
     longitude: nullIfEmpty(address.longitude),
     googlePlaceId: nullIfEmpty(address.googlePlaceId),
-    createdById: user.id,
-    updatedById: user.id
+    createdById: userId,
+    updatedById: userId
   })
 
   delete req.session.data.find
@@ -496,7 +496,7 @@ exports.editProviderAddressCheck_get = async (req, res) => {
 exports.editProviderAddressCheck_post = async (req, res) => {
   const { addressId, providerId } = req.params
   const { address } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user.id
 
   const currentAddress = await ProviderAddress.findByPk(addressId)
 
@@ -511,7 +511,7 @@ exports.editProviderAddressCheck_post = async (req, res) => {
     latitude: nullIfEmpty(address.latitude),
     longitude: nullIfEmpty(address.longitude),
     googlePlaceId: nullIfEmpty(address.googlePlaceId),
-    updatedById: user.id
+    updatedById: userId
   })
 
   delete req.session.data.address
@@ -542,12 +542,12 @@ exports.deleteProviderAddress_get = async (req, res) => {
 
 exports.deleteProviderAddress_post = async (req, res) => {
   const { addressId, providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const address = await ProviderAddress.findByPk(addressId)
   await address.update({
     deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
+    deletedById: userId,
+    updatedById: userId
   })
 
   req.flash('success', 'Address deleted')
