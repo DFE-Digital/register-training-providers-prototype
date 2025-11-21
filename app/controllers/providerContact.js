@@ -124,7 +124,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
-    error.text = "Enter a first name"
+    error.text = "Enter first name"
     errors.push(error)
   }
 
@@ -132,7 +132,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
-    error.text = "Enter a last name"
+    error.text = "Enter last name"
     errors.push(error)
   }
 
@@ -140,7 +140,7 @@ exports.newProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
-    error.text = "Enter an email address"
+    error.text = "Enter email address"
     errors.push(error)
   } else if (!isValidEmail(contact.email)) {
     const error = {}
@@ -261,7 +261,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "firstName"
     error.href = "#firstName"
-    error.text = "Enter a first name"
+    error.text = "Enter first name"
     errors.push(error)
   }
 
@@ -269,7 +269,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "lastName"
     error.href = "#lastName"
-    error.text = "Enter a last name"
+    error.text = "Enter last name"
     errors.push(error)
   }
 
@@ -277,7 +277,7 @@ exports.editProviderContact_post = async (req, res) => {
     const error = {}
     error.fieldName = "email"
     error.href = "#email"
-    error.text = "Enter an email address"
+    error.text = "Enter email address"
     errors.push(error)
   } else if (!isValidEmail(contact.email)) {
     const error = {}
