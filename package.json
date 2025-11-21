@@ -7,6 +7,7 @@
   },
   "scripts": {
     "db:build": "npm run db:migrate && npm run db:seed",
+    "db:build:dev": "rm -f app/database/development.sqlite3 && npm run db:build",
     "db:migrate": "npx sequelize db:migrate --migrations-path ./app/migrations --config ./app/config/config.json",
     "db:seed": "npx sequelize db:seed:all --seeders-path ./app/seeders --config ./app/config/config.json",
     "postinstall": "npm run db:build",
