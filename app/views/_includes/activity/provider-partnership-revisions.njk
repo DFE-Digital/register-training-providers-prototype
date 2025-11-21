@@ -9,7 +9,7 @@
 {% endfor %}
 
 {% set partnershipDates = item.summary.partnershipDates or {
-  startsOn: "Not recorded",
+  startsOn: "Not entered",
   endsOn: null
 } %}
 {% set academicYears = item.summary.linkedAcademicYears or [] %}
@@ -59,7 +59,7 @@
         </dd>
       </div>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Partnership details</dt>
+        <dt class="govuk-summary-list__key">Partnership dates</dt>
         <dd class="govuk-summary-list__value">
           {{ govukSummaryList({
             rows: [
