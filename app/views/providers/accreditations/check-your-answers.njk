@@ -26,6 +26,31 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
+      {% set accreditationDatesHtml %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Starts on"
+              },
+              value: {
+                text: accreditation.startsOn | isoDateFromDateInput | govukDate
+              }
+            },
+            {
+              key: {
+                text: "Ends on"
+              },
+              value: {
+                text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn else "Not entered",
+                classes: "govuk-hint" if not accreditation.endsOn
+              },
+              classes: "govuk-summary-list__row--no-border"
+            }
+          ]
+        }) }}
+      {% endset %}
+
       {{ govukSummaryList({
         rows: [
           {
@@ -47,35 +72,17 @@
           },
           {
             key: {
-              text: "Date accreditation starts"
+              text: "Accreditation dates"
             },
             value: {
-              text: accreditation.startsOn | isoDateFromDateInput | govukDate
+              html: accreditationDatesHtml
             },
             actions: {
               items: [
                 {
-                  href: actions.change + "?referrer=check",
+                  href: actions.change + "?referrer=check#accreditation-dates",
                   text: "Change",
-                  visuallyHiddenText: "date accreditation starts"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Date accreditation ends"
-            },
-            value: {
-              text: accreditation.endsOn | isoDateFromDateInput | govukDate if accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
-              classes: "govuk-hint" if accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
-            },
-            actions: {
-              items: [
-                {
-                  href: actions.change + "?referrer=check",
-                  text: "Change",
-                  visuallyHiddenText: "date accreditation ends"
+                  visuallyHiddenText: "accreditation dates"
                 }
               ]
             }
