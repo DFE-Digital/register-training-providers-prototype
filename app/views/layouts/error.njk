@@ -16,6 +16,14 @@
     homepageUrl: "/"
   }) }}
 
+  {% if not hideServiceNavigation %}
+    {{ govukServiceNavigation({
+      navigationId: "primaryNavigation",
+      serviceName: serviceName,
+      serviceUrl: "/"
+    }) }}
+  {% endif %}
+
   {% if not hidePhaseBanner %}
     {% include "_includes/phase-banner.njk" %}
   {% endif %}
