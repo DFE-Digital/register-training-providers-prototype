@@ -40,7 +40,8 @@ const revisionHook = ({ revisionModelName, modelKey }) => {
   return async (instance, options = {}) => {
     const sequelize = instance.sequelize
     const RevisionModel = sequelize.models[revisionModelName]
-    const trackedFields = revisionFields[modelKey] || []
+    const revisionAttrs = new Set(Object.keys(RevisionModel.rawAttributes))
+    const trackedFields = (revisionFields[modelKey] || []).filter((field) => revisionAttrs.has(field))
 
     const tx = options?.transaction // use the same transaction as the caller
 
@@ -51,10 +52,9 @@ const revisionHook = ({ revisionModelName, modelKey }) => {
 
     const src = instance.get({ plain: true })
     const pickForRevision = (obj) => {
-      const revisionAttrs = Object.keys(RevisionModel.rawAttributes)
       const omit = new Set(['id'])
       return Object.fromEntries(
-        Object.entries(obj).filter(([k]) => revisionAttrs.includes(k) && !omit.has(k))
+        Object.entries(obj).filter(([k]) => revisionAttrs.has(k) && !omit.has(k))
       )
     }
 

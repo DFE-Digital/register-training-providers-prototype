@@ -21,10 +21,16 @@
 
     <form action="{{ actions.delete }}" method="post" accept-charset="utf-8" novalidate>
 
-      {# {{ govukWarningText({
+      {% if not partnership.endsOn %}
+        <p class="govuk-body">
+          If you do not want to delete the partnership, but update that it has ended, <a href="{{ actions.change }}" class="govuk-link">add the partnership end date.</a>
+        </p>
+      {% endif %}
+
+      {{ govukWarningText({
         text: "Removing a partnership is permanent – you cannot undo it.",
         iconFallbackText: "Warning"
-      }) }} #}
+      }) }}
 
       {{ govukButton({
         text: "Delete partnership",

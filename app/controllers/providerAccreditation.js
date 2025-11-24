@@ -1,6 +1,6 @@
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
-const { isoDateFromDateInput } = require('../helpers/date')
+const { isoDateFromDateInput, govukDate, isValidDate } = require('../helpers/date')
 const { validateDateInput, getDateParts } = require('../helpers/validation/date')
 const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { Provider, ProviderAccreditation } = require('../models')
@@ -98,6 +98,16 @@ const validateAccreditationDates = ({ startsOnInput, endsOnInput } = {}) => {
     startsOnFieldErrors,
     endsOnFieldErrors
   }
+}
+
+const formatAccreditationDatesForSummary = (accreditation = {}) => {
+  const startsOnIso = isoDateFromDateInput(accreditation.startsOn)
+  const endsOnIso = isoDateFromDateInput(accreditation.endsOn)
+
+  const startsOn = isValidDate(startsOnIso) ? govukDate(startsOnIso) : ''
+  const endsOn = isValidDate(endsOnIso) ? govukDate(endsOnIso) : null
+
+  return { startsOn, endsOn }
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -287,9 +297,11 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
   }
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
+  const accreditationDates = formatAccreditationDatesForSummary(accreditation)
   res.render('providers/accreditations/check-your-answers', {
     provider,
     accreditation,
+    accreditationDates,
     actions: {
       back: `/providers/${providerId}/accreditations/new`,
       cancel: `/providers/${providerId}/accreditations`,
@@ -302,7 +314,11 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
 exports.newProviderAccreditationCheck_post = async (req, res) => {
   const { accreditation } = req.session.data
   const { providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user?.id
+
+  if (!userId) {
+    throw new Error('User session missing while saving accreditation')
+  }
 
   let startsOn = isoDateFromDateInput(accreditation.startsOn)
   startsOn = new Date(startsOn)
@@ -318,8 +334,8 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
     number: accreditation.number,
     startsOn,
     endsOn,
-    createdById: user.id,
-    updatedById: user.id
+    createdById: userId,
+    updatedById: userId
   })
 
   delete req.session.data.accreditation
@@ -424,11 +440,13 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
   const { accreditation } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
+  const accreditationDates = formatAccreditationDatesForSummary(accreditation)
 
   res.render('providers/accreditations/check-your-answers', {
     provider,
     currentAccreditation,
     accreditation,
+    accreditationDates,
     actions: {
       back: `/providers/${providerId}/accreditations/${accreditationId}/edit`,
       cancel: `/providers/${providerId}/accreditations`,
@@ -441,7 +459,11 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
 exports.editProviderAccreditationCheck_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
   const { accreditation } = req.session.data
-  const { user } = req.session.passport
+  const userId = req.user?.id
+
+  if (!userId) {
+    throw new Error('User session missing while updating accreditation')
+  }
 
   let startsOn = isoDateFromDateInput(accreditation.startsOn)
   startsOn = new Date(startsOn)
@@ -457,7 +479,7 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
     number: accreditation.number,
     startsOn,
     endsOn,
-    updatedById: user.id
+    updatedById: userId
   })
 
   delete req.session.data.accreditation
@@ -487,12 +509,12 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
 
 exports.deleteProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
-  const { user } = req.session.passport
+  const userId = req.user.id
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   await accreditation.update({
     deletedAt: new Date(),
-    deletedById: user.id,
-    updatedById: user.id
+    deletedById: userId,
+    updatedById: userId
   })
 
   req.flash('success', 'Accreditation deleted')
