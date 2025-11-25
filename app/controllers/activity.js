@@ -5,7 +5,7 @@ const Pagination = require('../helpers/pagination')
 exports.activityList = async (req, res) => {
   // variables for use in pagination
   const page = parseInt(req.query.page, 10) || 1
-  const limit = parseInt(req.query.limit, 10) || 25
+  const limit = parseInt(req.query.limit, 10) || 15
   const offset = (page - 1) * limit
 
   // Get the total amount of activity for pagination metadata
