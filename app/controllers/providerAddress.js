@@ -17,7 +17,7 @@ exports.providerAddressesList = async (req, res) => {
   delete req.session.data.address
 
   const page = parseInt(req.query.page, 10) || 1
-  const limit = parseInt(req.query.limit, 10) || 50
+  const limit = parseInt(req.query.limit, 10) || 15
   const offset = (page - 1) * limit
 
   // get the providerId from the request for use in subsequent queries
