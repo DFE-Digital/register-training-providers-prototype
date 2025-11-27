@@ -11,6 +11,13 @@
   border: 0;
 }
 
+.autocomplete__option--focused .app-autocomplete__option,
+.autocomplete__option--focused .app-autocomplete__option .govuk-hint,
+.autocomplete__option:hover .app-autocomplete__option,
+.autocomplete__option:hover .app-autocomplete__option .govuk-hint {
+  color: govuk-colour("white") !important;
+}
+
 .app-service-navigation__align-right {
   @include govuk-media-query($from: tablet) {
     margin-left: auto;
