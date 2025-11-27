@@ -144,9 +144,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const formatReferenceLine = (provider) => {
     const references = [
+      formatCode(provider),
       formatUkprn(provider),
-      formatUrn(provider),
-      formatCode(provider)
+      formatUrn(provider)
     ].filter(Boolean);
 
     return references.join(', ');
