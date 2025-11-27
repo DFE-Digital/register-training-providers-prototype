@@ -4,7 +4,7 @@
 
 {% set providerType = "training partner" if isAccredited else "accredited provider" %}
 
-{% set title = "Enter " + providerType + " name, UKPRN or URN" %}
+{% set title = "Enter " + providerType + " name, code, UKPRN or URN" %}
 
 {% if currentPartnership %}
   {% set caption = provider.operatingName %}
@@ -109,6 +109,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const fallback = document.querySelector('.autocomplete__fallback');
   const enhanced = document.querySelector('#provider-autocomplete-container');
+  const escapeHtml = (value = '') => {
+    const div = document.createElement('div');
+    div.textContent = value;
+    return div.innerHTML;
+  };
+
+  const formatOperatingName = (provider) => {
+    if (!provider) return '';
+    if (typeof provider === 'string') return provider;
+    return provider.operatingName || provider.legalName || '(no name)';
+  };
+
+  const formatUkprn = (provider) => {
+    if (provider && typeof provider === 'object' && provider.ukprn) {
+      return `UKPRN: ${provider.ukprn}`;
+    }
+    return '';
+  };
+
+  const formatInputValue = (provider) => {
+    const operatingName = formatOperatingName(provider);
+    const ukprn = formatUkprn(provider);
+    return ukprn ? `${operatingName} (${ukprn})` : operatingName;
+  };
+
+  const suggestionTemplate = (provider) => {
+    const operatingName = escapeHtml(formatOperatingName(provider));
+    const ukprn = formatUkprn(provider);
+    const ukprnHtml = ukprn ? `<div class="govuk-hint govuk-!-margin-bottom-0">${escapeHtml(ukprn)}</div>` : '';
+
+    return `
+      <div class="app-autocomplete__option">
+        ${operatingName}
+        ${ukprnHtml}
+      </div>
+    `;
+  };
 
   if (fallback && enhanced) {
     fallback.style.display = 'none';
@@ -143,21 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(providers => {
           // providers: [ { id, operatingName, legalName, ukprn, urn }, ... ]
 
-          // 1) Build a map that associates a display label with the provider object
-          providerMap = providers.map(provider => {
-            const namePart = provider.operatingName || provider.legalName || '(no name)';
-            const ukprnPart = provider.ukprn ? ` (UKPRN: ${provider.ukprn})` : '';
-            const displayLabel = `${namePart}${ukprnPart}`;
-
-            return {
-              label: displayLabel,
-              ...provider // keep the original fields, including provider.id
-            };
-          });
-
-          // 2) Pass an array of just the labels to populateResults
-          const labelArray = providerMap.map(item => item.label);
-          populateResults(labelArray);
+          providerMap = providers;
+          populateResults(providerMap);
         })
         .catch(err => {
           console.error(err);
@@ -167,13 +191,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fired when the user confirms a suggestion (click, Enter, or Tab)
     onConfirm: function (confirmedLabel) {
-      const selectedProvider = providerMap.find(p => p.label === confirmedLabel);
+      const selectedProvider = typeof confirmedLabel === 'object'
+        ? confirmedLabel
+        : providerMap.find(p => formatInputValue(p) === confirmedLabel || formatOperatingName(p) === confirmedLabel);
       // If found, store the provider's ID in the hidden field
       if (selectedProvider) {
         document.getElementById('selected-provider-id').value = selectedProvider.id;
       } else {
         document.getElementById('selected-provider-id').value = '';
       }
+    },
+    templates: {
+      inputValue: formatInputValue,
+      suggestion: suggestionTemplate
     }
   });
 
@@ -189,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Otherwise, try to see if the typed text exactly matches one suggestion
     const typedValue = document.getElementById('provider-autocomplete').value;
     if (typedValue && providerMap.length > 0) {
-      const matchedProvider = providerMap.find(p => p.label === typedValue);
+      const matchedProvider = providerMap.find(p => formatInputValue(p) === typedValue || formatOperatingName(p) === typedValue);
       if (matchedProvider) {
         hiddenField.value = matchedProvider.id;
       }
