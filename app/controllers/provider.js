@@ -1153,9 +1153,10 @@ exports.accreditedProviderSuggestions_json = async (req, res) => {
       deletedAt: null,
       [Op.or]: [
         { operatingName: { [Op.like]: `%${query}%` } },
-        { legalName: { [Op.like]: `%${query}%` } },
+        // { legalName: { [Op.like]: `%${query}%` } },
         { ukprn: { [Op.like]: `%${query}%` } },
-        { urn: { [Op.like]: `%${query}%` } }
+        { urn: { [Op.like]: `%${query}%` } },
+        { code: { [Op.like]: `%${query}%` } }
       ]
     },
     include: [
@@ -1197,9 +1198,10 @@ exports.trainingPartnerSuggestions_json = async (req, res) => {
       deletedAt: null,
       [Op.or]: [
         { operatingName: { [Op.like]: `%${query}%` } },
-        { legalName: { [Op.like]: `%${query}%` } },
+        // { legalName: { [Op.like]: `%${query}%` } },
         { ukprn: { [Op.like]: `%${query}%` } },
-        { urn: { [Op.like]: `%${query}%` } }
+        { urn: { [Op.like]: `%${query}%` } },
+        { code: { [Op.like]: `%${query}%` } }
       ]
     },
     include: [
