@@ -128,21 +128,46 @@ document.addEventListener('DOMContentLoaded', function () {
     return '';
   };
 
+  const formatUrn = (provider) => {
+    if (provider && typeof provider === 'object' && provider.urn) {
+      return `URN: ${provider.urn}`;
+    }
+    return '';
+  };
+
+  const formatCode = (provider) => {
+    if (provider && typeof provider === 'object' && provider.code) {
+      return `Provider code: ${provider.code}`;
+    }
+    return '';
+  };
+
+  const formatReferenceLine = (provider) => {
+    const references = [
+      formatUkprn(provider),
+      formatUrn(provider),
+      formatCode(provider)
+    ].filter(Boolean);
+
+    return references.join(', ');
+  };
+
   const formatInputValue = (provider) => {
     const operatingName = formatOperatingName(provider);
-    const ukprn = formatUkprn(provider);
-    return ukprn ? `${operatingName} (${ukprn})` : operatingName;
+    // const ukprn = formatUkprn(provider);
+    // return ukprn ? `${operatingName} (${ukprn})` : operatingName;
+    return operatingName;
   };
 
   const suggestionTemplate = (provider) => {
     const operatingName = escapeHtml(formatOperatingName(provider));
-    const ukprn = formatUkprn(provider);
-    const ukprnHtml = ukprn ? `<div class="govuk-hint govuk-!-margin-bottom-0">${escapeHtml(ukprn)}</div>` : '';
+    const references = formatReferenceLine(provider);
+    const referencesHtml = references ? `<div class="govuk-hint govuk-!-margin-bottom-0">${escapeHtml(references)}</div>` : '';
 
     return `
       <div class="app-autocomplete__option">
-        ${operatingName}
-        ${ukprnHtml}
+        <div class="govuk-!-font-weight-bold">${operatingName}</div>
+        ${referencesHtml}
       </div>
     `;
   };

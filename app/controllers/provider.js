@@ -1146,7 +1146,8 @@ exports.accreditedProviderSuggestions_json = async (req, res) => {
       'operatingName',
       'legalName',
       'ukprn',
-      'urn'
+      'urn',
+      'code'
     ],
     where: {
       archivedAt: null,
@@ -1191,7 +1192,8 @@ exports.trainingPartnerSuggestions_json = async (req, res) => {
       'operatingName',
       'legalName',
       'ukprn',
-      'urn'
+      'urn',
+      'code'
     ],
     where: {
       archivedAt: null,
