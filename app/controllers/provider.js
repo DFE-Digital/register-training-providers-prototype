@@ -6,8 +6,7 @@ const { isoDateFromDateInput } = require('../helpers/date')
 const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode, isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
-const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
-const { geocodeAddress } = require('../services/googleMaps')
+const { findByPostcode, findByUPRN, geocodeAddress } = require('../services/ordnanceSurveyPlaces')
 const { Provider, ProviderAddress, ProviderAccreditation } = require('../models')
 
 const { Op, literal } = require('sequelize')
@@ -796,11 +795,12 @@ exports.newProviderCheck_get = async (req, res) => {
 
     address = parseOsPlacesData(address)
   }
-  // Geocode the address data
-  const addressString = parseAddressAsString(address)
-  const geocodes = await geocodeAddress(addressString)
-
-  address = {...address, ...geocodes}
+  // Geocode the address data if we don't already have coordinates
+  if (address.latitude == null || address.longitude == null) {
+    const addressString = parseAddressAsString(address)
+    const geocodes = await geocodeAddress(addressString)
+    address = { ...address, ...geocodes }
+  }
 
   // put address into the session data for use later
   req.session.data.address = address
