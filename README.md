@@ -49,7 +49,6 @@ The prototype uses environment variables to help configure the application. Thes
 | --- | --- | --- |
 | `ORDNANCE_SURVEY_API_KEY` | string | The API key needed to access the Ordnance Survey Places API |
 | `ORDNANCE_SURVEY_API_SECRET` | string | The API secret needed to access the Ordnance Survey Places API |
-| `GOOGLE_MAPS_API_KEY` | string | The API key needed to access the Google Maps API |
 
 ## Tools
 
