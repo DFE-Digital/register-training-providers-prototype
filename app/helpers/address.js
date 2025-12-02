@@ -42,7 +42,9 @@ const parseForGovukRadios = (addresses) => {
  *   line3: string,
  *   town: string,
  *   county: string,
- *   postcode: string
+ *   postcode: string,
+ *   latitude: number|null,
+ *   longitude: number|null
  * }} A structured address object suitable for form display or storage.
  */
 const parseOsPlacesData = (address) => {
@@ -105,7 +107,9 @@ const parseOsPlacesData = (address) => {
     line3,
     town: address.POST_TOWN || '',
     county: '', // or set it if you have county data
-    postcode: address.POSTCODE || ''
+    postcode: address.POSTCODE || '',
+    latitude: address.LATITUDE ?? null,
+    longitude: address.LONGITUDE ?? null
   }
 }
 

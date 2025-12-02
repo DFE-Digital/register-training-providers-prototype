@@ -38,7 +38,6 @@ Create a `.env` file in the project root:
 NODE_ENV=production
 
 # External APIs
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 ORDNANCE_SURVEY_API_KEY=your_os_api_key_here
 ORDNANCE_SURVEY_API_SECRET=your_os_api_secret_here
 

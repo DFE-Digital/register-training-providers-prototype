@@ -1,5 +1,4 @@
-const { findByPostcode, findByUPRN } = require('../services/ordnanceSurveyPlaces')
-const { geocodeAddress } = require('../services/googleMaps')
+const { findByPostcode, findByUPRN, geocodeAddress } = require('../services/ordnanceSurveyPlaces')
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isValidPostcode } = require('../helpers/validation')
@@ -318,11 +317,12 @@ exports.newProviderAddressCheck_get = async (req, res) => {
 
     address = parseOsPlacesData(address)
   }
-  // Geocode the address data
-  const addressString = parseAddressAsString(address)
-  const geocodes = await geocodeAddress(addressString)
-
-  address = {...address, ...geocodes}
+  // Geocode the address data if we don't already have coordinates
+  if (address.latitude == null || address.longitude == null) {
+    const addressString = parseAddressAsString(address)
+    const geocodes = await geocodeAddress(addressString)
+    address = { ...address, ...geocodes }
+  }
 
   // put address into the session data for use later
   req.session.data.address = address
@@ -471,11 +471,12 @@ exports.editProviderAddressCheck_get = async (req, res) => {
   const provider = await Provider.findByPk(providerId)
   const currentAddress = await ProviderAddress.findByPk(addressId)
 
-  // Geocode the address data
-  const addressString = parseAddressAsString(address)
-  const geocodes = await geocodeAddress(addressString)
-
-  address = {...address, ...geocodes}
+  // Geocode the address data if we don't already have coordinates
+  if (address.latitude == null || address.longitude == null) {
+    const addressString = parseAddressAsString(address)
+    const geocodes = await geocodeAddress(addressString)
+    address = { ...address, ...geocodes }
+  }
 
   // put address into the session data for use later
   req.session.data.address = address

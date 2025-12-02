@@ -54,6 +54,8 @@ const sanitiseAddress = (data = {}) => {
     LAT,
     LNG
   } = data
+  const latitude = (LAT ?? LAT === 0) ? Number(LAT) : null
+  const longitude = (LNG ?? LNG === 0) ? Number(LNG) : null
 
   // Title-case relevant fields
   const orgName = titleCaseOrNull(ORGANISATION_NAME)
@@ -98,8 +100,8 @@ const sanitiseAddress = (data = {}) => {
     POST_TOWN: postTown,
     POSTCODE: postcode,
     ADDRESS: addressParts.join(', '),
-    LATITUDE: LAT ?? null,
-    LONGITUDE: LNG ?? null
+    LATITUDE: latitude,
+    LONGITUDE: longitude
   }
 }
 
@@ -111,7 +113,7 @@ const sanitiseAddress = (data = {}) => {
  */
 const find = async (query, options = {}) => {
   const maxresults = options.maxresults || 25
-  const url = `https://api.os.uk/search/places/v1/find?query=${encodeURIComponent(query)}&maxresults=${maxresults}&key=${apiKey}`
+  const url = `https://api.os.uk/search/places/v1/find?query=${encodeURIComponent(query)}&maxresults=${maxresults}&key=${apiKey}&output_srs=EPSG:4326`
 
   const results = await fetchOsPlacesData(url)
   return results.map(item => sanitiseAddress(item.DPA))
@@ -126,7 +128,7 @@ const find = async (query, options = {}) => {
  */
 const findByPostcode = async (postcode, building = null, options = {}) => {
   const maxresults = options.maxresults || 25
-  const url = `https://api.os.uk/search/places/v1/postcode?postcode=${encodeURIComponent(postcode)}&maxresults=${maxresults}&key=${apiKey}`
+  const url = `https://api.os.uk/search/places/v1/postcode?postcode=${encodeURIComponent(postcode)}&maxresults=${maxresults}&key=${apiKey}&output_srs=EPSG:4326`
 
   let addresses = (await fetchOsPlacesData(url)).map(item => sanitiseAddress(item.DPA))
 
@@ -150,7 +152,7 @@ const findByPostcode = async (postcode, building = null, options = {}) => {
  * @returns {Promise<Object|{}>} - A single sanitized address object or an empty object if not found.
  */
 const findByUPRN = async (uprn) => {
-  const url = `https://api.os.uk/search/places/v1/uprn?uprn=${uprn}&key=${apiKey}`
+  const url = `https://api.os.uk/search/places/v1/uprn?uprn=${uprn}&key=${apiKey}&output_srs=EPSG:4326`
 
   // This returns an array of results typically you’d expect only one for a single UPRN.
   const results = await fetchOsPlacesData(url)
@@ -161,8 +163,32 @@ const findByUPRN = async (uprn) => {
   return sanitiseAddress(results[0].DPA)
 }
 
+/**
+ * Geocodes a single-line address using OS Places and returns latitude/longitude.
+ *
+ * @param {string} addressString - The address to geocode.
+ * @returns {Promise<{ latitude: number|null, longitude: number|null }>}
+ */
+const geocodeAddress = async (addressString) => {
+  if (!addressString || !addressString.trim()) {
+    throw new Error('Cannot geocode an empty or invalid address string.')
+  }
+
+  const [result] = await find(addressString, { maxresults: 1 })
+
+  if (!result) {
+    throw new Error('Could not geocode this address.')
+  }
+
+  return {
+    latitude: result.LATITUDE ?? null,
+    longitude: result.LONGITUDE ?? null
+  }
+}
+
 module.exports = {
   find,
   findByPostcode,
-  findByUPRN
+  findByUPRN,
+  geocodeAddress
 }
