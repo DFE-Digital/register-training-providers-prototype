@@ -44,6 +44,15 @@ module.exports = (sequelize) => {
       })
 
       /**
+       * One provider → many ProviderAcademicYear rows.
+       * FK lives on ProviderAcademicYear.providerId.
+       */
+      Provider.hasMany(models.ProviderAcademicYear, {
+        foreignKey: 'providerId',
+        as: 'providerAcademicYears'
+      })
+
+      /**
        * Provider was created by a User.
        * FK lives on Provider.createdById.
        */
