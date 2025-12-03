@@ -39,7 +39,7 @@ The database is built when you run `npm install`.
 You can also regenerate the database:
 
 - In Terminal, change the path to the repository
-- Type `npm run build-database`
+- Type `npm run db:build:dev`
 
 ## Environment variables
 
