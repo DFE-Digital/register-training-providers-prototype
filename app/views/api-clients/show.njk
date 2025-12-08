@@ -18,13 +18,24 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
+    {% set headingTag %}
+      {% if isRevoked %}
+        {{ govukTag({
+          text: "Revoked",
+          classes: "govuk-tag--red govuk-tag__heading"
+        }) }}
+      {% endif %}
+    {% endset %}
+
     {% include "_includes/page-heading.njk" %}
 
     <div class="govuk-button-group">
-      {{ govukButton({
-        text: "Revoke API client",
-        href: actions.revoke
-      }) }}
+      {% if actions.revoke %}
+        {{ govukButton({
+          text: "Revoke API client",
+          href: actions.revoke
+        }) }}
+      {% endif %}
 
       <a class="govuk-link" href="{{ actions.delete }}">Delete API client</a>
     </div>
@@ -34,28 +45,32 @@
         {
           key: { text: "Client name" },
           value: { text: apiClientToken.clientName },
-          actions: {
-            items: [
-              {
-                href: actions.change,
-                text: "Change",
-                visuallyHiddenText: "client name"
-              }
-            ]
-          }
+          actions: (
+            {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "client name"
+                }
+              ]
+            } if actions.change else null
+          )
         },
         {
           key: { text: "Expiry date" },
           value: { text: apiClientToken.expiresOn | default("Not entered") },
-          actions: {
-            items: [
-              {
-                href: actions.change,
-                text: "Change",
-                visuallyHiddenText: "expiry date"
-              }
-            ]
-          }
+          actions: (
+            {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "expiry date"
+                }
+              ]
+            } if actions.change else null
+          )
         }
       ]
     }) }}
