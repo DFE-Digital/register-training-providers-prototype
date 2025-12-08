@@ -44,8 +44,8 @@ router.use(passport.session())
 /// ------------------------------------------------------------------------ ///
 const accountController = require('./controllers/account')
 const activityController = require('./controllers/activity')
-const authenticationController = require('./controllers/authentication')
 const apiClientController = require('./controllers/apiClient')
+const authenticationController = require('./controllers/authentication')
 const contentController = require('./controllers/content')
 const errorController = require('./controllers/error')
 const feedbackController = require('./controllers/feedback')
@@ -339,6 +339,14 @@ router.get('/providers/:providerId/activity', checkIsAuthenticated, providerActi
 /// ------------------------------------------------------------------------ ///
 
 router.get('/api-clients', checkIsAuthenticated, apiClientController.apiClientList)
+
+router.get('/api-clients/new', checkIsAuthenticated, apiClientController.newApiClientToken_get)
+router.post('/api-clients/new', checkIsAuthenticated, apiClientController.newApiClientToken_post)
+
+router.get('/api-clients/new/check', checkIsAuthenticated, apiClientController.newApiClientTokenCheck_get)
+router.post('/api-clients/new/check', checkIsAuthenticated, apiClientController.newApiClientTokenCheck_post)
+
+router.get('/api-clients/new/confirmation', checkIsAuthenticated, apiClientController.newApiClientTokenConfirmation_get)
 
 /// ------------------------------------------------------------------------ ///
 /// FEEDBACK ROUTES
