@@ -1,7 +1,16 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "apiClients" %}
-{% set title = "Add API client" %}
+
+{% set title = "Client details" %}
+
+{% if currentApiClientToken %}
+  {% set caption = currentApiClientToken.clientName %}
+  {% set isEdit = true %}
+{% else %}
+  {% set caption = "Add API client" %}
+  {% set isEdit = false %}
+{% endif %}
 
 {% block pageTitle %}
   {{ "Error: " if errors.length }}{{ title }} - {{ serviceName }} - GOV.UK
@@ -21,7 +30,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">{{ title }}</h1>
+    {% include "_includes/page-heading.njk" %}
 
     {# <p class="govuk-body">Add a name for this API client and set an expiry date (maximum 12 months from today).</p> #}
 

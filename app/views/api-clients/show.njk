@@ -1,0 +1,65 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "api-clients" %}
+{% set title = apiClientToken.clientName %}
+{% set caption = "API clients" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Revoke API client",
+        href: actions.revoke
+      }) }}
+
+      <a class="govuk-link" href="{{ actions.delete }}">Delete API client</a>
+    </div>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Client name" },
+          value: { text: apiClientToken.clientName },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "client name"
+              }
+            ]
+          }
+        },
+        {
+          key: { text: "Expiry date" },
+          value: { text: apiClientToken.expiresOn | default("Not entered") },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "expiry date"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}
