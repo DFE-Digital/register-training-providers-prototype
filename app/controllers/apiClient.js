@@ -264,6 +264,11 @@ exports.editApiClientToken_get = async (req, res) => {
   const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
   if (!currentApiClientToken) return
 
+  if (currentApiClientToken.status === 'revoked') {
+    req.flash('warning', 'You cannot edit a revoked API client')
+    return res.redirect(`/api-clients/${currentApiClientToken.id}`)
+  }
+
   let apiClientToken = ensureApiClientTokenSession(req, sessionKey)
 
   // Seed session from current DB values when first landing or switching records.
@@ -402,6 +407,39 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
 }
 
 /// ------------------------------------------------------------------------ ///
+/// Revoke API client token
+/// ------------------------------------------------------------------------ ///
+
+exports.revokeApiClientTokenCheck_get = async (req, res) => {
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!apiClientToken) return
+
+  res.render('api-clients/revoke', {
+    apiClientToken,
+    actions: {
+      back: `/api-clients/${apiClientToken.id}`,
+      cancel: `/api-clients/${apiClientToken.id}`,
+      revoke: `/api-clients/${apiClientToken.id}/revoke`
+    }
+  })
+}
+
+exports.revokeApiClientTokenCheck_post = async (req, res) => {
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!apiClientToken) return
+
+  await apiClientToken.update({
+    status: 'revoked',
+    revokedAt: new Date(),
+    revokedById: req.user.id,
+    updatedById: req.user.id
+  })
+
+  req.flash('success', 'API client revoked')
+  res.redirect(`/api-clients/${apiClientToken.id}`)
+}
+
+/// ------------------------------------------------------------------------ ///
 /// Show API client token
 /// ------------------------------------------------------------------------ ///
 
@@ -414,12 +452,14 @@ exports.apiClientTokenDetails = async (req, res) => {
       id: token.id,
       clientName: token.clientName,
       expiresOn: token.expiresAt ? govukDate(token.expiresAt) : null,
-      status: token.status
+      status: token.status,
+      revokedAt: token.revokedAt
     },
+    isRevoked: token.status === 'revoked',
     actions: {
       back: '/api-clients',
-      change: `/api-clients/${token.id}/edit`,
-      revoke: `/api-clients/${token.id}/revoke`,
+      change: token.status === 'revoked' ? null : `/api-clients/${token.id}/edit`,
+      revoke: token.status === 'revoked' ? null : `/api-clients/${token.id}/revoke`,
       delete: `/api-clients/${token.id}/delete`
     }
   })
