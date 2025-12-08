@@ -1,0 +1,30 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "apiClients" %}
+{% set title = "API client token created" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {{ govukPanel({
+      titleText: title,
+      html: "<strong class='govuk-!-display-block'>" + clientName + "</strong><span class='govuk-!-font-size-19'>Token: " + plainToken + "</span>"
+    }) }}
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <p class="govuk-body">Copy this token now. For security, it cannot be viewed again.</p>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.finish }}">Back to API clients</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
