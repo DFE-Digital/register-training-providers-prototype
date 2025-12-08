@@ -5,18 +5,18 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set panelHtml %}
+      <strong class="govuk-!-display-block">{{ clientName }}</strong>
+      <span class="govuk-!-font-size-19">Token:</span>
+      <span class="govuk-!-font-size-19 app-panel-token">{{ plainToken }}</span>
+    {% endset %}
 
     {{ govukPanel({
       titleText: title,
-      html: "<strong class='govuk-!-display-block'>" + clientName + "</strong><span class='govuk-!-font-size-19'>Token: " + plainToken + "</span>"
+      html: panelHtml
     }) }}
-
-  </div>
-</div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
 
     <p class="govuk-body">Copy this token now. For security, it cannot be viewed again.</p>
 
