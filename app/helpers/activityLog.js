@@ -12,6 +12,8 @@ const {
   ProviderPartnership,
   ProviderPartnershipAcademicYear,
   ProviderPartnershipRevision,
+  ApiClientToken,
+  ApiClientTokenRevision,
   User,
   UserRevision,
   AcademicYear,
@@ -33,6 +35,7 @@ const revisionAssociationMap = {
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
   provider_partnership_revisions: 'providerPartnershipRevision',
+  api_client_token_revisions: 'apiClientTokenRevision',
   user_revisions: 'userRevision',
   academic_year_revisions: 'academicYearRevision'
 }
@@ -47,6 +50,7 @@ const revisionModels = {
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
   provider_partnership_revisions: ProviderPartnershipRevision,
+  api_client_token_revisions: ApiClientTokenRevision,
   user_revisions: UserRevision,
   academic_year_revisions: AcademicYearRevision
 }
@@ -108,6 +112,34 @@ const escapeHtml = (s = '') =>
  */
 const isProviderListable = (provider) =>
   provider && provider.deletedAt == null // && provider.archivedAt == null
+
+/**
+ * Build a safe API client link (or plain text) depending on its current state.
+ * @param {string} apiClientTokenId
+ * @param {string} fallbackName
+ * @returns {Promise<{text:string, href:string, html?:string}>}
+ */
+const buildApiClientTokenLink = async (apiClientTokenId, fallbackName = 'API client') => {
+  if (!apiClientTokenId) {
+    const safeText = escapeHtml(fallbackName)
+    return { text: fallbackName, href: '', html: safeText }
+  }
+
+  const token = await ApiClientToken.findByPk(apiClientTokenId, { paranoid: false })
+  const text = token?.clientName || fallbackName
+
+  // Do not link deleted tokens
+  if (!token || token.deletedAt) {
+    return { text, href: '', html: escapeHtml(text) }
+  }
+
+  const href = `/api-clients/${apiClientTokenId}`
+  return {
+    text,
+    href,
+    html: `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>`
+  }
+}
 
 /**
  * Build a safe provider link (or plain text) depending on its current listable state.
@@ -409,6 +441,10 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
       {
         model: AcademicYearRevision,
         as: 'academicYearRevision'
+      },
+      {
+        model: ApiClientTokenRevision,
+        as: 'apiClientTokenRevision'
       },
       {
         model: User,
@@ -1079,6 +1115,19 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Name', value: revision.name })
       fields.push({ key: 'Starts on', value: govukDate(revision.startsOn) })
       fields.push({ key: 'Ends on', value: govukDate(revision.endsOn) })
+      break
+    }
+
+    case 'api_client_token_revisions': {
+      const fallbackName = revision.clientName || 'API client'
+      activity = `API client ${log.action}d`
+      const { text, href: safeHref, html } = await buildApiClientTokenLink(revision.apiClientTokenId, fallbackName)
+      label = text
+      href = safeHref
+      if (html) labelHtml = html
+
+      fields.push({ key: 'Client name', value: revision.clientName })
+      fields.push({ key: 'Expiry date', value: revision.expiresAt ? govukDate(revision.expiresAt) : 'Not entered' })
       break
     }
 
