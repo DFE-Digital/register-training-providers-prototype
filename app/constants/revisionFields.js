@@ -62,5 +62,13 @@ module.exports = {
     'endsOn',
     'deletedAt',
     'deletedById'
+  ],
+  apiClientToken: [
+    'clientName',
+    'expiresAt',
+    'revokedAt',
+    'revokedById',
+    'deletedAt',
+    'deletedById'
   ]
 }
