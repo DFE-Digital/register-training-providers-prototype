@@ -348,6 +348,14 @@ router.post('/api-clients/new/check', checkIsAuthenticated, apiClientController.
 
 router.get('/api-clients/new/confirmation', checkIsAuthenticated, apiClientController.newApiClientTokenConfirmation_get)
 
+router.get('/api-clients/:apiClientId/edit', checkIsAuthenticated, apiClientController.editApiClientToken_get)
+router.post('/api-clients/:apiClientId/edit', checkIsAuthenticated, apiClientController.editApiClientToken_post)
+
+router.get('/api-clients/:apiClientId/check', checkIsAuthenticated, apiClientController.editApiClientTokenCheck_get)
+router.post('/api-clients/:apiClientId/check', checkIsAuthenticated, apiClientController.editApiClientTokenCheck_post)
+
+router.get('/api-clients/:apiClientId', checkIsAuthenticated, apiClientController.apiClientTokenDetails)
+
 /// ------------------------------------------------------------------------ ///
 /// FEEDBACK ROUTES
 /// ------------------------------------------------------------------------ ///

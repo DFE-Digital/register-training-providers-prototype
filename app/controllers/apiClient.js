@@ -2,22 +2,22 @@ const crypto = require('crypto')
 
 const { ApiClientToken } = require('../models')
 const Pagination = require('../helpers/pagination')
-const { govukDate, isoDateFromDateInput } = require('../helpers/date')
+const { govukDate } = require('../helpers/date')
 const { validateDateInput, getDateParts, todayUTC } = require('../helpers/validation/date')
 
 const TOKEN_SECRET = process.env.API_CLIENT_TOKEN_SECRET
 const ENV_PREFIX = process.env.NODE_ENV || 'development'
 
-const ensureApiClientTokenSession = (req) => {
-  if (!req.session.data.apiClientToken) {
-    req.session.data.apiClientToken = {
+const ensureApiClientTokenSession = (req, key = 'apiClientToken') => {
+  if (!req.session.data[key]) {
+    req.session.data[key] = {
       clientName: '',
       expiresOn: {}
     }
-  } else if (!req.session.data.apiClientToken.expiresOn) {
-    req.session.data.apiClientToken.expiresOn = {}
+  } else if (!req.session.data[key].expiresOn) {
+    req.session.data[key].expiresOn = {}
   }
-  return req.session.data.apiClientToken
+  return req.session.data[key]
 }
 
 const validateExpiryDate = (expiresOn) => {
@@ -47,6 +47,28 @@ const hashToken = (token) => {
   return crypto.createHmac('sha256', TOKEN_SECRET).update(token).digest('hex')
 }
 
+const loadApiClientTokenOrRedirect = async (apiClientId, res) => {
+  const token = await ApiClientToken.findOne({
+    where: { id: apiClientId, deletedAt: null }
+  })
+  if (!token) {
+    res.redirect('/api-clients')
+    return null
+  }
+  return token
+}
+
+const formatDateForInput = (value) => {
+  if (!value) return {}
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return {}
+  return {
+    day: String(date.getUTCDate()),
+    month: String(date.getUTCMonth() + 1),
+    year: String(date.getUTCFullYear())
+  }
+}
+
 /// ------------------------------------------------------------------------ ///
 /// List API client tokens
 /// ------------------------------------------------------------------------ ///
@@ -54,6 +76,7 @@ const hashToken = (token) => {
 exports.apiClientList = async (req, res) => {
   // clear any stale session state for this flow
   delete req.session.data.apiClientToken
+  delete req.session.data.apiClientTokenEdit
 
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 15
@@ -82,7 +105,8 @@ exports.apiClientList = async (req, res) => {
     apiClientTokens: items,
     pagination,
     actions: {
-      new: '/api-clients/new'
+      new: '/api-clients/new',
+      view: '/api-clients'
     }
   })
 }
@@ -110,6 +134,10 @@ exports.newApiClientToken_post = async (req, res) => {
   const errors = []
   let expiresOnFieldErrors = null
   let expiresOnIso = null
+
+  const formData = req.body.apiClientToken || {}
+  apiClientToken.clientName = formData.clientName || ''
+  apiClientToken.expiresOn = formData.expiresOn || {}
 
   if (!apiClientToken.clientName?.trim().length) {
     errors.push({
@@ -151,7 +179,7 @@ exports.newApiClientToken_post = async (req, res) => {
 
 exports.newApiClientTokenCheck_get = async (req, res) => {
   const apiClientToken = ensureApiClientTokenSession(req)
-  const expiresOnIso = apiClientToken.expiresOnIso || isoDateFromDateInput(apiClientToken.expiresOn)
+  const expiresOnIso = apiClientToken.expiresOnIso
 
   if (!apiClientToken.clientName || !expiresOnIso) {
     return res.redirect('/api-clients/new')
@@ -160,6 +188,8 @@ exports.newApiClientTokenCheck_get = async (req, res) => {
   res.render('api-clients/check-your-answers', {
     apiClientToken,
     expiresOn: govukDate(expiresOnIso),
+    title: 'Check your answers',
+    caption: 'Add API client',
     actions: {
       back: '/api-clients/new',
       cancel: '/api-clients',
@@ -171,7 +201,7 @@ exports.newApiClientTokenCheck_get = async (req, res) => {
 
 exports.newApiClientTokenCheck_post = async (req, res) => {
   const apiClientToken = ensureApiClientTokenSession(req)
-  const expiresOnIso = apiClientToken.expiresOnIso || isoDateFromDateInput(apiClientToken.expiresOn)
+  const expiresOnIso = apiClientToken.expiresOnIso
 
   if (!apiClientToken.clientName || !expiresOnIso) {
     return res.redirect('/api-clients/new')
@@ -221,6 +251,176 @@ exports.newApiClientTokenConfirmation_get = async (req, res) => {
     actions: {
       back: '/api-clients',
       finish: '/api-clients'
+    }
+  })
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Edit API client token - details
+/// ------------------------------------------------------------------------ ///
+
+exports.editApiClientToken_get = async (req, res) => {
+  const sessionKey = 'apiClientTokenEdit'
+  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!currentApiClientToken) return
+
+  let apiClientToken = ensureApiClientTokenSession(req, sessionKey)
+
+  // Seed session from current DB values when first landing or switching records.
+  if (apiClientToken.id !== currentApiClientToken.id) {
+    apiClientToken = req.session.data[sessionKey] = {
+      id: currentApiClientToken.id,
+      clientName: currentApiClientToken.clientName,
+      expiresOn: formatDateForInput(currentApiClientToken.expiresAt),
+      expiresOnIso: currentApiClientToken.expiresAt ? currentApiClientToken.expiresAt.toISOString().slice(0, 10) : null
+    }
+  }
+
+  res.render('api-clients/edit', {
+    apiClientToken,
+    currentApiClientToken,
+    errors: [],
+    actions: {
+      back: '/api-clients',
+      cancel: '/api-clients',
+      save: `/api-clients/${req.params.apiClientId}/edit`
+    }
+  })
+}
+
+exports.editApiClientToken_post = async (req, res) => {
+  const sessionKey = 'apiClientTokenEdit'
+  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!currentApiClientToken) return
+
+  let apiClientToken = ensureApiClientTokenSession(req, sessionKey)
+  if (apiClientToken.id !== currentApiClientToken.id) {
+    apiClientToken = req.session.data[sessionKey] = {
+      id: currentApiClientToken.id,
+      clientName: currentApiClientToken.clientName,
+      expiresOn: formatDateForInput(currentApiClientToken.expiresAt),
+      expiresOnIso: currentApiClientToken.expiresAt ? currentApiClientToken.expiresAt.toISOString().slice(0, 10) : null
+    }
+  }
+  const errors = []
+  let expiresOnFieldErrors = null
+  let expiresOnIso = null
+
+  const formData = req.body.apiClientToken || {}
+  apiClientToken.clientName = formData.clientName || ''
+  apiClientToken.expiresOn = formData.expiresOn || {}
+
+  if (!apiClientToken.clientName?.trim().length) {
+    errors.push({
+      fieldName: 'clientName',
+      href: '#clientName',
+      text: 'Enter client name'
+    })
+  }
+
+  const expiresOnResult = validateExpiryDate(apiClientToken.expiresOn)
+  if (!expiresOnResult.valid) {
+    errors.push(expiresOnResult.summaryError)
+    expiresOnFieldErrors = expiresOnResult.fieldFlags || null
+  } else {
+    expiresOnIso = expiresOnResult.iso
+  }
+
+  if (errors.length) {
+    res.render('api-clients/edit', {
+      apiClientToken,
+      currentApiClientToken,
+      errors,
+      expiresOnFieldErrors,
+      actions: {
+        back: '/api-clients',
+        cancel: '/api-clients',
+        save: `/api-clients/${req.params.apiClientId}/edit`
+      }
+    })
+    return
+  }
+
+  req.session.data[sessionKey].expiresOnIso = expiresOnIso
+  res.redirect(`/api-clients/${req.params.apiClientId}/check`)
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Edit API client token - check answers
+/// ------------------------------------------------------------------------ ///
+
+exports.editApiClientTokenCheck_get = async (req, res) => {
+  const sessionKey = 'apiClientTokenEdit'
+  const apiClientToken = ensureApiClientTokenSession(req, sessionKey)
+  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!currentApiClientToken) return
+
+  if (apiClientToken.id !== req.params.apiClientId) {
+    return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
+  }
+
+  const expiresOnIso = apiClientToken.expiresOnIso
+
+  if (!apiClientToken.clientName || !expiresOnIso) {
+    return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
+  }
+
+  res.render('api-clients/check-your-answers', {
+    apiClientToken,
+    expiresOn: govukDate(expiresOnIso),
+    currentApiClientToken,
+    actions: {
+      back: `/api-clients/${req.params.apiClientId}/edit`,
+      cancel: '/api-clients',
+      change: `/api-clients/${req.params.apiClientId}/edit`,
+      save: `/api-clients/${req.params.apiClientId}/check`
+    }
+  })
+}
+
+exports.editApiClientTokenCheck_post = async (req, res) => {
+  const sessionKey = 'apiClientTokenEdit'
+  const apiClientToken = ensureApiClientTokenSession(req, sessionKey)
+
+  if (apiClientToken.id !== req.params.apiClientId || !apiClientToken.expiresOnIso || !apiClientToken.clientName) {
+    return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
+  }
+
+  const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!token) return
+
+  await token.update({
+    clientName: apiClientToken.clientName.trim(),
+    expiresAt: apiClientToken.expiresOnIso,
+    updatedById: req.user.id
+  })
+
+  delete req.session.data[sessionKey]
+
+  req.flash('success', 'API client updated')
+  res.redirect(`/api-clients/${req.params.apiClientId}`)
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Show API client token
+/// ------------------------------------------------------------------------ ///
+
+exports.apiClientTokenDetails = async (req, res) => {
+  const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!token) return
+
+  res.render('api-clients/show', {
+    apiClientToken: {
+      id: token.id,
+      clientName: token.clientName,
+      expiresOn: token.expiresAt ? govukDate(token.expiresAt) : null,
+      status: token.status
+    },
+    actions: {
+      back: '/api-clients',
+      change: `/api-clients/${token.id}/edit`,
+      revoke: `/api-clients/${token.id}/revoke`,
+      delete: `/api-clients/${token.id}/delete`
     }
   })
 }
