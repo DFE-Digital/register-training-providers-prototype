@@ -440,6 +440,38 @@ exports.revokeApiClientTokenCheck_post = async (req, res) => {
 }
 
 /// ------------------------------------------------------------------------ ///
+/// Delete API client token
+/// ------------------------------------------------------------------------ ///
+
+exports.deleteApiClientTokenCheck_get = async (req, res) => {
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!apiClientToken) return
+
+  res.render('api-clients/delete', {
+    apiClientToken,
+    actions: {
+      back: `/api-clients/${apiClientToken.id}`,
+      cancel: `/api-clients/${apiClientToken.id}`,
+      delete: `/api-clients/${apiClientToken.id}/delete`
+    }
+  })
+}
+
+exports.deleteApiClientTokenCheck_post = async (req, res) => {
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  if (!apiClientToken) return
+
+  await apiClientToken.update({
+    deletedAt: new Date(),
+    deletedById: req.user.id,
+    updatedById: req.user.id
+  })
+
+  req.flash('success', 'API client deleted')
+  res.redirect('/api-clients')
+}
+
+/// ------------------------------------------------------------------------ ///
 /// Show API client token
 /// ------------------------------------------------------------------------ ///
 

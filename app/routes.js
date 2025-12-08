@@ -357,6 +357,9 @@ router.post('/api-clients/:apiClientId/check', checkIsAuthenticated, apiClientCo
 router.get('/api-clients/:apiClientId/revoke', checkIsAuthenticated, apiClientController.revokeApiClientTokenCheck_get)
 router.post('/api-clients/:apiClientId/revoke', checkIsAuthenticated, apiClientController.revokeApiClientTokenCheck_post)
 
+router.get('/api-clients/:apiClientId/delete', checkIsAuthenticated, apiClientController.deleteApiClientTokenCheck_get)
+router.post('/api-clients/:apiClientId/delete', checkIsAuthenticated, apiClientController.deleteApiClientTokenCheck_post)
+
 router.get('/api-clients/:apiClientId', checkIsAuthenticated, apiClientController.apiClientTokenDetails)
 
 /// ------------------------------------------------------------------------ ///
