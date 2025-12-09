@@ -26,6 +26,7 @@
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
             <th scope="col" class="govuk-table__header">Email</th>
+            <th scope="col" class="govuk-table__header">Status</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -38,6 +39,19 @@
               </td>
               <td class="govuk-table__cell">
                 {{ user.email if user.email else "Not entered" }}
+              </td>
+              <td class="govuk-table__cell">
+                {% if user.isActive %}
+                  {{ govukTag({
+                    text: "Active",
+                    classes: "govuk-tag--turquoise"
+                  }) }}
+                {% else %}
+                  {{ govukTag({
+                    text: "Not active",
+                    classes: "govuk-tag--grey"
+                  }) }}
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
