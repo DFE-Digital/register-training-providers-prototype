@@ -20,7 +20,10 @@ const ensureApiClientTokenSession = (req, key = 'apiClientToken') => {
   return req.session.data[key]
 }
 
-const validateExpiryDate = (expiresOn) => {
+const startOfUtcDay = (date) =>
+  new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
+
+const validateExpiryDate = (expiresOn, { mode = 'new', createdAt } = {}) => {
   const today = todayUTC()
   const maxExpiry = new Date(Date.UTC(
     today.getUTCFullYear(),
@@ -28,13 +31,19 @@ const validateExpiryDate = (expiresOn) => {
     today.getUTCDate()
   ))
 
-  const result = validateDateInput(getDateParts(expiresOn), {
+  let constraint
+  if (mode === 'new') {
+    constraint = { between: [today, maxExpiry] } // new tokens must be today or future, up to +12 months
+  } else {
+    const createdDate = createdAt ? startOfUtcDay(new Date(createdAt)) : null
+    constraint = createdDate ? { between: [createdDate, maxExpiry] } : { onOrBefore: maxExpiry }
+  }
+
+  return validateDateInput(getDateParts(expiresOn), {
     label: 'expiry date',
     baseId: 'expiresOn',
-    constraint: { between: [today, maxExpiry] }
+    constraint
   })
-
-  return result
 }
 
 const generatePlainToken = () =>
@@ -147,7 +156,7 @@ exports.newApiClientToken_post = async (req, res) => {
     })
   }
 
-  const expiresOnResult = validateExpiryDate(apiClientToken.expiresOn)
+  const expiresOnResult = validateExpiryDate(apiClientToken.expiresOn, { mode: 'new' })
   if (!expiresOnResult.valid) {
     errors.push(expiresOnResult.summaryError)
     expiresOnFieldErrors = expiresOnResult.fieldFlags || null
@@ -210,10 +219,14 @@ exports.newApiClientTokenCheck_post = async (req, res) => {
   const plainToken = generatePlainToken()
   const tokenHash = hashToken(plainToken)
 
+  const expiresAtDate = startOfUtcDay(new Date(expiresOnIso))
+  const today = todayUTC()
+  const status = expiresAtDate < today ? 'expired' : 'active'
+
   await ApiClientToken.create({
     clientName: apiClientToken.clientName.trim(),
     tokenHash,
-    status: 'active',
+    status,
     expiresAt: expiresOnIso,
     createdById: req.user.id,
     updatedById: req.user.id
@@ -323,7 +336,10 @@ exports.editApiClientToken_post = async (req, res) => {
     })
   }
 
-  const expiresOnResult = validateExpiryDate(apiClientToken.expiresOn)
+  const expiresOnResult = validateExpiryDate(apiClientToken.expiresOn, {
+    mode: 'edit',
+    createdAt: currentApiClientToken.createdAt
+  })
   if (!expiresOnResult.valid) {
     errors.push(expiresOnResult.summaryError)
     expiresOnFieldErrors = expiresOnResult.fieldFlags || null
@@ -394,11 +410,25 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
   const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
   if (!token) return
 
-  await token.update({
+  const expiresAtDate = startOfUtcDay(new Date(apiClientToken.expiresOnIso))
+  const today = todayUTC()
+
+  // Only allow status changes for non-revoked tokens. Editing is blocked for revoked tokens earlier in the flow.
+  const nextStatus = expiresAtDate < today ? 'expired' : 'active'
+
+  const updates = {
     clientName: apiClientToken.clientName.trim(),
     expiresAt: apiClientToken.expiresOnIso,
+    status: token.status === 'revoked' ? token.status : nextStatus,
     updatedById: req.user.id
-  })
+  }
+
+  if (updates.status !== 'revoked') {
+    updates.revokedAt = null
+    updates.revokedById = null
+  }
+
+  await token.update(updates)
 
   delete req.session.data[sessionKey]
 
