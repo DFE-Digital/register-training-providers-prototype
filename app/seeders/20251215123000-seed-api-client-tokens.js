@@ -21,8 +21,9 @@ module.exports = {
       }, { transaction })
 
       const systemUserId = '354751f2-c5f7-483c-b9e4-b6103f50f970'
-      const now = new Date()
-      const addDays = (days) => new Date(now.getTime() + days * 24 * 60 * 60 * 1000)
+      const today = new Date()
+      const todayUtc = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))
+      const addDays = (days) => new Date(todayUtc.getTime() + days * 24 * 60 * 60 * 1000)
       const createdAt = addDays(-200)
 
       const apiClients = [
@@ -54,7 +55,7 @@ module.exports = {
       for (const [index, client] of apiClients.entries()) {
         const id = uuidv4()
         const tokenHash = hashToken(`seed-${client.status}-${index}-${client.clientName}`)
-        const changeTimestamp = client.status === 'revoked' ? client.revokedAt || now : now
+        const changeTimestamp = client.status === 'revoked' ? client.revokedAt || todayUtc : todayUtc
         const baseFields = {
           id,
           client_name: client.clientName,
@@ -65,7 +66,7 @@ module.exports = {
           created_by_id: systemUserId,
           updated_at: changeTimestamp,
           updated_by_id: systemUserId,
-          revoked_at: client.status === 'revoked' ? client.revokedAt || now : null,
+          revoked_at: client.status === 'revoked' ? client.revokedAt || todayUtc : null,
           revoked_by_id: client.status === 'revoked' ? systemUserId : null,
           deleted_at: null,
           deleted_by_id: null
