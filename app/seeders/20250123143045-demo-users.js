@@ -45,6 +45,7 @@ module.exports = {
           email: user.email,
           password: 'bat', // Placeholder password for prototype
           is_active: true,
+          is_api_user: false,
           created_by_id: systemUserId,
           created_at: createdAt,
           updated_by_id: systemUserId,
