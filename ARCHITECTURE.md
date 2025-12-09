@@ -111,6 +111,7 @@ exports.handlerName_get = async (req, res) => {
 - `ProviderPartnershipAcademicYear` - Academic year links for partnerships
 - `ProviderAddress` - Provider addresses
 - `ProviderContact` - Provider contacts
+- `ApiClientToken` - API clients and token metadata (hashed tokens, expiry, revoke/delete)
 - `AcademicYear` - Academic year reference data
 - `User` - System users
 - `ActivityLog` - Audit trail of all changes
@@ -122,6 +123,7 @@ exports.handlerName_get = async (req, res) => {
 - `ProviderContactRevision`
 - `ProviderPartnershipRevision`
 - `ProviderPartnershipAcademicYearRevision`
+- `ApiClientTokenRevision`
 - `UserRevision`
 - `AcademicYearRevision`
 
@@ -142,6 +144,9 @@ ProviderPartnership
 ProviderPartnershipAcademicYear
   ├── belongsTo ProviderPartnership
   └── belongsTo AcademicYear
+
+ApiClientToken
+  └── hasMany ApiClientTokenRevision
 ```
 
 ### 4. Business logic layer (helpers)
