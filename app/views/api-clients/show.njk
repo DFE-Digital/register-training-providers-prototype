@@ -19,9 +19,19 @@
   <div class="govuk-grid-column-two-thirds">
 
     {% set headingTag %}
-      {% if isRevoked %}
+      {% if apiClientToken.status == "active" %}
         {{ govukTag({
-          text: "Revoked",
+          text: apiClientToken.status | capitalize,
+          classes: "govuk-tag--green govuk-tag__heading"
+        }) }}
+      {% elif apiClientToken.status == "expired" %}
+        {{ govukTag({
+          text: apiClientToken.status | capitalize,
+          classes: "govuk-tag--orange govuk-tag__heading"
+        }) }}
+      {% elif apiClientToken.status == "revoked" %}
+        {{ govukTag({
+          text: apiClientToken.status | capitalize,
           classes: "govuk-tag--red govuk-tag__heading"
         }) }}
       {% endif %}
