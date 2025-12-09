@@ -59,8 +59,9 @@
       }) }}
 
       {% if not isEdit %}
-        {{ govukInsetText({
-          text: "An authentication token will be created and shown once on the next page."
+        {{ govukWarningText({
+          text: "An authentication token will be created and shown once on the next page.",
+          iconFallbackText: "Warning"
         }) }}
       {% endif %}
 
