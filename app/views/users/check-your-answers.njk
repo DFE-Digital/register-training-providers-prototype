@@ -89,6 +89,23 @@
           },
           {
             key: {
+              text: "Is the account an API user?"
+            },
+            value: {
+              text: "Yes" if (user.isApiUser === true or user.isApiUser === "true") else "No"
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "account type"
+                }
+              ]
+            }
+          },
+          {
+            key: {
               text: "Is the account active?"
             },
             value: {

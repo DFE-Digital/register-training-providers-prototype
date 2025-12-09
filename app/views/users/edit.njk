@@ -122,9 +122,34 @@
         }) }}
       {% endif %}
 
+      {{ govukRadios({
+        name: "user[isApiUser]",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Is the account an API user?",
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        errorMessage: errors | getErrorMessage("isApiUser"),
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            checked: user.isApiUser === true or user.isApiUser === "true"
+          },
+          {
+            value: "false",
+            text: "No",
+            checked: user.isApiUser === false or user.isApiUser === "false"
+          }
+        ]
+      }) }}
+
       {% if currentUser %}
         {{ govukRadios({
           name: "user[isActive]",
+          classes: "govuk-radios--inline",
           fieldset: {
             legend: {
               text: "Is the account active?",
