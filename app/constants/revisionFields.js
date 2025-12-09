@@ -51,6 +51,7 @@ module.exports = {
     'firstName',
     'lastName',
     'email',
+    'isApiUser',
     'isActive',
     'deletedAt',
     'deletedById'
