@@ -24,6 +24,7 @@
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Client name</th>
             <th scope="col" class="govuk-table__header">Expires on</th>
+            <th scope="col" class="govuk-table__header">Status</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -36,6 +37,24 @@
               </td>
               <td class="govuk-table__cell">
                 {{ apiClientToken.expiresOn | default("Not entered") }}
+              </td>
+              <td class="govuk-table__cell">
+                {% if apiClientToken.status == "active" %}
+                  {{ govukTag({
+                    text: apiClientToken.status | capitalize,
+                    classes: "govuk-tag--green"
+                  }) }}
+                {% elif apiClientToken.status == "expired" %}
+                  {{ govukTag({
+                    text: apiClientToken.status | capitalize,
+                    classes: "govuk-tag--orange"
+                  }) }}
+                {% elif apiClientToken.status == "revoked" %}
+                  {{ govukTag({
+                    text: apiClientToken.status | capitalize,
+                    classes: "govuk-tag--red"
+                  }) }}
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
