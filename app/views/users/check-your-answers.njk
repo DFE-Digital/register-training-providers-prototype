@@ -3,15 +3,15 @@
 {% set primaryNavId = "users" %}
 
 {% block pageTitle -%}
-  Change support user - {{ serviceName }} - GOV.UK
+  Change user - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = "Check your answers" %}
 
 {% if currentUser %}
-  {% set caption = "Support user - " + currentUser.firstName + " " + currentUser.lastName %}
+  {% set caption = "User - " + currentUser.firstName + " " + currentUser.lastName %}
 {% else %}
-  {% set caption = "Add support user" %}
+  {% set caption = "Add user" %}
 {% endif %}
 {% set allowPersonalDetailChanges = (not currentUser) or (not (currentUser.lastSignedInAt)) %}
 

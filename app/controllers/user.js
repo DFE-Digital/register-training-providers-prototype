@@ -183,7 +183,7 @@ exports.newUserCheck_post = async (req, res) => {
 
   delete req.session.data.user
 
-  req.flash('success', 'Support user added')
+  req.flash('success', 'User added')
   res.redirect('/users')
 }
 
@@ -347,7 +347,7 @@ exports.editUserCheck_post = async (req, res) => {
 
   delete req.session.data.user
 
-  req.flash('success', 'Support user updated')
+  req.flash('success', 'User updated')
   res.redirect(`/users/${userId}`)
 }
 
@@ -373,6 +373,6 @@ exports.deleteUser_post = async (req, res) => {
     updatedById: req.user.id
   })
 
-  req.flash('success', 'Support user deleted')
+  req.flash('success', 'User deleted')
   res.redirect('/users')
 }
