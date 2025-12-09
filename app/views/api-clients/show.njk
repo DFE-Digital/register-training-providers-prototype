@@ -22,17 +22,17 @@
       {% if apiClientToken.status == "active" %}
         {{ govukTag({
           text: apiClientToken.status | capitalize,
-          classes: "govuk-tag--green govuk-tag__heading"
+          classes: "govuk-tag--turquoise govuk-tag__heading"
         }) }}
       {% elif apiClientToken.status == "expired" %}
         {{ govukTag({
           text: apiClientToken.status | capitalize,
-          classes: "govuk-tag--orange govuk-tag__heading"
+          classes: "govuk-tag--grey govuk-tag__heading"
         }) }}
       {% elif apiClientToken.status == "revoked" %}
         {{ govukTag({
           text: apiClientToken.status | capitalize,
-          classes: "govuk-tag--red govuk-tag__heading"
+          classes: "govuk-tag--orange govuk-tag__heading"
         }) }}
       {% endif %}
     {% endset %}

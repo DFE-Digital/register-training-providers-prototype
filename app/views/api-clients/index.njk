@@ -42,17 +42,17 @@
                 {% if apiClientToken.status == "active" %}
                   {{ govukTag({
                     text: apiClientToken.status | capitalize,
-                    classes: "govuk-tag--green"
+                    classes: "govuk-tag--turquoise"
                   }) }}
                 {% elif apiClientToken.status == "expired" %}
                   {{ govukTag({
                     text: apiClientToken.status | capitalize,
-                    classes: "govuk-tag--orange"
+                    classes: "govuk-tag--grey"
                   }) }}
                 {% elif apiClientToken.status == "revoked" %}
                   {{ govukTag({
                     text: apiClientToken.status | capitalize,
-                    classes: "govuk-tag--red"
+                    classes: "govuk-tag--orange"
                   }) }}
                 {% endif %}
               </td>
