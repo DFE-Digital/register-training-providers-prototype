@@ -40,7 +40,7 @@
     {% include "_includes/page-heading.njk" %}
 
     <div class="govuk-button-group">
-      {% if actions.revoke %}
+      {% if apiClientToken.status == "active" %}
         {{ govukButton({
           text: "Revoke API client",
           href: actions.revoke
@@ -64,23 +64,12 @@
                   visuallyHiddenText: "client name"
                 }
               ]
-            } if actions.change else null
-          )
+            }
+          ) if apiClientToken.status == "active"
         },
         {
           key: { text: "Expiry date" },
-          value: { text: apiClientToken.expiresOn | default("Not entered") },
-          actions: (
-            {
-              items: [
-                {
-                  href: actions.change,
-                  text: "Change",
-                  visuallyHiddenText: "expiry date"
-                }
-              ]
-            } if actions.change else null
-          )
+          value: { text: apiClientToken.expiresOn | default("Not entered") }
         }
       ]
     }) }}

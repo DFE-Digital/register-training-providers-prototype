@@ -50,43 +50,52 @@
         classes: "govuk-!-width-two-thirds"
       }) }}
 
-      {{ govukDateInput({
-        id: "expiresOn",
-        fieldset: {
-          legend: {
-            text: "Expiry date",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        hint: {
-          text: "For example, 5 4 2025. Must be within the next 12 months."
-        },
-        items: [
-          {
-            id: "expiresOn-day",
-            name: "apiClientToken[expiresOn][day]",
-            label: "Day",
-            value: expiresOnValues.day,
-            classes: "govuk-input--width-2" + (" govuk-input--error" if expiresOnErrors.day)
+      {% if not isEdit %}
+        {{ govukDateInput({
+          id: "expiresOn",
+          fieldset: {
+            legend: {
+              text: "Expiry date",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
           },
-          {
-            id: "expiresOn-month",
-            name: "apiClientToken[expiresOn][month]",
-            label: "Month",
-            value: expiresOnValues.month,
-            classes: "govuk-input--width-2" + (" govuk-input--error" if expiresOnErrors.month)
+          hint: {
+            text: "For example, 5 4 2025. Must be within the next 12 months."
           },
-          {
-            id: "expiresOn-year",
-            name: "apiClientToken[expiresOn][year]",
-            label: "Year",
-            value: expiresOnValues.year,
-            classes: "govuk-input--width-4" + (" govuk-input--error" if expiresOnErrors.year)
-          }
-        ],
-        errorMessage: errors | getErrorMessage("expiresOn")
-      }) }}
+          items: [
+            {
+              id: "expiresOn-day",
+              name: "apiClientToken[expiresOn][day]",
+              label: "Day",
+              value: expiresOnValues.day,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if expiresOnErrors.day)
+            },
+            {
+              id: "expiresOn-month",
+              name: "apiClientToken[expiresOn][month]",
+              label: "Month",
+              value: expiresOnValues.month,
+              classes: "govuk-input--width-2" + (" govuk-input--error" if expiresOnErrors.month)
+            },
+            {
+              id: "expiresOn-year",
+              name: "apiClientToken[expiresOn][year]",
+              label: "Year",
+              value: expiresOnValues.year,
+              classes: "govuk-input--width-4" + (" govuk-input--error" if expiresOnErrors.year)
+            }
+          ],
+          errorMessage: errors | getErrorMessage("expiresOn")
+        }) }}
+      {% else %}
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+          Expiry date
+        </p>
+        <p class="govuk-body">
+          {{ currentApiClientToken.expiresAt | govukDate | default("Not entered") }}
+        </p>
+      {% endif %}
 
       {{ govukButton({
         text: "Continue"

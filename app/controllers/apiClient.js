@@ -288,9 +288,7 @@ exports.editApiClientToken_get = async (req, res) => {
   if (apiClientToken.id !== currentApiClientToken.id) {
     apiClientToken = req.session.data[sessionKey] = {
       id: currentApiClientToken.id,
-      clientName: currentApiClientToken.clientName,
-      expiresOn: formatDateForInput(currentApiClientToken.expiresAt),
-      expiresOnIso: currentApiClientToken.expiresAt ? currentApiClientToken.expiresAt.toISOString().slice(0, 10) : null
+      clientName: currentApiClientToken.clientName
     }
   }
 
@@ -315,18 +313,13 @@ exports.editApiClientToken_post = async (req, res) => {
   if (apiClientToken.id !== currentApiClientToken.id) {
     apiClientToken = req.session.data[sessionKey] = {
       id: currentApiClientToken.id,
-      clientName: currentApiClientToken.clientName,
-      expiresOn: formatDateForInput(currentApiClientToken.expiresAt),
-      expiresOnIso: currentApiClientToken.expiresAt ? currentApiClientToken.expiresAt.toISOString().slice(0, 10) : null
+      clientName: currentApiClientToken.clientName
     }
   }
   const errors = []
-  let expiresOnFieldErrors = null
-  let expiresOnIso = null
 
   const formData = req.body.apiClientToken || {}
   apiClientToken.clientName = formData.clientName || ''
-  apiClientToken.expiresOn = formData.expiresOn || {}
 
   if (!apiClientToken.clientName?.trim().length) {
     errors.push({
@@ -336,23 +329,11 @@ exports.editApiClientToken_post = async (req, res) => {
     })
   }
 
-  const expiresOnResult = validateExpiryDate(apiClientToken.expiresOn, {
-    mode: 'edit',
-    createdAt: currentApiClientToken.createdAt
-  })
-  if (!expiresOnResult.valid) {
-    errors.push(expiresOnResult.summaryError)
-    expiresOnFieldErrors = expiresOnResult.fieldFlags || null
-  } else {
-    expiresOnIso = expiresOnResult.iso
-  }
-
   if (errors.length) {
     res.render('api-clients/edit', {
       apiClientToken,
       currentApiClientToken,
       errors,
-      expiresOnFieldErrors,
       actions: {
         back: '/api-clients',
         cancel: '/api-clients',
@@ -362,7 +343,6 @@ exports.editApiClientToken_post = async (req, res) => {
     return
   }
 
-  req.session.data[sessionKey].expiresOnIso = expiresOnIso
   res.redirect(`/api-clients/${req.params.apiClientId}/check`)
 }
 
@@ -380,15 +360,13 @@ exports.editApiClientTokenCheck_get = async (req, res) => {
     return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
   }
 
-  const expiresOnIso = apiClientToken.expiresOnIso
-
-  if (!apiClientToken.clientName || !expiresOnIso) {
+  if (!apiClientToken.clientName) {
     return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
   }
 
   res.render('api-clients/check-your-answers', {
     apiClientToken,
-    expiresOn: govukDate(expiresOnIso),
+    expiresOn: currentApiClientToken.expiresAt ? govukDate(currentApiClientToken.expiresAt) : 'Not entered',
     currentApiClientToken,
     actions: {
       back: `/api-clients/${req.params.apiClientId}/edit`,
@@ -403,29 +381,16 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
   const sessionKey = 'apiClientTokenEdit'
   const apiClientToken = ensureApiClientTokenSession(req, sessionKey)
 
-  if (apiClientToken.id !== req.params.apiClientId || !apiClientToken.expiresOnIso || !apiClientToken.clientName) {
+  if (apiClientToken.id !== req.params.apiClientId || !apiClientToken.clientName) {
     return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
   }
 
   const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
   if (!token) return
 
-  const expiresAtDate = startOfUtcDay(new Date(apiClientToken.expiresOnIso))
-  const today = todayUTC()
-
-  // Only allow status changes for non-revoked tokens. Editing is blocked for revoked tokens earlier in the flow.
-  const nextStatus = expiresAtDate < today ? 'expired' : 'active'
-
   const updates = {
     clientName: apiClientToken.clientName.trim(),
-    expiresAt: apiClientToken.expiresOnIso,
-    status: token.status === 'revoked' ? token.status : nextStatus,
     updatedById: req.user.id
-  }
-
-  if (updates.status !== 'revoked') {
-    updates.revokedAt = null
-    updates.revokedById = null
   }
 
   await token.update(updates)
