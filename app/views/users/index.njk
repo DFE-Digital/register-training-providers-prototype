@@ -52,6 +52,12 @@
                     classes: "govuk-tag--grey"
                   }) }}
                 {% endif %}
+                {% if user.isApiUser %}
+                  {{ govukTag({
+                    text: "API user",
+                    classes: "govuk-tag--yellow"
+                  }) }}
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
