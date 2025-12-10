@@ -64,6 +64,21 @@ const revisionModels = {
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
 
 /**
+ * Normalise an action into the activity verb we display.
+ *
+ * @param {string} action - The raw log action (e.g. 'create', 'update', 'delete').
+ * @returns {string} The verb to use in activity labels (e.g. 'added').
+ */
+const getActivityVerb = (action) => {
+  const verbs = {
+    create: 'added',
+    update: 'updated',
+    delete: 'deleted'
+  }
+  return verbs[action] || `${action}d`
+}
+
+/**
  * Safely escape a string for inclusion in HTML by replacing the five
  * special characters `&`, `<`, `>`, `"` and `'` with their entity forms.
  *
@@ -908,7 +923,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
           activity = 'Provider updated'
         }
       } else {
-        const actionLabel = { create: 'created', delete: 'deleted' }[log.action] || `${log.action}d`
+        const actionLabel = getActivityVerb(log.action)
         activity = `Provider ${actionLabel}`
       }
 
@@ -929,7 +944,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
-      activity = `Provider address ${log.action}d`
+      activity = `Provider address ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/addresses` : ''
 
@@ -948,7 +963,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
-      activity = `Provider contact ${log.action}d`
+      activity = `Provider contact ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/contacts` : ''
 
@@ -963,7 +978,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
-      activity = `Provider accreditation ${log.action}d`
+      activity = `Provider accreditation ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/accreditations` : ''
 
@@ -1080,7 +1095,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     }
 
     case 'user_revisions': {
-      activity = `User ${log.action}d`
+      activity = `User ${getActivityVerb(log.action)}`
 
       // Prefer a proper name, otherwise email, then a generic fallback.
       const fallbackName =
@@ -1101,7 +1116,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     }
 
     case 'academic_year_revisions': {
-      activity = `Academic year ${log.action}d`
+      activity = `Academic year ${getActivityVerb(log.action)}`
 
       // Prefer a proper name, otherwise email, then a generic fallback.
       const fallbackName = revision.name || 'Academic year'
@@ -1120,7 +1135,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
     case 'api_client_token_revisions': {
       const fallbackName = revision.clientName || 'API client'
-      activity = `API client ${log.action}d`
+      activity = `API client ${getActivityVerb(log.action)}`
       const { text, href: safeHref, html } = await buildApiClientTokenLink(revision.apiClientTokenId, fallbackName)
       label = text
       href = safeHref
