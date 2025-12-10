@@ -1,8 +1,8 @@
 const crypto = require('crypto')
 
-const { ApiClientToken } = require('../models')
+const { ApiClientToken, User } = require('../models')
 const Pagination = require('../helpers/pagination')
-const { govukDate } = require('../helpers/date')
+const { govukDate, govukDateTime } = require('../helpers/date')
 const { validateDateInput, getDateParts, todayUTC } = require('../helpers/validation/date')
 
 const TOKEN_SECRET = process.env.API_CLIENT_TOKEN_SECRET
@@ -31,6 +31,18 @@ const buildExpiryHintExample = () => {
     today.getUTCDate()
   ))
   return `${future.getUTCDate()} ${future.getUTCMonth() + 1} ${future.getUTCFullYear()}`
+}
+
+const formatUserName = (user) => {
+  if (!user) return 'Unknown'
+  const parts = [user.firstName, user.lastName].filter(Boolean).join(' ').trim()
+  return parts || user.email || 'Unknown'
+}
+
+const buildCreatedDisplay = (token) => {
+  if (!token?.createdAt) return null
+  const name = formatUserName(token.createdByUser)
+  return `Created by ${name} on ${govukDateTime(token.createdAt)}`
 }
 
 const validateExpiryDate = (expiresOn, { mode = 'new', createdAt } = {}) => {
@@ -485,8 +497,15 @@ exports.deleteApiClientTokenCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.apiClientTokenDetails = async (req, res) => {
-  const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
-  if (!token) return
+  const token = await ApiClientToken.findOne({
+    where: { id: req.params.apiClientId, deletedAt: null },
+    include: [
+      { model: User, as: 'createdByUser', attributes: ['firstName', 'lastName', 'email'] }
+    ]
+  })
+  if (!token) {
+    return res.redirect('/api-clients')
+  }
 
   res.render('api-clients/show', {
     apiClientToken: {
@@ -496,6 +515,7 @@ exports.apiClientTokenDetails = async (req, res) => {
       status: token.status,
       revokedAt: token.revokedAt
     },
+    createdDisplay: buildCreatedDisplay(token),
     isRevoked: token.status === 'revoked',
     actions: {
       back: '/api-clients',
