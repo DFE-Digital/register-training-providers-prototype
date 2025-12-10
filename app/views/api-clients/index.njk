@@ -34,6 +34,11 @@
                 <a class="govuk-link" href="{{ actions.view }}/{{ apiClientToken.id }}">
                   {{ apiClientToken.clientName }}
                 </a>
+                {% if apiClientToken.createdBy %}
+                  <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-0 govuk-!-margin-top-1">
+                    {{ apiClientToken.createdBy }}
+                  </p>
+                {% endif %}
               </td>
               <td class="govuk-table__cell">
                 {{ apiClientToken.expiresOn | default("Not entered") }}

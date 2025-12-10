@@ -119,7 +119,10 @@ exports.apiClientList = async (req, res) => {
     where: { deletedAt: null },
     order: [['clientName', 'ASC']],
     limit,
-    offset
+    offset,
+    include: [
+      { model: User, as: 'createdByUser', attributes: ['firstName', 'lastName', 'email'] }
+    ]
   })
 
   const pagination = new Pagination(apiClientTokens, totalCount, page, limit)
@@ -127,6 +130,7 @@ exports.apiClientList = async (req, res) => {
   const items = pagination.getData().map(token => ({
     id: token.id,
     clientName: token.clientName,
+    createdBy: formatUserName(token.createdByUser),
     expiresAt: token.expiresAt,
     expiresOn: token.expiresAt ? govukDate(token.expiresAt) : null,
     status: token.status
