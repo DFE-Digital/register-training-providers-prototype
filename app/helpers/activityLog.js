@@ -367,6 +367,8 @@ const getEntityKeys = (revisionTable) => {
       return ['academicYearId']
     case 'provider_partnership_revisions':
       return ['providerPartnershipId']
+    case 'api_client_token_revisions':
+      return ['apiClientTokenId']
     default:
       return ['providerId']
   }
@@ -1135,11 +1137,27 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
 
     case 'api_client_token_revisions': {
       const fallbackName = revision.clientName || 'API client'
-      activity = `API client ${getActivityVerb(log.action)}`
       const { text, href: safeHref, html } = await buildApiClientTokenLink(revision.apiClientTokenId, fallbackName)
       label = text
       href = safeHref
       if (html) labelHtml = html
+
+      if (log.action === 'update') {
+        const previousRevision = await getPreviousRevision({
+          revisionTable,
+          revisionId: log.revisionId,
+          entityId: log.entityId
+        })
+
+        const isRevoked = revision.status === 'revoked'
+        const wasRevoked = previousRevision?.status === 'revoked'
+
+        activity = isRevoked && !wasRevoked
+          ? 'API client revoked'
+          : 'API client updated'
+      } else {
+        activity = `API client ${getActivityVerb(log.action)}`
+      }
 
       fields.push({ key: 'Client name', value: revision.clientName })
       fields.push({ key: 'Expiry date', value: revision.expiresAt ? govukDate(revision.expiresAt) : 'Not entered' })
