@@ -37,6 +37,9 @@
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
       {% set expiresOnValues = apiClientToken.expiresOn or {} %}
       {% set expiresOnErrors = expiresOnFieldErrors or {} %}
+      {% if not isEdit %}
+        {% set expiryHintExample = expiryHintExample or "5 4 2025" %}
+      {% endif %}
 
       {{ govukInput({
         id: "clientName",
@@ -61,7 +64,7 @@
             }
           },
           hint: {
-            text: "For example, 5 4 2025. Must be within the next 12 months."
+            text: "Must be within the next 12 months. For example, " + expiryHintExample + "."
           },
           items: [
             {

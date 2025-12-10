@@ -23,6 +23,16 @@ const ensureApiClientTokenSession = (req, key = 'apiClientToken') => {
 const startOfUtcDay = (date) =>
   new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
 
+const buildExpiryHintExample = () => {
+  const today = todayUTC()
+  const future = new Date(Date.UTC(
+    today.getUTCFullYear() + 1,
+    today.getUTCMonth(),
+    today.getUTCDate()
+  ))
+  return `${future.getUTCDate()} ${future.getUTCMonth() + 1} ${future.getUTCFullYear()}`
+}
+
 const validateExpiryDate = (expiresOn, { mode = 'new', createdAt } = {}) => {
   const today = todayUTC()
   const maxExpiry = new Date(Date.UTC(
@@ -126,10 +136,12 @@ exports.apiClientList = async (req, res) => {
 
 exports.newApiClientToken_get = async (req, res) => {
   const apiClientToken = ensureApiClientTokenSession(req)
+  const expiryHintExample = buildExpiryHintExample()
 
   res.render('api-clients/edit', {
     apiClientToken,
     errors: [],
+    expiryHintExample,
     actions: {
       back: '/api-clients',
       cancel: '/api-clients',
@@ -143,6 +155,7 @@ exports.newApiClientToken_post = async (req, res) => {
   const errors = []
   let expiresOnFieldErrors = null
   let expiresOnIso = null
+  const expiryHintExample = buildExpiryHintExample()
 
   const formData = req.body.apiClientToken || {}
   apiClientToken.clientName = formData.clientName || ''
@@ -169,6 +182,7 @@ exports.newApiClientToken_post = async (req, res) => {
       apiClientToken,
       errors,
       expiresOnFieldErrors,
+      expiryHintExample,
       actions: {
         back: '/api-clients',
         cancel: '/api-clients',
