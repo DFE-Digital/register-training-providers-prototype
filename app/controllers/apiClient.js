@@ -78,9 +78,15 @@ const hashToken = (token) => {
   return crypto.createHmac('sha256', TOKEN_SECRET).update(token).digest('hex')
 }
 
-const loadApiClientTokenOrRedirect = async (apiClientId, res) => {
+const loadApiClientTokenOrRedirect = async (apiClientId, res, currentUser, options = {}) => {
+  const where = { id: apiClientId, deletedAt: null }
+  if (currentUser?.isApiUser) {
+    where.createdById = currentUser.id
+  }
+
   const token = await ApiClientToken.findOne({
-    where: { id: apiClientId, deletedAt: null }
+    where,
+    include: options.include
   })
   if (!token) {
     res.redirect('/api-clients')
@@ -112,11 +118,15 @@ exports.apiClientList = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1
   const limit = parseInt(req.query.limit, 10) || 15
   const offset = (page - 1) * limit
+  const whereClause = { deletedAt: null }
+  if (req.user.isApiUser) {
+    whereClause.createdById = req.user.id
+  }
 
-  const totalCount = await ApiClientToken.count({ where: { deletedAt: null } })
+  const totalCount = await ApiClientToken.count({ where: whereClause })
 
   const apiClientTokens = await ApiClientToken.findAll({
-    where: { deletedAt: null },
+    where: whereClause,
     order: [['clientName', 'ASC']],
     limit,
     offset,
@@ -304,7 +314,7 @@ exports.newApiClientTokenConfirmation_get = async (req, res) => {
 
 exports.editApiClientToken_get = async (req, res) => {
   const sessionKey = 'apiClientTokenEdit'
-  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!currentApiClientToken) return
 
   if (currentApiClientToken.status === 'revoked') {
@@ -336,7 +346,7 @@ exports.editApiClientToken_get = async (req, res) => {
 
 exports.editApiClientToken_post = async (req, res) => {
   const sessionKey = 'apiClientTokenEdit'
-  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!currentApiClientToken) return
 
   let apiClientToken = ensureApiClientTokenSession(req, sessionKey)
@@ -383,7 +393,7 @@ exports.editApiClientToken_post = async (req, res) => {
 exports.editApiClientTokenCheck_get = async (req, res) => {
   const sessionKey = 'apiClientTokenEdit'
   const apiClientToken = ensureApiClientTokenSession(req, sessionKey)
-  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const currentApiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!currentApiClientToken) return
 
   if (apiClientToken.id !== req.params.apiClientId) {
@@ -415,7 +425,7 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
     return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
   }
 
-  const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!token) return
 
   const updates = {
@@ -436,7 +446,7 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.revokeApiClientTokenCheck_get = async (req, res) => {
-  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!apiClientToken) return
 
   res.render('api-clients/revoke', {
@@ -450,7 +460,7 @@ exports.revokeApiClientTokenCheck_get = async (req, res) => {
 }
 
 exports.revokeApiClientTokenCheck_post = async (req, res) => {
-  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!apiClientToken) return
 
   await apiClientToken.update({
@@ -469,7 +479,7 @@ exports.revokeApiClientTokenCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.deleteApiClientTokenCheck_get = async (req, res) => {
-  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!apiClientToken) return
 
   res.render('api-clients/delete', {
@@ -483,7 +493,7 @@ exports.deleteApiClientTokenCheck_get = async (req, res) => {
 }
 
 exports.deleteApiClientTokenCheck_post = async (req, res) => {
-  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res)
+  const apiClientToken = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
   if (!apiClientToken) return
 
   await apiClientToken.update({
@@ -501,15 +511,17 @@ exports.deleteApiClientTokenCheck_post = async (req, res) => {
 /// ------------------------------------------------------------------------ ///
 
 exports.apiClientTokenDetails = async (req, res) => {
-  const token = await ApiClientToken.findOne({
-    where: { id: req.params.apiClientId, deletedAt: null },
-    include: [
-      { model: User, as: 'createdByUser', attributes: ['firstName', 'lastName', 'email'] }
-    ]
-  })
-  if (!token) {
-    return res.redirect('/api-clients')
-  }
+  const token = await loadApiClientTokenOrRedirect(
+    req.params.apiClientId,
+    res,
+    req.user,
+    {
+      include: [
+        { model: User, as: 'createdByUser', attributes: ['firstName', 'lastName', 'email'] }
+      ]
+    }
+  )
+  if (!token) return
 
   res.render('api-clients/show', {
     apiClientToken: {
