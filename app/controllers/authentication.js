@@ -1,5 +1,6 @@
 const passport = require('passport')
 const { User } = require('../models')
+const { isValidEmail } = require('../helpers/validation')
 
 const getPersonaItems = async () => {
   const personas = await User.findAll({
@@ -26,12 +27,26 @@ const getPersonaItems = async () => {
     }
   })
 }
-const { isValidEmail } = require('../helpers/validation')
+
+const resolveRedirectPath = (user, requestedPath = null) => {
+  const defaultPath = user?.isApiUser ? '/api-clients' : '/providers'
+
+  if (!user?.isApiUser) {
+    return requestedPath || defaultPath
+  }
+
+  // API users can only access API client and account pages
+  const allowedPrefixes = ['/api-clients', '/account']
+  const isAllowed = requestedPath &&
+    allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
+
+  return isAllowed ? requestedPath : defaultPath
+}
 
 exports.signIn_get = (req, res) => {
   // If user is already authenticated, redirect to support page
   if (req.isAuthenticated()) {
-    return res.redirect('/providers')
+    return res.redirect(resolveRedirectPath(req.user, req.session.returnTo))
   }
 
   // Check if we should use persona selection or sign-in form
@@ -49,7 +64,7 @@ exports.signIn_get = (req, res) => {
 exports.signInEmail_get = (req, res) => {
   // If user is already authenticated, redirect to support page
   if (req.isAuthenticated()) {
-    return res.redirect('/providers')
+    return res.redirect(resolveRedirectPath(req.user, req.session.returnTo))
   }
 
   res.render('authentication/sign-in-email', {
@@ -101,7 +116,7 @@ exports.signInEmail_post = (req, res) => {
 exports.signInPassword_get = (req, res) => {
   // If user is already authenticated, redirect to support page
   if (req.isAuthenticated()) {
-    return res.redirect('/providers')
+    return res.redirect(resolveRedirectPath(req.user, req.session.returnTo))
   }
 
   // If no email in session, redirect back to email entry
@@ -194,7 +209,7 @@ exports.signInPassword_post = (req, res, next) => {
       delete req.session.email
 
       // Redirect to intended page or default to support
-      const redirectTo = req.session.returnTo || '/providers'
+      const redirectTo = resolveRedirectPath(user, req.session.returnTo)
       delete req.session.returnTo
 
       return res.redirect(redirectTo)
@@ -205,7 +220,7 @@ exports.signInPassword_post = (req, res, next) => {
 exports.persona_get = async (req, res, next) => {
   // If user is already authenticated, redirect to support page
   if (req.isAuthenticated()) {
-    return res.redirect('/providers')
+    return res.redirect(resolveRedirectPath(req.user, req.session.returnTo))
   }
 
   try {
@@ -286,7 +301,7 @@ exports.persona_post = async (req, res, next) => {
       }
 
       // Redirect to intended page or default to support
-      const redirectTo = req.session.returnTo || '/providers'
+      const redirectTo = resolveRedirectPath(user, req.session.returnTo)
       delete req.session.returnTo
 
       return res.redirect(redirectTo)
