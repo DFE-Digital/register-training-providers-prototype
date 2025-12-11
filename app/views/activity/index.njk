@@ -30,6 +30,8 @@
             {% include "_includes/activity/provider-partnership-revisions.njk" %}
           {% elif item.revisionTable == "provider_address_revisions" %}
             {% include "_includes/activity/provider-address-revisions.njk" %}
+          {% elif item.revisionTable == "provider_accreditation_revisions" %}
+            {% include "_includes/activity/provider-accreditation-revisions.njk" %}
           {% else %}
             {% include "_includes/activity/provider-revisions.njk" %}
           {% endif %}
