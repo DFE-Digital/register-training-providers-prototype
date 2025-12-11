@@ -3,11 +3,11 @@
 {% set primaryNavId = "users" %}
 
 {% block pageTitle -%}
-  Confirm you want to delete support user - {{ serviceName }} - GOV.UK
+  Confirm you want to delete user - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = "Confirm you want to delete " + user.firstName + " " + user.lastName %}
-{% set caption = "Delete support user" %}
+{% set caption = "Delete user" %}
 
 {% block beforeContent %}
 {{ govukBackLink({

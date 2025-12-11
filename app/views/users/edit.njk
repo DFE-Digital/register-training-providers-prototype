@@ -5,9 +5,9 @@
 {% block pageTitle -%}
 {{ "Error: " if errors.length -}}
 {% if currentUser -%}
-  Change support user - personal details
+  Change user - personal details
 {%- else -%}
-  Add support user - personal details
+  Add user - personal details
 {%- endif %}
  - {{ serviceName }} - GOV.UK
 {%- endblock %}
@@ -15,9 +15,9 @@
 {% set title = "Personal details" %}
 
 {% if currentUser %}
-  {% set caption = "Support user - " + currentUser.firstName + " " + currentUser.lastName %}
+  {% set caption = "User - " + currentUser.firstName + " " + currentUser.lastName %}
 {% else %}
-  {% set caption = "Add support user" %}
+  {% set caption = "Add user" %}
 {% endif %}
 {% set userHasSignedIn = currentUser and currentUser.lastSignedInAt %}
 
@@ -122,9 +122,34 @@
         }) }}
       {% endif %}
 
+      {{ govukRadios({
+        name: "user[isApiUser]",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Is the account an API user?",
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        errorMessage: errors | getErrorMessage("isApiUser"),
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            checked: user.isApiUser === true or user.isApiUser === "true"
+          },
+          {
+            value: "false",
+            text: "No",
+            checked: user.isApiUser === false or user.isApiUser === "false"
+          }
+        ]
+      }) }}
+
       {% if currentUser %}
         {{ govukRadios({
           name: "user[isActive]",
+          classes: "govuk-radios--inline",
           fieldset: {
             legend: {
               text: "Is the account active?",

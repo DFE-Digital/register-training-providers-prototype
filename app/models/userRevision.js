@@ -61,6 +61,12 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: true
       },
+      isApiUser: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_api_user'
+      },
       lastSignedInAt: {
         type: DataTypes.DATE,
         allowNull: true,

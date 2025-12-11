@@ -5,6 +5,12 @@ const { User } = require('../models')
 
 const { Op } = require('sequelize')
 
+const parseBoolean = (value) => value === 'true' || value === true
+const hasBooleanChoice = (value) =>
+  value === 'true' ||
+  value === 'false' ||
+  typeof value === 'boolean'
+
 exports.usersList = async (req, res) => {
   // clear session data
   delete req.session.data.user
@@ -138,6 +144,14 @@ exports.newUser_post = async (req, res) => {
     errors.push(error)
   }
 
+  if (!hasBooleanChoice(user.isApiUser)) {
+    const error = {}
+    error.fieldName = 'isApiUser'
+    error.href = '#isApiUser'
+    error.text = 'Select if the account is an API user'
+    errors.push(error)
+  }
+
   if (errors.length) {
     res.render('users/edit', {
       user,
@@ -171,11 +185,13 @@ exports.newUserCheck_post = async (req, res) => {
 
   // Hash the default password for new users
   const hashedPassword = await bcrypt.hash('bat', 10)
+  const isApiUser = parseBoolean(user.isApiUser)
 
   await User.create({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    isApiUser,
     password: hashedPassword,
     createdById: req.user.id,
     updatedById: req.user.id
@@ -183,7 +199,7 @@ exports.newUserCheck_post = async (req, res) => {
 
   delete req.session.data.user
 
-  req.flash('success', 'Support user added')
+  req.flash('success', 'User added')
   res.redirect('/users')
 }
 
@@ -287,6 +303,14 @@ exports.editUser_post = async (req, res) => {
     }
   }
 
+  if (!hasBooleanChoice(user.isApiUser)) {
+    const error = {}
+    error.fieldName = 'isApiUser'
+    error.href = '#isApiUser'
+    error.text = 'Select if the account is an API user'
+    errors.push(error)
+  }
+
   if (errors.length) {
     res.render('users/edit', {
       currentUser,
@@ -331,9 +355,11 @@ exports.editUserCheck_post = async (req, res) => {
 
   // Convert isActive string to boolean
   const isActive = user.isActive === 'true' || user.isActive === true
+  const isApiUser = parseBoolean(user.isApiUser)
 
   const updatePayload = {
     isActive: isActive,
+    isApiUser,
     updatedById: req.user.id
   }
 
@@ -347,7 +373,7 @@ exports.editUserCheck_post = async (req, res) => {
 
   delete req.session.data.user
 
-  req.flash('success', 'Support user updated')
+  req.flash('success', 'User updated')
   res.redirect(`/users/${userId}`)
 }
 
@@ -373,6 +399,6 @@ exports.deleteUser_post = async (req, res) => {
     updatedById: req.user.id
   })
 
-  req.flash('success', 'Support user deleted')
+  req.flash('success', 'User deleted')
   res.redirect('/users')
 }

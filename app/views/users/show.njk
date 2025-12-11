@@ -3,11 +3,11 @@
 {% set primaryNavId = "users" %}
 
 {% block pageTitle -%}
-  View support user - {{ serviceName }} - GOV.UK
+  View user - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = user.firstName + " " + user.lastName %}
-{% set caption = "Support user" %}
+{% set caption = "User" %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -99,6 +99,23 @@
               }
             ]
           } if showChangeLink
+        },
+        {
+          key: {
+            text: "Is the account an API user?"
+          },
+          value: {
+            text: "Yes" if user.isApiUser else "No"
+          },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "account type"
+              }
+            ]
+          } if showStatusChangeLink
         },
         {
           key: {

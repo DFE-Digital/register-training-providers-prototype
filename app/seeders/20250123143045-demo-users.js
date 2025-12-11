@@ -21,19 +21,33 @@ module.exports = {
           id: '3faa7586-951b-495c-9999-e5fc4367b507',
           first_name: 'Anne',
           last_name: 'Wilson',
-          email: 'test1@education.gov.uk'
-        },
-        {
-          id: '99c07212-6395-40b5-9776-9210645a5028',
-          first_name: 'Mary',
-          last_name: 'Lawson',
-          email: 'test2@education.gov.uk'
+          email: 'test1@education.gov.uk',
+          is_api_user: false,
+          is_active: true
         },
         {
           id: systemUserId,
           first_name: 'Colin',
           last_name: 'Chapman',
-          email: 'test3@education.gov.uk'
+          email: 'test2@education.gov.uk',
+          is_api_user: false,
+          is_active: true
+        },
+        {
+          id: '41a420d8-8dc4-40a7-b724-31b5e512cffc',
+          first_name: 'Hannah',
+          last_name: 'Mills',
+          email: 'test3@education.gov.uk',
+          is_api_user: true,
+          is_active: true
+        },
+        {
+          id: '99c07212-6395-40b5-9776-9210645a5028',
+          first_name: 'Mary',
+          last_name: 'Lawson',
+          email: 'test4@education.gov.uk',
+          is_api_user: false,
+          is_active: false
         }
       ]
 
@@ -44,7 +58,8 @@ module.exports = {
           last_name: user.last_name,
           email: user.email,
           password: 'bat', // Placeholder password for prototype
-          is_active: true,
+          is_active: user.is_active,
+          is_api_user: user.is_api_user,
           created_by_id: systemUserId,
           created_at: createdAt,
           updated_by_id: systemUserId,

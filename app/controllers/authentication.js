@@ -12,7 +12,10 @@ const getPersonaItems = async () => {
 
   return personas.map((persona) => {
     const fullName = `${persona.firstName} ${persona.lastName}`
-    const suffix = persona.isActive ? '' : ' - not active'
+    const flags = []
+    if (persona.isApiUser) flags.push('API user')
+    if (!persona.isActive) flags.push('not active')
+    const suffix = flags.length ? ` - ${flags.join(', ')}` : ''
 
     return {
       value: persona.id,
