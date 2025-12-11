@@ -44,6 +44,7 @@ router.use(passport.session())
 /// ------------------------------------------------------------------------ ///
 const accountController = require('./controllers/account')
 const activityController = require('./controllers/activity')
+const apiClientController = require('./controllers/apiClient')
 const authenticationController = require('./controllers/authentication')
 const contentController = require('./controllers/content')
 const errorController = require('./controllers/error')
@@ -332,6 +333,34 @@ router.get('/account', checkIsAuthenticated, accountController.userAccount)
 router.get('/activity', checkIsAuthenticated, activityController.activityList)
 
 router.get('/providers/:providerId/activity', checkIsAuthenticated, providerActivityController.activityList)
+
+/// ------------------------------------------------------------------------ ///
+/// API CLIENT ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/api-clients', checkIsAuthenticated, apiClientController.apiClientList)
+
+router.get('/api-clients/new', checkIsAuthenticated, apiClientController.newApiClientToken_get)
+router.post('/api-clients/new', checkIsAuthenticated, apiClientController.newApiClientToken_post)
+
+router.get('/api-clients/new/check', checkIsAuthenticated, apiClientController.newApiClientTokenCheck_get)
+router.post('/api-clients/new/check', checkIsAuthenticated, apiClientController.newApiClientTokenCheck_post)
+
+router.get('/api-clients/new/confirmation', checkIsAuthenticated, apiClientController.newApiClientTokenConfirmation_get)
+
+router.get('/api-clients/:apiClientId/edit', checkIsAuthenticated, apiClientController.editApiClientToken_get)
+router.post('/api-clients/:apiClientId/edit', checkIsAuthenticated, apiClientController.editApiClientToken_post)
+
+router.get('/api-clients/:apiClientId/check', checkIsAuthenticated, apiClientController.editApiClientTokenCheck_get)
+router.post('/api-clients/:apiClientId/check', checkIsAuthenticated, apiClientController.editApiClientTokenCheck_post)
+
+router.get('/api-clients/:apiClientId/revoke', checkIsAuthenticated, apiClientController.revokeApiClientTokenCheck_get)
+router.post('/api-clients/:apiClientId/revoke', checkIsAuthenticated, apiClientController.revokeApiClientTokenCheck_post)
+
+router.get('/api-clients/:apiClientId/delete', checkIsAuthenticated, apiClientController.deleteApiClientTokenCheck_get)
+router.post('/api-clients/:apiClientId/delete', checkIsAuthenticated, apiClientController.deleteApiClientTokenCheck_post)
+
+router.get('/api-clients/:apiClientId', checkIsAuthenticated, apiClientController.apiClientTokenDetails)
 
 /// ------------------------------------------------------------------------ ///
 /// FEEDBACK ROUTES

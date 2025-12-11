@@ -1,0 +1,87 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "apiClients" %}
+
+{% set title = "Check your answers" %}
+
+{% if currentApiClientToken %}
+  {% set caption = currentApiClientToken.clientName %}
+  {% set isEdit = true %}
+{% else %}
+  {% set caption = "Add API client" %}
+  {% set isEdit = false %}
+{% endif %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: { text: "Client name" },
+            value: { text: apiClientToken.clientName },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "client name"
+                }
+              ]
+            }
+          },
+          {
+            key: { text: "Expiry date" },
+            value: { text: expiresOn },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "expiry date"
+                }
+              ]
+            } if not isEdit
+          }
+        ]
+      }) }}
+
+      {% if not isEdit %}
+        {{ govukWarningText({
+          text: "An authentication token will be created and shown once on the next page.",
+          iconFallbackText: "Warning"
+        }) }}
+      {% endif %}
+
+      {% if not isEdit %}
+        {{ govukButton({
+          text: "Create API token"
+        }) }}
+      {% else %}
+        {{ govukButton({
+          text: "Save API client"
+        }) }}
+      {% endif %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

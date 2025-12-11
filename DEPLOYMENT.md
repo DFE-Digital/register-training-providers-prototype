@@ -44,6 +44,9 @@ ORDNANCE_SURVEY_API_SECRET=your_os_api_secret_here
 # Session Secret (generate a strong random string)
 SESSION_SECRET=generate_a_random_32_character_string
 
+# API client token signing
+API_CLIENT_TOKEN_SECRET=generate_a_random_64_character_string
+
 # Express / prototype
 PORT=3000
 USE_SIGN_IN_FORM=true
@@ -67,7 +70,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ### Development (SQLite)
 
-The database is automatically set up during `npm install` via the `postinstall` script.
+The database is automatically set up during `npm install` via the `postinstall` script. Ensure `API_CLIENT_TOKEN_SECRET` is set before creating API client tokens so hashes can be generated.
 
 Manual setup:
 

@@ -52,6 +52,13 @@ module.exports = (sequelize) => {
         as: 'userRevision'
       })
 
+      ActivityLog.belongsTo(models.ApiClientTokenRevision, {
+        foreignKey: 'revisionId',
+        targetKey: 'id',
+        constraints: false,
+        as: 'apiClientTokenRevision'
+      })
+
       ActivityLog.belongsTo(models.User, {
         foreignKey: 'changedById',
         as: 'changedByUser'

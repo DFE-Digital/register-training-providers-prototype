@@ -1,0 +1,85 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "api-clients" %}
+{% set title = apiClientToken.clientName %}
+{% set caption = "API client" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingTag %}
+      {% if apiClientToken.status == "active" %}
+        {{ govukTag({
+          text: apiClientToken.status | capitalize,
+          classes: "govuk-tag--turquoise govuk-tag__heading"
+        }) }}
+      {% elif apiClientToken.status == "expired" %}
+        {{ govukTag({
+          text: apiClientToken.status | capitalize,
+          classes: "govuk-tag--grey govuk-tag__heading"
+        }) }}
+      {% elif apiClientToken.status == "revoked" %}
+        {{ govukTag({
+          text: apiClientToken.status | capitalize,
+          classes: "govuk-tag--orange govuk-tag__heading"
+        }) }}
+      {% endif %}
+    {% endset %}
+
+    {% set headingClasses = "govuk-!-margin-bottom-2" %}
+
+    {% include "_includes/page-heading.njk" %}
+
+    {% if createdDisplay %}
+      <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-5">{{ createdDisplay }}</p>
+    {% endif %}
+
+    <div class="govuk-button-group">
+      {% if apiClientToken.status == "active" %}
+        {{ govukButton({
+          text: "Revoke API client",
+          href: actions.revoke
+        }) }}
+      {% endif %}
+
+      <a class="govuk-link" href="{{ actions.delete }}">Delete API client</a>
+    </div>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Client name" },
+          value: { text: apiClientToken.clientName },
+          actions: (
+            {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "client name"
+                }
+              ]
+            }
+          ) if apiClientToken.status == "active"
+        },
+        {
+          key: { text: "Expiry date" },
+          value: { text: apiClientToken.expiresOn | default("Not entered") }
+        }
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

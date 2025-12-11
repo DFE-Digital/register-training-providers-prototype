@@ -12,6 +12,8 @@ const {
   ProviderPartnership,
   ProviderPartnershipAcademicYear,
   ProviderPartnershipRevision,
+  ApiClientToken,
+  ApiClientTokenRevision,
   User,
   UserRevision,
   AcademicYear,
@@ -33,6 +35,7 @@ const revisionAssociationMap = {
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
   provider_partnership_revisions: 'providerPartnershipRevision',
+  api_client_token_revisions: 'apiClientTokenRevision',
   user_revisions: 'userRevision',
   academic_year_revisions: 'academicYearRevision'
 }
@@ -47,6 +50,7 @@ const revisionModels = {
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
   provider_partnership_revisions: ProviderPartnershipRevision,
+  api_client_token_revisions: ApiClientTokenRevision,
   user_revisions: UserRevision,
   academic_year_revisions: AcademicYearRevision
 }
@@ -58,6 +62,21 @@ const revisionModels = {
  * @returns {import('sequelize').Model} The associated Sequelize model.
  */
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
+
+/**
+ * Normalise an action into the activity verb we display.
+ *
+ * @param {string} action - The raw log action (e.g. 'create', 'update', 'delete').
+ * @returns {string} The verb to use in activity labels (e.g. 'added').
+ */
+const getActivityVerb = (action) => {
+  const verbs = {
+    create: 'added',
+    update: 'updated',
+    delete: 'deleted'
+  }
+  return verbs[action] || `${action}d`
+}
 
 /**
  * Safely escape a string for inclusion in HTML by replacing the five
@@ -108,6 +127,34 @@ const escapeHtml = (s = '') =>
  */
 const isProviderListable = (provider) =>
   provider && provider.deletedAt == null // && provider.archivedAt == null
+
+/**
+ * Build a safe API client link (or plain text) depending on its current state.
+ * @param {string} apiClientTokenId
+ * @param {string} fallbackName
+ * @returns {Promise<{text:string, href:string, html?:string}>}
+ */
+const buildApiClientTokenLink = async (apiClientTokenId, fallbackName = 'API client') => {
+  if (!apiClientTokenId) {
+    const safeText = escapeHtml(fallbackName)
+    return { text: fallbackName, href: '', html: safeText }
+  }
+
+  const token = await ApiClientToken.findByPk(apiClientTokenId, { paranoid: false })
+  const text = token?.clientName || fallbackName
+
+  // Do not link deleted tokens
+  if (!token || token.deletedAt) {
+    return { text, href: '', html: escapeHtml(text) }
+  }
+
+  const href = `/api-clients/${apiClientTokenId}`
+  return {
+    text,
+    href,
+    html: `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>`
+  }
+}
 
 /**
  * Build a safe provider link (or plain text) depending on its current listable state.
@@ -320,6 +367,8 @@ const getEntityKeys = (revisionTable) => {
       return ['academicYearId']
     case 'provider_partnership_revisions':
       return ['providerPartnershipId']
+    case 'api_client_token_revisions':
+      return ['apiClientTokenId']
     default:
       return ['providerId']
   }
@@ -409,6 +458,10 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
       {
         model: AcademicYearRevision,
         as: 'academicYearRevision'
+      },
+      {
+        model: ApiClientTokenRevision,
+        as: 'apiClientTokenRevision'
       },
       {
         model: User,
@@ -872,7 +925,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
           activity = 'Provider updated'
         }
       } else {
-        const actionLabel = { create: 'created', delete: 'deleted' }[log.action] || `${log.action}d`
+        const actionLabel = getActivityVerb(log.action)
         activity = `Provider ${actionLabel}`
       }
 
@@ -893,7 +946,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
-      activity = `Provider address ${log.action}d`
+      activity = `Provider address ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/addresses` : ''
 
@@ -912,7 +965,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
-      activity = `Provider contact ${log.action}d`
+      activity = `Provider contact ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/contacts` : ''
 
@@ -927,7 +980,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
-      activity = `Provider accreditation ${log.action}d`
+      activity = `Provider accreditation ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/accreditations` : ''
 
@@ -1044,7 +1097,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     }
 
     case 'user_revisions': {
-      activity = `User ${log.action}d`
+      activity = `User ${getActivityVerb(log.action)}`
 
       // Prefer a proper name, otherwise email, then a generic fallback.
       const fallbackName =
@@ -1065,7 +1118,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
     }
 
     case 'academic_year_revisions': {
-      activity = `Academic year ${log.action}d`
+      activity = `Academic year ${getActivityVerb(log.action)}`
 
       // Prefer a proper name, otherwise email, then a generic fallback.
       const fallbackName = revision.name || 'Academic year'
@@ -1079,6 +1132,35 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Name', value: revision.name })
       fields.push({ key: 'Starts on', value: govukDate(revision.startsOn) })
       fields.push({ key: 'Ends on', value: govukDate(revision.endsOn) })
+      break
+    }
+
+    case 'api_client_token_revisions': {
+      const fallbackName = revision.clientName || 'API client'
+      const { text, href: safeHref, html } = await buildApiClientTokenLink(revision.apiClientTokenId, fallbackName)
+      label = text
+      href = safeHref
+      if (html) labelHtml = html
+
+      if (log.action === 'update') {
+        const previousRevision = await getPreviousRevision({
+          revisionTable,
+          revisionId: log.revisionId,
+          entityId: log.entityId
+        })
+
+        const isRevoked = revision.status === 'revoked'
+        const wasRevoked = previousRevision?.status === 'revoked'
+
+        activity = isRevoked && !wasRevoked
+          ? 'API client revoked'
+          : 'API client updated'
+      } else {
+        activity = `API client ${getActivityVerb(log.action)}`
+      }
+
+      fields.push({ key: 'Client name', value: revision.clientName })
+      fields.push({ key: 'Expiry date', value: revision.expiresAt ? govukDate(revision.expiresAt) : 'Not entered' })
       break
     }
 
