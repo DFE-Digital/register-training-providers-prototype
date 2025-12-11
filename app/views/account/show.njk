@@ -2,19 +2,10 @@
 
 {% set primaryNavId = "account" %}
 
-{% set hidePrimaryNavigation = true %}
+{% set hidePrimaryNavigation = false %}
 {% set hideOrganisationSwitcher = true %}
 
 {% set title = "Your account" %}
-
-{% block beforeContent %}
-{{ govukBreadcrumbs({
-  items: [{
-    text: "Home",
-    href: "/"
-  }]
-}) }}
-{% endblock %}
 
 {% block content %}
 
