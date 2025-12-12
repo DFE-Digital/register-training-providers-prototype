@@ -21,6 +21,8 @@
     containerClasses: "govuk-width-container"
   }) }}
 
+  {% set isApiUser = currentUser and currentUser.isApiUser %}
+
   {% set navigationEndHtml %}
     <li class="govuk-service-navigation__item {{- ' govuk-service-navigation__item--active' if primaryNavId == 'account' }} app-service-navigation__align-right">
       <a class="govuk-service-navigation__link" href="/account" {{- ' aria-current="true"' if primaryNavId == "account" }}>Your account</a>
@@ -30,36 +32,38 @@
     </li>
   {% endset %}
 
-  {{ govukServiceNavigation({
-    navigationId: "primaryNavigation",
-    serviceName: serviceName,
-    serviceUrl: "/",
-    navigation: [
-      {
-        text: "Providers",
-        href: "/providers",
-        active: primaryNavId == "providers"
-      },
-      {
-        text: "Users",
-        href: "/users",
-        active: primaryNavId == "users"
-      },
-      {
-        text: "API clients",
-        href: "/api-clients",
-        active: primaryNavId == "apiClients"
-      },
-      {
-        text: "Activity log",
-        href: "/activity",
-        active: primaryNavId == "activity"
+  {% if not hidePrimaryNavigation %}
+    {{ govukServiceNavigation({
+      navigationId: "primaryNavigation",
+      serviceName: serviceName,
+      serviceUrl: "/",
+      navigation: [
+        {
+          text: "Providers",
+          href: "/providers",
+          active: primaryNavId == "providers"
+        } if not isApiUser,
+        {
+          text: "Users",
+          href: "/users",
+          active: primaryNavId == "users"
+        } if not isApiUser,
+        {
+          text: "API clients",
+          href: "/api-clients",
+          active: primaryNavId == "apiClients"
+        },
+        {
+          text: "Activity log",
+          href: "/activity",
+          active: primaryNavId == "activity"
+        } if not isApiUser
+      ],
+      slots: {
+        navigationEnd: navigationEndHtml
       }
-    ],
-    slots: {
-      navigationEnd: navigationEndHtml
-    }
-  }) }}
+    }) }}
+  {% endif %}
 
   {% include "_includes/phase-banner.njk" %}
 {% endblock %}

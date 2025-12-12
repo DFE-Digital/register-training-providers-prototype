@@ -75,9 +75,18 @@ const checkIsAuthenticated = (req, res, next) => {
         id: req.user.id,
         first_name: req.user.firstName,
         last_name: req.user.lastName,
-        email: req.user.email
+        email: req.user.email,
+        isApiUser: req.user.isApiUser
       }
     }
+    res.locals.currentUser = {
+      id: req.user.id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      email: req.user.email,
+      isApiUser: req.user.isApiUser
+    }
+    res.locals.isApiUser = req.user.isApiUser
     return next()
   }
 
@@ -85,6 +94,16 @@ const checkIsAuthenticated = (req, res, next) => {
   req.session.returnTo = req.originalUrl
   res.redirect('/auth/sign-in')
 }
+
+const checkIsSupportUser = (req, res, next) => {
+  if (req.user?.isApiUser) {
+    return res.redirect('/unauthorised')
+  }
+
+  return next()
+}
+
+const supportOnly = [checkIsAuthenticated, checkIsSupportUser]
 
 /// ------------------------------------------------------------------------ ///
 /// ALL ROUTES
@@ -134,191 +153,191 @@ router.get('/start', (req, res) => {
 /// ------------------------------------------------------------------------ ///
 /// USER ROUTES
 /// ------------------------------------------------------------------------ ///
-router.get('/users/new', checkIsAuthenticated, userController.newUser_get)
-router.post('/users/new', checkIsAuthenticated, userController.newUser_post)
+router.get('/users/new', ...supportOnly, userController.newUser_get)
+router.post('/users/new', ...supportOnly, userController.newUser_post)
 
-router.get('/users/new/check', checkIsAuthenticated, userController.newUserCheck_get)
-router.post('/users/new/check', checkIsAuthenticated, userController.newUserCheck_post)
+router.get('/users/new/check', ...supportOnly, userController.newUserCheck_get)
+router.post('/users/new/check', ...supportOnly, userController.newUserCheck_post)
 
-router.get('/users/:userId/edit', checkIsAuthenticated, userController.editUser_get)
-router.post('/users/:userId/edit', checkIsAuthenticated, userController.editUser_post)
+router.get('/users/:userId/edit', ...supportOnly, userController.editUser_get)
+router.post('/users/:userId/edit', ...supportOnly, userController.editUser_post)
 
-router.get('/users/:userId/edit/check', checkIsAuthenticated, userController.editUserCheck_get)
-router.post('/users/:userId/edit/check', checkIsAuthenticated, userController.editUserCheck_post)
+router.get('/users/:userId/edit/check', ...supportOnly, userController.editUserCheck_get)
+router.post('/users/:userId/edit/check', ...supportOnly, userController.editUserCheck_post)
 
-router.get('/users/:userId/delete', checkIsAuthenticated, userController.deleteUser_get)
-router.post('/users/:userId/delete', checkIsAuthenticated, userController.deleteUser_post)
+router.get('/users/:userId/delete', ...supportOnly, userController.deleteUser_get)
+router.post('/users/:userId/delete', ...supportOnly, userController.deleteUser_post)
 
-router.get('/users/:userId', checkIsAuthenticated, userController.userDetails)
+router.get('/users/:userId', ...supportOnly, userController.userDetails)
 
-router.get('/users', checkIsAuthenticated, userController.usersList)
+router.get('/users', ...supportOnly, userController.usersList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ACCREDITATION ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/providers/:providerId/accreditations/new', checkIsAuthenticated, providerAccreditationController.newProviderAccreditation_get)
-router.post('/providers/:providerId/accreditations/new', checkIsAuthenticated, providerAccreditationController.newProviderAccreditation_post)
+router.get('/providers/:providerId/accreditations/new', ...supportOnly, providerAccreditationController.newProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/new', ...supportOnly, providerAccreditationController.newProviderAccreditation_post)
 
-router.get('/providers/:providerId/accreditations/new/check', checkIsAuthenticated, providerAccreditationController.newProviderAccreditationCheck_get)
-router.post('/providers/:providerId/accreditations/new/check', checkIsAuthenticated, providerAccreditationController.newProviderAccreditationCheck_post)
+router.get('/providers/:providerId/accreditations/new/check', ...supportOnly, providerAccreditationController.newProviderAccreditationCheck_get)
+router.post('/providers/:providerId/accreditations/new/check', ...supportOnly, providerAccreditationController.newProviderAccreditationCheck_post)
 
-router.get('/providers/:providerId/accreditations/:accreditationId/edit', checkIsAuthenticated, providerAccreditationController.editProviderAccreditation_get)
-router.post('/providers/:providerId/accreditations/:accreditationId/edit', checkIsAuthenticated, providerAccreditationController.editProviderAccreditation_post)
+router.get('/providers/:providerId/accreditations/:accreditationId/edit', ...supportOnly, providerAccreditationController.editProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/edit', ...supportOnly, providerAccreditationController.editProviderAccreditation_post)
 
-router.get('/providers/:providerId/accreditations/:accreditationId/edit/check', checkIsAuthenticated, providerAccreditationController.editProviderAccreditationCheck_get)
-router.post('/providers/:providerId/accreditations/:accreditationId/edit/check', checkIsAuthenticated, providerAccreditationController.editProviderAccreditationCheck_post)
+router.get('/providers/:providerId/accreditations/:accreditationId/edit/check', ...supportOnly, providerAccreditationController.editProviderAccreditationCheck_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/edit/check', ...supportOnly, providerAccreditationController.editProviderAccreditationCheck_post)
 
-router.get('/providers/:providerId/accreditations/:accreditationId/delete', checkIsAuthenticated, providerAccreditationController.deleteProviderAccreditation_get)
-router.post('/providers/:providerId/accreditations/:accreditationId/delete', checkIsAuthenticated, providerAccreditationController.deleteProviderAccreditation_post)
+router.get('/providers/:providerId/accreditations/:accreditationId/delete', ...supportOnly, providerAccreditationController.deleteProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/delete', ...supportOnly, providerAccreditationController.deleteProviderAccreditation_post)
 
-router.get('/providers/:providerId/accreditations/:accreditationId', checkIsAuthenticated, providerAccreditationController.providerAccreditationDetails)
+router.get('/providers/:providerId/accreditations/:accreditationId', ...supportOnly, providerAccreditationController.providerAccreditationDetails)
 
-router.get('/providers/:providerId/accreditations', checkIsAuthenticated, providerAccreditationController.providerAccreditationsList)
+router.get('/providers/:providerId/accreditations', ...supportOnly, providerAccreditationController.providerAccreditationsList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER CONTACT ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/providers/:providerId/contacts/new', checkIsAuthenticated, providerContactController.newProviderContact_get)
-router.post('/providers/:providerId/contacts/new', checkIsAuthenticated, providerContactController.newProviderContact_post)
+router.get('/providers/:providerId/contacts/new', ...supportOnly, providerContactController.newProviderContact_get)
+router.post('/providers/:providerId/contacts/new', ...supportOnly, providerContactController.newProviderContact_post)
 
-router.get('/providers/:providerId/contacts/new/check', checkIsAuthenticated, providerContactController.newProviderContactCheck_get)
-router.post('/providers/:providerId/contacts/new/check', checkIsAuthenticated, providerContactController.newProviderContactCheck_post)
+router.get('/providers/:providerId/contacts/new/check', ...supportOnly, providerContactController.newProviderContactCheck_get)
+router.post('/providers/:providerId/contacts/new/check', ...supportOnly, providerContactController.newProviderContactCheck_post)
 
-router.get('/providers/:providerId/contacts/:contactId/edit', checkIsAuthenticated, providerContactController.editProviderContact_get)
-router.post('/providers/:providerId/contacts/:contactId/edit', checkIsAuthenticated, providerContactController.editProviderContact_post)
+router.get('/providers/:providerId/contacts/:contactId/edit', ...supportOnly, providerContactController.editProviderContact_get)
+router.post('/providers/:providerId/contacts/:contactId/edit', ...supportOnly, providerContactController.editProviderContact_post)
 
-router.get('/providers/:providerId/contacts/:contactId/edit/check', checkIsAuthenticated, providerContactController.editProviderContactCheck_get)
-router.post('/providers/:providerId/contacts/:contactId/edit/check', checkIsAuthenticated, providerContactController.editProviderContactCheck_post)
+router.get('/providers/:providerId/contacts/:contactId/edit/check', ...supportOnly, providerContactController.editProviderContactCheck_get)
+router.post('/providers/:providerId/contacts/:contactId/edit/check', ...supportOnly, providerContactController.editProviderContactCheck_post)
 
-router.get('/providers/:providerId/contacts/:contactId/delete', checkIsAuthenticated, providerContactController.deleteProviderContact_get)
-router.post('/providers/:providerId/contacts/:contactId/delete', checkIsAuthenticated, providerContactController.deleteProviderContact_post)
+router.get('/providers/:providerId/contacts/:contactId/delete', ...supportOnly, providerContactController.deleteProviderContact_get)
+router.post('/providers/:providerId/contacts/:contactId/delete', ...supportOnly, providerContactController.deleteProviderContact_post)
 
-router.get('/providers/:providerId/contacts/:contactId', checkIsAuthenticated, providerContactController.providerContactDetails)
+router.get('/providers/:providerId/contacts/:contactId', ...supportOnly, providerContactController.providerContactDetails)
 
-router.get('/providers/:providerId/contacts', checkIsAuthenticated, providerContactController.providerContactsList)
+router.get('/providers/:providerId/contacts', ...supportOnly, providerContactController.providerContactsList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ADDRESS ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newFindProviderAddress_get)
-router.post('/providers/:providerId/addresses/new', checkIsAuthenticated, providerAddressController.newFindProviderAddress_post)
+router.get('/providers/:providerId/addresses/new', ...supportOnly, providerAddressController.newFindProviderAddress_get)
+router.post('/providers/:providerId/addresses/new', ...supportOnly, providerAddressController.newFindProviderAddress_post)
 
-router.get('/providers/:providerId/addresses/new/select', checkIsAuthenticated, providerAddressController.newSelectProviderAddress_get)
-router.post('/providers/:providerId/addresses/new/select', checkIsAuthenticated, providerAddressController.newSelectProviderAddress_post)
+router.get('/providers/:providerId/addresses/new/select', ...supportOnly, providerAddressController.newSelectProviderAddress_get)
+router.post('/providers/:providerId/addresses/new/select', ...supportOnly, providerAddressController.newSelectProviderAddress_post)
 
-router.get('/providers/:providerId/addresses/new/enter', checkIsAuthenticated, providerAddressController.newEnterProviderAddress_get)
-router.post('/providers/:providerId/addresses/new/enter', checkIsAuthenticated, providerAddressController.newEnterProviderAddress_post)
+router.get('/providers/:providerId/addresses/new/enter', ...supportOnly, providerAddressController.newEnterProviderAddress_get)
+router.post('/providers/:providerId/addresses/new/enter', ...supportOnly, providerAddressController.newEnterProviderAddress_post)
 
-router.get('/providers/:providerId/addresses/new/check', checkIsAuthenticated, providerAddressController.newProviderAddressCheck_get)
-router.post('/providers/:providerId/addresses/new/check', checkIsAuthenticated, providerAddressController.newProviderAddressCheck_post)
+router.get('/providers/:providerId/addresses/new/check', ...supportOnly, providerAddressController.newProviderAddressCheck_get)
+router.post('/providers/:providerId/addresses/new/check', ...supportOnly, providerAddressController.newProviderAddressCheck_post)
 
-router.get('/providers/:providerId/addresses/:addressId/edit', checkIsAuthenticated, providerAddressController.editProviderAddress_get)
-router.post('/providers/:providerId/addresses/:addressId/edit', checkIsAuthenticated, providerAddressController.editProviderAddress_post)
+router.get('/providers/:providerId/addresses/:addressId/edit', ...supportOnly, providerAddressController.editProviderAddress_get)
+router.post('/providers/:providerId/addresses/:addressId/edit', ...supportOnly, providerAddressController.editProviderAddress_post)
 
-router.get('/providers/:providerId/addresses/:addressId/edit/check', checkIsAuthenticated, providerAddressController.editProviderAddressCheck_get)
-router.post('/providers/:providerId/addresses/:addressId/edit/check', checkIsAuthenticated, providerAddressController.editProviderAddressCheck_post)
+router.get('/providers/:providerId/addresses/:addressId/edit/check', ...supportOnly, providerAddressController.editProviderAddressCheck_get)
+router.post('/providers/:providerId/addresses/:addressId/edit/check', ...supportOnly, providerAddressController.editProviderAddressCheck_post)
 
-router.get('/providers/:providerId/addresses/:addressId/delete', checkIsAuthenticated, providerAddressController.deleteProviderAddress_get)
-router.post('/providers/:providerId/addresses/:addressId/delete', checkIsAuthenticated, providerAddressController.deleteProviderAddress_post)
+router.get('/providers/:providerId/addresses/:addressId/delete', ...supportOnly, providerAddressController.deleteProviderAddress_get)
+router.post('/providers/:providerId/addresses/:addressId/delete', ...supportOnly, providerAddressController.deleteProviderAddress_post)
 
-router.get('/providers/:providerId/addresses/:addressId', checkIsAuthenticated, providerAddressController.providerAddressDetails)
+router.get('/providers/:providerId/addresses/:addressId', ...supportOnly, providerAddressController.providerAddressDetails)
 
-router.get('/providers/:providerId/addresses', checkIsAuthenticated, providerAddressController.providerAddressesList)
+router.get('/providers/:providerId/addresses', ...supportOnly, providerAddressController.providerAddressesList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER PARTNERSHIP ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/providers/:providerId/partnerships/new', checkIsAuthenticated, providerPartnershipController.newProviderPartnership_get)
-router.post('/providers/:providerId/partnerships/new', checkIsAuthenticated, providerPartnershipController.newProviderPartnership_post)
+router.get('/providers/:providerId/partnerships/new', ...supportOnly, providerPartnershipController.newProviderPartnership_get)
+router.post('/providers/:providerId/partnerships/new', ...supportOnly, providerPartnershipController.newProviderPartnership_post)
 
-router.get('/providers/:providerId/partnerships/new/duplicate', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDuplicate_get)
+router.get('/providers/:providerId/partnerships/new/duplicate', ...supportOnly, providerPartnershipController.newProviderPartnershipDuplicate_get)
 
-router.get('/providers/:providerId/partnerships/new/choose', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipChoose_get)
-router.post('/providers/:providerId/partnerships/new/choose', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipChoose_post)
+router.get('/providers/:providerId/partnerships/new/choose', ...supportOnly, providerPartnershipController.newProviderPartnershipChoose_get)
+router.post('/providers/:providerId/partnerships/new/choose', ...supportOnly, providerPartnershipController.newProviderPartnershipChoose_post)
 
-router.get('/providers/:providerId/partnerships/new/dates', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDates_get)
-router.post('/providers/:providerId/partnerships/new/dates', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipDates_post)
+router.get('/providers/:providerId/partnerships/new/dates', ...supportOnly, providerPartnershipController.newProviderPartnershipDates_get)
+router.post('/providers/:providerId/partnerships/new/dates', ...supportOnly, providerPartnershipController.newProviderPartnershipDates_post)
 
-router.get('/providers/:providerId/partnerships/new/academic-years', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipAcademicYears_get)
-router.post('/providers/:providerId/partnerships/new/academic-years', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipAcademicYears_post)
+router.get('/providers/:providerId/partnerships/new/academic-years', ...supportOnly, providerPartnershipController.newProviderPartnershipAcademicYears_get)
+router.post('/providers/:providerId/partnerships/new/academic-years', ...supportOnly, providerPartnershipController.newProviderPartnershipAcademicYears_post)
 
-router.get('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_get)
-router.post('/providers/:providerId/partnerships/new/check', checkIsAuthenticated, providerPartnershipController.newProviderPartnershipCheck_post)
+router.get('/providers/:providerId/partnerships/new/check', ...supportOnly, providerPartnershipController.newProviderPartnershipCheck_get)
+router.post('/providers/:providerId/partnerships/new/check', ...supportOnly, providerPartnershipController.newProviderPartnershipCheck_post)
 
-router.get('/providers/:providerId/partnerships/:partnershipId/dates', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipDates_get)
-router.post('/providers/:providerId/partnerships/:partnershipId/dates', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipDates_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/dates', ...supportOnly, providerPartnershipController.editProviderPartnershipDates_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/dates', ...supportOnly, providerPartnershipController.editProviderPartnershipDates_post)
 
-router.get('/providers/:providerId/partnerships/:partnershipId/academic-years', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAcademicYears_get)
-router.post('/providers/:providerId/partnerships/:partnershipId/academic-years', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipAcademicYears_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/academic-years', ...supportOnly, providerPartnershipController.editProviderPartnershipAcademicYears_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/academic-years', ...supportOnly, providerPartnershipController.editProviderPartnershipAcademicYears_post)
 
-router.get('/providers/:providerId/partnerships/:partnershipId/check', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipCheck_get)
-router.post('/providers/:providerId/partnerships/:partnershipId/check', checkIsAuthenticated, providerPartnershipController.editProviderPartnershipCheck_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/check', ...supportOnly, providerPartnershipController.editProviderPartnershipCheck_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/check', ...supportOnly, providerPartnershipController.editProviderPartnershipCheck_post)
 
-router.get('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_get)
-router.post('/providers/:providerId/partnerships/:partnershipId/delete', checkIsAuthenticated, providerPartnershipController.deleteProviderPartnership_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/delete', ...supportOnly, providerPartnershipController.deleteProviderPartnership_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/delete', ...supportOnly, providerPartnershipController.deleteProviderPartnership_post)
 
 // router.get('/providers/:providerId/partnerships/:partnershipId', checkIsAuthenticated, providerPartnershipController.providerPartnershipDetails)
 
-router.get('/providers/:providerId/partnerships', checkIsAuthenticated, providerPartnershipController.providerPartnershipsList)
+router.get('/providers/:providerId/partnerships', ...supportOnly, providerPartnershipController.providerPartnershipsList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/providers/remove-provider-type-filter/:providerType', checkIsAuthenticated, providerController.removeProviderTypeFilter)
-router.get('/providers/remove-accreditation-type-filter/:accreditationType', checkIsAuthenticated, providerController.removeAccreditationTypeFilter)
-router.get('/providers/remove-show-archived-provider-filter/:showArchivedProvider', checkIsAuthenticated, providerController.removeShowArchivedProviderFilter)
+router.get('/providers/remove-provider-type-filter/:providerType', ...supportOnly, providerController.removeProviderTypeFilter)
+router.get('/providers/remove-accreditation-type-filter/:accreditationType', ...supportOnly, providerController.removeAccreditationTypeFilter)
+router.get('/providers/remove-show-archived-provider-filter/:showArchivedProvider', ...supportOnly, providerController.removeShowArchivedProviderFilter)
 
-router.get('/providers/remove-all-filters', checkIsAuthenticated, providerController.removeAllFilters)
+router.get('/providers/remove-all-filters', ...supportOnly, providerController.removeAllFilters)
 
-router.get('/providers/remove-keyword-search', checkIsAuthenticated, providerController.removeKeywordSearch)
+router.get('/providers/remove-keyword-search', ...supportOnly, providerController.removeKeywordSearch)
 
-router.get('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_get)
-router.post('/providers/new', checkIsAuthenticated, providerController.newProviderIsAccredited_post)
+router.get('/providers/new', ...supportOnly, providerController.newProviderIsAccredited_get)
+router.post('/providers/new', ...supportOnly, providerController.newProviderIsAccredited_post)
 
-router.get('/providers/new/type', checkIsAuthenticated, providerController.newProviderType_get)
-router.post('/providers/new/type', checkIsAuthenticated, providerController.newProviderType_post)
+router.get('/providers/new/type', ...supportOnly, providerController.newProviderType_get)
+router.post('/providers/new/type', ...supportOnly, providerController.newProviderType_post)
 
-router.get('/providers/new/details', checkIsAuthenticated, providerController.newProviderDetails_get)
-router.post('/providers/new/details', checkIsAuthenticated, providerController.newProviderDetails_post)
+router.get('/providers/new/details', ...supportOnly, providerController.newProviderDetails_get)
+router.post('/providers/new/details', ...supportOnly, providerController.newProviderDetails_post)
 
-router.get('/providers/new/accreditation', checkIsAuthenticated, providerController.newProviderAccreditation_get)
-router.post('/providers/new/accreditation', checkIsAuthenticated, providerController.newProviderAccreditation_post)
+router.get('/providers/new/accreditation', ...supportOnly, providerController.newProviderAccreditation_get)
+router.post('/providers/new/accreditation', ...supportOnly, providerController.newProviderAccreditation_post)
 
-router.get('/providers/new/address', checkIsAuthenticated, providerController.newProviderFindAddress_get)
-router.post('/providers/new/address', checkIsAuthenticated, providerController.newProviderFindAddress_post)
+router.get('/providers/new/address', ...supportOnly, providerController.newProviderFindAddress_get)
+router.post('/providers/new/address', ...supportOnly, providerController.newProviderFindAddress_post)
 
-router.get('/providers/new/address/select', checkIsAuthenticated, providerController.newProviderSelectAddress_get)
-router.post('/providers/new/address/select', checkIsAuthenticated, providerController.newProviderSelectAddress_post)
+router.get('/providers/new/address/select', ...supportOnly, providerController.newProviderSelectAddress_get)
+router.post('/providers/new/address/select', ...supportOnly, providerController.newProviderSelectAddress_post)
 
-router.get('/providers/new/address/enter', checkIsAuthenticated, providerController.newProviderEnterAddress_get)
-router.post('/providers/new/address/enter', checkIsAuthenticated, providerController.newProviderEnterAddress_post)
+router.get('/providers/new/address/enter', ...supportOnly, providerController.newProviderEnterAddress_get)
+router.post('/providers/new/address/enter', ...supportOnly, providerController.newProviderEnterAddress_post)
 
-router.get('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_get)
-router.post('/providers/new/check', checkIsAuthenticated, providerController.newProviderCheck_post)
+router.get('/providers/new/check', ...supportOnly, providerController.newProviderCheck_get)
+router.post('/providers/new/check', ...supportOnly, providerController.newProviderCheck_post)
 
-router.get('/providers/:providerId/edit', checkIsAuthenticated, providerController.editProvider_get)
-router.post('/providers/:providerId/edit', checkIsAuthenticated, providerController.editProvider_post)
+router.get('/providers/:providerId/edit', ...supportOnly, providerController.editProvider_get)
+router.post('/providers/:providerId/edit', ...supportOnly, providerController.editProvider_post)
 
-router.get('/providers/:providerId/edit/check', checkIsAuthenticated, providerController.editProviderCheck_get)
-router.post('/providers/:providerId/edit/check', checkIsAuthenticated, providerController.editProviderCheck_post)
+router.get('/providers/:providerId/edit/check', ...supportOnly, providerController.editProviderCheck_get)
+router.post('/providers/:providerId/edit/check', ...supportOnly, providerController.editProviderCheck_post)
 
-router.get('/providers/:providerId/delete', checkIsAuthenticated, providerController.deleteProvider_get)
-router.post('/providers/:providerId/delete', checkIsAuthenticated, providerController.deleteProvider_post)
+router.get('/providers/:providerId/delete', ...supportOnly, providerController.deleteProvider_get)
+router.post('/providers/:providerId/delete', ...supportOnly, providerController.deleteProvider_post)
 
-router.get('/providers/:providerId/archive', checkIsAuthenticated, providerController.archiveProvider_get)
-router.post('/providers/:providerId/archive', checkIsAuthenticated, providerController.archiveProvider_post)
+router.get('/providers/:providerId/archive', ...supportOnly, providerController.archiveProvider_get)
+router.post('/providers/:providerId/archive', ...supportOnly, providerController.archiveProvider_post)
 
-router.get('/providers/:providerId/restore', checkIsAuthenticated, providerController.restoreProvider_get)
-router.post('/providers/:providerId/restore', checkIsAuthenticated, providerController.restoreProvider_post)
+router.get('/providers/:providerId/restore', ...supportOnly, providerController.restoreProvider_get)
+router.post('/providers/:providerId/restore', ...supportOnly, providerController.restoreProvider_post)
 
-router.get('/providers/:providerId', checkIsAuthenticated, providerController.providerDetails)
+router.get('/providers/:providerId', ...supportOnly, providerController.providerDetails)
 
-router.get('/providers', checkIsAuthenticated, providerController.providersList)
+router.get('/providers', ...supportOnly, providerController.providersList)
 
 /// ------------------------------------------------------------------------ ///
 /// MY ACCOUNT ROUTES
@@ -330,9 +349,9 @@ router.get('/account', checkIsAuthenticated, accountController.userAccount)
 /// ACTIVITY ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/activity', checkIsAuthenticated, activityController.activityList)
+router.get('/activity', ...supportOnly, activityController.activityList)
 
-router.get('/providers/:providerId/activity', checkIsAuthenticated, providerActivityController.activityList)
+router.get('/providers/:providerId/activity', ...supportOnly, providerActivityController.activityList)
 
 /// ------------------------------------------------------------------------ ///
 /// API CLIENT ROUTES
@@ -405,9 +424,9 @@ router.get('/account-no-organisation', errorController.accountNoOrganisation)
 /// AUTOCOMPLETE ROUTES
 /// ------------------------------------------------------------------------ ///
 
-router.get('/accredited-provider-suggestions', providerController.accreditedProviderSuggestions_json)
+router.get('/accredited-provider-suggestions', ...supportOnly, providerController.accreditedProviderSuggestions_json)
 
-router.get('/training-partner-suggestions', providerController.trainingPartnerSuggestions_json)
+router.get('/training-partner-suggestions', ...supportOnly, providerController.trainingPartnerSuggestions_json)
 
 /// ------------------------------------------------------------------------ ///
 ///
