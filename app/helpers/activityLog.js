@@ -990,8 +990,8 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       }
 
       fields.push({ key: 'Accreditation number', value: revision.number })
-      fields.push({ key: 'Date accreditation starts', value: accreditationDatesSummary.startsOn })
-      fields.push({ key: 'Date accreditation ends', value: accreditationDatesSummary.endsOn || 'No end date' })
+      fields.push({ key: 'Accreditation start date', value: accreditationDatesSummary.startsOn })
+      fields.push({ key: 'Accreditation end date', value: accreditationDatesSummary.endsOn || 'No end date' })
       break
     }
 

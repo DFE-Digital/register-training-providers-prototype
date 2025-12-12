@@ -99,7 +99,7 @@ exports.providersList = async (req, res) => {
 
     if (accreditationTypes?.length) {
       selectedFilters.categories.push({
-        heading: { text: 'Accreditation type' },
+        heading: { text: 'Accreditation status' },
         items: accreditationTypes.map((accreditationType) => {
           return {
             text: getAccreditationTypeLabel(accreditationType),

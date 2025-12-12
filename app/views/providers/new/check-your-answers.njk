@@ -134,6 +134,31 @@
       {% if provider.isAccredited == "yes" %}
         <h2 class="govuk-heading-m govuk-!-margin-top-7">Accreditation</h2>
 
+        {% set accreditationDatesHtml %}
+          {{ govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: "Starts on"
+                },
+                value: {
+                  text: provider.accreditation.startsOn | isoDateFromDateInput | govukDate
+                }
+              },
+              {
+                key: {
+                  text: "Ends on"
+                },
+                value: {
+                  text: provider.accreditation.endsOn | isoDateFromDateInput | govukDate if provider.accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
+                  classes: "govuk-hint" if provider.accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
+                },
+                classes: "govuk-summary-list__row--no-border"
+              }
+            ]
+          }) }}
+        {% endset %}
+
         {{ govukSummaryList({
           rows: [
             {
@@ -155,35 +180,17 @@
             },
             {
               key: {
-                text: "Date accreditation starts"
+                text: "Accreditation dates"
               },
               value: {
-                text: provider.accreditation.startsOn | isoDateFromDateInput | govukDate
+                html: accreditationDatesHtml
               },
               actions: {
                 items: [
                   {
                     href: "#",
                     text: "Change",
-                    visuallyHiddenText: "date accreditation starts"
-                  }
-                ]
-              }
-            },
-            {
-              key: {
-                text: "Date accreditation ends"
-              },
-              value: {
-                text: provider.accreditation.endsOn | isoDateFromDateInput | govukDate if provider.accreditation.endsOn | isoDateFromDateInput != "Invalid DateTime" else "Not entered",
-                classes: "govuk-hint" if provider.accreditation.endsOn | isoDateFromDateInput == "Invalid DateTime"
-              },
-              actions: {
-                items: [
-                  {
-                    href: "#",
-                    text: "Change",
-                    visuallyHiddenText: "date accreditation ends"
+                    visuallyHiddenText: "accreditation dates"
                   }
                 ]
               }
