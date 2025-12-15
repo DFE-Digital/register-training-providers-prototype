@@ -5,7 +5,7 @@ const { hashToken } = require('../helpers/apiTokens')
 
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization || ''
-  const match = authHeader.match(/^Bearer\\s+(.+)$/i)
+  const match = authHeader.match(/^Bearer\s+(.+)$/i)
 
   if (!match || !match[1]) {
     return res.status(401).json({ error: 'Missing or invalid Authorization header' })
