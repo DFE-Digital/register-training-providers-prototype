@@ -1,12 +1,8 @@
-const crypto = require('crypto')
-
 const { ApiClientToken, User } = require('../models')
 const Pagination = require('../helpers/pagination')
 const { govukDate, govukDateTime } = require('../helpers/date')
 const { validateDateInput, getDateParts, todayUTC } = require('../helpers/validation/date')
-
-const TOKEN_SECRET = process.env.API_CLIENT_TOKEN_SECRET
-const ENV_PREFIX = process.env.NODE_ENV || 'development'
+const { hashToken, generatePlainToken } = require('../helpers/apiTokens')
 
 const ensureApiClientTokenSession = (req, key = 'apiClientToken') => {
   if (!req.session.data[key]) {
@@ -66,16 +62,6 @@ const validateExpiryDate = (expiresOn, { mode = 'new', createdAt } = {}) => {
     baseId: 'expiresOn',
     constraint
   })
-}
-
-const generatePlainToken = () =>
-  `${ENV_PREFIX}_${crypto.randomBytes(32).toString('hex')}`
-
-const hashToken = (token) => {
-  if (!TOKEN_SECRET) {
-    throw new Error('API_CLIENT_TOKEN_SECRET is not set')
-  }
-  return crypto.createHmac('sha256', TOKEN_SECRET).update(token).digest('hex')
 }
 
 const loadApiClientTokenOrRedirect = async (apiClientId, res, currentUser, options = {}) => {
