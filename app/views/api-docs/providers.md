@@ -1,5 +1,5 @@
 ---
-title: Providers endpoint
+title: Providers
 contents:
   items:
     - text: Endpoint
@@ -16,19 +16,19 @@ contents:
       href: "#error-responses"
 ---
 
-# Providers
-
 Use this endpoint to retrieve providers from the register. Results are paginated and ordered by the last update time (newest first).
 
 ## Endpoint
 
-`GET /api/v1/providers`
+```text
+GET /api/v1/providers
+```
 
 ## Authentication
 
 Send a bearer token from the API clients section:
 
-```
+```text
 Authorization: Bearer YOUR_TOKEN_VALUE
 ```
 
@@ -36,9 +36,11 @@ Tokens must be active, not revoked, and not expired.
 
 ## Query parameters
 
-- `changed_since` — optional ISO 8601 timestamp. Returns providers updated on or after this time.
-- `page` — optional page number (default `1`).
-- `per_page` — optional page size (default `50`, maximum `200`).
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `changed_since` | false | ISO 8601 timestamp. Returns providers updated on or after this time. |
+| `page` | false | Page number (defaults to `1`) |
+| `per_page` | false | Page size (defaults to `50`, maximum `200`). |
 
 ## Response structure
 
@@ -85,6 +87,22 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 ## Error responses
 
-- Missing or malformed header: `401 { "error": "Missing or invalid Authorization header" }`
-- Invalid, expired, or revoked token: `403 { "error": "Invalid, expired, or revoked token" }`
-- Bad query parameters (e.g. invalid date or negative pagination): `400 { "error": "Invalid per_page: must be a positive integer" }`
+### Missing or malformed header
+
+```text
+401 { "error": "Missing or invalid Authorization header" }
+```
+
+### Invalid, expired, or revoked token
+
+```text
+403 { "error": "Invalid, expired, or revoked token" }
+```
+
+### Bad query parameters
+
+For example, invalid date or negative pagination.
+
+```text
+400 { "error": "Invalid per_page: must be a positive integer" }
+```
