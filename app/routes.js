@@ -395,6 +395,8 @@ router.get('/api/v1/providers', apiAuth, apiProvidersController.list)
 /// API DOCUMENTATION ROUTES
 /// ------------------------------------------------------------------------ ///
 
+router.get('/api-docs', apiDocsController.list)
+
 router.get('/api-docs/providers', apiDocsController.providers)
 
 /// ------------------------------------------------------------------------ ///

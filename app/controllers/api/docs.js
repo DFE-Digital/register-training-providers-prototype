@@ -10,6 +10,12 @@ const getDoc = (fileName) => {
   return matter(doc)
 }
 
+exports.list = (req, res) => {
+  res.render('../views/api-docs/index', {
+
+  })
+}
+
 exports.providers = (req, res) => {
   const markdown = getDoc('providers')
 
