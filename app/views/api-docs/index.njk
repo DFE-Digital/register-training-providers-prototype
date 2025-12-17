@@ -1,0 +1,62 @@
+{% extends "layouts/main.njk" %}
+
+{% set hidePrimaryNavigation = true %}
+{% set hideOrganisationSwitcher = true %}
+
+{% set title = "API documentation" %}
+
+{% block beforeContent %}
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "/"
+    }
+  ]
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% include "_includes/page-heading.njk" %}
+
+      <h2 class="govuk-heading-m">API endpoints</h2>
+
+      <ul class="govuk-list govuk-list--spaced">
+        <li>
+          <a href="/api-docs/providers" class="govuk-link">GET /providers</a>
+        </li>
+        <li>
+          GET /providers/{provider_id}
+        </li>
+        <li>
+          GET /providers/{provider_id}/accreditations
+        </li>
+        <li>
+          GET /providers/{provider_id}/addresses
+        </li>
+        <li>
+          GET /providers/{provider_id}/contacts
+        </li>
+        <li>
+          GET /providers/{provider_id}/partnerships
+        </li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Get help</h2>
+
+      <p class="govuk-body">
+        If you have any questions or suggestions contact us at <a href="mailto:example@education.gov.uk" class="govuk-link">example@education.gov.uk</a>.
+      </p>
+
+      <p class="govuk-body">
+        We will get back to you within five working days.
+      </p>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -56,6 +56,10 @@ const providerContactController = require('./controllers/providerContact')
 const providerController = require('./controllers/provider')
 const providerPartnershipController = require('./controllers/providerPartnership')
 const userController = require('./controllers/user')
+const apiProvidersController = require('./controllers/api/providers')
+const apiDocsController = require('./controllers/api/docs')
+
+const apiAuth = require('./middleware/apiAuth')
 
 /// ------------------------------------------------------------------------ ///
 /// Authentication middleware
@@ -380,6 +384,20 @@ router.get('/api-clients/:apiClientId/delete', checkIsAuthenticated, apiClientCo
 router.post('/api-clients/:apiClientId/delete', checkIsAuthenticated, apiClientController.deleteApiClientTokenCheck_post)
 
 router.get('/api-clients/:apiClientId', checkIsAuthenticated, apiClientController.apiClientTokenDetails)
+
+/// ------------------------------------------------------------------------ ///
+/// API ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/api/v1/providers', apiAuth, apiProvidersController.list)
+
+/// ------------------------------------------------------------------------ ///
+/// API DOCUMENTATION ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/api-docs', apiDocsController.list)
+
+router.get('/api-docs/providers', apiDocsController.providers)
 
 /// ------------------------------------------------------------------------ ///
 /// FEEDBACK ROUTES
