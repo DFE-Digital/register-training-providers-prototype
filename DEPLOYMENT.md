@@ -121,6 +121,7 @@ The Prototype Kit listens on `PORT` (default 3000). Verify deployment by visitin
 ## Deployment checklist
 
 - [ ] Environment variables set and secrets generated
+- [ ] `app/middleware` included in the deploy artifact (auth + API token checks)
 - [ ] Database storage location is writable and persisted
 - [ ] `npm install` (with or without scripts, per seeding preference) has run
 - [ ] `NODE_ENV=production npm run db:migrate` executed
