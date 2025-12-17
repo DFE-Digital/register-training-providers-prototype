@@ -75,14 +75,14 @@ Tokens must be active, not revoked, and not expired.
 
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-  "http://localhost:3000/api/v1/providers"
+  {{ BASE_URL }}/api/v1/providers
 ```
 
 ### Get providers updated since a date, with a custom page size
 
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-  "http://localhost:3000/api/v1/providers?changed_since=2024-09-01T00:00:00Z&per_page=25&page=2"
+  {{ BASE_URL }}/api/v1/providers?changed_since=2024-09-01T00:00:00Z&per_page=25&page=2
 ```
 
 ## Error responses
