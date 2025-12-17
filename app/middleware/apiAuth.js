@@ -8,7 +8,11 @@ module.exports = async (req, res, next) => {
   const match = authHeader.match(/^Bearer\s+(.+)$/i)
 
   if (!match || !match[1]) {
-    return res.status(401).json({ error: 'Missing or invalid Authorization header' })
+    return res.status(401).json({
+      status: 401,
+      title: 'Unauthorized',
+      details: 'Missing or invalid Authorization header'
+    })
   }
 
   const token = match[1].trim()
@@ -17,7 +21,11 @@ module.exports = async (req, res, next) => {
   try {
     tokenHash = hashToken(token)
   } catch (error) {
-    return res.status(500).json({ error: 'API token secret is not configured' })
+    return res.status(500).json({
+      status: 500,
+      title: 'Internal Server Error',
+      details: 'API token secret is not configured'
+    })
   }
 
   try {
@@ -35,7 +43,10 @@ module.exports = async (req, res, next) => {
     })
 
     if (!apiClientToken) {
-      return res.status(403).json({ error: 'Invalid, expired, or revoked token' })
+      return res.status(403).json({
+        status: 403,
+        title: 'Forbidden',
+        details: 'Invalid, expired, or revoked token' })
     }
 
     req.apiClient = {
@@ -45,6 +56,10 @@ module.exports = async (req, res, next) => {
 
     return next()
   } catch (error) {
-    return res.status(500).json({ error: 'Unable to validate API token' })
+    return res.status(500).json({
+      status: 500,
+      title: 'Internal Server Error',
+      details: 'Unable to validate API token'
+    })
   }
 }

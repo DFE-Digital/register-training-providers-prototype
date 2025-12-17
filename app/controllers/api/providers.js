@@ -43,17 +43,29 @@ const parseChangedSince = (value) => {
 exports.list = async (req, res) => {
   const pageResult = parsePositiveInt(req.query.page, DEFAULT_PAGE)
   if (pageResult.error) {
-    return res.status(400).json({ error: `Invalid page: ${pageResult.error}` })
+    return res.status(400).json({
+      status: 400,
+      title: 'Bad Request',
+      details: `Invalid page: ${pageResult.error}`
+    })
   }
 
   const perPageResult = parsePositiveInt(req.query.per_page, DEFAULT_PER_PAGE, MAX_PER_PAGE)
   if (perPageResult.error) {
-    return res.status(400).json({ error: `Invalid per_page: ${perPageResult.error}` })
+    return res.status(400).json({
+      status: 400,
+      title: 'Bad Request',
+      details: `Invalid per_page: ${perPageResult.error}`
+    })
   }
 
   const changedSinceResult = parseChangedSince(req.query.changed_since)
   if (changedSinceResult.error) {
-    return res.status(400).json({ error: changedSinceResult.error })
+    return res.status(400).json({
+      status: 400,
+      title: 'Bad Request',
+      details: changedSinceResult.error
+    })
   }
 
   const page = pageResult.value

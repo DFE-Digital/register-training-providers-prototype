@@ -89,20 +89,32 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 ### Missing or malformed header
 
-```text
-401 { "error": "Missing or invalid Authorization header" }
+```json
+{
+  "status": 401,
+  "title": "Unauthorized",
+  "details": "Missing or invalid Authorization header"
+}
 ```
 
 ### Invalid, expired, or revoked token
 
-```text
-403 { "error": "Invalid, expired, or revoked token" }
+```json
+{
+  "status": 403,
+  "title": "Forbidden",
+  "details": "Invalid, expired, or revoked token"
+}
 ```
 
 ### Bad query parameters
 
 For example, invalid date or negative pagination.
 
-```text
-400 { "error": "Invalid per_page: must be a positive integer" }
+```json
+{
+  "status": 400,
+  "title": "Bad Request",
+  "details": "Invalid per_page: must be a positive integer"
+}
 ```
