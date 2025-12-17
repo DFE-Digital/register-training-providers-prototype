@@ -13,42 +13,43 @@ You can read more about this register on the [design history website](https://be
 
 - [Architecture documentation](ARCHITECTURE.md) - Technical architecture, design patterns, and codebase structure
 - [Deployment guide](DEPLOYMENT.md) - Deployment instructions for various platforms and environments
+- [Design history](https://becoming-a-teacher.design-history.education.gov.uk/register-of-training-providers/) - Service and design context
 
 ## Requirements
 
-- Node.js - version 22.x.x
+- Node.js 22.x
+- npm (compatible with Node 22)
 
-## Installation
+## Quick start
 
-- Clone this repository to a folder on your computer
-- Open Terminal
-- In Terminal, change the path to the repository
-- Type `npm install` to install the dependencies
-
-## Working locally
-
-- In Terminal, change the path to the repository
-- Type `npm run dev`  and start the application
+```bash
+git clone <repository-url>
+cd register-training-providers-prototype
+npm install          # installs deps and builds the dev SQLite DB
+npm run dev          # start with live reload
+```
 
 ## Generating data
 
 The prototype uses a SQLite database to store data and includes a set of seed data.
 
-The database is built when you run `npm install`.
+The database is built automatically during `npm install`. To rebuild with fresh seed data:
 
-You can also regenerate the database:
-
-- In Terminal, change the path to the repository
-- Type `npm run db:build:dev`
+```bash
+npm run db:build:dev
+```
 
 ## Environment variables
 
-The prototype uses environment variables to help configure the application. These include:
+The prototype uses environment variables to configure runtime and integrations:
 
 | Variable | Type | Description |
 | --- | --- | --- |
 | `ORDNANCE_SURVEY_API_KEY` | string | The API key needed to access the Ordnance Survey Places API |
 | `ORDNANCE_SURVEY_API_SECRET` | string | The API secret needed to access the Ordnance Survey Places API |
+| `SESSION_SECRET` | string | Secret used to sign session cookies |
+| `API_CLIENT_TOKEN_SECRET` | string | Secret used to hash and validate API client tokens |
+| `USE_SIGN_IN_FORM` | boolean (`true`/`false`) | Whether to use the sign-in form instead of personas (default `true`) |
 
 ## Tools
 
