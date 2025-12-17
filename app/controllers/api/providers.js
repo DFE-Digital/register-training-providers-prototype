@@ -6,6 +6,11 @@ const DEFAULT_PAGE = 1
 const DEFAULT_PER_PAGE = 50
 const MAX_PER_PAGE = 200
 
+/**
+ * Normalize provider model into API response shape.
+ * @param {import('../../models').Provider} provider
+ * @returns {object}
+ */
 const serializeProvider = (provider) => ({
   id: provider.id,
   operating_name: provider.operatingName,
@@ -19,6 +24,13 @@ const serializeProvider = (provider) => ({
   archived_at: provider.archivedAt ? provider.archivedAt.toISOString() : null
 })
 
+/**
+ * Parse and validate a positive integer query parameter.
+ * @param {string|undefined} value
+ * @param {number} fallback default value when undefined
+ * @param {number} [max] optional upper bound
+ * @returns {{ value?: number, error?: string }}
+ */
 const parsePositiveInt = (value, fallback, max) => {
   if (value === undefined) return { value: fallback }
   const parsed = Number.parseInt(value, 10)
@@ -31,6 +43,11 @@ const parsePositiveInt = (value, fallback, max) => {
   return { value: parsed }
 }
 
+/**
+ * Parse and validate an ISO8601 date/time for changed_since.
+ * @param {string|undefined} value
+ * @returns {{ date?: Date|null, error?: string }}
+ */
 const parseChangedSince = (value) => {
   if (!value) return { date: null }
   const date = new Date(value)
@@ -40,6 +57,14 @@ const parseChangedSince = (value) => {
   return { date }
 }
 
+/**
+ * GET /providers
+ * Returns paginated providers filtered by optional changed_since.
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<import('express').Response|void>}
+ */
 exports.list = async (req, res) => {
   const pageResult = parsePositiveInt(req.query.page, DEFAULT_PAGE)
   if (pageResult.error) {

@@ -3,6 +3,16 @@ const { Op } = require('sequelize')
 const { ApiClientToken } = require('../models')
 const { hashToken } = require('../helpers/apiTokens')
 
+/**
+ * Express middleware to validate a bearer token for API access.
+ * Looks up an active, non-revoked, non-expired token and attaches the
+ * api client details to the request when valid.
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ * @returns {Promise<import('express').Response|void>}
+ */
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization || ''
   const match = authHeader.match(/^Bearer\s+(.+)$/i)
