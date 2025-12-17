@@ -29,6 +29,7 @@ register-training-providers-prototype/
 │   ├── hooks/               # Sequelize lifecycle hooks (revision + activity)
 │   ├── migrations/          # Database migrations
 │   ├── seeders/             # Database seed data
+│   ├── middleware/          # Express middleware (auth, API auth)
 │   ├── filters.js           # Nunjucks template filters
 │   ├── routes.js            # Route definitions
 │   ├── config/              # Configuration files
@@ -236,6 +237,7 @@ ApiClientToken
 ## Cross-cutting concerns
 
 - **Authentication:** Passport local strategy backed by server sessions; login updates `lastSignedInAt`.
+- **Authentication:** Passport local strategy backed by server sessions; login updates `lastSignedInAt`. Route protection lives in `app/middleware/auth.js` (`checkIsAuthenticated`, `checkIsSupportUser`) and API bearer token validation in `app/middleware/apiAuth.js`.
 - **Audit trail:** `revisionHook` snapshots tracked fields into revision tables; `activityHook` creates `ActivityLog` rows for each revision.
 - **Data lifecycle:** Soft deletes (`deletedAt`/`deletedById`) preserve history and feed the audit trail.
 - **Config:** `app/config/config.json` uses SQLite for all environments; override via env vars if deploying elsewhere.
