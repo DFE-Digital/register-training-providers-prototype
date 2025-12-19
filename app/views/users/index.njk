@@ -41,23 +41,25 @@
                 {{ user.email if user.email else "Not entered" }}
               </td>
               <td class="govuk-table__cell">
-                {% if user.isActive %}
-                  {{ govukTag({
-                    text: "Active",
-                    classes: "govuk-tag--turquoise"
-                  }) }}
-                {% else %}
-                  {{ govukTag({
-                    text: "Not active",
-                    classes: "govuk-tag--grey"
-                  }) }}
-                {% endif %}
-                {% if user.isApiUser %}
-                  {{ govukTag({
-                    text: "API user",
-                    classes: "govuk-tag--yellow"
-                  }) }}
-                {% endif %}
+                <div class="app-tag-list">
+                  {% if user.isActive %}
+                    {{ govukTag({
+                      text: "Active",
+                      classes: "govuk-tag--turquoise"
+                    }) }}
+                  {% else %}
+                    {{ govukTag({
+                      text: "Not active",
+                      classes: "govuk-tag--grey"
+                    }) }}
+                  {% endif %}
+                  {% if user.isApiUser %}
+                    {{ govukTag({
+                      text: "API user",
+                      classes: "govuk-tag--yellow"
+                    }) }}
+                  {% endif %}
+                </div>
               </td>
             </tr>
           {% endfor %}

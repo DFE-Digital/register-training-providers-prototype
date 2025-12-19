@@ -82,6 +82,8 @@ exports.newUser_get = async (req, res) => {
   const { user } = req.session.data
   res.render('users/edit', {
     user,
+    // Explicitly null to avoid clashing with the signed-in user injected into res.locals
+    currentUser: null,
     actions: {
       back: '/users',
       cancel: '/users',
@@ -156,6 +158,7 @@ exports.newUser_post = async (req, res) => {
     res.render('users/edit', {
       user,
       errors,
+      currentUser: null,
       actions: {
         back: '/users',
         cancel: '/users',
@@ -171,6 +174,7 @@ exports.newUserCheck_get = async (req, res) => {
   const { user } = req.session.data
   res.render('users/check-your-answers', {
     user,
+    currentUser: null,
     actions: {
       back: `/users/new`,
       cancel: `/users`,
@@ -191,6 +195,7 @@ exports.newUserCheck_post = async (req, res) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    isActive: true,
     isApiUser,
     password: hashedPassword,
     createdById: req.user.id,
