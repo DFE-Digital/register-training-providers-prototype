@@ -30,3 +30,13 @@
   overflow-wrap: break-word;
   word-break: break-all;
 }
+
+.app-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: govuk-spacing(1);
+
+  .govuk-tag {
+    margin: 0;
+  }
+}
