@@ -541,9 +541,9 @@ exports.newProviderPartnership_post = async (req, res) => {
     error.fieldName = 'provider'
     error.href = '#provider'
     if (isAccredited) {
-      error.text = 'Enter training partner name, UKPRN or URN'
+      error.text = 'Enter training partner name, code, UKPRN or URN'
     } else {
-      error.text = 'Enter accredited provider name, UKPRN or URN'
+      error.text = 'Enter accredited provider name, code, UKPRN or URN'
     }
     errors.push(error)
   }
