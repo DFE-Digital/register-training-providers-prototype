@@ -10,6 +10,8 @@
     "db:build:dev": "rm -f app/database/development.sqlite3 && npm run db:build",
     "db:migrate": "npx sequelize db:migrate --migrations-path ./app/migrations --config ./app/config/config.json",
     "db:seed": "npx sequelize db:seed:all --seeders-path ./app/seeders --config ./app/config/config.json",
+    "data:build-providers": "python3 app/data/scripts/build-providers.py",
+    "data:build-providers:js": "node app/data/scripts/build-providers.js",
     "postinstall": "npm run db:build",
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",

@@ -1,0 +1,230 @@
+#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+
+const EXPECTED_FIELDS = [
+  "operating_name",
+  "legal_name",
+  "ukprn",
+  "urn",
+  "provider_code",
+  "accredited_provider_number",
+  "provider_type",
+  "address1",
+  "address2",
+  "address3",
+  "address4",
+  "town",
+  "postcode",
+  "latitude",
+  "longitude",
+  "academic_year_code",
+];
+
+const OUTPUT_FIELDS = [
+  "provider__operating_name",
+  "provider__legal_name",
+  "provider__ukprn",
+  "provider__urn",
+  "provider__code",
+  "accreditation__number",
+  "accreditation__start_date",
+  "accreditation__end_date",
+  "provider__provider_type",
+  "address__address_line_1",
+  "address__address_line_2",
+  "address__address_line_3",
+  "address__town_or_city",
+  "address__county",
+  "address__postcode",
+  "address__latitude",
+  "address__longitude",
+  "provider__academic_years_active",
+  "provider__academic_year_code",
+];
+
+const OUTPUT_MAP = {
+  operating_name: "provider__operating_name",
+  legal_name: "provider__legal_name",
+  ukprn: "provider__ukprn",
+  urn: "provider__urn",
+  provider_code: "provider__code",
+  accredited_provider_number: "accreditation__number",
+  provider_type: "provider__provider_type",
+  address1: "address__address_line_1",
+  address2: "address__address_line_2",
+  address3: "address__address_line_3",
+  town: "address__town_or_city",
+  address4: "address__county",
+  postcode: "address__postcode",
+  latitude: "address__latitude",
+  longitude: "address__longitude",
+  academic_year_code: "provider__academic_year_code",
+};
+
+function parseCsv(content) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < content.length; i += 1) {
+    const char = content[i];
+    const next = content[i + 1];
+
+    if (inQuotes) {
+      if (char === '"' && next === '"') {
+        field += '"';
+        i += 1;
+      } else if (char === '"') {
+        inQuotes = false;
+      } else {
+        field += char;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inQuotes = true;
+    } else if (char === ",") {
+      row.push(field);
+      field = "";
+    } else if (char === "\n") {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+    } else if (char === "\r") {
+      // Ignore CR in CRLF.
+    } else {
+      field += char;
+    }
+  }
+
+  if (field.length > 0 || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+function toCsvValue(value) {
+  const text = value ?? "";
+  if (/[",\n]/.test(text)) {
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+  return text;
+}
+
+function writeCsv(rows) {
+  return rows.map((row) => row.map(toCsvValue).join(",")).join("\n") + "\n";
+}
+
+function providerKey(row) {
+  if (row.provider_code) return `provider_code:${row.provider_code}`;
+  if (row.ukprn) return `ukprn:${row.ukprn}`;
+  if (row.urn) return `urn:${row.urn}`;
+  const name = row.operating_name || row.legal_name || "";
+  const postcode = row.postcode || "";
+  return `fallback:${name}|${postcode}`;
+}
+
+function yearFromFilename(filename) {
+  const match = filename.match(/providers?-(\d{4})\.csv$/);
+  return match ? match[1] : null;
+}
+
+function main() {
+  const dataDir = path.resolve(__dirname, "..");
+  const srcDir = path.join(dataDir, "src");
+  const distDir = path.join(dataDir, "dist");
+
+  const files = fs
+    .readdirSync(srcDir)
+    .map((name) => ({
+      name,
+      year: yearFromFilename(name),
+    }))
+    .filter((item) => item.year)
+    .sort((a, b) => b.year.localeCompare(a.year))
+    .map((item) => ({
+      year: item.year,
+      fullPath: path.join(srcDir, item.name),
+    }));
+
+  if (files.length === 0) {
+    throw new Error(`No input files found in ${srcDir}`);
+  }
+
+  const providers = new Map();
+  const order = [];
+
+  for (const file of files) {
+    const content = fs.readFileSync(file.fullPath, "utf8");
+    const rows = parseCsv(content);
+    const header = rows.shift();
+
+    if (!header || header.join(",") !== EXPECTED_FIELDS.join(",")) {
+      throw new Error(
+        `Unexpected columns in ${path.basename(file.fullPath)}: ${header}`
+      );
+    }
+
+    for (const values of rows) {
+      const row = {};
+      EXPECTED_FIELDS.forEach((field, index) => {
+        row[field] = values[index] ?? "";
+      });
+
+      const key = providerKey(row);
+      const year = row.academic_year_code || file.year;
+      if (!providers.has(key)) {
+        providers.set(key, {
+          row,
+          years: [],
+          yearsSet: new Set(),
+        });
+        order.push(key);
+      }
+
+      const record = providers.get(key);
+      if (!record.yearsSet.has(year)) {
+        record.years.push(year);
+        record.yearsSet.add(year);
+      }
+    }
+  }
+
+  fs.mkdirSync(distDir, { recursive: true });
+  const outputPath = path.join(distDir, "providers.csv");
+
+  const outputRows = [OUTPUT_FIELDS];
+  for (const key of order) {
+    const record = providers.get(key);
+    const row = {};
+    OUTPUT_FIELDS.forEach((field) => {
+      row[field] = "";
+    });
+    Object.entries(OUTPUT_MAP).forEach(([srcKey, destKey]) => {
+      row[destKey] = record.row[srcKey] ?? "";
+    });
+    row.provider__academic_years_active = record.years.join(",");
+    if (row.accreditation__number) {
+      const earliestYear = Math.min(
+        ...Array.from(record.yearsSet).map((year) => Number(year))
+      );
+      if (Number.isFinite(earliestYear)) {
+        row.accreditation__start_date = `${earliestYear}-08-01`;
+      }
+    }
+    outputRows.push(OUTPUT_FIELDS.map((field) => row[field] ?? ""));
+  }
+
+  fs.writeFileSync(outputPath, writeCsv(outputRows), "utf8");
+  console.log(
+    `Wrote ${order.length} providers from ${files.length} files to ${outputPath}`
+  );
+}
+
+main();
