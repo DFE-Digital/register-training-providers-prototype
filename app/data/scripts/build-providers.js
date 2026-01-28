@@ -2,6 +2,10 @@
 const fs = require("fs");
 const path = require("path");
 
+/**
+ * Columns expected in source CSVs.
+ * @type {string[]}
+ */
 const EXPECTED_FIELDS = [
   "operating_name",
   "legal_name",
@@ -21,6 +25,10 @@ const EXPECTED_FIELDS = [
   "academic_year_code",
 ];
 
+/**
+ * Columns emitted in providers.csv (ordered).
+ * @type {string[]}
+ */
 const OUTPUT_FIELDS = [
   "provider__operating_name",
   "provider__legal_name",
@@ -43,6 +51,10 @@ const OUTPUT_FIELDS = [
   "provider__academic_year_code",
 ];
 
+/**
+ * Mapping of source columns to output columns.
+ * @type {Record<string, string>}
+ */
 const OUTPUT_MAP = {
   operating_name: "provider__operating_name",
   legal_name: "provider__legal_name",
@@ -62,6 +74,11 @@ const OUTPUT_MAP = {
   academic_year_code: "provider__academic_year_code",
 };
 
+/**
+ * Parse a CSV string into rows of fields.
+ * @param {string} content
+ * @returns {string[][]}
+ */
 function parseCsv(content) {
   const rows = [];
   let row = [];
@@ -109,6 +126,11 @@ function parseCsv(content) {
   return rows;
 }
 
+/**
+ * Escape a value for CSV output.
+ * @param {string} value
+ * @returns {string}
+ */
 function toCsvValue(value) {
   const text = value ?? "";
   if (/[",\n]/.test(text)) {
@@ -117,24 +139,42 @@ function toCsvValue(value) {
   return text;
 }
 
+/**
+ * Convert rows into a CSV string.
+ * @param {string[][]} rows
+ * @returns {string}
+ */
 function writeCsv(rows) {
   return rows.map((row) => row.map(toCsvValue).join(",")).join("\n") + "\n";
 }
 
+/**
+ * Resolve a stable provider key (code first, then name+postcode).
+ * @param {Record<string, string>} row
+ * @returns {string}
+ */
 function providerKey(row) {
+  // Prefer provider code for identity; fallback to name+postcode.
   if (row.provider_code) return `provider_code:${row.provider_code}`;
-  if (row.ukprn) return `ukprn:${row.ukprn}`;
-  if (row.urn) return `urn:${row.urn}`;
   const name = row.operating_name || row.legal_name || "";
   const postcode = row.postcode || "";
   return `fallback:${name}|${postcode}`;
 }
 
+/**
+ * Extract year from a providers-YYYY.csv filename.
+ * @param {string} filename
+ * @returns {string|null}
+ */
 function yearFromFilename(filename) {
   const match = filename.match(/providers?-(\d{4})\.csv$/);
   return match ? match[1] : null;
 }
 
+/**
+ * Build app/data/dist/providers.csv from yearly source files.
+ * @returns {void}
+ */
 function main() {
   const dataDir = path.resolve(__dirname, "..");
   const srcDir = path.join(dataDir, "src");
@@ -177,6 +217,7 @@ function main() {
         row[field] = values[index] ?? "";
       });
 
+      // Track first-seen row per provider, and append any new years.
       const key = providerKey(row);
       const year = row.academic_year_code || file.year;
       if (!providers.has(key)) {
@@ -209,8 +250,10 @@ function main() {
     Object.entries(OUTPUT_MAP).forEach(([srcKey, destKey]) => {
       row[destKey] = record.row[srcKey] ?? "";
     });
+    // Year list is newest→oldest because we process 2026→2019.
     row.provider__academic_years_active = record.years.join(",");
     if (row.accreditation__number) {
+      // Accreditation starts on 1 Aug of the earliest year seen.
       const earliestYear = Math.min(
         ...Array.from(record.yearsSet).map((year) => Number(year))
       );

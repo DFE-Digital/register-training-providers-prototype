@@ -66,13 +66,10 @@ OUTPUT_MAP = {
 
 
 def provider_key(row):
+    # Prefer provider code for identity; fallback to name+postcode.
     if row.get("provider_code"):
         return f"provider_code:{row['provider_code']}"
-    if row.get("ukprn"):
-        return f"ukprn:{row['ukprn']}"
-    if row.get("urn"):
-        return f"urn:{row['urn']}"
-    # Fallback for rare cases with missing identifiers.
+    # Fallback: match on provider name if code is missing.
     name = row.get("operating_name") or row.get("legal_name") or ""
     postcode = row.get("postcode") or ""
     return f"fallback:{name}|{postcode}"
@@ -114,6 +111,7 @@ def main():
                     f"Unexpected columns in {path.name}: {reader.fieldnames}"
                 )
             for row in reader:
+                # Track first-seen row per provider, and append any new years.
                 key = provider_key(row)
                 year = row.get("academic_year_code") or file_year
                 if key not in providers:
@@ -138,8 +136,10 @@ def main():
             out_row = {field: "" for field in OUTPUT_FIELDS}
             for src_key, dest_key in OUTPUT_MAP.items():
                 out_row[dest_key] = src_row.get(src_key, "")
+            # Year list is newest→oldest because we process 2026→2019.
             out_row["provider__academic_years_active"] = ",".join(record["years"])
             if out_row.get("accreditation__number"):
+                # Accreditation starts on 1 Aug of the earliest year seen.
                 try:
                     earliest_year = min(int(y) for y in record["years_set"])
                     out_row["accreditation__start_date"] = f"{earliest_year}-08-01"
