@@ -35,6 +35,7 @@ const OUTPUT_FIELDS = [
   "provider__ukprn",
   "provider__urn",
   "provider__code",
+  "provider__accreditation_status",
   "accreditation__number",
   "accreditation__start_date",
   "accreditation__end_date",
@@ -252,6 +253,9 @@ function main() {
     });
     // Year list is newest→oldest because we process 2026→2019.
     row.provider__academic_years_active = record.years.join(",");
+    row.provider__accreditation_status = row.accreditation__number
+      ? "accredited"
+      : "unaccredited";
     if (row.accreditation__number) {
       // Accreditation starts on 1 Aug of the earliest year seen.
       const earliestYear = Math.min(

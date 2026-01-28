@@ -29,6 +29,7 @@ OUTPUT_FIELDS = [
     "provider__ukprn",
     "provider__urn",
     "provider__code",
+    "provider__accreditation_status",
     "accreditation__number",
     "accreditation__start_date",
     "accreditation__end_date",
@@ -138,6 +139,9 @@ def main():
                 out_row[dest_key] = src_row.get(src_key, "")
             # Year list is newest→oldest because we process 2026→2019.
             out_row["provider__academic_years_active"] = ",".join(record["years"])
+            out_row["provider__accreditation_status"] = (
+                "accredited" if out_row.get("accreditation__number") else "unaccredited"
+            )
             if out_row.get("accreditation__number"):
                 # Accreditation starts on 1 Aug of the earliest year seen.
                 try:
