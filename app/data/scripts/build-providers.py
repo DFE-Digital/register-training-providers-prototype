@@ -84,7 +84,7 @@ def year_from_filename(path):
 
 def main():
     data_dir = Path(__file__).resolve().parents[1]
-    src_dir = data_dir / "src"
+    src_dir = data_dir / "src" / "providers"
     dist_dir = data_dir / "dist"
     dist_dir.mkdir(parents=True, exist_ok=True)
 

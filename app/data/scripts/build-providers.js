@@ -177,7 +177,7 @@ function yearFromFilename(filename) {
  */
 function main() {
   const dataDir = path.resolve(__dirname, "..");
-  const srcDir = path.join(dataDir, "src");
+  const srcDir = path.join(dataDir, "src", "providers");
   const distDir = path.join(dataDir, "dist");
 
   const files = fs
