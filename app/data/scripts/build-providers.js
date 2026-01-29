@@ -149,6 +149,19 @@ function toCsvValue(value) {
 }
 
 /**
+ * Normalize a postcode to standard spacing (e.g. "RG 2 8RH" -> "RG2 8RH").
+ * Returns the original value if it cannot be validated.
+ * @param {string} postcode
+ * @returns {string}
+ */
+function normalizePostcode(postcode) {
+  const cleaned = (postcode ?? "").toUpperCase().replace(/\s+/g, "");
+  if (!cleaned) return "";
+  const formatted = `${cleaned.slice(0, -3)} ${cleaned.slice(-3)}`;
+  return POSTCODE_REGEX.test(formatted) ? formatted : postcode;
+}
+
+/**
  * Convert rows into a CSV string.
  * @param {string[][]} rows
  * @returns {string}
@@ -263,6 +276,9 @@ function main() {
     Object.entries(OUTPUT_MAP).forEach(([srcKey, destKey]) => {
       row[destKey] = record.row[srcKey] ?? "";
     });
+    if (row.address__postcode) {
+      row.address__postcode = normalizePostcode(row.address__postcode);
+    }
     const addressNotes = [];
     if (!row.address__address_line_1) {
       addressNotes.push("missing address__address_line_1");
