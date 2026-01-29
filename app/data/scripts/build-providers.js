@@ -48,9 +48,17 @@ const OUTPUT_FIELDS = [
   "address__postcode",
   "address__latitude",
   "address__longitude",
+  "address__note",
   "provider__academic_years_active",
   "provider__academic_year_code",
 ];
+
+/**
+ * UK postcode format for validation.
+ * @type {RegExp}
+ */
+const POSTCODE_REGEX =
+  /^((GIR 0AA)|((([A-Z]{1,2}[0-9][0-9A-Z]?)|([A-Z]{1,2}[0-9]{1,2})) ?[0-9][A-Z]{2}))$/i;
 
 /**
  * Mapping of source columns to output columns.
@@ -251,6 +259,19 @@ function main() {
     Object.entries(OUTPUT_MAP).forEach(([srcKey, destKey]) => {
       row[destKey] = record.row[srcKey] ?? "";
     });
+    const addressNotes = [];
+    if (!row.address__address_line_1) {
+      addressNotes.push("missing address__address_line_1");
+    }
+    if (!row.address__town_or_city) {
+      addressNotes.push("missing address__town_or_city");
+    }
+    if (!row.address__postcode) {
+      addressNotes.push("missing address__postcode");
+    } else if (!POSTCODE_REGEX.test(row.address__postcode)) {
+      addressNotes.push("invalid address__postcode");
+    }
+    row.address__note = addressNotes.join(",");
     // Year list is newest→oldest because we process 2026→2019.
     row.provider__academic_years_active = record.years.join(",");
     row.provider__accreditation_status = row.accreditation__number
