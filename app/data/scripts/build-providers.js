@@ -26,6 +26,17 @@ const EXPECTED_FIELDS = [
 ];
 
 /**
+ * Columns expected in accredited-providers.csv.
+ * @type {string[]}
+ */
+const ACCREDITED_FIELDS = [
+  "provider__code",
+  "provider__legal_name",
+  "provider__operating_name",
+  "accreditation__number",
+];
+
+/**
  * Columns emitted in providers.csv (ordered).
  * @type {string[]}
  */
@@ -171,6 +182,35 @@ function writeCsv(rows) {
 }
 
 /**
+ * Build a lookup of provider code to accredited legal name.
+ * @param {string} filePath
+ * @returns {Map<string, string>}
+ */
+function loadAccreditedLegalNames(filePath) {
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Missing accredited providers file: ${filePath}`);
+  }
+  const content = fs.readFileSync(filePath, "utf8");
+  const rows = parseCsv(content);
+  const header = rows.shift();
+  if (!header || header.join(",") !== ACCREDITED_FIELDS.join(",")) {
+    throw new Error(
+      `Unexpected columns in ${path.basename(filePath)}: ${header}`
+    );
+  }
+  const map = new Map();
+  for (const values of rows) {
+    const row = {};
+    ACCREDITED_FIELDS.forEach((field, index) => {
+      row[field] = (values[index] ?? "").trim().replace(/\s+/g, " ");
+    });
+    if (!row.provider__code) continue;
+    map.set(row.provider__code, row.provider__legal_name ?? "");
+  }
+  return map;
+}
+
+/**
  * Resolve a stable provider key (code first, then name+postcode).
  * @param {Record<string, string>} row
  * @returns {string}
@@ -247,7 +287,14 @@ function resolveOutputPath(distDir, baseName) {
 function main() {
   const dataDir = path.resolve(__dirname, "..");
   const srcDir = path.join(dataDir, "src", "providers");
+  const accreditedPath = path.join(
+    dataDir,
+    "src",
+    "market-regs",
+    "accredited-providers.csv"
+  );
   const distDir = path.join(dataDir, "dist");
+  const accreditedLegalNames = loadAccreditedLegalNames(accreditedPath);
 
   const files = fs
     .readdirSync(srcDir)
@@ -322,6 +369,12 @@ function main() {
     Object.entries(OUTPUT_MAP).forEach(([srcKey, destKey]) => {
       row[destKey] = record.row[srcKey] ?? "";
     });
+    if (row.provider__code) {
+      row.provider__legal_name =
+        accreditedLegalNames.get(row.provider__code) ?? "";
+    } else {
+      row.provider__legal_name = "";
+    }
     if (row.address__postcode) {
       row.address__postcode = normalizePostcode(row.address__postcode);
     }
