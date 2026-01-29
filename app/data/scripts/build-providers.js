@@ -215,7 +215,7 @@ function main() {
     for (const values of rows) {
       const row = {};
       EXPECTED_FIELDS.forEach((field, index) => {
-        row[field] = values[index] ?? "";
+        row[field] = (values[index] ?? "").trim();
       });
 
       // Track first-seen row per provider, and append any new years.
