@@ -227,10 +227,10 @@ function main() {
     const earliestYear = Math.min(...years);
     const latestYear = Math.max(...years);
     if (Number.isFinite(earliestYear)) {
-      row.partnership__start_date = `${earliestYear}-08-01`;
+      row.partnership__start_date = `${earliestYear}-08-01T00:00:00Z`;
     }
     if (Number.isFinite(latestYear) && latestYear < currentYear) {
-      row.partnership__end_date = `${latestYear + 1}-07-31`;
+      row.partnership__end_date = `${latestYear + 1}-07-31T00:00:00Z`;
     }
 
     outputRows.push(OUTPUT_FIELDS.map((field) => row[field] ?? ""));
