@@ -142,6 +142,53 @@ function yearFromFilename(filename) {
 }
 
 /**
+ * Format a timestamp for filenames (YYYYMMDDHHmmss).
+ * @param {Date} date
+ * @returns {string}
+ */
+function formatTimestamp(date) {
+  const pad = (value) => String(value).padStart(2, "0");
+  return [
+    date.getFullYear(),
+    pad(date.getMonth() + 1),
+    pad(date.getDate()),
+    pad(date.getHours()),
+    pad(date.getMinutes()),
+    pad(date.getSeconds()),
+  ].join("");
+}
+
+/**
+ * Ensure dist directory exists and resolve output path.
+ * @param {string} distDir
+ * @param {string} baseName
+ * @returns {string}
+ */
+function resolveOutputPath(distDir, baseName) {
+  if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true });
+  }
+
+  const outputPath = path.join(distDir, baseName);
+  if (!fs.existsSync(outputPath)) {
+    return outputPath;
+  }
+
+  const ext = path.extname(baseName);
+  const stem = path.basename(baseName, ext);
+  const timestamp = formatTimestamp(new Date());
+  let candidate = path.join(distDir, `${stem}-${timestamp}${ext}`);
+  let counter = 1;
+
+  while (fs.existsSync(candidate)) {
+    candidate = path.join(distDir, `${stem}-${timestamp}-${counter}${ext}`);
+    counter += 1;
+  }
+
+  return candidate;
+}
+
+/**
  * Build app/data/dist/provider-partnerships.csv from yearly source files.
  * @returns {void}
  */
@@ -207,8 +254,7 @@ function main() {
     }
   }
 
-  fs.mkdirSync(distDir, { recursive: true });
-  const outputPath = path.join(distDir, "provider-partnerships.csv");
+  const outputPath = resolveOutputPath(distDir, "provider-partnerships.csv");
 
   const outputRows = [OUTPUT_FIELDS];
   for (const key of order) {
