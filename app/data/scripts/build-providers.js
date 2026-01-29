@@ -234,6 +234,7 @@ function main() {
           row,
           years: [],
           yearsSet: new Set(),
+          accreditationYearsSet: new Set(),
         });
         order.push(key);
       }
@@ -242,6 +243,9 @@ function main() {
       if (!record.yearsSet.has(year)) {
         record.years.push(year);
         record.yearsSet.add(year);
+      }
+      if (row.accredited_provider_number) {
+        record.accreditationYearsSet.add(year);
       }
     }
   }
@@ -277,13 +281,18 @@ function main() {
     row.provider__accreditation_status = row.accreditation__number
       ? "accredited"
       : "unaccredited";
-    if (row.accreditation__number) {
+    if (row.accreditation__number && record.accreditationYearsSet.size > 0) {
       // Accreditation starts on 1 Aug of the earliest year seen.
-      const earliestYear = Math.min(
-        ...Array.from(record.yearsSet).map((year) => Number(year))
+      const accreditationYears = Array.from(record.accreditationYearsSet).map(
+        (year) => Number(year)
       );
+      const earliestYear = Math.min(...accreditationYears);
+      const latestYear = Math.max(...accreditationYears);
       if (Number.isFinite(earliestYear)) {
         row.accreditation__start_date = `${earliestYear}-08-01T00:00:00Z`;
+      }
+      if (Number.isFinite(latestYear) && latestYear < 2026) {
+        row.accreditation__end_date = `${latestYear + 1}-07-31T00:00:00Z`;
       }
     }
     outputRows.push(OUTPUT_FIELDS.map((field) => row[field] ?? ""));
