@@ -215,7 +215,7 @@ function main() {
     for (const values of rows) {
       const row = {};
       EXPECTED_FIELDS.forEach((field, index) => {
-        row[field] = (values[index] ?? "").trim();
+        row[field] = (values[index] ?? "").trim().replace(/\s+/g, " ");
       });
 
       // Track first-seen row per provider, and append any new years.
@@ -262,7 +262,7 @@ function main() {
         ...Array.from(record.yearsSet).map((year) => Number(year))
       );
       if (Number.isFinite(earliestYear)) {
-        row.accreditation__start_date = `${earliestYear}-08-01`;
+        row.accreditation__start_date = `${earliestYear}-08-01T00:00:00Z`;
       }
     }
     outputRows.push(OUTPUT_FIELDS.map((field) => row[field] ?? ""));
