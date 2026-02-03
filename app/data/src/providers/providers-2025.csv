@@ -131,7 +131,7 @@ Calthorpe Park North East Hants and Surrey Borders Consortium,,10015239,116436,1
 Cambridge Meridian Academies Trust & Swavesey Village College,,10033420,136580,2KU,,school,Gibraltar Lane,Swavesey,,Cambridgeshire,Cambridge,CB24 4RS,52.2947667,-0.0055253,2025
 Cambridge Partnership,,10053421,,C03,5602,scitt,Meridian Trust - Swavesey Village College,"Gibraltar Lane, Swavesey",,Cambridgeshire,Cambridge,CB24 4RN,52.2947667,-0.0055253,2025
 "Cambridge Training Schools Network, CTSN SCITT",,10055220,,1WO,5630,scitt,Comberton Village College,West Street,,Cambridgeshire,Comberton,CB23 7DU,52.205356,0.113168,2025
-Campus Tees Schools Alliance,,10057507,143063,2JJ,,school,Campus Tees Schools Alliance,"C/O Egglescliffe School, ","Urlay Nook Road, Eaglescliffe",,Stockton on Tees,TS160LA,54.5163874,-1.3580929,2025
+Campus Tees Schools Alliance,,10057507,143063,2JJ,,school,Campus Tees Schools Alliance,"C/O Egglescliffe School","Urlay Nook Road, Eaglescliffe",,Stockton on Tees,TS160LA,54.5163874,-1.3580929,2025
 Canterbury Christ Church University,,10001143,133806,C10,1505,hei,North Holmes Road,,,Kent,Canterbury,CT1 1QU,51.277939,1.090659,2025
 Cardinal Hume Catholic School,,10036181,137852,198,,school,Old Durham Road,,,Tyne & Wear,Gateshead,NE9 6RZ,54.9308872,-1.5771033,2025
 Cardinal Newman ITT Hub,,10001165,,5E0,,scitt,"Cardinal Newman College ","Lark Hill Road ",,"Lancashire ","Preston ",PR1 4HD,53.7565001,-2.6899194,2025
@@ -161,9 +161,9 @@ Chorus Education Trust and Sheffield Teacher Training Alliance,,10039996,139167,
 Chrysalis Multi Academy Trust,,10058610,136656,5C2,,school,Chrysalis Multi Academy Trust,Claremont Avenue,Kenton,Middlesex,Harrow,HA3 0UH,51.5856269,-0.2934051,2025
 City of Liverpool College,,10003955,130487,L43,,school,Clarence Street,,,Merseyside,Liverpool,L3 5TP,53.40408069999999,-2.9725432,2025
 City of London Academies Trust (COLAT) SCITT,,10058170,,4C3,,scitt,The City of London Academies Trust,"North Wing, Guildhall, PO BOX 270",Gresham Street,,London,EC2P 2EJ,51.5163393,-0.0918938,2025
-Cleeve School,,10033702,136772,3B6,,school,"Cleeve School, Two Hedges Road, ",Bishops Cleeve,,Gloucs,Cheltenham,GL528AE,51.9414539,-2.0552792,2025
+Cleeve School,,10033702,136772,3B6,,school,"Cleeve School, Two Hedges Road",Bishops Cleeve,,Gloucs,Cheltenham,GL528AE,51.9414539,-2.0552792,2025
 CMAT Stamford Welland Academy,,10035739,137600,9J1,,school,"Meridian Trust ITT, Swavesey Village College","Gibraltar Lane, Swavesey",,Cambridgeshire,Cambridge,CB24 4RS,52.2947667,-0.0055253,2025
-CMAT West Town Primary,,10045926,140855,1DT,,school,The Cambridge Partnership,"Meridian Trust ITT Swavesey Village College, ","Gibraltar Lane, Swavesey",Cambridgeshire,Cambridge,CB24 4RS,52.2960266,-0.0051239,2025
+CMAT West Town Primary,,10045926,140855,1DT,,school,The Cambridge Partnership,"Meridian Trust ITT Swavesey Village College","Gibraltar Lane, Swavesey",Cambridgeshire,Cambridge,CB24 4RS,52.2960266,-0.0051239,2025
 Coastal Academies Trust,,10058585,,4C5,,scitt,Coastal Academies Trust,King Ethelbert School,Canterbury Road,Kent,Birchington,CT7 9BL,51.3773603,1.3222983,2025
 Colchester Teacher Training Consortium,,10035498,137515,2DB,5509,scitt,Colchester Teacher Training,Colchester County High School,,Colchester,Norman Way,CO3 3US,51.8717756,0.8676611,2025
 Colmore Partnership Training School Alliance,,10052836,103189,19Q,,school,Colmore Partnership Training School Alliance,Colmore Road,,Birmingham,Kings Heath,B14 6AJ,52.4275269,-1.8998453,2025
@@ -276,7 +276,7 @@ Gladesmore Community School,,10002675,102157,1FW,,school,Gladesmore Community Sc
 Glenthorne High School,,10034150,136914,17J,,school,270 Sutton Common Road,,,Surrey,Sutton,SM3 9PS,51.38058789999999,-0.2004546,2025
 GLF Teacher Training,,10053217,,2B4,,scitt,c/o Rosebery School,White Horse Drive,,Surrey,Epsom,KT18 7NQ,51.327886,-0.2779958,2025
 Gloucestershire Initial Teacher Education Partnership (GITEP),,10034789,,G48,5518,scitt,The Balcarras Trust,,,Gloucestershire,Cheltenham,GL538QF,51.8525562,-2.0900104,2025
-Godalming Learning Partnership,,10072769,125014,2JT,,school,"Sara Cox, Headteacher","Milford School ","Church Road, ",Surrey,"Milford, Godalming ",GU8 5JA,51.1700326,-0.6446447,2025
+Godalming Learning Partnership,,10072769,125014,2JT,,school,"Sara Cox, Headteacher","Milford School ","Church Road",Surrey,"Milford, Godalming ",GU8 5JA,51.1700326,-0.6446447,2025
 Golborne Trinity,,10015405,106525,A7D,,school,"Golborne High School, Lowton Road",,,Cheshire,Warrington,WA3 3EL,53.4804796,-2.5884695,2025
 Goldington Academy,,10033281,136552,2DM,,school,Goldington Academy,Haylands Way,,Bedfordshire,Bedford,MK41 9BX,52.1447941,-0.4440558,2025
 "Goldsmiths, University of London",,10002718,,G56,1511,hei,New Cross,,,London,Lewisham,SE14 6NW,51.474271,-0.035408,2025
@@ -336,12 +336,12 @@ Inspire Partnership Academy Trust,,10064647,,5I2,,scitt,Foxfield Primary School,
 Inspiring Future Teachers,,10058640,,3Y3,5738,scitt,c/o HISP Multi Academy Trust,Winchester Road,,Hampshire,Chandlers Ford,SO53 2DW,50.9953445,-1.3633755,2025
 Inspiring Leaders Primary (Derbyshire),,10088528,148428,5W1,,school,Alfreton Nursery School,Grange Street,,Derbyshire,Alfreton,DE55 7JA,53.093613,-1.388254,2025
 Inspiring Leaders Primary (Leicester and Rutland),,10055365,,1BJ,,scitt,Discovery Schools Trust,NSPCC National Training Centre,,Leicestershire,Leicester,LE4 1EZ,52.6672413,-1.1643835,2025
-Inspiring Leaders Primary (Nottingham and Mansfield),,10088528,,24H,,scitt,"Inspiring Leaders Teacher Training ","2a Vickery Way, ",,Nottingham,"Beeston, ",NG9 6RY,52.9559294,-1.1680787,2025
+Inspiring Leaders Primary (Nottingham and Mansfield),,10088528,,24H,,scitt,"Inspiring Leaders Teacher Training ","2a Vickery Way",,Nottingham,"Beeston",NG9 6RY,52.9559294,-1.1680787,2025
 "Inspiring Leaders Secondary (Leicestershire, Rutland and Northampton)",,10088528,,4R4,,scitt,NSPCC National Training Centre,3 Gilmour Close,,,"Leicester ",LE4 1EZ,52.66705940000001,-1.1640999,2025
 Inspiring Leaders Secondary (Nottingham and Derbyshire),,10088528,,2A5,,scitt,Central Services,William Lee Centre,Flatts Lane,Nottinghamshire,Calverton,NG14 6JZ,53.0424917,-1.0870203,2025
 Inspiring Leaders - Teacher Training,,10088528,,3A1,5642,scitt,2a Vickery Way,Chilwell,,Nottinghamshire,Nottingham,NG9 6RY,52.9076957,-1.2474413,2025
 Invictus Education Trust,,10060890,,E46,,scitt,Enville Road,Kinver,West Midlands,West Midlands,Oldswinford,DY8 2HH,52.4535779,-2.2314364,2025
-Invictus Education Trust,,10047463,141342,2I2,,scitt,"Invictus HQ, ","Kinver High School, ","Enville Road, ",,"Kinver ",DY7 6AA,52.4526311,-2.2316768,2025
+Invictus Education Trust,,10047463,141342,2I2,,scitt,"Invictus HQ","Kinver High School","Enville Road",,"Kinver ",DY7 6AA,52.4526311,-2.2316768,2025
 Ironstone Academy Trust SCITT,,10060801,,3I4,,scitt,"Ironstone Academy Trust ",Flatts Lane,Normanby,,Middlesbrough,TS6 0NP,54.5451518,-1.1492853,2025
 Jewish Schools Direct Primary Consortium (LSJS),,10082385,146663,1CP,,school,Wolfson Hillel Primary School,154 Chase Road,,London,,N14 4LG,51.6389916,-0.1278345,2025
 John Donne Primary School,,10044489,140507,1DS,,school,John Donne Primary School,Woods Road,,London,London,SE15 2SW,51.4727429,-0.0611774,2025
@@ -353,7 +353,7 @@ Kent Catholic Schools' Partnership Initial Teacher Training,,10060024,141217,4K1
 Kent Oaks Consortium,,10030458,136128,2CC,,school,Bradbourne Vale Rd,,,Kent,Sevenoaks,TN13 3LE,51.2868137,0.1866879,2025
 Kent Oaks Consortium with the University of Sussex,,10030458,136128,2O2,,school,Bradbourne Vale Rd,,,Kent,Sevenoaks,TN13 3LE,51.2868137,0.1866879,2025
 King Edward's Consortium,,10065300,,K50,5591,scitt,King Edward VI Camp Hill School for Girls,Vicarage Road,,Birmingham,Kings Heath,B14 7QJ,52.4309751,-1.9027397,2025
-Kingsbridge EIP SCITT,,10054033,,1S2,5616,scitt,"Kingsbridge Teacher Training Center ","c/o Platt Bridge Community School, ",,Wigan,"Rivington Avenue, Platt Bridge",WN2 5NG,53.5224812,-2.5962509,2025
+Kingsbridge EIP SCITT,,10054033,,1S2,5616,scitt,"Kingsbridge Teacher Training Center ","c/o Platt Bridge Community School",,Wigan,"Rivington Avenue, Platt Bridge",WN2 5NG,53.5224812,-2.5962509,2025
 King's College London (University of London),,10003645,,K60,1515,hei,Admissions and Registry Services," King's College London",Bush House – North West Wing,London,30 Aldwych,WC2B 4BG,51.51194109999999,-0.1164779,2025
 King's Group Academies,,10063058,144093,1AS,,school,Gomer Junior School,Pyrford Close,Alverstoke,Hampshire,Gosport,PO12 2RP,50.7913413,-1.1588817,2025
 Kingston University,,10003678,,K84,1516,hei,Kingston Hill Campus,Kingston Hill,,London,Kingston-upon-Thames,KT2 7LB,51.4292831,-0.2648285,2025
@@ -378,7 +378,7 @@ Lift Schools: London and South,,10033736,138982,2CH,,school,163 Eversholt Street
 Lift Schools: Midlands,,10033736,138982,2CJ,,school,163 Eversholt Street,,,,London,NW1 1BU,51.53192240000001,-0.1359459,2025
 Lift Schools: North,,10033736,138982,2CK,,school,163 Eversholt Street,,,,London,NW1 1BU,51.53192240000001,-0.1359459,2025
 Lift Schools: South West,,10033736,138982,2E1,,school,163 Eversholt Street,,,,London,NW1 1BU,51.53192240000001,-0.1359459,2025
-Lighthouse Learning Partnership,,10058855,16340,16Z,,school,"St. Marys Road, ",Portishead,,North Somerset,"Bristol ",BS20 7QR,51.476094,-2.7700673,2025
+Lighthouse Learning Partnership,,10058855,16340,16Z,,school,"St. Marys Road",Portishead,,North Somerset,"Bristol ",BS20 7QR,51.476094,-2.7700673,2025
 Lime Trust,,10060895,141734,3L2,,school,70-72 New Road,,,London,Chingford,E4 8ET,51.6179463,-0.0120041,2025
 Lincoln Bishop University,,10007811,133835,B38,1503,hei,Longdales Road,,,Lincolnshire,Lincoln,LN1 3DY,53.2435632,-0.5371389999999999,2025
 Lincolnshire Gateway Academies Trust,,10059809,,3L7,,scitt,Gateway House,North Holme Road,,Lincolnshire,Louth,LN11 0HG,53.3726981,-0.0030219,2025
@@ -411,7 +411,7 @@ Manchester Nexus SCITT,,10058966,,2EU,5710,scitt,The Blue Coat School,Egerton St
 Manchester Prospere Teacher Training,,10046414,139148,3D2,,school,Chorlton High School,Nell Lane,,,Manchester,M217SL,53.4363874,-2.2645594,2025
 Manchester Trusts and Schools Alliance,,10063039,144131,1JR,,school,Brookburn Primary School,Brookburn Rd,,Greater Manchester,Chorlton,M21 8EH,53.4358546,-2.2826708,2025
 Manor Primary School,,10053803,141858,1QO,,school,Manor Primary School,Ettingshall Road,,Bilston,Coseley,WV14 9UQ,52.5490377,-2.0960927,2025
-Maplefields Academy (Mainstream and Special Needs),,10065849,138634,21F,,school,"The Pilgrim Partnership, Sharnbrook Academy, ",Odell Road,Sharnbrook,Bedfordshire,Bedford,MK44 1JL,52.2230487,-0.5569514000000001,2025
+Maplefields Academy (Mainstream and Special Needs),,10065849,138634,21F,,school,"The Pilgrim Partnership, Sharnbrook Academy",Odell Road,Sharnbrook,Bedfordshire,Bedford,MK44 1JL,52.2230487,-0.5569514000000001,2025
 Marlbrook Collaboration of Schools,,10070800,116684,1Y2,,school,Marlbrook Primary School,Green Croft,,Herefordshire,Hereford,HR2 7NT,52.0401888,-2.7251068,2025
 Medway Valley Training Partnership,,10035084,118923,1Q5,,school,c/o The Thomas Aveling School,Arethusa Road,,"Kent ",Rochester,ME1 2UW,51.3641608,0.5027328,2025
 Melrose Learning Trust,,10034923,136988,4M2,,school,4 Whitfield Court,St John's Road,,Durham,Durham,DH7 8XL,54.7467221,-1.6110038,2025
@@ -521,7 +521,7 @@ PACE Academy Trust,,10045671,140704,1O1,,school,Chipstead Valley Primary School,
 Painsley Catholic Academy,,10059938,,F72,,scitt,Painsley Catholic Academy,Station Road,Cheadle,Staffordshire,Stoke-on-Trent,ST10 1LH,52.9812309,-1.9903545,2025
 Palmerston School,,10016906,104748,1AE,,school,Palmerston School,Beaconsfield Road,,Merseyside,Liverpool,L25 6EE,53.3806024,-2.8861175,2025
 Park View School,,10059154,136971,2P1,,school,Church Chare,,,Durham,Chester Le Street,DH3 3QA,54.8553012,-1.5692226,2025
-Parkwood Primary School,,10061930,143569,2HH,,school,"Parkwood Primary School - School Direct ","Parkwood St, ",,West Yorkshire,Keighley,BD21 4QH,53.8641016,-1.9019839,2025
+Parkwood Primary School,,10061930,143569,2HH,,school,"Parkwood Primary School - School Direct ","Parkwood St",,West Yorkshire,Keighley,BD21 4QH,53.8641016,-1.9019839,2025
 Parliament Hill School,,10004992,100050,H14,,school,Parliament Hill School,Highgate Road,,,London,NW5 1RL,51.5583417,-0.1493249,2025
 Parmiter's School,,10034176,136899,1D5,,school,Parmiter's School,High Elms Lane,,Watford,Garston,WD25 0UU,51.7027017,-0.3902834,2025
 Partnership London SCITT (PLS),,10053276,,2B1,5699,scitt,c/o Sydney Russell School,,,---,Dagenham,RM9 5QT,51.5486077,0.1340839,2025
@@ -593,7 +593,7 @@ Sherborne Area Schools Trust,,10059883,138471,18M,,school,The Gryphon School,Bri
 Sheringham Community Primary School Partnership,,10072540,120851,1A5,,school,Cooper Road,Off Holway Road,,Norfolk,Sheringham,NR26 8UH,52.9350151,1.2016833,2025
 Sheringham High School,,10004772,70287,8H6,,school,"Norfolk Teacher Training Centre ","City College Norwich, Ipswich Road ",,Norfolk,Norwich,NR2 2LJ,52.6178124,1.2871217,2025
 Shires Teaching Alliance,,10058699,136786,2EB,,school,Crooks Lane,,,Warwickshire,Studley,B80 7QX,52.2690755,-1.8984383,2025
-Shropshire Primary Partnership,,10007848,145790,2AN,,school,Shropshire Primary Partnership,"Unit 6 The Courtyard,","Yeomanry Road Battlefield Enterprise Park, ",Shropshire,Shrewsbury,SY1 3EH,52.7459141,-2.7426051,2025
+Shropshire Primary Partnership,,10007848,145790,2AN,,school,Shropshire Primary Partnership,"Unit 6 The Courtyard,","Yeomanry Road Battlefield Enterprise Park",Shropshire,Shrewsbury,SY1 3EH,52.7459141,-2.7426051,2025
 Slough ITE Partnership,,10033213,136521,7D6,,school,TSH Berkshire - Langley Grammar School,Reddington Drive,,Berkshire,Langley,SL3 7QS,51.5002038,-0.5543541,2025
 Somerset SCITT Consortium,,10005959,,S31,5538,scitt,Broughton House,Blackbrook Park Avenue,,Somerset,Taunton,TA1 2PX,51.0139743,-3.0692804,2025
 Somerset SCITT - Oak Partnership,,10005959,70066,5S2,,school,"SCIL Broughton House ",Blackbrook Park Avenue,Taunton,Somerset,Taunton,TA1 2PX,51.0139743,-3.0692804,2025
@@ -605,7 +605,7 @@ South East Essex Academy Trust,,10058517,136490,2W2,,school,"Westcliff High Scho
 South East Learning Alliance,,10037408,138178,1J1,,school,South East Learning Alliance,Riddlesdown Collegiate,,Surrey,South Croydon,CR8 1EX,51.3252338,-0.0888204,2025
 Southend Initial Teacher Training,,10035498,137515,1AV,,school,Colchester Teacher Training,Colchester County High School,,Colchester,Norman Way,CO3 3US,51.8857277,0.8753857,2025
 South of Tyne Primary Alliance,,10007159,144220,2JZ,,school,South of Tyne Primary Alliance,Well Bank Road,,Tyne and Wear,Washington,NE37 1NL,54.9176861,-1.5344825,2025
-South West Teacher Training,,10060466,,7M7,,scitt,"Hatherleigh Rd, ",,,Devon,"Exeter ",EX2 9JU,50.7066479,-3.5399237,2025
+South West Teacher Training,,10060466,,7M7,,scitt,"Hatherleigh Rd",,,Devon,"Exeter ",EX2 9JU,50.7066479,-3.5399237,2025
 Sparkenhoe Lead Partner Leicester,,10082990,146857,1RL,,school,Sparkenhoe Community Primary School,Saxby Street,,Leicester,Leicester,LE2 0TD,52.6300416,-1.1185262,2025
 Sponne School,,10033021,136488,1PJ,,school,Brackley Road,Towcester,,Northants,Northampton,NN12 6DJ,52.1321304,-0.9936731,2025
 Springboard,,10003861,131570,2HX,,school,Shire Oak CE Primary School,Wood Lane,,West Yorkshire,Leeds,LS6 2DT,53.8221988,-1.5740195,2025
@@ -696,7 +696,7 @@ TEC Partnership,,10007938,,8T2,,scitt,"Nuns Corner, Laceby Road",,,North East Li
 Ted Wragg Teacher Training Partnership,,10060466,,S66,5540,scitt,West Exe School,Hatherleigh Road,,Devon,Exeter,EX2 9JU,50.754748,-3.399884,2025
 Teesside University,,10007161,,3S1,1587,hei,Teesside University,Borough Road,,,Middlesbrough,TS1 3BX,54.5706753,-1.2352671,2025
 Telford Partnership,,10007166,142705,2GO,,school,Grange Park Primary School,Grange Avenue,,Shropshire,Telford,TF3 1ET,52.6557481,-2.435475,2025
-Tes Institute,,10035578,,H40,5708,scitt,"Tes Global, St Paul's Place, ","Norfolk Street, Sheffield,",,,Sheffield,S1 2JE,53.378727,-1.4696371,2025
+Tes Institute,,10035578,,H40,5708,scitt,"Tes Global, St Paul's Place","Norfolk Street, Sheffield,",,,Sheffield,S1 2JE,53.378727,-1.4696371,2025
 Thames Gateway Teaching School Hub,,10033431,136662,1FN,,school,Thames Gateway Teaching School Hub,Leigh Academies Trust c/o Strood Academy,,Kent,Strood,ME2 2SX,51.398135,0.466407,2025
 Thamesmead SCITT,,10034809,,T26,,scitt,Manygate Lane,,,Surrey,Shepperton,TW17 9EE,51.3934369,-0.4425889,2025
 The Bardney Church Of England And Methodist Primary School,,10078117,120589,1N2,,school,Bardney Church of England and Methodist Primary School,Henry Lane,,Lincoln,Bardney,LN3 5XJ,53.2116149,-0.3158135,2025
@@ -765,7 +765,7 @@ Thinking School Academy Trust Teacher Training,,10032200,136313,1DX,,school,The 
 Thomas Telford Multi Academy Trust,,10058173,,W53,,scitt,Thomas Telford School,Old Park,,Shropshire,Telford,TF3 4NW,52.6779194,-2.4581813,2025
 Thorndown Primary School,,10072300,136814,2LV,,school,Thorndown Primary School,Hill Rise,,Cambridgeshire,St Ives,PE27 6SE,52.3363365,-0.0882647,2025
 Three Spires Trust,,10088355,141486,6T2,,scitt,New Beacon Building,Stafford Education & Enterprise Park,Weston Road,,Stafford,ST18 0BF,52.81282359999999,-2.0829098,2025
-Thurston Community College,,10006910,124802,2TC,,school,"Thurston Community College, ",Norton Road,,Suffolk,Thurston,IP31 3PB,52.25415890000001,0.8112104000000001,2025
+Thurston Community College,,10006910,124802,2TC,,school,"Thurston Community College",Norton Road,,Suffolk,Thurston,IP31 3PB,52.25415890000001,0.8112104000000001,2025
 Titan Teacher Training,,10039377,,T30,,scitt,Titan Partnership,Faraday Wharf,Holt Street,West Midlands,Birmingham,B7 4BB,52.4883018,-1.8873394,2025
 Tividale Community Primary School,,10073602,133261,142,,school,Tividale Community Primary School,Dudley Road,Tividale,West Midlands,Oldbury,B69 2HT,52.5135545,-2.0466049,2025
 TKAT (School Direct),,10005374,136456,2G5,,school,c/o The Kemnal Academies Trust,"The Atkins Centre, Kemnal Technology College, Sevenoaks Way",,Kent,Sidcup,DA14 5AA,51.4120189,0.1104716,2025
@@ -812,7 +812,7 @@ University of Northampton,,10007138,,N38,1534,hei,Waterside Campus,University Dr
 University of Northumbria at Newcastle,,10001282,,N77,1572,hei,Pandon Building,Northumbria University,,Tyne and Wear,Newcastle upon Tyne,NE2 1XE,54.9777316,-1.6044697,2025
 University of Nottingham,,10007154,,N84,1555,hei,The School of Education,Jubilee Campus,,Nottinghamshire,Nottingham,NG8 1BB,52.9519817,-1.1862738,2025
 University of Plymouth,,10007801,133865,P60,,hei,"Nancy Astor Building, 3rd Floor",Drake Circus,,Devon,Plymouth,PL4 8AA,50.3766065,-4.1380195,2025
-University of Portsmouth,,10007155,,P80,1558,hei,University of Portsmouth,"St George's Building, 141 High Street, ",,Hampshire,Portsmouth,PO1 2HY,50.792441,-1.1000846,2025
+University of Portsmouth,,10007155,,P80,1558,hei,University of Portsmouth,"St George's Building, 141 High Street",,Hampshire,Portsmouth,PO1 2HY,50.792441,-1.1000846,2025
 University of Reading,,10007802,,R12,1559,hei,Admissions Office,"5th Floor, Philip Lyle Building",,Reading,"Pepper Lane, Whiteknights",RG6 6EG,51.4376,-0.9411783,2025
 University of Sheffield,,10007157,,S18,1560,hei,The School of Education,The University of Sheffield,,Sheffield,Western Bank,S10 2TN,53.3800093,-1.482673,2025
 University of Southampton,,10007158,133879,S27,1561,hei,Southampton Education School,Highfield,,Hampshire,Southampton,SO17 1BJ,50.934434,-1.3953718,2025
