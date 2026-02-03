@@ -63,6 +63,7 @@ const OUTPUT_FIELDS = [
   "provider__academic_years_active",
   "provider__academic_year_code",
   "provider__status",
+  "provider__archived_at",
 ];
 
 const ACTIVE_ACADEMIC_YEARS = new Set(["2025", "2026"]);
@@ -402,6 +403,16 @@ function main() {
     )
       ? "active"
       : "archived";
+    if (row.provider__status === "archived") {
+      const lastActiveYear = Math.max(
+        ...Array.from(record.yearsSet)
+          .map((year) => Number(year))
+          .filter((year) => Number.isFinite(year))
+      );
+      if (Number.isFinite(lastActiveYear)) {
+        row.provider__archived_at = `${lastActiveYear + 1}-07-31T00:00:00Z`;
+      }
+    }
     row.provider__accreditation_status = row.accreditation__number
       ? "accredited"
       : "unaccredited";
