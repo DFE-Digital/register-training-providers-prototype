@@ -62,7 +62,10 @@ const OUTPUT_FIELDS = [
   "address__note",
   "provider__academic_years_active",
   "provider__academic_year_code",
+  "provider__status",
 ];
+
+const ACTIVE_ACADEMIC_YEARS = new Set(["2025", "2026"]);
 
 /**
  * UK postcode format for validation.
@@ -394,6 +397,11 @@ function main() {
     row.address__note = addressNotes.join(",");
     // Year list is newest→oldest because we process 2026→2019.
     row.provider__academic_years_active = record.years.join(",");
+    row.provider__status = Array.from(record.yearsSet).some((year) =>
+      ACTIVE_ACADEMIC_YEARS.has(String(year))
+    )
+      ? "active"
+      : "archived";
     row.provider__accreditation_status = row.accreditation__number
       ? "accredited"
       : "unaccredited";
