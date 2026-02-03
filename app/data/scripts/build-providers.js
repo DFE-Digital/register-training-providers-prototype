@@ -81,7 +81,6 @@ const OUTPUT_MAP = {
   ukprn: "provider__ukprn",
   urn: "provider__urn",
   provider_code: "provider__code",
-  accredited_provider_number: "accreditation__number",
   provider_type: "provider__provider_type",
   address1: "address__address_line_1",
   address2: "address__address_line_2",
@@ -182,11 +181,11 @@ function writeCsv(rows) {
 }
 
 /**
- * Build a lookup of provider code to accredited legal name.
+ * Build a lookup of provider code to accredited provider details.
  * @param {string} filePath
- * @returns {Map<string, string>}
+ * @returns {Map<string, { legalName: string, accreditationNumber: string }>}
  */
-function loadAccreditedLegalNames(filePath) {
+function loadAccreditedProviders(filePath) {
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing accredited providers file: ${filePath}`);
   }
@@ -205,7 +204,10 @@ function loadAccreditedLegalNames(filePath) {
       row[field] = (values[index] ?? "").trim().replace(/\s+/g, " ");
     });
     if (!row.provider__code) continue;
-    map.set(row.provider__code, row.provider__legal_name ?? "");
+    map.set(row.provider__code, {
+      legalName: row.provider__legal_name ?? "",
+      accreditationNumber: row.accreditation__number ?? "",
+    });
   }
   return map;
 }
@@ -294,7 +296,7 @@ function main() {
     "accredited-providers.csv"
   );
   const distDir = path.join(dataDir, "dist");
-  const accreditedLegalNames = loadAccreditedLegalNames(accreditedPath);
+  const accreditedProviders = loadAccreditedProviders(accreditedPath);
 
   const files = fs
     .readdirSync(srcDir)
@@ -351,7 +353,7 @@ function main() {
         record.years.push(year);
         record.yearsSet.add(year);
       }
-      if (row.accredited_provider_number) {
+      if (row.provider_code && accreditedProviders.has(row.provider_code)) {
         record.accreditationYearsSet.add(year);
       }
     }
@@ -369,12 +371,11 @@ function main() {
     Object.entries(OUTPUT_MAP).forEach(([srcKey, destKey]) => {
       row[destKey] = record.row[srcKey] ?? "";
     });
-    if (row.provider__code) {
-      row.provider__legal_name =
-        accreditedLegalNames.get(row.provider__code) ?? "";
-    } else {
-      row.provider__legal_name = "";
-    }
+    const accreditedDetails = row.provider__code
+      ? accreditedProviders.get(row.provider__code)
+      : null;
+    row.provider__legal_name = accreditedDetails?.legalName ?? "";
+    row.accreditation__number = accreditedDetails?.accreditationNumber ?? "";
     if (row.address__postcode) {
       row.address__postcode = normalizePostcode(row.address__postcode);
     }
