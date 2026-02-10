@@ -22,7 +22,7 @@
     "connect-flash": "^0.1.1",
     "dotenv": "^17.2.4",
     "express-session": "^1.19.0",
-    "govuk-frontend": "^5.14.0",
+    "govuk-frontend": "^6.0.0",
     "govuk-prototype-kit": "^13.18.1",
     "gray-matter": "^4.0.3",
     "inflection": "^3.0.2",
