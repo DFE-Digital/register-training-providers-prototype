@@ -42,6 +42,12 @@
         }
       }) %}
 
+        {% if showAddressFinderInset %}
+          {{ govukInsetText({
+            text: "The selected address does not include all required fields. Enter the address manually."
+          }) }}
+        {% endif %}
+
         {{ govukInput({
           id: "address-line-1",
           name: "address[line1]",
