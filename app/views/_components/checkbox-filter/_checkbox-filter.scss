@@ -122,7 +122,7 @@
   }
 
   &:after {
-    background-image: url("/public/images/icon-tag-remove-cross.svg");
+    background-image: url("#{$app-assets-path}images/icon-tag-remove-cross.svg");
     content: '';
     display: inline-block;
     font-weight: bold;
@@ -133,7 +133,7 @@
   }
 
   &:hover:after {
-    background-image: url("/public/images/icon-tag-remove-cross-white.svg");
+    background-image: url("#{$app-assets-path}images/icon-tag-remove-cross-white.svg");
   }
 
 }
