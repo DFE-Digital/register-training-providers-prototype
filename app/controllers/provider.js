@@ -664,7 +664,7 @@ exports.newProviderSelectAddress_get = async (req, res) => {
       back,
       cancel: `/providers`,
       change: `/providers/new/address`,
-      enter: `/providers/new/address/enter`,
+      enter: `/providers/new/address/enter?addressFinderIncomplete=`,
       save: `/providers/new/address/select`
     }
   })
@@ -708,7 +708,7 @@ exports.newProviderSelectAddress_post = async (req, res) => {
         back,
         cancel: `/providers`,
         change: `/providers/new/address`,
-        enter: `/providers/new/address/enter`,
+        enter: `/providers/new/address/enter?addressFinderIncomplete=`,
         save: `/providers/new/address/select`
       }
     })
@@ -719,6 +719,7 @@ exports.newProviderSelectAddress_post = async (req, res) => {
 
 exports.newProviderEnterAddress_get = async (req, res) => {
   const { address, provider } = req.session.data
+  const showAddressFinderInset = !!req.session.data.addressFinderIncomplete
 
   // delete any selected address URPN as user is entering manually
   delete req.session.data.find.uprn
@@ -726,6 +727,7 @@ exports.newProviderEnterAddress_get = async (req, res) => {
   res.render('providers/new/address/edit', {
     provider,
     address,
+    showAddressFinderInset,
     actions: {
       back: `/providers/new/address/select`,
       cancel: `/providers`,
@@ -736,6 +738,7 @@ exports.newProviderEnterAddress_get = async (req, res) => {
 
 exports.newProviderEnterAddress_post = async (req, res) => {
   const { address, provider } = req.session.data
+  const showAddressFinderInset = !!req.session.data.addressFinderIncomplete
   const errors = []
 
   if (!address.line1.length) {
@@ -770,8 +773,9 @@ exports.newProviderEnterAddress_post = async (req, res) => {
 
   if (errors.length) {
     res.render('providers/new/address/edit', {
-      provider: provider,
-      address: address,
+      provider,
+      address,
+      showAddressFinderInset,
       errors,
       actions: {
         back: `/providers/new/address/select`,
@@ -794,6 +798,12 @@ exports.newProviderCheck_get = async (req, res) => {
     )
 
     address = parseOsPlacesData(address)
+    // If OS Places returns incomplete data, send the user to manual entry
+    if (!address.line1?.trim() || !address.town?.trim() || !address.postcode?.trim()) {
+      req.session.data.address = address
+      req.session.data.addressFinderIncomplete = true
+      return res.redirect('/providers/new/address/enter')
+    }
   }
   // Geocode the address data if we don't already have coordinates
   if (address.latitude == null || address.longitude == null) {
@@ -876,6 +886,7 @@ exports.newProviderCheck_post = async (req, res) => {
 
   delete req.session.data.provider
   delete req.session.data.address
+  delete req.session.data.addressFinderIncomplete
 
   req.flash('success', 'Provider added')
   res.redirect(`/providers`)
