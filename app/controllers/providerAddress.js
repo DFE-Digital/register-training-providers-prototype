@@ -178,7 +178,7 @@ exports.newSelectProviderAddress_get = async (req, res) => {
       back,
       cancel: `/providers/${providerId}/addresses`,
       change: `/providers/${providerId}/addresses/new`,
-      enter: `/providers/${providerId}/addresses/new/enter`,
+      enter: `/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
       save: `/providers/${providerId}/addresses/new/select`
     }
   })
@@ -224,7 +224,7 @@ exports.newSelectProviderAddress_post = async (req, res) => {
         back,
         cancel: `/providers/${providerId}/addresses`,
         change: `/providers/${providerId}/addresses/new`,
-        enter: `/providers/${providerId}/addresses/new/enter`,
+        enter: `/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
         save: `/providers/${providerId}/addresses/new/select`
       }
     })
@@ -258,6 +258,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
   const { address } = req.session.data
   const provider = await Provider.findByPk(providerId)
+  const showAddressFinderInset = !!req.session.data.addressFinderIncomplete
   const errors = []
 
   if (!address.line1.length) {
@@ -294,6 +295,7 @@ exports.newEnterProviderAddress_post = async (req, res) => {
     res.render('providers/addresses/edit', {
       provider,
       address,
+      showAddressFinderInset,
       errors,
       actions: {
         back: `/providers/${providerId}/addresses/new/select`,

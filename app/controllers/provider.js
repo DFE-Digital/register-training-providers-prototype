@@ -664,7 +664,7 @@ exports.newProviderSelectAddress_get = async (req, res) => {
       back,
       cancel: `/providers`,
       change: `/providers/new/address`,
-      enter: `/providers/new/address/enter`,
+      enter: `/providers/new/address/enter?addressFinderIncomplete=`,
       save: `/providers/new/address/select`
     }
   })
@@ -708,7 +708,7 @@ exports.newProviderSelectAddress_post = async (req, res) => {
         back,
         cancel: `/providers`,
         change: `/providers/new/address`,
-        enter: `/providers/new/address/enter`,
+        enter: `/providers/new/address/enter?addressFinderIncomplete=`,
         save: `/providers/new/address/select`
       }
     })
@@ -738,6 +738,7 @@ exports.newProviderEnterAddress_get = async (req, res) => {
 
 exports.newProviderEnterAddress_post = async (req, res) => {
   const { address, provider } = req.session.data
+  const showAddressFinderInset = !!req.session.data.addressFinderIncomplete
   const errors = []
 
   if (!address.line1.length) {
@@ -772,8 +773,9 @@ exports.newProviderEnterAddress_post = async (req, res) => {
 
   if (errors.length) {
     res.render('providers/new/address/edit', {
-      provider: provider,
-      address: address,
+      provider,
+      address,
+      showAddressFinderInset,
       errors,
       actions: {
         back: `/providers/new/address/select`,
