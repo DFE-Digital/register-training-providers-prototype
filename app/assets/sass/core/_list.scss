@@ -5,7 +5,7 @@
     position: relative;
 
     &:before {
-      color: govuk-colour("dark-grey");
+      color: govuk-colour("black", $variant: "tint-25");
       content: "\2013";
       left: -16px;
       position: absolute;
