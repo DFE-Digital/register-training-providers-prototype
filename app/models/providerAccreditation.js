@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize')
+const { Model, DataTypes, Op } = require('sequelize')
 
 module.exports = (sequelize) => {
   class ProviderAccreditation extends Model {
@@ -100,6 +100,36 @@ module.exports = (sequelize) => {
 
   const revisionHook = require('../hooks/revisionHook')
 
+  const refreshProviderAccreditationStatusForInstance = async (instance, options = {}) => {
+    const now = new Date()
+    const { Provider, ProviderAccreditation } = instance.sequelize.models
+
+    const accreditationCount = await ProviderAccreditation.count({
+      where: {
+        providerId: instance.providerId,
+        deletedAt: null,
+        startsOn: { [Op.lte]: now },
+        [Op.or]: [
+          { endsOn: null },
+          { endsOn: { [Op.gte]: now } }
+        ]
+      },
+      transaction: options.transaction
+    })
+
+    const provider = await Provider.findByPk(instance.providerId, {
+      transaction: options.transaction
+    })
+
+    if (!provider) return
+
+    const nextValue = accreditationCount > 0
+
+    if (provider.isAccredited !== nextValue) {
+      await provider.update({ isAccredited: nextValue }, { transaction: options.transaction })
+    }
+  }
+
   ProviderAccreditation.addHook('afterCreate', (instance, options) =>
     revisionHook({ revisionModelName: 'ProviderAccreditationRevision', modelKey: 'providerAccreditation' })(instance, {
       ...options,
@@ -110,6 +140,14 @@ module.exports = (sequelize) => {
   ProviderAccreditation.addHook('afterUpdate',
     revisionHook({ revisionModelName: 'ProviderAccreditationRevision', modelKey: 'providerAccreditation' })
   )
+
+  ProviderAccreditation.addHook('afterCreate', async (instance, options) => {
+    await refreshProviderAccreditationStatusForInstance(instance, options)
+  })
+
+  ProviderAccreditation.addHook('afterUpdate', async (instance, options) => {
+    await refreshProviderAccreditationStatusForInstance(instance, options)
+  })
 
   return ProviderAccreditation
 }
