@@ -22,17 +22,23 @@ module.exports = {
       const createdAt = new Date()
       const userId = '354751f2-c5f7-483c-b9e4-b6103f50f970'
 
+      const now = new Date()
+      const accreditedProviderIds = new Set()
+
       for (const accreditation of accreditations) {
         if (!accreditation.number) continue
 
         const accreditationId = accreditation.id
         const revisionNumber = 1
+        const startsOn = new Date(accreditation.startsOn)
+        const endsOn = accreditation.endsOn ? new Date(accreditation.endsOn) : null
 
         const baseFields = {
           id: accreditationId,
           provider_id: accreditation.providerId,
           number: accreditation.number,
-          starts_on: new Date(accreditation.startsOn),
+          starts_on: startsOn,
+          ends_on: endsOn,
           created_at: createdAt,
           created_by_id: userId,
           updated_at: createdAt,
@@ -64,6 +70,26 @@ module.exports = {
           changedById: userId,
           changedAt: createdAt
         }, queryInterface, transaction)
+
+        if (startsOn <= now && (!endsOn || endsOn >= now)) {
+          accreditedProviderIds.add(accreditation.providerId)
+        }
+      }
+
+      if (accreditedProviderIds.size > 0) {
+        await queryInterface.bulkUpdate(
+          'providers',
+          { is_accredited: true },
+          { id: Array.from(accreditedProviderIds) },
+          { transaction }
+        )
+
+        await queryInterface.bulkUpdate(
+          'provider_revisions',
+          { is_accredited: true },
+          { provider_id: Array.from(accreditedProviderIds) },
+          { transaction }
+        )
       }
 
       await transaction.commit()
