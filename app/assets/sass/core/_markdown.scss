@@ -191,7 +191,7 @@
   code {
     @include govuk-font($size: 19);
     font-family: monospace;
-    background-color: govuk-colour("light-grey");
+    background-color: govuk-colour("black", $variant: "tint-95");
   }
 
   pre {
@@ -229,7 +229,7 @@
   .header-anchor {
     visibility: hidden;
     margin-left: govuk-spacing(1);
-    color: govuk-colour("mid-grey");
+    color: govuk-colour("black", $variant: "tint-80");
     font-style: italic;
     font-weight: normal;
     text-decoration: none;

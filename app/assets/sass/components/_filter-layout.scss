@@ -14,9 +14,9 @@
 //   outline: 0 none;
 
 //   @include govuk-media-query($until: desktop) {
-//     background-color: govuk-colour("light-grey");
+//     background-color: govuk-colour("black", $variant: "tint-95");
 //     bottom: govuk-spacing(1);
-//     border: 1px solid govuk-colour("mid-grey");
+//     border: 1px solid govuk-colour("black", $variant: "tint-80");
 //     max-width: 310px;
 //     min-width: 260px;
 //     width: 100%;
@@ -45,7 +45,7 @@
 }
 
 .app-filter-layout__filter {
-  // box-shadow: 0 0 0 1px govuk-colour("mid-grey"); // Extends the inset border left full height of the filters on mobile
+  // box-shadow: 0 0 0 1px govuk-colour("black", $variant: "tint-80"); // Extends the inset border left full height of the filters on mobile
 
   @include govuk-media-query($from: desktop) {
     float: left;
