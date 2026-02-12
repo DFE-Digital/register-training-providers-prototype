@@ -838,8 +838,8 @@ exports.newProviderCheck_post = async (req, res) => {
       latitude: nullIfEmpty(address.latitude),
       longitude: nullIfEmpty(address.longitude),
       googlePlaceId: nullIfEmpty(address.googlePlaceId),
-      createdById: user.id,
-      updatedById: user.id
+      createdById: userId,
+      updatedById: userId
     })
   }
 
