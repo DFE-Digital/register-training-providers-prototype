@@ -55,6 +55,7 @@ Tokens must be active, not revoked, and not expired.
       "urn": "string|null",
       "provider_code": "string",
       "provider_type": "hei|school|other",
+      "is_accredited": "boolean",
       "created_at": "ISO8601 timestamp",
       "updated_at": "ISO8601 timestamp",
       "archived_at": "ISO8601 timestamp|null"
