@@ -33,6 +33,7 @@ module.exports = {
           operating_name: provider.operatingName,
           legal_name: provider.legalName,
           type: provider.type,
+          is_accredited: false,
           ukprn: provider.ukprn,
           urn: nullIfEmpty(provider.urn),
           code: provider.code,

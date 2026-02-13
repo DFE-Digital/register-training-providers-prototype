@@ -42,6 +42,12 @@ module.exports = (sequelize) => {
       type: {
         type: DataTypes.ENUM('hei', 'other', 'school')
       },
+      isAccredited: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_accredited'
+      },
       ukprn:  {
         type: DataTypes.STRING,
         allowNull: false,

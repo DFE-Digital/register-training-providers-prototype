@@ -158,52 +158,18 @@ exports.providersList = async (req, res) => {
     whereClause[Op.and].push({ type: { [Op.in]: selectedProviderType } })
   }
 
-  // Now set up an include for ProviderAccreditation
-  //
-  // Assume that "current" means:
-  //     endsOn is null OR endsOn > now
-  //
-  // The idea here is that “accredited” means having at least one valid accreditation,
-  // whereas “notAccredited” means no valid accreditation rows at all.
-  const today = new Date()
-
-  const include = [
-    {
-      model: ProviderAccreditation,
-      as: 'accreditations',
-      required: false, // false so that providers with no accreditations also come back
-      // We'll only consider "current" accreditations in this relation
-      attributes: ['id', 'startsOn', 'endsOn'],
-      where: {
-        startsOn: { [Op.lte]: today },
-        [Op.or]: [
-          { endsOn: null },
-          { endsOn: { [Op.gte]: today } }
-        ]
-      }
-    }
-  ]
-
   // Apply accreditation filters if user has selected them
   //
   //  - If both "accredited" and "notAccredited" are selected, we want them all—so no extra filter.
   //
-  //  - If only "accredited" is selected, we need providers who have at least one current accreditation row
-  //    => i.e. $accreditations.id$ != null
+  //  - If only "accredited" is selected, we need providers who have isAccredited = true
   //
-  //  - If only "notAccredited" is selected, we need providers who have no current accreditation rows
-  //    => $accreditations.id$ = null
+  //  - If only "notAccredited" is selected, we need providers who have isAccredited = false
   if (selectedAccreditationType.length === 1) {
     if (selectedAccreditationType[0] === 'accredited') {
-      // Must have a matching accreditation
-      whereClause[Op.and].push({
-        '$accreditations.id$': { [Op.ne]: null }
-      })
+      whereClause[Op.and].push({ isAccredited: true })
     } else if (selectedAccreditationType[0] === 'notAccredited') {
-      // Must NOT have a matching accreditation
-      whereClause[Op.and].push({
-        '$accreditations.id$': null
-      })
+      whereClause[Op.and].push({ isAccredited: false })
     }
   }
   // If selectedAccreditationType includes both 'accredited' and 'notAccredited',
@@ -223,23 +189,16 @@ exports.providersList = async (req, res) => {
 
   // Get the total number of providers for pagination metadata
   const totalCount = await Provider.count({
-    where: whereClause,
-    include,
-    subQuery: false
+    where: whereClause
   })
 
   // Only fetch ONE page of providers
   const providers = await Provider.findAll({
     where: whereClause,
-    include,
     order: [['operatingName', 'ASC']],
     limit,
     offset,
     subQuery: false
-  })
-
-  providers.forEach(provider => {
-    provider.isAccredited = provider.accreditations?.length > 0
   })
 
   // create the Pagination object
@@ -879,8 +838,8 @@ exports.newProviderCheck_post = async (req, res) => {
       latitude: nullIfEmpty(address.latitude),
       longitude: nullIfEmpty(address.longitude),
       googlePlaceId: nullIfEmpty(address.googlePlaceId),
-      createdById: user.id,
-      updatedById: user.id
+      createdById: userId,
+      updatedById: userId
     })
   }
 

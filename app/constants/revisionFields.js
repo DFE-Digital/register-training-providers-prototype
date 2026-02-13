@@ -3,6 +3,7 @@ module.exports = {
     'operatingName',
     'legalName',
     'type',
+    'isAccredited',
     'ukprn',
     'urn',
     'code',

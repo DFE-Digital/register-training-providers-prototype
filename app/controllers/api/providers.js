@@ -19,6 +19,7 @@ const serializeProvider = (provider) => ({
   urn: provider.urn,
   provider_code: provider.code,
   provider_type: provider.type,
+  is_accredited: !!provider.isAccredited,
   created_at: provider.createdAt ? provider.createdAt.toISOString() : null,
   updated_at: provider.updatedAt ? provider.updatedAt.toISOString() : null,
   archived_at: provider.archivedAt ? provider.archivedAt.toISOString() : null

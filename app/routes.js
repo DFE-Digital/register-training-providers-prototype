@@ -8,6 +8,7 @@ require('dotenv').config()
 const govukPrototypeKit = require('govuk-prototype-kit')
 const router = govukPrototypeKit.requests.setupRouter()
 const session = require('express-session')
+const { startAccreditationStatusScheduler } = require('./services/accreditationStatus')
 
 /// ------------------------------------------------------------------------ ///
 /// Session configuration
@@ -24,6 +25,10 @@ router.use(
     }
   })
 )
+
+// Keep provider accreditation flags up to date in the background
+const accreditationRefreshMs = Number(process.env.ACCREDITATION_STATUS_REFRESH_MS) || (1000 * 60 * 30)
+startAccreditationStatusScheduler(accreditationRefreshMs)
 
 /// ------------------------------------------------------------------------ ///
 /// Flash messaging
