@@ -419,7 +419,7 @@ exports.providerPartnershipsList = async (req, res) => {
   })
 
   for (const p of partnerships) {
-    p.academicYears.sort((a, b) => new Date(a.startsOn) - new Date(b.startsOn))
+    p.academicYears.sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
   }
 
   const totalCount = partnerships.length
