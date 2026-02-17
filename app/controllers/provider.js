@@ -7,9 +7,46 @@ const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode, isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { findByPostcode, findByUPRN, geocodeAddress } = require('../services/ordnanceSurveyPlaces')
-const { Provider, ProviderAddress, ProviderAccreditation } = require('../models')
+const { Provider, ProviderAddress, ProviderAccreditation, AcademicYear, ProviderAcademicYear } = require('../models')
 
-const { Op, literal } = require('sequelize')
+const { Op, literal, Sequelize } = require('sequelize')
+
+const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone, year: 'numeric', month: 'numeric', day: 'numeric'
+  }).formatToParts(now)
+  const y = Number(parts.find(p => p.type === 'year').value)
+  const m = Number(parts.find(p => p.type === 'month').value)
+  const d = Number(parts.find(p => p.type === 'day').value)
+  return (m > 8 || (m === 8 && d >= 1)) ? y : (y - 1)
+}
+
+const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = getCurrentAcademicYearStart()) => {
+  if (!academicYear || !academicYear.startsOn) {
+    return null
+  }
+
+  const startDate = new Date(academicYear.startsOn)
+  if (Number.isNaN(startDate.getTime())) {
+    return null
+  }
+
+  const startYear = startDate.getUTCFullYear()
+
+  if (startYear === currentAcademicYearStart) {
+    return 'current'
+  }
+
+  if (startYear === currentAcademicYearStart - 1) {
+    return 'last'
+  }
+
+  if (startYear === currentAcademicYearStart + 1) {
+    return 'next'
+  }
+
+  return null
+}
 
 const getCheckboxValues = (name, data) => {
   return name && (Array.isArray(name)
@@ -57,6 +94,7 @@ exports.providersList = async (req, res) => {
   const providerType = null
   const accreditationType = null
   const showArchivedProvider = null
+  const academicYear = null
 
   let providerTypes
   if (filters?.providerType) {
@@ -73,9 +111,40 @@ exports.providersList = async (req, res) => {
     showArchivedProviders = getCheckboxValues(showArchivedProvider, filters.showArchivedProvider)
   }
 
+  let academicYears
+  if (filters?.academicYear) {
+    academicYears = getCheckboxValues(academicYear, filters.academicYear)
+  }
+
+  const academicYearCutoff = getCurrentAcademicYearStart() + 1
+  const academicYearCodeAsInteger = Sequelize.cast(Sequelize.col('code'), 'INTEGER')
+
+  const academicYearsList = await AcademicYear.findAll({
+    where: {
+      deletedAt: null,
+      [Op.and]: [
+        Sequelize.where(
+          academicYearCodeAsInteger,
+          { [Op.lte]: academicYearCutoff }
+        )
+      ]
+    },
+    order: [['startsOn', 'DESC']]
+  })
+
+  const academicYearFilterItems = academicYearsList.map((academicYear) => {
+    const statusLabel = getAcademicYearStatusLabel(academicYear)
+    const suffix = statusLabel ? ` - ${statusLabel}` : ''
+    return {
+      value: academicYear.id,
+      text: `${academicYear.name}${suffix}`
+    }
+  })
+
   const hasFilters = !!((providerTypes?.length > 0)
    || (accreditationTypes?.length > 0)
    || (showArchivedProviders?.length > 0)
+   || (academicYears?.length > 0)
   )
 
   let selectedFilters = null
@@ -120,6 +189,19 @@ exports.providersList = async (req, res) => {
         })
       })
     }
+
+    if (academicYears?.length) {
+      const academicYearMap = new Map(academicYearFilterItems.map((item) => [item.value, item.text]))
+      selectedFilters.categories.push({
+        heading: { text: 'Academic year' },
+        items: academicYears.map((academicYearId) => {
+          return {
+            text: academicYearMap.get(academicYearId) || 'Academic year',
+            href: `/providers/remove-academic-year-filter/${academicYearId}`
+          }
+        })
+      })
+    }
   }
 
   let selectedProviderType = []
@@ -135,6 +217,11 @@ exports.providersList = async (req, res) => {
   let selectedArchivedProvider = []
   if (filters?.showArchivedProvider) {
     selectedArchivedProvider = filters.showArchivedProvider
+  }
+
+  let selectedAcademicYear = []
+  if (filters?.academicYear) {
+    selectedAcademicYear = filters.academicYear
   }
 
   // build the WHERE conditions
@@ -187,18 +274,40 @@ exports.providersList = async (req, res) => {
     'deletedAt': null
   })
 
+  // Filter providers by selected academic years
+  let academicYearInclude = []
+  if (selectedAcademicYear.length > 0) {
+    academicYearInclude = [{
+      model: ProviderAcademicYear,
+      as: 'providerAcademicYears',
+      attributes: [],
+      where: {
+        deletedAt: null,
+        academicYearId: {
+          [Op.in]: selectedAcademicYear
+        }
+      },
+      required: true
+    }]
+  }
+
   // Get the total number of providers for pagination metadata
   const totalCount = await Provider.count({
-    where: whereClause
+    where: whereClause,
+    include: academicYearInclude,
+    distinct: true,
+    col: 'id'
   })
 
   // Only fetch ONE page of providers
   const providers = await Provider.findAll({
     where: whereClause,
+    include: academicYearInclude,
     order: [['operatingName', 'ASC']],
+    distinct: true,
     limit,
     offset,
-    subQuery: false
+    subQuery: academicYearInclude.length ? true : false
   })
 
   // create the Pagination object
@@ -212,6 +321,7 @@ exports.providersList = async (req, res) => {
     pagination,
     // the selected filters
     selectedFilters,
+    academicYearFilterItems,
     // the search terms
     keywords,
     //
@@ -256,6 +366,15 @@ exports.removeShowArchivedProviderFilter = (req, res) => {
   filters.showArchivedProvider = removeFilter(
     req.params.showArchivedProvider,
     filters.showArchivedProvider
+  )
+  res.redirect('/providers')
+}
+
+exports.removeAcademicYearFilter = (req, res) => {
+  const { filters } = req.session.data
+  filters.academicYear = removeFilter(
+    req.params.academicYear,
+    filters.academicYear
   )
   res.redirect('/providers')
 }
