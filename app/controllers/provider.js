@@ -275,26 +275,25 @@ exports.providersList = async (req, res) => {
   })
 
   // Filter providers by selected academic years
-  let academicYearInclude = []
-  if (selectedAcademicYear.length > 0) {
-    academicYearInclude = [{
-      model: ProviderAcademicYear,
-      as: 'providerAcademicYears',
-      attributes: [],
-      where: {
-        deletedAt: null,
-        academicYearId: {
-          [Op.in]: selectedAcademicYear
-        }
-      },
-      required: true
-    }]
-  }
+  const providerAcademicYearFilterInclude = selectedAcademicYear.length > 0
+    ? [{
+        model: ProviderAcademicYear,
+        as: 'providerAcademicYears',
+        attributes: [],
+        where: {
+          deletedAt: null,
+          academicYearId: {
+            [Op.in]: selectedAcademicYear
+          }
+        },
+        required: true
+      }]
+    : []
 
   // Get the total number of providers for pagination metadata
   const totalCount = await Provider.count({
     where: whereClause,
-    include: academicYearInclude,
+    include: providerAcademicYearFilterInclude,
     distinct: true,
     col: 'id'
   })
@@ -302,21 +301,66 @@ exports.providersList = async (req, res) => {
   // Only fetch ONE page of providers
   const providers = await Provider.findAll({
     where: whereClause,
-    include: academicYearInclude,
+    include: providerAcademicYearFilterInclude,
     order: [['operatingName', 'ASC']],
     distinct: true,
     limit,
     offset,
-    subQuery: academicYearInclude.length ? true : false
+    subQuery: providerAcademicYearFilterInclude.length > 0
   })
 
   // create the Pagination object
   // using the chunk + the overall total count
   const pagination = new Pagination(providers, totalCount, page, limit)
 
+  const pagedProviders = pagination.getData()
+  const providerIds = pagedProviders.map((provider) => provider.id)
+
+  const providerAcademicYears = providerIds.length
+    ? await ProviderAcademicYear.findAll({
+        where: {
+          providerId: {
+            [Op.in]: providerIds
+          },
+          deletedAt: null
+        },
+        include: [{
+          model: AcademicYear,
+          as: 'academicYear',
+          where: {
+            deletedAt: null
+          },
+          required: false
+        }]
+      })
+    : []
+
+  const academicYearsByProviderId = providerAcademicYears.reduce((acc, link) => {
+    const providerId = link.providerId
+    if (!acc[providerId]) acc[providerId] = []
+    if (link.academicYear) acc[providerId].push(link.academicYear)
+    return acc
+  }, {})
+
+  const providersWithAcademicYears = pagedProviders.map((provider) => {
+    const providerJson = provider.toJSON ? provider.toJSON() : provider
+    const academicYears = (academicYearsByProviderId[provider.id] || [])
+      .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
+      .map((academicYear) => {
+        const statusLabel = getAcademicYearStatusLabel(academicYear)
+        const suffix = statusLabel ? ` - ${statusLabel}` : ''
+        return `${academicYear.name}${suffix}`
+      })
+
+    return {
+      ...providerJson,
+      academicYears
+    }
+  })
+
   res.render('providers/index', {
     // providers for *this* page
-    providers: pagination.getData(),
+    providers: providersWithAcademicYears,
     // the pagination metadata (pageItems, nextPage, etc.)
     pagination,
     // the selected filters

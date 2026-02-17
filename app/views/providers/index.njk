@@ -39,25 +39,37 @@
 
       {% for provider in providers %}
 
-        {% set operatingNameHtml %}
-          <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">
-            {{ provider.operatingName }}
-          </a>
-          {% if provider.archivedAt %}
-            {{ govukTag({
-              text: "Archived",
-              classes: "govuk-!-margin-left-1"
-            }) }}
-          {% endif %}
-        {% endset %}
+      {% set operatingNameHtml %}
+        <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">
+          {{ provider.operatingName }}
+        </a>
+        {% if provider.archivedAt %}
+          {{ govukTag({
+            text: "Archived",
+            classes: "govuk-!-margin-left-1"
+          }) }}
+        {% endif %}
+      {% endset %}
 
-        {{ govukSummaryList({
-          card: {
-            title: {
-              html: operatingNameHtml
-            }
-          },
-          rows: [
+      {% set academicYearsHtml %}
+        {% if provider.academicYears and provider.academicYears.length %}
+          <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYears.length > 1 }}">
+            {% for academicYear in provider.academicYears %}
+              <li>{{ academicYear }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="govuk-hint">Not entered</p>
+        {% endif %}
+      {% endset %}
+
+      {{ govukSummaryList({
+        card: {
+          title: {
+            html: operatingNameHtml
+          }
+        },
+        rows: [
             {
               key: {
                 text: "Provider type"
@@ -115,6 +127,14 @@
               },
               value: {
                 text: provider.code
+              }
+            },
+            {
+              key: {
+                text: "Academic years"
+              },
+              value: {
+                html: academicYearsHtml
               }
             }
           ]
