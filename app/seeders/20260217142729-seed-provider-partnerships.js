@@ -27,7 +27,7 @@ module.exports = {
       await queryInterface.bulkDelete('provider_partnership_revisions', null, { transaction })
       await queryInterface.bulkDelete('provider_partnership_academic_years', null, { transaction })
       await queryInterface.bulkDelete('provider_partnerships', null, { transaction })
-      const dataPath = path.join(__dirname, '/data/20260217141236-seed-provider-partnership.json')
+      const dataPath = path.join(__dirname, '/data/20260217142729-seed-provider-partnership.json')
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const providerPartnerships = JSON.parse(rawData)
 
