@@ -9240,6 +9240,16 @@
     "website": null
   },
   {
+    "id": "dc153177-9cba-56a3-a933-18a94b8fc5fc",
+    "operatingName": "Buile Hill VA College SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1WT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9e2692f3-de2f-52bb-ba32-113bcf290a75",
     "operatingName": "Castlebar School",
     "legalName": null,
@@ -12230,6 +12240,16 @@
     "website": null
   },
   {
+    "id": "ee2689e4-9888-5338-a46c-28b247371489",
+    "operatingName": "Anglian Gateway Teaching Schools Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1JD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "c8bdee03-3546-5ddd-82e8-27274f232da2",
     "operatingName": "Belle Vue Girls' Academy",
     "legalName": null,
@@ -12270,6 +12290,16 @@
     "website": null
   },
   {
+    "id": "87486b59-61a3-5f58-879e-e522dda07b41",
+    "operatingName": "Bristol Early Years Teaching Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "1LF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "258bec80-7f55-5242-b054-1394b80ea99e",
     "operatingName": "Chiltern Training Group part of the Chiltern Learning trust",
     "legalName": null,
@@ -12290,6 +12320,16 @@
     "website": null
   },
   {
+    "id": "e0d875c2-2820-5a42-8853-678dad0aff16",
+    "operatingName": "Cuckoo Hall Academies Trust (CHAT)",
+    "legalName": null,
+    "type": "school",
+    "code": "1X1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "363dc905-6be7-5ae3-b12f-6890814ba7dc",
     "operatingName": "Durham City Teaching Hub",
     "legalName": null,
@@ -12300,6 +12340,16 @@
     "website": null
   },
   {
+    "id": "a8b63263-8ebf-5fc5-a677-fbf435493c96",
+    "operatingName": "East London Early Years and Schools Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "25U",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ee4300e6-4ca1-543e-ae16-99d6f5ad5439",
     "operatingName": "Elmridge Primary School",
     "legalName": null,
@@ -12307,6 +12357,26 @@
     "code": "1V4",
     "ukprn": 10038585,
     "urn": "138654",
+    "website": null
+  },
+  {
+    "id": "8cd5a7c0-cf33-5b62-a5f8-c703df1c3623",
+    "operatingName": "Future Stars TSA",
+    "legalName": null,
+    "type": "school",
+    "code": "1BR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9f818297-b83f-5a1b-b660-5757b298c96d",
+    "operatingName": "Gipsy Hill Federation",
+    "legalName": null,
+    "type": "school",
+    "code": "1BC",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12340,6 +12410,16 @@
     "website": null
   },
   {
+    "id": "f1338958-78fd-5cee-9c88-c120ca7afa37",
+    "operatingName": "InMAT Northamptonshire",
+    "legalName": null,
+    "type": "school",
+    "code": "1YY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "51b81c1e-cc40-5b98-9a9e-5d0d9ab2ccd7",
     "operatingName": "Kings Langley School",
     "legalName": null,
@@ -12367,6 +12447,26 @@
     "code": "1LZ",
     "ukprn": 10037863,
     "urn": "138689",
+    "website": null
+  },
+  {
+    "id": "ba0a0654-c453-576e-95bb-adbd434fa132",
+    "operatingName": "Lee Chapel Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "16H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7a68dd9f-fead-53c5-88af-0d4d96b22d77",
+    "operatingName": "Lime Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1PX",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12400,6 +12500,16 @@
     "website": null
   },
   {
+    "id": "85e8d24a-8923-5706-a84b-327e7ba31e4d",
+    "operatingName": "New Collaborative",
+    "legalName": null,
+    "type": "school",
+    "code": "2AJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "7d0211e4-6e9b-52d4-87c1-7bb7bccbcdd7",
     "operatingName": "Oxfordshire Teacher Training",
     "legalName": null,
@@ -12410,12 +12520,32 @@
     "website": null
   },
   {
+    "id": "0287061b-fc99-513b-938e-0b17d424b86b",
+    "operatingName": "Pan Enfield Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1KC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "49a5ce92-656b-5da9-b2c6-f21de6be0453",
     "operatingName": "Park Community School",
     "legalName": null,
     "type": "school",
     "code": "2K2",
     "ukprn": 10016462,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "31156b00-0b65-5c27-a2ec-8cfb89f337ea",
+    "operatingName": "Pennine Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2FK",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -12440,6 +12570,26 @@
     "website": null
   },
   {
+    "id": "aa287f3a-0a06-5f5a-8384-d2629317719b",
+    "operatingName": "Rivington School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "1JL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "01ad3aa7-1b07-5f92-b60c-981838b380a3",
+    "operatingName": "School Direct Reading Area",
+    "legalName": null,
+    "type": "school",
+    "code": "4F9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "4d35c295-9ce1-588c-84d3-01d85da2d8fe",
     "operatingName": "Selby College",
     "legalName": null,
@@ -12460,6 +12610,26 @@
     "website": null
   },
   {
+    "id": "d8e1d888-c668-5a09-b63e-cc0819c86208",
+    "operatingName": "SJPTSA",
+    "legalName": null,
+    "type": "school",
+    "code": "1KT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3c44923e-6c15-57a3-921a-4050486f800f",
+    "operatingName": "Sola Fide Multi-Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1NC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "6cad532a-a653-5bb7-a80f-23822dda9f63",
     "operatingName": "St Bartholomew's Church of England Primary School",
     "legalName": null,
@@ -12470,6 +12640,26 @@
     "website": null
   },
   {
+    "id": "e5dd2229-ff67-55f1-a85e-6d01ca72ba0e",
+    "operatingName": "St Bede's Deanery Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2FC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3ee628dc-b013-5cda-8673-bd60d7567131",
+    "operatingName": "St George's CofE VA Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "1SO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "b85d91a5-24a3-5ee4-842e-500735ef429f",
     "operatingName": "St Hugh's School",
     "legalName": null,
@@ -12477,6 +12667,46 @@
     "code": "1RZ",
     "ukprn": 10017505,
     "urn": "118146",
+    "website": null
+  },
+  {
+    "id": "b9ae2416-be7b-5af1-be1d-bff69d97a4e5",
+    "operatingName": "St James' Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1VN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "450a8339-166d-5017-8010-39cc836cbe63",
+    "operatingName": "St Joseph's Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1BY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "dcf8c48b-a5cf-5ea4-a995-02ced5137bf1",
+    "operatingName": "Tauheedul Islam Girls High School",
+    "legalName": null,
+    "type": "school",
+    "code": "3MP",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b01f0d50-6ec4-578f-b489-961392680b5a",
+    "operatingName": "Taunton Teaching Alliance (Heathfield School)",
+    "legalName": null,
+    "type": "school",
+    "code": "232",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12497,6 +12727,16 @@
     "code": "21M",
     "ukprn": 10031573,
     "urn": "136345",
+    "website": null
+  },
+  {
+    "id": "a2150a46-bb9c-5708-a090-b2b49f8525d0",
+    "operatingName": "The Northworthy Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1L7",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12540,6 +12780,16 @@
     "website": null
   },
   {
+    "id": "7e232cf1-e533-5200-888d-526d7ecd1465",
+    "operatingName": "Uttoxeter Learning Trust Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "2J9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9224b6c5-5468-563a-b29f-ebaa622e286a",
     "operatingName": "Warren Dell Primary School",
     "legalName": null,
@@ -12547,6 +12797,16 @@
     "code": "215",
     "ukprn": 10065025,
     "urn": "144905",
+    "website": null
+  },
+  {
+    "id": "e5152513-3397-538e-bdb8-98a5263c38d3",
+    "operatingName": "West Cumbria and North Lakes School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "17X",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12567,6 +12827,106 @@
     "code": "1CH",
     "ukprn": 10033583,
     "urn": "136723",
+    "website": null
+  },
+  {
+    "id": "3a33718e-4f6d-5fb3-8e01-4e6aa48b9082",
+    "operatingName": "Yorkshire Inclusive TSA",
+    "legalName": null,
+    "type": "school",
+    "code": "1ER",
+    "ukprn": null,
+    "urn": "108119",
+    "website": null
+  },
+  {
+    "id": "7aeeea6f-e766-5a0b-a58b-048777463b04",
+    "operatingName": "Abbey MAT Primary Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2DQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "26452f44-9d95-5ecf-a64c-f0449986452e",
+    "operatingName": "Abbey Primary Community School",
+    "legalName": null,
+    "type": "school",
+    "code": "2HO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "703f78e1-adee-5009-a798-8a8f69f85605",
+    "operatingName": "Abraham Darby Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "159",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "df937d51-51c7-5fed-ad2e-6abf3e0355fc",
+    "operatingName": "Abraham Moss High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1V2",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6246544a-2d15-58d7-be09-66ff6b70236e",
+    "operatingName": "Academies Enterprise Trust: North East",
+    "legalName": null,
+    "type": "school",
+    "code": "2CL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4c06586d-a230-587e-a373-fc42fdea43d8",
+    "operatingName": "Academy Transformation Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1OE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a8049e0a-f66e-599f-aff2-877bfa0aeaf6",
+    "operatingName": "Affinity Teaching School Alliance (Somerset)",
+    "legalName": null,
+    "type": "school",
+    "code": "2DO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4cba0f8a-6623-5b31-a30d-6f79b1118366",
+    "operatingName": "Aireborough Learning Partnership (Queensway Primary School)",
+    "legalName": null,
+    "type": "school",
+    "code": "29K",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d4d5e4ac-2a6a-5b20-a0ec-fd5987ef7e28",
+    "operatingName": "Alderman White School and Language College",
+    "legalName": null,
+    "type": "school",
+    "code": "22E",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12610,6 +12970,16 @@
     "website": null
   },
   {
+    "id": "ec42ac50-a893-559e-8f88-a946d34ab334",
+    "operatingName": "Anglesey Primary Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "15W",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "f9b97b2f-f925-59be-a2a5-d93f31745de5",
     "operatingName": "Anglia Ruskin University",
     "legalName": null,
@@ -12647,6 +13017,26 @@
     "code": "1G9",
     "ukprn": 10000344,
     "urn": "101811",
+    "website": null
+  },
+  {
+    "id": "cdfafd66-0775-54d1-a67f-d5efed75ae58",
+    "operatingName": "Archbishop Tenison's School",
+    "legalName": null,
+    "type": "school",
+    "code": "1K6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4f8f21d1-324b-5ad2-8653-5075321969f3",
+    "operatingName": "Ark Boulton Teacher Training",
+    "legalName": null,
+    "type": "school",
+    "code": "2GB",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12690,6 +13080,16 @@
     "website": null
   },
   {
+    "id": "d4ec3e1c-cbe2-5a97-a0c5-4f73a93403b6",
+    "operatingName": "Ashley CofE Aided Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "22M",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "3d02dd44-8109-5c64-b7e7-96b52a37199b",
     "operatingName": "Ashton-on-Mersey School",
     "legalName": null,
@@ -12697,6 +13097,36 @@
     "code": "164",
     "ukprn": 10037238,
     "urn": "138123",
+    "website": null
+  },
+  {
+    "id": "14035f17-5dcb-51b4-81fc-e3b074a78695",
+    "operatingName": "Astor College (A Specialist College for the Arts)",
+    "legalName": null,
+    "type": "school",
+    "code": "13X",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d493caa4-e1ea-5c2e-8993-5bd603765a74",
+    "operatingName": "Atlantic Coast Cooperative Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f0da4138-7ce6-508f-8116-a2ff8501b00a",
+    "operatingName": "Aurum Schools Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1X2",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12740,6 +13170,16 @@
     "website": null
   },
   {
+    "id": "c978e7e0-7554-5fe5-b218-54c378145ef3",
+    "operatingName": "Beacon Community College",
+    "legalName": null,
+    "type": "school",
+    "code": "13M",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "6ee1e9ca-880e-56b8-afe4-b08f5383c8cd",
     "operatingName": "Beatrix Potter Primary School",
     "legalName": null,
@@ -12747,6 +13187,26 @@
     "code": "199",
     "ukprn": 10046788,
     "urn": "100997",
+    "website": null
+  },
+  {
+    "id": "81f836eb-4187-5c43-b596-75de0281b3ba",
+    "operatingName": "Bedlington West End First School",
+    "legalName": null,
+    "type": "school",
+    "code": "1BA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "157e1c89-6c2d-52a7-b984-67976e4d455c",
+    "operatingName": "Beech Hill Junior and Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "13H",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12760,6 +13220,66 @@
     "website": null
   },
   {
+    "id": "7e40abc8-f039-55a8-929b-2a1348992403",
+    "operatingName": "Belle Vue Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "2BM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8b10b431-f599-546c-8551-6147e89ac9ee",
+    "operatingName": "Bemrose School",
+    "legalName": null,
+    "type": "school",
+    "code": "16Q",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ccd2df73-cd9a-53fd-83e0-5667a4985578",
+    "operatingName": "Bensham Manor School",
+    "legalName": null,
+    "type": "school",
+    "code": "1RS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f695b38b-0d1c-50c8-b4cd-85a6ad4a4b41",
+    "operatingName": "Berkshire Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "26M",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e55df5c0-98c2-5366-99ed-f07fd2e5240f",
+    "operatingName": "Bethnal Green Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1CJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0d916266-312a-5adf-a80a-d294b905f440",
+    "operatingName": "Bexley Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1HE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "d0b9eb83-1ff6-5007-a4cc-95421e6d1d93",
     "operatingName": "Bexton Primary School",
     "legalName": null,
@@ -12770,6 +13290,16 @@
     "website": null
   },
   {
+    "id": "05478bf6-d2dd-5e14-8e4d-12326ebe30ca",
+    "operatingName": "Biddenham Upper School and Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "2DR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "4aae7360-e72e-5d28-a518-ec63c9fb2828",
     "operatingName": "Bilton School",
     "legalName": null,
@@ -12777,6 +13307,56 @@
     "code": "1NS",
     "ukprn": 10066891,
     "urn": "145575",
+    "website": null
+  },
+  {
+    "id": "cdd6c977-019c-541e-8650-8b1fd72ca6b0",
+    "operatingName": "Binstead Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1FB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "26839f19-caa2-5753-a9c1-04062772eeaa",
+    "operatingName": "Birches Head High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1JP",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "941c5edf-2b45-5c0e-a755-753bb834fc31",
+    "operatingName": "Birmingham Nursery Schools Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2D8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8b29e4e5-4c8a-5929-8c03-39beba6dbdd4",
+    "operatingName": "Birmingham Primary Training Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "226",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a40e8014-69cc-5bce-95af-e719343ae810",
+    "operatingName": "Birmingham Primary Training Partnership SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "24F",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12800,6 +13380,16 @@
     "website": null
   },
   {
+    "id": "f3d06fd3-7f02-5f4a-812a-4a136f393ac0",
+    "operatingName": "Bishop Winnington-Ingram CE Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "1U3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5ccac7f6-e926-5991-8667-8cabe838932b",
     "operatingName": "Blackburn The Redeemer CofE Primary",
     "legalName": null,
@@ -12810,6 +13400,46 @@
     "website": null
   },
   {
+    "id": "8a551feb-8a9a-5ca1-90ca-d09a7223b614",
+    "operatingName": "Blackburn with Darwen Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1G7",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0e74ec79-4a1e-5845-aa32-820f20b7047d",
+    "operatingName": "Blessed George Napier Catholic School and Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "287",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "98a930b0-d6ff-5dc6-9f4b-73f77d6fe890",
+    "operatingName": "BLT SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "25L",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b616c79e-612d-5c3f-bd98-fb6cc5273488",
+    "operatingName": "Bolingbroke Excellence Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2AK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "31560950-3127-5a5b-8d4a-fbbb08a68193",
     "operatingName": "Bonneygrove Primary School",
     "legalName": null,
@@ -12817,6 +13447,36 @@
     "code": "191",
     "ukprn": 10079529,
     "urn": "117366",
+    "website": null
+  },
+  {
+    "id": "668f0552-bef1-5b56-a115-a963ff9e020e",
+    "operatingName": "Bordesley Green Girls' School TSA",
+    "legalName": null,
+    "type": "school",
+    "code": "2JS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7bcf10e0-80c5-5914-a842-92039abc29f0",
+    "operatingName": "Boston West Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1DN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d463b8ce-fa71-5675-b208-6cd69d5997a8",
+    "operatingName": "Bourne Westfield (for the Deepings SCITT)",
+    "legalName": null,
+    "type": "school",
+    "code": "2JX",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12850,6 +13510,36 @@
     "website": null
   },
   {
+    "id": "aea8c3d9-1e2b-59ac-afcd-8bda933a12f1",
+    "operatingName": "Bracknell Forest Secondary Schools Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1RB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c2e35943-f6c0-52a2-a52e-0e096cacc676",
+    "operatingName": "Bradfields School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0dddf8ac-c626-5d86-b623-1b0e9a35df0b",
+    "operatingName": "Bradford South Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2FA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "6e8fbad0-d23e-5372-9c2f-9ffeafb36895",
     "operatingName": "Bradley Barton Primary School And Nursery Unit",
     "legalName": null,
@@ -12857,6 +13547,26 @@
     "code": "1Q3",
     "ukprn": 10070851,
     "urn": "113241",
+    "website": null
+  },
+  {
+    "id": "c15bf6ae-8e66-5687-a587-149252b494dc",
+    "operatingName": "Breck Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1AH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "765838cb-f378-5aa4-aa36-aec6622beb41",
+    "operatingName": "Brent Initial Teacher Training (BITT)",
+    "legalName": null,
+    "type": "school",
+    "code": "19H",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12880,6 +13590,16 @@
     "website": null
   },
   {
+    "id": "305a84a1-b152-531b-a0b1-fcd954fb7c50",
+    "operatingName": "Bristol E-ACT Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2HD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "6b0de087-09dc-526c-8f81-f1749414da4d",
     "operatingName": "Broadfields Primary School",
     "legalName": null,
@@ -12887,6 +13607,56 @@
     "code": "1AO",
     "ukprn": 10043449,
     "urn": "140236",
+    "website": null
+  },
+  {
+    "id": "bcb53f95-463b-5f47-9b76-89a772d6849c",
+    "operatingName": "Broadwater CofE First and Middle School",
+    "legalName": null,
+    "type": "school",
+    "code": "15E",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "11b2d37d-3bd5-5d10-9171-8eeba39bdadc",
+    "operatingName": "Bromley Schools' Collegiate (Beaverwood School for Girls)",
+    "legalName": null,
+    "type": "school",
+    "code": "25S",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2a01273d-48e1-5b51-aa8e-3bfb9dd9a212",
+    "operatingName": "Brookhill Leys Primary And Nursery School",
+    "legalName": null,
+    "type": "school",
+    "code": "1F5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "23b055d1-4077-54af-9b81-b43ebdf5e8c8",
+    "operatingName": "Brookside Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "1T5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5f06c899-8f38-5cb4-b0f5-d82cc673cc1a",
+    "operatingName": "Buckinghamshire Teaching School Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1GG",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12940,6 +13710,16 @@
     "website": null
   },
   {
+    "id": "960d463c-9a69-5808-abd3-b9a04ffabda2",
+    "operatingName": "Buttsbury Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "1PV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "86fb9c96-d9d9-56b7-bcec-4026b14268c1",
     "operatingName": "Buxton Community School",
     "legalName": null,
@@ -12960,6 +13740,36 @@
     "website": null
   },
   {
+    "id": "b2eaa121-664b-5200-8ebc-10f1091ea0c9",
+    "operatingName": "Cabot Learning Federation",
+    "legalName": null,
+    "type": "school",
+    "code": "193",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "100688d7-38d4-5d85-a388-ba67d3f846f8",
+    "operatingName": "Calthorpe School Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "1DJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3f535c51-0733-50a3-9395-f71a046641ba",
+    "operatingName": "Cambridge Early Years Teaching School Alliance (CEYTSA)",
+    "legalName": null,
+    "type": "school",
+    "code": "271",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "486a7455-4fe4-59bf-9766-35fac30b0131",
     "operatingName": "Cannock Chase High School",
     "legalName": null,
@@ -12967,6 +13777,16 @@
     "code": "1JF",
     "ukprn": 10035154,
     "urn": "137384",
+    "website": null
+  },
+  {
+    "id": "9933ba1d-c34b-56e6-a288-0414d6f67793",
+    "operatingName": "CAPITAL (Sefton)",
+    "legalName": null,
+    "type": "school",
+    "code": "2CD",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -12980,6 +13800,36 @@
     "website": null
   },
   {
+    "id": "b9e58e5c-6589-52fc-a653-239ca4a40929",
+    "operatingName": "Carter Community School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ff8e4909-2daa-502c-9c46-81df412b1df0",
+    "operatingName": "Castle Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "16E",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c6f42534-3a30-50ac-bc84-02c207e7582b",
+    "operatingName": "Castledown Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "249",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "647dd6ab-9bad-5a5b-81cc-8f8047c152a5",
     "operatingName": "Castle Hill Infant School",
     "legalName": null,
@@ -12987,6 +13837,46 @@
     "code": "2DV",
     "ukprn": 10047499,
     "urn": "141372",
+    "website": null
+  },
+  {
+    "id": "c9f881e7-a307-571e-b998-169c53e62505",
+    "operatingName": "Catalyst Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2L5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b7ebb341-8b7c-501a-9261-4ac26315453f",
+    "operatingName": "Catholic Coastal Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2ES",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e58e14c2-3bbf-549c-9384-0fb6abd32b8e",
+    "operatingName": "Cawston Voluntary Controlled Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "17W",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "54d038d7-e741-5deb-9893-48d31764e6fd",
+    "operatingName": "CECET Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2AA",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13010,6 +13900,26 @@
     "website": null
   },
   {
+    "id": "aa7e917b-085f-54e2-8827-84181a79f3b4",
+    "operatingName": "Chailey School",
+    "legalName": null,
+    "type": "school",
+    "code": "1K5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4520dd5a-4915-5b01-81f8-bda75abd80fc",
+    "operatingName": "Change through Learning Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "15A",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "409e6eec-6f2d-51ba-8bbe-db113b7fa4f0",
     "operatingName": "Charles Dickens Primary School",
     "legalName": null,
@@ -13030,6 +13940,26 @@
     "website": null
   },
   {
+    "id": "78f52158-d11f-5e32-80fb-ba6e7a20bf6c",
+    "operatingName": "Charlton School",
+    "legalName": null,
+    "type": "school",
+    "code": "1O3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a2541098-5d41-5d3b-92a1-1fe17d75f20a",
+    "operatingName": "Cheadle and Marple College Network",
+    "legalName": null,
+    "type": "school",
+    "code": "2EK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "12335bd6-55f0-5730-a3f1-815638d854d1",
     "operatingName": "Cheadle Hulme High School",
     "legalName": null,
@@ -13037,6 +13967,16 @@
     "code": "1HF",
     "ukprn": 10036411,
     "urn": "137843",
+    "website": null
+  },
+  {
+    "id": "3aa75647-e2af-58ed-9971-22101bca44af",
+    "operatingName": "Cheam Park Farm Junior School",
+    "legalName": null,
+    "type": "school",
+    "code": "1RQ",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13050,6 +13990,36 @@
     "website": null
   },
   {
+    "id": "8255d8bf-2745-5fce-8109-863c824cbe07",
+    "operatingName": "Child First Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "28M",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f17abda7-801d-5d3a-a717-0c2db6afc805",
+    "operatingName": "Chiltern Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1XR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "03ac5c4a-7cf8-5a68-8816-1e1228ebfcf2",
+    "operatingName": "Chingford Academies Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "23T",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5fc5f72c-00bf-5c7d-ab87-e79638a4a5bf",
     "operatingName": "Chipping Norton School",
     "legalName": null,
@@ -13057,6 +14027,16 @@
     "code": "13F",
     "ukprn": 10036615,
     "urn": "137936",
+    "website": null
+  },
+  {
+    "id": "b5b758c3-f087-5e66-885e-75cf63f58600",
+    "operatingName": "Christ Church CE VA Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UZ",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13090,6 +14070,26 @@
     "website": null
   },
   {
+    "id": "60b2ca95-f5c1-5905-9418-dcdfe11bc801",
+    "operatingName": "Church Drive ITT/GAPS",
+    "legalName": null,
+    "type": "school",
+    "code": "26C",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d00dfb4e-2275-5213-86b0-d315eaaf866b",
+    "operatingName": "Churchfield Primary School, Gateway TSA (North London)",
+    "legalName": null,
+    "type": "school",
+    "code": "1SU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "00791fdf-06cf-5306-963a-396caa86e345",
     "operatingName": "Churwell Primary School",
     "legalName": null,
@@ -13097,6 +14097,36 @@
     "code": "137",
     "ukprn": 10075614,
     "urn": "107820",
+    "website": null
+  },
+  {
+    "id": "5dd37ee6-cdd8-5929-901d-93bc4011b1c4",
+    "operatingName": "City Learning Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1JB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "fbc23d23-fac5-53ff-aed8-f3bb7c25483c",
+    "operatingName": "City of Westminster College",
+    "legalName": null,
+    "type": "school",
+    "code": "W51",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5fa536e0-ffba-5f1c-9f12-d8e331af6696",
+    "operatingName": "Clayton-le-Moors All Saints Church of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1XS",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13120,6 +14150,26 @@
     "website": null
   },
   {
+    "id": "0f93640a-c0f5-5cc7-8d69-879063aa55f1",
+    "operatingName": "Cobham Free School",
+    "legalName": null,
+    "type": "school",
+    "code": "1O5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "24b19c6a-83a5-59e7-8362-2fbbf5149323",
+    "operatingName": "Colchester Royal Grammar School",
+    "legalName": null,
+    "type": "school",
+    "code": "1YT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "e3db48d2-beb0-56f9-959c-45a2991dc997",
     "operatingName": "Collingwood School & Media Arts College",
     "legalName": null,
@@ -13140,6 +14190,16 @@
     "website": null
   },
   {
+    "id": "65d7d86c-2d2e-5086-a57d-6dbac33eddc4",
+    "operatingName": "Colston's Girls' School BS6 5RD",
+    "legalName": null,
+    "type": "school",
+    "code": "22O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "a986b4d3-392f-52cd-94c2-5a2315776c9b",
     "operatingName": "Conisborough College",
     "legalName": null,
@@ -13147,6 +14207,16 @@
     "code": "17M",
     "ukprn": 10015211,
     "urn": "100742",
+    "website": null
+  },
+  {
+    "id": "fdc3f019-2982-5e4a-a57a-e06174d9f9a3",
+    "operatingName": "Conisbrough Ivanhoe Primary Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1UB",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13160,6 +14230,26 @@
     "website": null
   },
   {
+    "id": "c7e27536-0b7b-5eda-a96d-9ab796e7e4f0",
+    "operatingName": "Co-op Academies Trust School Direct - Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "27V",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "74b71b0c-20a2-52e7-b39d-7cc9668084b4",
+    "operatingName": "Copleston High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1VC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "427a1c80-04b3-5fde-bdca-a3599b638aa2",
     "operatingName": "Coppice Primary Academy",
     "legalName": null,
@@ -13170,12 +14260,42 @@
     "website": null
   },
   {
+    "id": "c83be3dd-0396-5c1a-9195-5ff0e24296d6",
+    "operatingName": "Cornwall SCITT Partnership (3-11)",
+    "legalName": null,
+    "type": "school",
+    "code": "C82",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "38385f64-3ce3-57d9-b17b-27a8363d8d7f",
     "operatingName": "Cornwall Teaching School",
     "legalName": null,
     "type": "school",
     "code": "19U",
     "ukprn": 10007063,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "734df97b-4eb0-54ba-8e7e-6ce8dd37a751",
+    "operatingName": "Corpus Christi Catholic Academy Trust Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1L4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c58c986a-6c98-5014-8637-2bc79eeca98c",
+    "operatingName": "Corpus Christi Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1OC",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -13210,6 +14330,26 @@
     "website": null
   },
   {
+    "id": "0bc54980-83f1-5df6-b55c-a709a02f94a7",
+    "operatingName": "Cramlington Teaching School Alliance SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "N76",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "53ad59f1-30fe-518e-8e25-68b92c046439",
+    "operatingName": "Crampton School",
+    "legalName": null,
+    "type": "school",
+    "code": "228",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "c53b3b0b-8b19-5c7b-b9f7-0f623ef35129",
     "operatingName": "CREC Early Years Partnership",
     "legalName": null,
@@ -13240,6 +14380,16 @@
     "website": null
   },
   {
+    "id": "b81c366b-e064-5e1d-9f48-a21ae0e2a374",
+    "operatingName": "CTC Kingshurst Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1AX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "be6dca6f-7023-5ad0-bfc7-d26bb456e1ea",
     "operatingName": "Culcheth High School",
     "legalName": null,
@@ -13260,6 +14410,36 @@
     "website": null
   },
   {
+    "id": "850bb64d-6918-5faf-83b4-61da16746bc4",
+    "operatingName": "Dale Hall Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "820132a0-0b26-5d3b-a48e-e45f841187de",
+    "operatingName": "Dales TSA",
+    "legalName": null,
+    "type": "school",
+    "code": "2FL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "724135a6-1256-56f8-9518-e2a581c0ff5a",
+    "operatingName": "Dale Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1R6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "bb240478-212b-5a1a-887e-0fea1bee1b96",
     "operatingName": "Dame Alice Owen's School",
     "legalName": null,
@@ -13267,6 +14447,36 @@
     "code": "1S8",
     "ukprn": 10033278,
     "urn": "136554",
+    "website": null
+  },
+  {
+    "id": "a68bef03-921a-502a-a3a7-9519a136e5c0",
+    "operatingName": "Darlinghurst Primary and Nursery School",
+    "legalName": null,
+    "type": "school",
+    "code": "1B4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "327f161e-b676-5fdf-b44c-787e70e41b90",
+    "operatingName": "Dartmoor Federation",
+    "legalName": null,
+    "type": "school",
+    "code": "1XZ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cb1764dd-30b0-523a-9fc5-13f628ce3c79",
+    "operatingName": "Dawlish Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1T6",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13280,6 +14490,36 @@
     "website": null
   },
   {
+    "id": "cbdd4b79-08d7-5a67-aff6-6fe2d8ee4c93",
+    "operatingName": "Deansfield Community School, Specialists In Media Arts",
+    "legalName": null,
+    "type": "school",
+    "code": "1XJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1342a2e2-333a-5ef2-b8cf-3d41fa8c2484",
+    "operatingName": "De La Salle School and Language College",
+    "legalName": null,
+    "type": "school",
+    "code": "245",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b8dc3efb-a334-5024-9981-55835fb0e479",
+    "operatingName": "Derby City Schools Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2EO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "3935f404-5665-5917-b85d-240e1a78ffcb",
     "operatingName": "De Stafford School",
     "legalName": null,
@@ -13290,6 +14530,36 @@
     "website": null
   },
   {
+    "id": "2cd99437-c4b0-5cba-add3-f4243ea7e257",
+    "operatingName": "Devon And Cornwall Cooperative Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6ae9b897-cd23-5137-9fd3-d9e731a11fe1",
+    "operatingName": "Devon Primary SCITT School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "1Z9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "508e1104-875c-59a6-8645-7d1a2b76d96f",
+    "operatingName": "Devon Secondary Teacher Training Group (DSTTG)",
+    "legalName": null,
+    "type": "scitt",
+    "code": "D41",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "597d14ec-ed2f-5cbe-b748-d721d55bbcff",
     "operatingName": "Dial Park Primary School",
     "legalName": null,
@@ -13297,6 +14567,66 @@
     "code": "1W5",
     "ukprn": 10072635,
     "urn": "106043",
+    "website": null
+  },
+  {
+    "id": "caaac2fc-9c9e-5889-9017-f5071fa2fc67",
+    "operatingName": "Diocese of Middlesbrough Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2C6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ea5dfd06-a5fd-57b0-bdcd-24e3ac5f7880",
+    "operatingName": "Diocese of Salisbury Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "294",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "73c5beff-c061-5809-b742-328f3d5bc2a6",
+    "operatingName": "Djanogly City Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1D4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b76e1aed-437b-5fad-9d44-b1b40a343d38",
+    "operatingName": "Doncaster Regional Alliance for Teacher Training (Secondary)",
+    "legalName": null,
+    "type": "school",
+    "code": "1HD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7f795819-b0ee-5187-b202-55b5a8c03819",
+    "operatingName": "Doncaster Regional Alliance for Teacher Training Secondary",
+    "legalName": null,
+    "type": "school",
+    "code": "211",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "81416755-0e73-5659-9e38-32e248d80d55",
+    "operatingName": "Dorset Teacher Training Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "D53",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13320,6 +14650,16 @@
     "website": null
   },
   {
+    "id": "9d0ce5a2-4c4a-5c7c-b9b2-d077cc92bf27",
+    "operatingName": "Durand Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1O6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "57d9fec9-8891-55f9-aa1f-5d71f3b81d79",
     "operatingName": "Durants School",
     "legalName": null,
@@ -13327,6 +14667,16 @@
     "code": "1BL",
     "ukprn": 10015529,
     "urn": "102066",
+    "website": null
+  },
+  {
+    "id": "6326626d-3e33-52b3-9529-6e351ae23d6f",
+    "operatingName": "Early Foundations Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2A9",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13346,6 +14696,46 @@
     "type": "school",
     "code": "1RT",
     "ukprn": 10064183,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a0d40bce-f5b8-5283-bb59-0ddd4bd379f7",
+    "operatingName": "East Midland's Primary Catholic Academies",
+    "legalName": null,
+    "type": "school",
+    "code": "2AE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "615bf265-5b40-52d1-9de2-4fb9ccf501d6",
+    "operatingName": "East Riding College",
+    "legalName": null,
+    "type": "school",
+    "code": "E29",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c4f13a40-f1f4-53bb-ba55-93de8b67e193",
+    "operatingName": "East Sussex Teacher Training Partnership School Direct Salaried TH",
+    "legalName": null,
+    "type": "school",
+    "code": "276",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5b8c8fe5-03b4-5ed9-9e38-a6898bc0d305",
+    "operatingName": "East Sussex Teacher Training Partnership SCITT IK",
+    "legalName": null,
+    "type": "school",
+    "code": "24B",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -13370,6 +14760,66 @@
     "website": null
   },
   {
+    "id": "579a3318-845c-5652-af35-af5dc3c03a33",
+    "operatingName": "Edward Worlledge Community Junior School",
+    "legalName": null,
+    "type": "school",
+    "code": "1AL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "fe3fc111-bf84-5222-8418-2603df569de5",
+    "operatingName": "Eldon Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "1QS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2d37856a-48e4-5054-8430-2d32607d1c4b",
+    "operatingName": "Eliot Bank Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "17P",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "76952212-9ab7-55fb-8e41-aaf6e0395293",
+    "operatingName": "ELIP",
+    "legalName": null,
+    "type": "school",
+    "code": "2KQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "dcfe9581-1731-5edb-ae02-121cf21111d9",
+    "operatingName": "Ellis Guilford School and Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "1W1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cb350a85-857a-5f8b-856d-9d2b571de829",
+    "operatingName": "Elmhurst Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "15U",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9ed1da8b-131a-5142-97b6-f0a4da9aa274",
     "operatingName": "Emersons Green Primary School",
     "legalName": null,
@@ -13380,6 +14830,66 @@
     "website": null
   },
   {
+    "id": "264b68a8-fb79-5bce-8cf2-002a40d0cd96",
+    "operatingName": "Encompass",
+    "legalName": null,
+    "type": "school",
+    "code": "2FV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4d5f2d76-3583-5b68-ae10-3f694afdce70",
+    "operatingName": "Encompass Learning Alliance (Berkshire)",
+    "legalName": null,
+    "type": "school",
+    "code": "18Q",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1e0eedd9-448d-504b-834d-8cde8ea2eaea",
+    "operatingName": "ENCOMPASS The Inclusive Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "1OK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f659a842-3e3e-5e15-adfb-3a9c73b74dbb",
+    "operatingName": "Enfield County School",
+    "legalName": null,
+    "type": "school",
+    "code": "1E3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7bd8eb93-80ea-5ba3-8268-a023b65afbb0",
+    "operatingName": "Epinay Teaching School Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "23J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "383218ba-c91d-52fc-802a-71e2cda00b17",
+    "operatingName": "Equals Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "3Q6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9a507a75-09b7-55ae-be91-1799c49fa229",
     "operatingName": "Ernesettle Community School",
     "legalName": null,
@@ -13387,6 +14897,46 @@
     "code": "14Y",
     "ukprn": 10055188,
     "urn": "142545",
+    "website": null
+  },
+  {
+    "id": "508a7a15-6003-580e-b524-f7d0fd6775d7",
+    "operatingName": "Esher CofE High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1OQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6f4de817-fc21-5970-acdf-e2a5838be994",
+    "operatingName": "Essendine Primary School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1BV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6412f57d-3e2a-5df9-a085-2a317f18eecf",
+    "operatingName": "Fakenham Academy Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2G8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d2af3f18-459f-5d21-b6fd-88ecfa88a95c",
+    "operatingName": "Farlingaye & Kesgrave Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1GN",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13417,6 +14967,46 @@
     "code": "1SV",
     "ukprn": 10079057,
     "urn": "117160",
+    "website": null
+  },
+  {
+    "id": "4e3d678d-10d6-5f3a-9059-adda99b43f20",
+    "operatingName": "Field Lane J I & N School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0841ed01-5a75-544b-b4cc-075748abc65f",
+    "operatingName": "Fields of Learning Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "161",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "230b6307-a9d5-53eb-8f0c-2cac4a7c5ce2",
+    "operatingName": "Forest Hill Schools Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "22D",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "35e0538b-68ea-5b42-8872-6b33619d7c2b",
+    "operatingName": "Forest Of Galtres Anglican/Methodist Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1E1",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13520,6 +15110,86 @@
     "website": null
   },
   {
+    "id": "877c10f7-f7bd-5931-898b-a9022546519e",
+    "operatingName": "Furley Park",
+    "legalName": null,
+    "type": "school",
+    "code": "1YV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d5e8cf54-c6bf-5cac-9923-ba9407a8c368",
+    "operatingName": "Gateshead SCITT Alliance (Dunston Hill School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1AQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b82f5dd2-16bb-5806-b46e-08ae0368643a",
+    "operatingName": "Gateshead SCITT Alliance (Falla Park School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1B3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "aa3a1d39-4248-5d96-9d38-5bdf5578058f",
+    "operatingName": "Gateway Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1K3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "960f362a-5627-5ed4-ac28-f4b35f138469",
+    "operatingName": "George Stephenson Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "21R",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "dba0c918-889b-582d-ba21-b7a47e2e9af5",
+    "operatingName": "Giffards Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2BR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9ff59e20-47d3-5455-92a5-c78cd267e2dc",
+    "operatingName": "Gipsey Bridge Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1F7",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e96de51e-2a88-5636-baa2-197e41e93fa7",
+    "operatingName": "Glapton Primary and Nursery School",
+    "legalName": null,
+    "type": "school",
+    "code": "16V",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "6b752662-5378-54c7-afea-b092beaf1ee8",
     "operatingName": "Glen Hills Primary School",
     "legalName": null,
@@ -13527,6 +15197,16 @@
     "code": "158",
     "ukprn": 10036608,
     "urn": "137932",
+    "website": null
+  },
+  {
+    "id": "0b27ea3f-48f1-59ee-921a-25d730d8c5f0",
+    "operatingName": "Gloucestershire Initial Teacher Education Partnership (School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1D3",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13547,6 +15227,16 @@
     "code": "1SZ",
     "ukprn": 10069219,
     "urn": "124183",
+    "website": null
+  },
+  {
+    "id": "cedb93c3-dd37-514a-9a0a-9d9b1b74905c",
+    "operatingName": "Gorsey Bank Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1YW",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13580,6 +15270,16 @@
     "website": null
   },
   {
+    "id": "09660ae8-865a-5f0b-b1d1-154fac468351",
+    "operatingName": "Great Yarmouth High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "63007c36-9c35-5b74-b154-c802a36b2e12",
     "operatingName": "Greengate Lane Academy",
     "legalName": null,
@@ -13610,6 +15310,26 @@
     "website": null
   },
   {
+    "id": "0564a249-0081-5365-be1b-eaa76e2986ea",
+    "operatingName": "Green Oak CofE Primary School And Nursery",
+    "legalName": null,
+    "type": "school",
+    "code": "1GK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a4fbecd8-e225-5079-a6d0-46f3b95ea86e",
+    "operatingName": "Grimley and Holt CE Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "93b4c181-6256-56fb-9dbf-c7671e51f8ae",
     "operatingName": "Grimsdyke School",
     "legalName": null,
@@ -13620,6 +15340,16 @@
     "website": null
   },
   {
+    "id": "befea7c4-de13-5ef8-a03f-f85fc83263b2",
+    "operatingName": "Gumley House RC Convent School FCJ",
+    "legalName": null,
+    "type": "school",
+    "code": "1LG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "d1bede9b-8ccc-5f7a-86d5-3ac8eb2d5d5c",
     "operatingName": "Gunnersbury Catholic School",
     "legalName": null,
@@ -13627,6 +15357,36 @@
     "code": "22K",
     "ukprn": 10002823,
     "urn": "102545",
+    "website": null
+  },
+  {
+    "id": "2175d581-95dd-5722-bb55-3baf9ef3b0ea",
+    "operatingName": "Guru Nanak Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1E9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9866d144-4b76-51c4-8efb-f0048fafdb1e",
+    "operatingName": "Hampton Vale Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "27W",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a8aef624-fe1e-5cdf-b4bb-580e774deb27",
+    "operatingName": "Harborne Primary School Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "293",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13647,6 +15407,56 @@
     "code": "1YZ",
     "ukprn": 10076644,
     "urn": "134853",
+    "website": null
+  },
+  {
+    "id": "9e3591d1-ad69-5cb3-93ce-8b3b353c981e",
+    "operatingName": "HART Alliance, North Yorkshire",
+    "legalName": null,
+    "type": "school",
+    "code": "1B2",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "302942d6-55bd-515f-8767-b70a9fa0c159",
+    "operatingName": "HART School Direct Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2CY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2edde346-c8d0-5110-93fd-18a660972066",
+    "operatingName": "Hastings Academies Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "15M",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "770f4ff5-a5fa-5e3c-82b2-2770fd4c4261",
+    "operatingName": "Hawksmoor School",
+    "legalName": null,
+    "type": "school",
+    "code": "1J9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d9a6ae9c-bfbd-57ee-899f-fcb30d38fd50",
+    "operatingName": "Haybridge Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1C6",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13700,6 +15510,16 @@
     "website": null
   },
   {
+    "id": "a5c810f1-3290-5fb6-b609-1425046e208a",
+    "operatingName": "Heathland Whitefriars Federation",
+    "legalName": null,
+    "type": "school",
+    "code": "1Z3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "98d8a362-78a2-5151-bd68-935692e4f941",
     "operatingName": "Heaton Park Primary School",
     "legalName": null,
@@ -13730,6 +15550,16 @@
     "website": null
   },
   {
+    "id": "a60baaac-ad63-5669-961f-d326bb22db8b",
+    "operatingName": "Hempstalls-KNSTE",
+    "legalName": null,
+    "type": "school",
+    "code": "29U",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "27574ce6-3650-57cc-a308-cefd2324154a",
     "operatingName": "Hertswood Academy",
     "legalName": null,
@@ -13747,6 +15577,16 @@
     "code": "2H1",
     "ukprn": 10043337,
     "urn": "140188",
+    "website": null
+  },
+  {
+    "id": "d7b42001-5329-59b2-abaf-48ee154195f4",
+    "operatingName": "Highbury Fields School Direct Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "229",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13790,6 +15630,26 @@
     "website": null
   },
   {
+    "id": "31600845-0540-5cd2-9abd-6f8296804a9b",
+    "operatingName": "Hillingdon Primary School (The Elliot Foundation Teaching School)",
+    "legalName": null,
+    "type": "school",
+    "code": "3E7",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8c4cb8b1-b6e0-5e1d-8175-7ac73f800eca",
+    "operatingName": "Hillside School",
+    "legalName": null,
+    "type": "school",
+    "code": "1T8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "e6c5be5b-5038-5dab-85e3-fa8c2cdb21b1",
     "operatingName": "Hillview School For Girls",
     "legalName": null,
@@ -13820,6 +15680,16 @@
     "website": null
   },
   {
+    "id": "e30af76c-d6a7-5527-866c-f5b9b5a2b75b",
+    "operatingName": "Holt Heath Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "281",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "c55dc351-b866-504d-b286-846f543d6cd4",
     "operatingName": "Holtsmere End Infant and Nursery School",
     "legalName": null,
@@ -13830,6 +15700,16 @@
     "website": null
   },
   {
+    "id": "a92bf964-8513-5f39-808a-16229abb9698",
+    "operatingName": "Holy Trinity CE Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "1U9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "c1dbea47-c622-5025-9665-dd89ca8f796b",
     "operatingName": "Holy Trinity Church of England Primary School",
     "legalName": null,
@@ -13837,6 +15717,16 @@
     "code": "1C1",
     "ukprn": 10074729,
     "urn": "100622",
+    "website": null
+  },
+  {
+    "id": "0935fa47-8de3-5f87-9006-22409ff7c638",
+    "operatingName": "Holy Trinity CofE VA Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1ND",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13857,6 +15747,16 @@
     "code": "1AU",
     "ukprn": 10084303,
     "urn": "147533",
+    "website": null
+  },
+  {
+    "id": "353ef619-ad87-5c3d-9387-8a825af9a7da",
+    "operatingName": "Horizon Learning Network",
+    "legalName": null,
+    "type": "school",
+    "code": "19D",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13900,6 +15800,16 @@
     "website": null
   },
   {
+    "id": "314346fa-a14c-5b2c-9c47-40073c90241e",
+    "operatingName": "Hull SCITT salaried",
+    "legalName": null,
+    "type": "school",
+    "code": "1BX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "a411ff45-434b-5340-93aa-9f01d7f1c977",
     "operatingName": "Hurstmere School",
     "legalName": null,
@@ -13920,6 +15830,86 @@
     "website": null
   },
   {
+    "id": "60e6c17f-f725-57d0-b83f-ca09961b9766",
+    "operatingName": "Ignite Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "18Z",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b11b16f4-adc7-5fdd-b067-36cc28728c16",
+    "operatingName": "Inner London Teacher Training Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "21B",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2a400448-475e-5bc7-9ded-0344587832a4",
+    "operatingName": "Innovate Multi Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "29D",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9602182b-24da-5d0c-8c6f-3ea01da8ec07",
+    "operatingName": "Inspiration Trust Norwich",
+    "legalName": null,
+    "type": "school",
+    "code": "2AB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b597ac7a-1eb7-52ff-a0d8-3aa8ed3318be",
+    "operatingName": "Inspire (Warwickshire)",
+    "legalName": null,
+    "type": "school",
+    "code": "23H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a34b2726-25e7-552f-8022-6935b2e5b61c",
+    "operatingName": "Inspiring Leaders - 4 Derbyshire",
+    "legalName": null,
+    "type": "school",
+    "code": "2C4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7fe31f0f-5b26-5196-a722-644a061451f8",
+    "operatingName": "IPLCN",
+    "legalName": null,
+    "type": "school",
+    "code": "2AH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0ac8750e-ab4f-5d1c-b025-6a15e47f1581",
+    "operatingName": "Iqra Community Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "16R",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "3b5582f8-3dbc-54a3-9dda-567e4e1da3c5",
     "operatingName": "Iqra Primary School",
     "legalName": null,
@@ -13930,6 +15920,16 @@
     "website": null
   },
   {
+    "id": "34e26d07-1b91-5c33-a935-0a2803c6016b",
+    "operatingName": "Islamia Schools ITT Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2E6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0e879c14-715a-5fac-bac8-f2df01bd44b5",
     "operatingName": "Islamiyah School",
     "legalName": null,
@@ -13937,6 +15937,36 @@
     "code": "1GM",
     "ukprn": 10018120,
     "urn": "132749",
+    "website": null
+  },
+  {
+    "id": "afae8ee6-d4e1-54e4-85f8-f8436d9879fa",
+    "operatingName": "Isle of Wight SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "I65",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "33e678d9-4f4c-5320-abf5-56978a32ad3e",
+    "operatingName": "James Brindley School",
+    "legalName": null,
+    "type": "school",
+    "code": "1AM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "04ffa61c-fd38-5207-8e21-4f21957f03ac",
+    "operatingName": "Jewish Teacher Training Partnership (Jewish Secondary School Consortium)",
+    "legalName": null,
+    "type": "school",
+    "code": "1X6",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -13960,6 +15990,16 @@
     "website": null
   },
   {
+    "id": "8a932390-5cf6-5f7c-8a7c-ecce7d2db260",
+    "operatingName": "John King Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "1H8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "2918dc6a-1192-5183-87fc-552c1c7c62fd",
     "operatingName": "John Mason School",
     "legalName": null,
@@ -13970,6 +16010,16 @@
     "website": null
   },
   {
+    "id": "924a0d63-3e58-5e27-9d0a-412c08582344",
+    "operatingName": "John Port School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "7fc47dcd-f76f-5e9c-97be-d24a89136233",
     "operatingName": "Joseph Leckie Academy",
     "legalName": null,
@@ -13977,6 +16027,46 @@
     "code": "1MF",
     "ukprn": 10036183,
     "urn": "137830",
+    "website": null
+  },
+  {
+    "id": "15c5f825-c2c6-5191-8607-3da5a7f522df",
+    "operatingName": "Joseph Whitaker (Nottinghamshire, Derbyshire)",
+    "legalName": null,
+    "type": "school",
+    "code": "1E6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a3f9d2c3-df06-5911-ac6d-c75bddba29aa",
+    "operatingName": "Kaizen Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2AG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "33f10a6d-48f7-57e9-a080-63739a9c8612",
+    "operatingName": "KCSP Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "2DZ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "95175ed9-3d7c-50ff-b08c-67bb642c7968",
+    "operatingName": "Keele University",
+    "legalName": null,
+    "type": "hei",
+    "code": "K12",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14007,6 +16097,16 @@
     "code": "1GF",
     "ukprn": 10035660,
     "urn": "137667",
+    "website": null
+  },
+  {
+    "id": "a7c6956d-814b-551a-9483-64cb565c4f4b",
+    "operatingName": "King Alfred's (A Specialist Sports College)",
+    "legalName": null,
+    "type": "school",
+    "code": "247",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14060,6 +16160,26 @@
     "website": null
   },
   {
+    "id": "fb4c0570-9ffb-517c-9b8f-43a0c10856a0",
+    "operatingName": "Kingsmead Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1AJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "fc565ba9-6af2-50ce-b3d5-2914dec4a835",
+    "operatingName": "Kings Science Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1TS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "f5408386-ed35-5995-8bc5-0487de222fec",
     "operatingName": "Kingsway Primary School",
     "legalName": null,
@@ -14067,6 +16187,16 @@
     "code": "1CC",
     "ukprn": 10071987,
     "urn": "122716",
+    "website": null
+  },
+  {
+    "id": "2166977a-ead9-5e88-b96e-5202f118fe89",
+    "operatingName": "Kirk Hallam Community Technology and Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "16Y",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14100,6 +16230,26 @@
     "website": null
   },
   {
+    "id": "eb116b70-6868-51f6-bd02-34e7bd6a70e2",
+    "operatingName": "Lady Hawkins School and Sixth Form Centre",
+    "legalName": null,
+    "type": "school",
+    "code": "1X4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3c5deedd-7e2e-51a1-8253-507b561afad8",
+    "operatingName": "Lancaster and Fylde Schools' Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1NN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "da923086-1fa1-5209-832a-9f3e8fc883f5",
     "operatingName": "Langley Park School For Boys",
     "legalName": null,
@@ -14120,6 +16270,16 @@
     "website": null
   },
   {
+    "id": "e1fb92a7-3cd0-58e0-8f38-3dae96bddcd4",
+    "operatingName": "Launceston College MAT and Duchy Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "218",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "f099c21e-7fa6-519c-b82d-8104d9468b51",
     "operatingName": "Laurance Haines School",
     "legalName": null,
@@ -14130,6 +16290,26 @@
     "website": null
   },
   {
+    "id": "853f2c38-5b6a-51e4-a825-adb5fadc94a4",
+    "operatingName": "Learning for All Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2G6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "62b06a78-3edf-56e4-af9e-231b805edfba",
+    "operatingName": "Learning Unlimited Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "26G",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "fca4796b-a59c-52ee-b108-300c4bf01e3f",
     "operatingName": "Ledbury Primary School",
     "legalName": null,
@@ -14137,6 +16317,46 @@
     "code": "1XX",
     "ukprn": 10069565,
     "urn": "116702",
+    "website": null
+  },
+  {
+    "id": "1417dd5b-a60a-52af-b11a-8e0a1a49b9f2",
+    "operatingName": "Leeds City Training Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1FH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c7c73071-98c7-5de1-867b-7565aae2aab5",
+    "operatingName": "Leeds East Primary Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZP",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b795c735-5b03-5756-acc1-930c88866451",
+    "operatingName": "Leicester City Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "283",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "de152b17-63a0-51bc-9924-277e8f62b8c5",
+    "operatingName": "Leicestershire Learning Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "27P",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14180,6 +16400,16 @@
     "website": null
   },
   {
+    "id": "2fd8be44-c172-554a-9926-530669e14a56",
+    "operatingName": "Longcroft School and Sixth Form",
+    "legalName": null,
+    "type": "school",
+    "code": "27A",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0ee818ce-f743-5577-8886-ed49c2300a54",
     "operatingName": "Longford Park School",
     "legalName": null,
@@ -14197,6 +16427,36 @@
     "code": "192",
     "ukprn": 10075239,
     "urn": "131595",
+    "website": null
+  },
+  {
+    "id": "8713d5c0-7ece-54ca-b71b-5241da74a5d7",
+    "operatingName": "Loughborough Federation Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "28O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1df2c3a6-89a2-576c-b964-1a494295222d",
+    "operatingName": "Loxford School of Science and Technology",
+    "legalName": null,
+    "type": "school",
+    "code": "1ST",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a4f3439d-cbe9-5d4a-a8bd-d319f04e2d9d",
+    "operatingName": "Luton Futures",
+    "legalName": null,
+    "type": "school",
+    "code": "1JG",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14230,6 +16490,26 @@
     "website": null
   },
   {
+    "id": "5b6c9930-dfab-55f8-bb17-b98fcd70df19",
+    "operatingName": "Lytham St Annes Technology And Performing Arts College",
+    "legalName": null,
+    "type": "school",
+    "code": "1NO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e3d933c6-1e04-5b14-a5f7-b50bbdc2cb58",
+    "operatingName": "Malaga Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "22R",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "1901fe90-2e4c-5936-8a6e-613bbabc19b0",
     "operatingName": "Manchester Communication Academy",
     "legalName": null,
@@ -14257,6 +16537,16 @@
     "code": "2H6",
     "ukprn": 10027533,
     "urn": "135875",
+    "website": null
+  },
+  {
+    "id": "6bff1217-9a8c-5c71-b68b-6d340b4837a9",
+    "operatingName": "Manor Green Primary and Nursery School",
+    "legalName": null,
+    "type": "school",
+    "code": "14M",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14310,6 +16600,16 @@
     "website": null
   },
   {
+    "id": "da467540-f29f-551e-be3e-e01b901fd79f",
+    "operatingName": "Matthew Moss ITT Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1WL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "796c59e8-2edc-5fa3-a58e-843115d74966",
     "operatingName": "Mauldeth Road Primary School",
     "legalName": null,
@@ -14317,6 +16617,16 @@
     "code": "23K",
     "ukprn": 10070092,
     "urn": "105426",
+    "website": null
+  },
+  {
+    "id": "3d4c74fa-38c7-5975-bfaa-3427f50a874d",
+    "operatingName": "Meadowgate School",
+    "legalName": null,
+    "type": "school",
+    "code": "17N",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14340,6 +16650,16 @@
     "website": null
   },
   {
+    "id": "d6af1af5-18bb-51e6-a109-ea8d388b21f8",
+    "operatingName": "Medlock Valley Community School",
+    "legalName": null,
+    "type": "school",
+    "code": "1RX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "d22850a1-e46e-5ba5-8def-07722055af0d",
     "operatingName": "Meryfield Primary School",
     "legalName": null,
@@ -14350,6 +16670,26 @@
     "website": null
   },
   {
+    "id": "b125b978-4c58-507f-8313-9bf76c5b7779",
+    "operatingName": "Milestones Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1WX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "390623d1-f660-571c-b767-8c5a1bfe1b44",
+    "operatingName": "Milford Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1EZ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "4071cf3f-bb7c-5c59-8a2e-7fd8f5dd364e",
     "operatingName": "Millennium Primary School",
     "legalName": null,
@@ -14357,6 +16697,16 @@
     "code": "2LH",
     "ukprn": 10057782,
     "urn": "143211",
+    "website": null
+  },
+  {
+    "id": "d4333299-5451-5b1f-9ca0-27b33bae9b43",
+    "operatingName": "Mill Hill School",
+    "legalName": null,
+    "type": "school",
+    "code": "14Q",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14400,6 +16750,26 @@
     "website": null
   },
   {
+    "id": "a612cfa1-f04b-5a87-a667-cc00e18f57cf",
+    "operatingName": "Montsaye Community Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1BN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "40d7c39d-1119-5435-99c2-c3e56f07b0af",
+    "operatingName": "Moorside High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1FK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "8c4db3fe-f543-50fb-9f54-72d8f811c50a",
     "operatingName": "Mordiford CofE Primary School",
     "legalName": null,
@@ -14407,6 +16777,26 @@
     "code": "24A",
     "ukprn": 10044284,
     "urn": "140464",
+    "website": null
+  },
+  {
+    "id": "0600f51c-238c-55c2-9c62-42c25cbe078d",
+    "operatingName": "Morris Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2KV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2de71f18-007c-5a20-8a65-d3ddb93c103d",
+    "operatingName": "MOSAIC Teacher Training Calderdale",
+    "legalName": null,
+    "type": "school",
+    "code": "17K",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14440,12 +16830,182 @@
     "website": null
   },
   {
+    "id": "0a71c047-0e44-5be7-bff5-0836d858bc40",
+    "operatingName": "Nene and Ramnoth",
+    "legalName": null,
+    "type": "school",
+    "code": "2GE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c1483186-5106-52e3-8576-3a967784c433",
+    "operatingName": "NESCOT",
+    "legalName": null,
+    "type": "school",
+    "code": "N49",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "307140c0-f4be-5753-bf8a-af63a5ff970b",
+    "operatingName": "Neston Primary and Secondary ITT Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1PC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1d6ccf02-ffe3-5dd0-b8d6-777e3bae33e6",
+    "operatingName": "Newcroft School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "26O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "31b97398-7309-5336-8ce4-7759daa78920",
+    "operatingName": "Newlands Spring Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1MB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5f1e9548-ad5b-5e1b-8404-b96bd75785e8",
+    "operatingName": "New Wave Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "29S",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5e79f4a3-50fd-56b6-aa90-438ef230c658",
+    "operatingName": "Norfolk GTP Provider",
+    "legalName": null,
+    "type": "school",
+    "code": "S58",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "614bee1b-8ca5-5068-bf09-5b6e6390f899",
+    "operatingName": "North Beckton Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1QJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "222670e6-22a0-52a3-9878-8b3d38bd99d8",
+    "operatingName": "North Charnwood Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1KB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5de0b745-01b2-5ecf-914e-4cca7fdf1e62",
+    "operatingName": "North Devon Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "17H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f85c5c7f-6698-5b1e-b2e6-e100d3c6d01a",
+    "operatingName": "North East Essex Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1H6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "399a458f-cb06-5e44-8379-995d4db39d09",
+    "operatingName": "Northern Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1JQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "aa5c6755-7214-5382-9f2b-70ac5e063639",
+    "operatingName": "Northern Lincolnshire Education Consortium (NLEC)",
+    "legalName": null,
+    "type": "school",
+    "code": "213",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cb972df1-0ad1-554f-90d3-b6bd1d259d2f",
+    "operatingName": "Northern Schools Training Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "1OA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "4467445f-1602-526d-8ba6-a20b27ff7ecd",
     "operatingName": "North Essex Teacher Training",
     "legalName": null,
     "type": "school",
     "code": "29J",
     "ukprn": 10059545,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8ec1d906-026f-5f57-8a52-5c9359aab891",
+    "operatingName": "Northgate International Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1Y4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "34f8424d-e84e-58fb-a78e-8f76db7b508d",
+    "operatingName": "North Herts Catholic Primary Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "22J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3ec0a681-5a47-59ff-a44a-fa1e46d4886c",
+    "operatingName": "North Kesteven School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TL",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -14457,6 +17017,66 @@
     "code": "2KE",
     "ukprn": 10018099,
     "urn": "131065",
+    "website": null
+  },
+  {
+    "id": "92b39868-1ed6-59dd-81a3-eaaf80d8feb3",
+    "operatingName": "North Sefton Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "28K",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "09929a12-69d3-5067-8339-b0fd73b99731",
+    "operatingName": "Northumberland CofE Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1CL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b3cd985d-e080-5b34-9dcd-6bb4d7334320",
+    "operatingName": "North West Teacher Training Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "28H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7ca8bbfb-b636-53f1-951b-e62038a0139b",
+    "operatingName": "North West Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "43017092-1bc9-50f0-96ab-27fce5a80b95",
+    "operatingName": "Northwick Park Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1R4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b7469deb-dd85-5857-8f52-d4f76f3e057d",
+    "operatingName": "North Wiltshire SCITT (School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1T9",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14490,6 +17110,16 @@
     "website": null
   },
   {
+    "id": "6f73dc4e-3c91-55d0-a6df-d1713acec202",
+    "operatingName": "Nottingham City Primary SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "N87",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "bb0f300b-1239-5744-bd55-7027b81ef5dd",
     "operatingName": "Nunnery Wood High School",
     "legalName": null,
@@ -14507,6 +17137,16 @@
     "code": "157",
     "ukprn": 10070886,
     "urn": "108332",
+    "website": null
+  },
+  {
+    "id": "500940e6-c4e2-562f-8a68-d3b8c10c07b1",
+    "operatingName": "Oakham Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1P7",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14540,6 +17180,26 @@
     "website": null
   },
   {
+    "id": "3eab515e-1472-5dac-85f6-95c65a674106",
+    "operatingName": "Oasis Foundry Teacher Training",
+    "legalName": null,
+    "type": "school",
+    "code": "2GD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "96dcd0f7-b109-5db1-a16a-7bb071af00f8",
+    "operatingName": "Okehampton Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "95af14b8-3575-58b7-8649-75a5f3574e6b",
     "operatingName": "Old Fletton Primary School",
     "legalName": null,
@@ -14547,6 +17207,36 @@
     "code": "1Y5",
     "ukprn": 10068883,
     "urn": "110683",
+    "website": null
+  },
+  {
+    "id": "38c6f3f5-9872-5da6-bb61-4563dfa3f810",
+    "operatingName": "Onslow St Audrey's School",
+    "legalName": null,
+    "type": "school",
+    "code": "1FF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a129ad13-0ecd-5427-b445-05496038f105",
+    "operatingName": "Optimus Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2DA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6c0c4edf-0a06-5edf-b491-4553bf74543d",
+    "operatingName": "Orchard Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "14A",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14570,6 +17260,66 @@
     "website": null
   },
   {
+    "id": "f514a5c4-4719-5339-8574-12e4fb4f6e7f",
+    "operatingName": "Our Lady Immaculate Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1XL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5d1b5ac0-c938-5b17-ae32-d2006846c7c7",
+    "operatingName": "Our Lady of Pity RC Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1W3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "460b2a38-5ce8-5755-9276-061b57891406",
+    "operatingName": "Our Lady Queen of Martyrs Roman Catholic Voluntary Aided Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2FG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ff3f9238-7dcc-5c86-a3fd-798e7b6ef4a2",
+    "operatingName": "Ouseburn Learning Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1EU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6b0e0cad-7ebb-55f8-abb6-972079b39dca",
+    "operatingName": "OWLS",
+    "legalName": null,
+    "type": "school",
+    "code": "21Z",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e9d715b4-dcef-50f8-ad6e-e477e6fd8dce",
+    "operatingName": "Oxon-Bucks SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "O21",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "63ca1573-0f06-5309-83ca-29b05c7fccd5",
     "operatingName": "Oxted School",
     "legalName": null,
@@ -14577,6 +17327,16 @@
     "code": "19T",
     "ukprn": 10053918,
     "urn": "142315",
+    "website": null
+  },
+  {
+    "id": "edc26b16-fe8c-57cf-a52f-906d978b85e5",
+    "operatingName": "Paget High School Business And Enterprise College",
+    "legalName": null,
+    "type": "school",
+    "code": "1CY",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14590,6 +17350,16 @@
     "website": null
   },
   {
+    "id": "15b1635e-62ea-557e-8c6f-42823a98fc9d",
+    "operatingName": "Paradigm Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "2J3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "bf83a1c4-9675-57d1-bdba-7d521a4d1449",
     "operatingName": "Parbold Douglas Church of England Academy",
     "legalName": null,
@@ -14597,6 +17367,16 @@
     "code": "1Q4",
     "ukprn": 10034590,
     "urn": "137127",
+    "website": null
+  },
+  {
+    "id": "b496c6bf-2731-5fb7-a278-e72ad79b355b",
+    "operatingName": "Parish Church CofE Junior School",
+    "legalName": null,
+    "type": "school",
+    "code": "14J",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14620,6 +17400,36 @@
     "website": null
   },
   {
+    "id": "e16ca469-ba22-5840-b17f-6f7970524847",
+    "operatingName": "Parkinson Lane School Direct Partnership (Calderdale)",
+    "legalName": null,
+    "type": "school",
+    "code": "238",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cd2a0cf6-9bf9-5ac5-9799-caf03945bc18",
+    "operatingName": "Park Junior School",
+    "legalName": null,
+    "type": "school",
+    "code": "272",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1781ed51-4e2b-5cbe-8cbf-7ac91293de9f",
+    "operatingName": "Parkside - KNSTE",
+    "legalName": null,
+    "type": "school",
+    "code": "2GS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "4b19e738-64e4-50cb-ac3a-3c6172679a90",
     "operatingName": "Parliament Hill School",
     "legalName": null,
@@ -14630,6 +17440,56 @@
     "website": null
   },
   {
+    "id": "990bf9d2-5b10-5f26-82e8-a7021c2eb750",
+    "operatingName": "Pathways",
+    "legalName": null,
+    "type": "school",
+    "code": "2KP",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "673a1dfb-e845-5305-bbc0-1a31d1585332",
+    "operatingName": "Pegasus Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1AG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b9c5b1ba-e821-5162-9398-a8eec0307d20",
+    "operatingName": "Pegasus Primary School Blackbird Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1LH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6d7a53cb-e30d-56c2-9a6b-619652955dcb",
+    "operatingName": "Peninsula SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "25B",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "066f0b75-3b3a-5866-b922-77fa7a7b28b2",
+    "operatingName": "Peninsula Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "5B9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "8cbe4c0f-ea37-561d-9b5e-1e90c127b515",
     "operatingName": "Penistone Grammar School",
     "legalName": null,
@@ -14637,6 +17497,36 @@
     "code": "1N8",
     "ukprn": 10005034,
     "urn": "106653",
+    "website": null
+  },
+  {
+    "id": "3e48f69b-439c-5584-a27a-df573b327384",
+    "operatingName": "Penrice Community College",
+    "legalName": null,
+    "type": "school",
+    "code": "1Q9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4528eceb-f6a9-5e3c-92f9-3f919bb6645a",
+    "operatingName": "Perry Beeches SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "25N",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8a752a3e-606e-5bdd-bf2d-037985ab2d83",
+    "operatingName": "Perry Beeches The Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1GD",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14660,6 +17550,16 @@
     "website": null
   },
   {
+    "id": "ed7a5528-b8ff-5a2e-b413-7f3452245453",
+    "operatingName": "Petersfield School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "d2840604-e05b-5e92-9837-9a4c3a2ce5c2",
     "operatingName": "Pinkwell Primary School",
     "legalName": null,
@@ -14667,6 +17567,26 @@
     "code": "183",
     "ukprn": 10045430,
     "urn": "140671",
+    "website": null
+  },
+  {
+    "id": "fed738c0-aa0a-5dcf-aa6b-fb3e87fc7dd6",
+    "operatingName": "Pinnacle, South Craven",
+    "legalName": null,
+    "type": "school",
+    "code": "1Q1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5c81e492-d391-5e1e-b6d6-c3689c7e7c6b",
+    "operatingName": "Plantsbrook Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "22B",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14680,6 +17600,16 @@
     "website": null
   },
   {
+    "id": "8151a5b5-be58-5ae7-944b-34359c049161",
+    "operatingName": "Ponteland Community Middle School",
+    "legalName": null,
+    "type": "school",
+    "code": "29X",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "31eb5195-9fa9-54be-b7d7-317415764b9b",
     "operatingName": "Poole High School",
     "legalName": null,
@@ -14690,6 +17620,36 @@
     "website": null
   },
   {
+    "id": "ca8d7081-d735-5c07-aaf6-44b6c3800422",
+    "operatingName": "Poole SCITT Lower Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "1YL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ffc36dbc-d4a4-50c0-b65d-536e2b7c3bb1",
+    "operatingName": "Pool Hayes Arts and Community School",
+    "legalName": null,
+    "type": "school",
+    "code": "18S",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e81e4d33-a747-5e86-8a5e-01c3ab7dfb94",
+    "operatingName": "Portishead Teaching School Alliance (Primary)",
+    "legalName": null,
+    "type": "school",
+    "code": "23O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "866b8cd3-7a69-56a3-badf-69882df31706",
     "operatingName": "Portsmouth High School",
     "legalName": null,
@@ -14697,6 +17657,16 @@
     "code": "1KZ",
     "ukprn": 10008431,
     "urn": "116581",
+    "website": null
+  },
+  {
+    "id": "cc30e8ca-5c1a-555e-b3cd-c38a3360d73f",
+    "operatingName": "Portsmouth Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1DR",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14750,6 +17720,16 @@
     "website": null
   },
   {
+    "id": "445bba61-e265-5c3a-9563-e196467e4320",
+    "operatingName": "Primary TS Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "14N",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "01232be9-9f6d-5cf2-b1b8-ea2259f87989",
     "operatingName": "Princess Frederica CofE Primary School",
     "legalName": null,
@@ -14777,6 +17757,16 @@
     "code": "1B1",
     "ukprn": 10034135,
     "urn": "136876",
+    "website": null
+  },
+  {
+    "id": "ab56510a-c4d8-55fd-9638-b0e971362e85",
+    "operatingName": "Quantock Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2JK",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14810,6 +17800,16 @@
     "website": null
   },
   {
+    "id": "ecd7e646-d9d0-5c98-8721-3e8c5627ad60",
+    "operatingName": "Queensmill School",
+    "legalName": null,
+    "type": "school",
+    "code": "1BZ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ee754355-8ffa-5e39-b501-362dc1cecfcd",
     "operatingName": "Queen's Park Academy",
     "legalName": null,
@@ -14827,6 +17827,36 @@
     "code": "1PA",
     "ukprn": 10062004,
     "urn": "143817",
+    "website": null
+  },
+  {
+    "id": "1eafef14-aa61-5e0f-998c-490985717194",
+    "operatingName": "Quintin Kynaston School",
+    "legalName": null,
+    "type": "school",
+    "code": "1M9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cc97e28d-8450-5aee-a556-6345a310071c",
+    "operatingName": "RAISE",
+    "legalName": null,
+    "type": "school",
+    "code": "182",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d2c40a7f-645d-5433-a487-0244980dde4c",
+    "operatingName": "Rattlesden Church of England Voluntary Controlled School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SN",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14860,6 +17890,66 @@
     "website": null
   },
   {
+    "id": "1920ba45-b3f5-5ede-bcea-571442c1e2be",
+    "operatingName": "Redhill Primary Teacher Training",
+    "legalName": null,
+    "type": "school",
+    "code": "1EY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d31defbc-a26a-5ecc-bacf-d52cf48b16eb",
+    "operatingName": "Red Kite Secondary School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "2JB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "545ca766-0d96-559a-b50d-6d306d31a17c",
+    "operatingName": "Red Kite Teacher Training (School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1GC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ed1de2bc-78e3-5833-8879-5b1d594f591b",
+    "operatingName": "Redmoor High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3e02c2df-e0f5-545d-80f8-00d2b3d1264f",
+    "operatingName": "Richmond Primary Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1M6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f9fcceef-080b-521d-9ffb-a8b67979a665",
+    "operatingName": "Richmond Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2KY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "10d73594-71de-5965-8c54-5659ef4976b0",
     "operatingName": "Risley Avenue Primary School",
     "legalName": null,
@@ -14867,6 +17957,16 @@
     "code": "23Q",
     "ukprn": 10076690,
     "urn": "131879",
+    "website": null
+  },
+  {
+    "id": "04bd201d-40bb-507e-9b53-ce7dec7b1a19",
+    "operatingName": "Rockliffe Manor Cluster",
+    "legalName": null,
+    "type": "school",
+    "code": "2AC",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14880,6 +17980,16 @@
     "website": null
   },
   {
+    "id": "64899a97-4629-510f-a638-d53dda2e0799",
+    "operatingName": "Rothley Church Of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1JK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "64857595-9302-5dba-8adc-6f65cf292a74",
     "operatingName": "RSA Academy",
     "legalName": null,
@@ -14887,6 +17997,26 @@
     "code": "1VH",
     "ukprn": 10024208,
     "urn": "135599",
+    "website": null
+  },
+  {
+    "id": "5f96fb6e-8270-54e2-aca0-ae85413bec75",
+    "operatingName": "Rugby 11 Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "27D",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "255dc915-a53c-56d0-94d1-35ce828cdb0b",
+    "operatingName": "Rugby Primary Learning Consortium 12",
+    "legalName": null,
+    "type": "school",
+    "code": "26R",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14910,6 +18040,16 @@
     "website": null
   },
   {
+    "id": "17f02a13-79a8-5739-a7a8-9e5ef0c8b075",
+    "operatingName": "Rushall Junior Mixed and Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "1VD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "60e3b7eb-b7af-56b0-b9b1-2b5d7e069971",
     "operatingName": "Rushcliffe School",
     "legalName": null,
@@ -14920,6 +18060,26 @@
     "website": null
   },
   {
+    "id": "b5fd7f5c-7d4b-5be4-8268-c597884b4f7a",
+    "operatingName": "Rushey Mead School",
+    "legalName": null,
+    "type": "school",
+    "code": "1C7",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cfdafdd3-37ef-5e17-80b3-1bd7e333bf94",
+    "operatingName": "Ryders Hayes Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "131",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "d49c497e-3c60-554a-b13f-44cd57ac4016",
     "operatingName": "Sacred Heart Catholic High School",
     "legalName": null,
@@ -14927,6 +18087,16 @@
     "code": "1KJ",
     "ukprn": 10035956,
     "urn": "137708",
+    "website": null
+  },
+  {
+    "id": "fefd2d8b-99bd-5f36-9383-1d45da756e59",
+    "operatingName": "Sacred Heart Roman Catholic Secondary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1FT",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -14980,6 +18150,26 @@
     "website": null
   },
   {
+    "id": "2c1ea55e-a913-5fbf-99bc-b8bab175e619",
+    "operatingName": "Salisbury Primary Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2E5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1e535865-c8fb-5ee9-93d9-699b89d0e64c",
+    "operatingName": "Saltash.net community school",
+    "legalName": null,
+    "type": "school",
+    "code": "23X",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5de9ffa2-1c48-50e4-8aae-e01a5622942e",
     "operatingName": "Saltford CofE Primary School",
     "legalName": null,
@@ -14990,6 +18180,16 @@
     "website": null
   },
   {
+    "id": "0db4b0a9-3ef8-5f7e-af10-2b4b6f8ad9d7",
+    "operatingName": "Sandwell Community School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "cbfc3f92-fe2a-5153-a45c-3f5f77d56385",
     "operatingName": "Scientia Academy",
     "legalName": null,
@@ -14997,6 +18197,26 @@
     "code": "22C",
     "ukprn": 10041549,
     "urn": "139602",
+    "website": null
+  },
+  {
+    "id": "3c4e282d-d849-5d83-8c31-347b74238d24",
+    "operatingName": "SCLA Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "1CF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "16d7ccbd-52d7-5a58-827a-6184e9e59ae0",
+    "operatingName": "SCLP Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "17F",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15020,6 +18240,46 @@
     "website": null
   },
   {
+    "id": "88a28751-71be-5de9-aacb-5c875260990f",
+    "operatingName": "SEND Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "C9E",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "53bc5d8f-9acc-56c1-baa9-6af4add4bd57",
+    "operatingName": "SERA",
+    "legalName": null,
+    "type": "school",
+    "code": "SE1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a8aad45f-8818-5e43-9558-a7c273ffe97d",
+    "operatingName": "Severnside Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2CE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "49dfa064-25b6-5507-ab69-861e323b9232",
+    "operatingName": "Seymour Park Community Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "26Y",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "6f8d14e1-d7d1-5a1e-a1b3-c394967e3428",
     "operatingName": "Shaftesbury High School",
     "legalName": null,
@@ -15027,6 +18287,26 @@
     "code": "21H",
     "ukprn": 10017495,
     "urn": "102260",
+    "website": null
+  },
+  {
+    "id": "db19672a-bcce-5c9d-bc09-ae932c472c82",
+    "operatingName": "Sheffield South Primary Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "21E",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0e26d294-e780-526c-af4b-607693e12a72",
+    "operatingName": "Sheridan School",
+    "legalName": null,
+    "type": "school",
+    "code": "14L",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15060,6 +18340,26 @@
     "website": null
   },
   {
+    "id": "75684283-e488-5db4-9ade-710f092b4404",
+    "operatingName": "Silver Birch Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "2GZ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0e855bc2-c6d1-56db-980c-6ceac1f709ff",
+    "operatingName": "Simon Balle School",
+    "legalName": null,
+    "type": "school",
+    "code": "16C",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "bbd34f9f-cccd-5feb-a792-80a117647df4",
     "operatingName": "Sir Harry Smith Community College",
     "legalName": null,
@@ -15067,6 +18367,46 @@
     "code": "23V",
     "ukprn": 10037025,
     "urn": "138053",
+    "website": null
+  },
+  {
+    "id": "7a4adac2-848e-5634-89c4-fce9d50bacaa",
+    "operatingName": "Sir Robert Geffery's School",
+    "legalName": null,
+    "type": "school",
+    "code": "2DF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "10b43c15-6f8b-5752-b69c-08578b7c866d",
+    "operatingName": "Smestow School A Specialist Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "1LL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "067b9efb-fc2d-5bc0-a655-59b8ba044e85",
+    "operatingName": "Societas - KNSTE",
+    "legalName": null,
+    "type": "school",
+    "code": "2GR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c18715ee-5d99-5ea8-9500-62ea13e73676",
+    "operatingName": "Solihull Secondaries Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "17E",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15080,12 +18420,52 @@
     "website": null
   },
   {
+    "id": "90f48d4a-c6d6-50eb-b93a-93e70c84f9df",
+    "operatingName": "South Bradford Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "14O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "c21b6fd9-cdfa-5db3-93b4-5093d78875f7",
     "operatingName": "South Coast SCITT",
     "legalName": null,
     "type": "scitt",
     "code": "S70",
     "ukprn": 10035668,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4198b839-1a1d-5c3e-b6da-0d770f3d72fe",
+    "operatingName": "South Cumbria SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "24W",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "496799fa-c163-5d93-96de-f4c7fb4904dd",
+    "operatingName": "South Durham Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2EQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "165cd59a-b1f3-5b6d-a392-33edadc6d764",
+    "operatingName": "South Farnborough Junior",
+    "legalName": null,
+    "type": "school",
+    "code": "1UK",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -15110,6 +18490,26 @@
     "website": null
   },
   {
+    "id": "0aa69515-ed72-5aff-9ff8-d15058a433bc",
+    "operatingName": "South London Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "29H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "167e498f-2d6c-5339-afec-d3de2dd585c0",
+    "operatingName": "South Otterington Church of England Voluntary Controlled Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1HL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ccf1d968-e40c-5ba6-a20d-4f3b6b2dcb34",
     "operatingName": "Southwark Primary School",
     "legalName": null,
@@ -15120,6 +18520,26 @@
     "website": null
   },
   {
+    "id": "530a18d9-96cc-5c5d-8f98-2d0dd5e92622",
+    "operatingName": "SPARKLE ALLIANCE",
+    "legalName": null,
+    "type": "school",
+    "code": "2K8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7b872841-9429-5ebd-9ed1-828323224887",
+    "operatingName": "Speldhurst CE Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5558b7f4-f8dc-5ff6-b998-ae2669880206",
     "operatingName": "Spindle Point Primary School",
     "legalName": null,
@@ -15127,6 +18547,16 @@
     "code": "1VL",
     "ukprn": 10070108,
     "urn": "105196",
+    "website": null
+  },
+  {
+    "id": "6565ac7d-aa58-5b02-affe-b7c3263c4a82",
+    "operatingName": "Spires Academy Teaching Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2K5",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15150,6 +18580,16 @@
     "website": null
   },
   {
+    "id": "ec0804ea-2d57-593c-9ab0-41c334142b58",
+    "operatingName": "Spring Vale Primary Schools Direct Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2AD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "05bc0049-10a8-56d8-93d2-317c317fbb0b",
     "operatingName": "Springwell Community College",
     "legalName": null,
@@ -15157,6 +18597,26 @@
     "code": "1BP",
     "ukprn": 10085581,
     "urn": "147400",
+    "website": null
+  },
+  {
+    "id": "488c5a38-f707-5be6-8ade-d2df292d1189",
+    "operatingName": "STAGE TSA",
+    "legalName": null,
+    "type": "school",
+    "code": "2CO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c18642df-1891-5bfa-a799-922beaea9c1f",
+    "operatingName": "St Ambrose Barlow",
+    "legalName": null,
+    "type": "school",
+    "code": "1SL",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15180,6 +18640,26 @@
     "website": null
   },
   {
+    "id": "15d87045-bd1a-556f-ae29-20a617cf9a70",
+    "operatingName": "St. Anne's Primary, Brown Edge",
+    "legalName": null,
+    "type": "school",
+    "code": "264",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2ed8da40-69bf-5c51-bf84-f55f297506a7",
+    "operatingName": "St Ann's Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1US",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0313436b-891d-53e0-b721-238c69a75e99",
     "operatingName": "St Augustine Academy",
     "legalName": null,
@@ -15187,6 +18667,16 @@
     "code": "296",
     "ukprn": 10034935,
     "urn": "136923",
+    "website": null
+  },
+  {
+    "id": "9a45d742-4187-51e9-a040-498eff9ee544",
+    "operatingName": "St Augustine's CofE High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1G8",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15230,6 +18720,26 @@
     "website": null
   },
   {
+    "id": "37096173-bd8d-540e-9c38-351ada987468",
+    "operatingName": "St Bede's Deanery Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "12J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0f634bfb-fdd5-56f5-be20-e86ac01bab22",
+    "operatingName": "St Bede's Roman Catholic Voluntary Aided Primary School, Sacriston",
+    "legalName": null,
+    "type": "school",
+    "code": "1OP",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ee68f6c7-fef7-5364-a4af-222305ddef56",
     "operatingName": "St Bernadettes Roman Catholic Primary School Aided",
     "legalName": null,
@@ -15247,6 +18757,16 @@
     "code": "19Z",
     "ukprn": 10049656,
     "urn": "142064",
+    "website": null
+  },
+  {
+    "id": "a0789420-3433-51cb-9895-fa8ea72e8577",
+    "operatingName": "St Catherine's Catholic School For Girls",
+    "legalName": null,
+    "type": "school",
+    "code": "1NL",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15290,6 +18810,26 @@
     "website": null
   },
   {
+    "id": "5f1d8147-ca9b-5c98-8ebf-8c4914743cc2",
+    "operatingName": "Step Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1RJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "168f4ae8-a9fa-5063-a04a-4ff2a02c377d",
+    "operatingName": "St Francis Xavier Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "14E",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0d4e29df-40f2-50f1-92d5-95ff77dde912",
     "operatingName": "St George's Primary School",
     "legalName": null,
@@ -15297,6 +18837,26 @@
     "code": "1F8",
     "ukprn": 10070127,
     "urn": "104995",
+    "website": null
+  },
+  {
+    "id": "1e9fa608-ed12-5236-9a14-8968bfd10dd2",
+    "operatingName": "St George the Martyr CE Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1VF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "960d6a20-5f2c-5875-bd63-607d354f7aac",
+    "operatingName": "St Helens ONE Bleak Hill",
+    "legalName": null,
+    "type": "school",
+    "code": "1PD",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15330,6 +18890,16 @@
     "website": null
   },
   {
+    "id": "07f685dd-b1bc-59fc-bc47-14eb3649e676",
+    "operatingName": "St John Houghton",
+    "legalName": null,
+    "type": "school",
+    "code": "1TW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "f849ff1f-8151-5b50-8b88-84a1e2b25867",
     "operatingName": "St John's Catholic Comprehensive",
     "legalName": null,
@@ -15347,6 +18917,26 @@
     "code": "1LW",
     "ukprn": 10079922,
     "urn": "137071",
+    "website": null
+  },
+  {
+    "id": "2884a9eb-aff3-5db7-ab4c-e90b462d6e80",
+    "operatingName": "St John's CofE Middle School Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1LQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ab7da65d-e0b3-5738-8d93-100c9a2b817d",
+    "operatingName": "St John's Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1T3",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15380,6 +18970,36 @@
     "website": null
   },
   {
+    "id": "8d7806d4-6144-5275-b5df-68e9c0a8a299",
+    "operatingName": "St Joseph's RC Lower School",
+    "legalName": null,
+    "type": "school",
+    "code": "288",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "732776ea-843a-5fdc-a594-d4177db9715c",
+    "operatingName": "St Lawrence CE(A) Junior",
+    "legalName": null,
+    "type": "school",
+    "code": "1TQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "df569463-9494-51e4-9988-7b172f34cad1",
+    "operatingName": "St Louis Roman Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1YC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9bd62282-633e-5b21-a71f-4f26dda166aa",
     "operatingName": "St Luke's CofE Primary School",
     "legalName": null,
@@ -15387,6 +19007,16 @@
     "code": "23S",
     "ukprn": 10079299,
     "urn": "100443",
+    "website": null
+  },
+  {
+    "id": "5d202500-2ec1-5d54-86f4-63def9faad07",
+    "operatingName": "St Luke's Science and Sports College",
+    "legalName": null,
+    "type": "school",
+    "code": "12S",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15410,6 +19040,26 @@
     "website": null
   },
   {
+    "id": "99fda9d4-2fb8-552d-b79a-f192b686062c",
+    "operatingName": "St Marks's teaching School Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "13T",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b0df901c-bc8d-5083-9f18-4bed1de9e6a7",
+    "operatingName": "St Martin at Shouldham CE VA Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ced999ac-d260-5ee3-8b0e-d10b746a9dea",
     "operatingName": "St Mary And St Pancras Church Of England Primary School",
     "legalName": null,
@@ -15417,6 +19067,16 @@
     "code": "1MA",
     "ukprn": 10079313,
     "urn": "100043",
+    "website": null
+  },
+  {
+    "id": "113caced-8855-5f33-a2f2-29c292aba046",
+    "operatingName": "St Mary's Catholic Academy - KNSTE",
+    "legalName": null,
+    "type": "school",
+    "code": "12Z",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15460,6 +19120,36 @@
     "website": null
   },
   {
+    "id": "f4dccdee-59fb-50c2-aa45-e07870e34778",
+    "operatingName": "St Mary's CofE VA Primary School - KNSTE",
+    "legalName": null,
+    "type": "school",
+    "code": "2FN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d68c4c1f-9b2c-552c-bd6e-431461d6cdc1",
+    "operatingName": "St Marys Menston",
+    "legalName": "Anglia Ruskin University",
+    "type": "school",
+    "code": "1AA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ddd481e7-230e-500c-898b-87a69336e135",
+    "operatingName": "St Mary's Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "29M",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9908f3c9-32f9-5db9-a441-9e36f6b925e9",
     "operatingName": "St Matthew's CofE Primary School",
     "legalName": null,
@@ -15480,6 +19170,16 @@
     "website": null
   },
   {
+    "id": "fa8de30b-1c0d-5ad0-94d0-57cb00e904cc",
+    "operatingName": "St Matthew's Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "5G9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "055cc8a1-8655-5088-ade4-44d325772833",
     "operatingName": "St Michael's Catholic Grammar School",
     "legalName": null,
@@ -15490,6 +19190,16 @@
     "website": null
   },
   {
+    "id": "6f5916c9-d70d-5119-90af-2e4b6746ef92",
+    "operatingName": "St Michael's CE Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "1V8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "459e89e1-aa36-5674-af35-73e3358a7ee7",
     "operatingName": "St Michael's VA Junior School",
     "legalName": null,
@@ -15497,6 +19207,16 @@
     "code": "2AR",
     "ukprn": 10080627,
     "urn": "121146",
+    "website": null
+  },
+  {
+    "id": "18053f41-236f-5cdb-bd0d-b1f91b48d717",
+    "operatingName": "St Monica's Catholic Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "216",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15560,6 +19280,36 @@
     "website": null
   },
   {
+    "id": "9a9117b0-ea03-50ff-94fa-0e311dbf995a",
+    "operatingName": "St Pauls Nursery School & Children's Centre",
+    "legalName": null,
+    "type": "school",
+    "code": "2LK",
+    "ukprn": null,
+    "urn": "108901",
+    "website": null
+  },
+  {
+    "id": "bde109f0-6624-5db7-a345-5275755aecec",
+    "operatingName": "St Paul's Whitechapel CE Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UP",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b6fd8368-49f9-575b-862e-5e085b5a4ca8",
+    "operatingName": "St Peter's Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1RG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ad993d24-fed6-58e3-b811-a9aa7b9ebfe2",
     "operatingName": "St Philip's CofE Primary School, Atherton",
     "legalName": null,
@@ -15567,6 +19317,16 @@
     "code": "1H7",
     "ukprn": 10068651,
     "urn": "106515",
+    "website": null
+  },
+  {
+    "id": "f110d3ce-5746-5959-b8ea-14a97f5a3c47",
+    "operatingName": "Stradbroke Church of England Primary School IP21 5HH",
+    "legalName": null,
+    "type": "school",
+    "code": "2KC",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15590,6 +19350,26 @@
     "website": null
   },
   {
+    "id": "27b67fcd-6fac-5c3d-8256-984f4b04e7cb",
+    "operatingName": "St Stephen's Church of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2CW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "05fc76c7-17da-5a2f-99a6-e5e5672397df",
+    "operatingName": "St Thomas More Catholic Primary School, Birmingham",
+    "legalName": null,
+    "type": "school",
+    "code": "1S3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "67f0a8fa-42ba-55de-aabf-b6eb3eec82cf",
     "operatingName": "St Thomas More Catholic Voluntary Academy",
     "legalName": null,
@@ -15597,6 +19377,26 @@
     "code": "167",
     "ukprn": 10037470,
     "urn": "138185",
+    "website": null
+  },
+  {
+    "id": "1346cd2e-ba8d-5046-b393-7f5a745f9a34",
+    "operatingName": "SUPA Southampton",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a95e587a-70a4-5a13-b367-b568378d9b70",
+    "operatingName": "Surrey County Council",
+    "legalName": null,
+    "type": "school",
+    "code": "15H",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15620,6 +19420,36 @@
     "website": null
   },
   {
+    "id": "7dcfd37e-d053-5622-9a41-e6d2525402d8",
+    "operatingName": "Sussex Teacher Training Partnership SCITT RSW",
+    "legalName": null,
+    "type": "school",
+    "code": "1CA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1cad9754-3fb9-56c1-b6f9-8f46de4a8ccc",
+    "operatingName": "Swale Academies Trust - East Sussex ITE",
+    "legalName": null,
+    "type": "school",
+    "code": "4T8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b3d74bc7-1c76-5dc7-aa2b-a3a7196daf83",
+    "operatingName": "Swansfield Park First School",
+    "legalName": null,
+    "type": "school",
+    "code": "187",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "35c15e2f-3db3-5b03-b47b-29f03a4d350d",
     "operatingName": "Swanwick Hall School",
     "legalName": null,
@@ -15627,6 +19457,66 @@
     "code": "1VZ",
     "ukprn": 10056067,
     "urn": "142741",
+    "website": null
+  },
+  {
+    "id": "fb14e325-e773-5b6b-b47b-dfe2ee479831",
+    "operatingName": "Swindon Initial Teacher Education",
+    "legalName": null,
+    "type": "school",
+    "code": "12Q",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8968f6b5-7669-535f-89e4-3ae16815bb35",
+    "operatingName": "Swindon Initial Teacher Education in Gloucester",
+    "legalName": null,
+    "type": "school",
+    "code": "12O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "24d3558e-6a1d-501b-a205-46d0ef0ffb1a",
+    "operatingName": "Swindon SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "S99",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c67542ce-cab5-518f-b58a-83065312c1c6",
+    "operatingName": "Swiss Cottage Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1HU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "08fe9df4-1b4a-5533-8b03-7242a69254f8",
+    "operatingName": "Talentum learning Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "2GN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "85981f5c-386e-5703-9e9a-6c98edd70da1",
+    "operatingName": "Tameside Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2F9",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15640,6 +19530,16 @@
     "website": null
   },
   {
+    "id": "3456b776-98df-5d4b-8870-c0ae83f04fda",
+    "operatingName": "Tanglewood Nursery School",
+    "legalName": null,
+    "type": "school",
+    "code": "223",
+    "ukprn": null,
+    "urn": "114698",
+    "website": null
+  },
+  {
     "id": "8b28c5b7-26cf-5140-94e5-7ff8b53d7a1b",
     "operatingName": "Tarleton Academy",
     "legalName": null,
@@ -15650,12 +19550,82 @@
     "website": null
   },
   {
+    "id": "360e390a-2b1a-51a7-a956-4125ceab69a5",
+    "operatingName": "Teach East London",
+    "legalName": null,
+    "type": "school",
+    "code": "1FY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d6b41274-7d67-527d-bdd4-452904cc0d1d",
+    "operatingName": "Teach East London Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "28Z",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "bb1b3b4c-dd62-544a-9197-f81da8a89b37",
+    "operatingName": "Teach Maidenehead",
+    "legalName": null,
+    "type": "school",
+    "code": "16J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8cc25304-d4a6-5434-9955-32719c014878",
+    "operatingName": "Teach North: Nottinghamshire & North Lincolnshire",
+    "legalName": null,
+    "type": "school",
+    "code": "2X5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "ae1a38b8-9f92-5956-8ce8-17bfa07cb39a",
     "operatingName": "TEACH Poole School Direct Salaried",
     "legalName": null,
     "type": "school",
     "code": "2D1",
     "ukprn": 10057353,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "73de1b6f-b7a3-5577-b6ea-025e85ebceeb",
+    "operatingName": "Teach@Salesian",
+    "legalName": null,
+    "type": "school",
+    "code": "253",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e0d954bb-3b32-55cb-9bc4-3029de6b513f",
+    "operatingName": "Teach@Salesian (Schools Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "257",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "92676ae2-9a4b-5519-a5d1-03e1d12c9641",
+    "operatingName": "Teach@SJB",
+    "legalName": null,
+    "type": "school",
+    "code": "24O",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -15670,6 +19640,56 @@
     "website": null
   },
   {
+    "id": "cdd916bf-fb96-5726-9496-c4eb3be96e0f",
+    "operatingName": "Temple Newsam Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "27G",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d52bf8a5-c387-583e-8f18-99c1d61e29f4",
+    "operatingName": "Temple Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1S1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f5341a68-6a90-5fc3-a0f9-fabcb4eaa09c",
+    "operatingName": "Tendring Hundred Primary SCITT (School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1H5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2eedb7bb-505b-5bc2-a9b4-f5ce6bfa5079",
+    "operatingName": "Tendring Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "23L",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3d2d3d0d-842b-5719-94da-63278a96d7b1",
+    "operatingName": "Thames Teaching Alliance, Gravesham",
+    "legalName": null,
+    "type": "school",
+    "code": "12N",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "8f8a749b-fa34-5021-a9f0-104784fce421",
     "operatingName": "The Academy at Shotton Hall",
     "legalName": null,
@@ -15677,6 +19697,36 @@
     "code": "1OT",
     "ukprn": 10032958,
     "urn": "136451",
+    "website": null
+  },
+  {
+    "id": "29ce6160-1965-52b2-8c20-7d24fe8e92ce",
+    "operatingName": "The Amberley Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "27H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "065e8480-9eee-5b77-b06c-4c37db00a680",
+    "operatingName": "The Angmering School",
+    "legalName": null,
+    "type": "school",
+    "code": "1KX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f68eebd3-c589-5a78-bc97-b79008fbda99",
+    "operatingName": "The Aspirations Academies Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "2WB",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15710,6 +19760,16 @@
     "website": null
   },
   {
+    "id": "7ba8aeeb-e6c9-523e-b2a3-ea09e25067d3",
+    "operatingName": "The Catholic High School, Chester A Specialist Science College",
+    "legalName": null,
+    "type": "school",
+    "code": "21Q",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "51a03e30-abae-57f4-9ca5-c0554233480b",
     "operatingName": "The Cavendish School",
     "legalName": null,
@@ -15717,6 +19777,16 @@
     "code": "1K4",
     "ukprn": 10038106,
     "urn": "138475",
+    "website": null
+  },
+  {
+    "id": "b83f91cc-ab41-5ac4-9787-891a51bd49a2",
+    "operatingName": "The Chafford School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TB",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15760,6 +19830,16 @@
     "website": null
   },
   {
+    "id": "6f027fe0-b390-5bd0-8217-579a1303a6a7",
+    "operatingName": "The Co-Operative Primary Academy Of Leeds",
+    "legalName": null,
+    "type": "school",
+    "code": "1OX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "9f4e203d-011b-5ce3-b0f5-76b902d70c26",
     "operatingName": "The Costello School",
     "legalName": null,
@@ -15767,6 +19847,16 @@
     "code": "24C",
     "ukprn": 10037589,
     "urn": "138287",
+    "website": null
+  },
+  {
+    "id": "ebb8579f-d907-5dc7-aa14-0b16330c3f9c",
+    "operatingName": "The Coventry Blue Coat Church of England School and Music College",
+    "legalName": null,
+    "type": "school",
+    "code": "148",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15787,6 +19877,46 @@
     "code": "1GE",
     "ukprn": 10036444,
     "urn": "137873",
+    "website": null
+  },
+  {
+    "id": "21a98cba-feb5-56e1-9060-f91afad30793",
+    "operatingName": "The Duston Education Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "28F",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8c13f944-2de6-54b3-928b-135155a12d9a",
+    "operatingName": "The E-ACT Crest Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "2FT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "21d3deb8-28ef-50e2-85fe-583998bfcc43",
+    "operatingName": "The Earls High School",
+    "legalName": null,
+    "type": "school",
+    "code": "1L5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f944ce67-4673-5279-8640-3675e058fdba",
+    "operatingName": "The English Martyrs School and Sixth Form College",
+    "legalName": null,
+    "type": "school",
+    "code": "1BG",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15830,6 +19960,16 @@
     "website": null
   },
   {
+    "id": "ded1aad4-9fda-5909-b529-392fb7a7c835",
+    "operatingName": "The Hayesbrook School",
+    "legalName": null,
+    "type": "school",
+    "code": "1GL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "f261ee17-23be-5f37-acf2-476092fcd91b",
     "operatingName": "The Henrietta Barnett School",
     "legalName": null,
@@ -15840,6 +19980,56 @@
     "website": null
   },
   {
+    "id": "d980d879-226e-59fb-83a7-38dd7c95aebe",
+    "operatingName": "The Hereford Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1JU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ff1894d5-bbd1-5a8c-a97b-74e2a107a48d",
+    "operatingName": "The Hermitage Academy School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "1PG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "75286a74-ffe0-56ec-a12b-e262590e41fc",
+    "operatingName": "The Hillcrest School and Community College",
+    "legalName": null,
+    "type": "school",
+    "code": "13Y",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ac6b62a5-fd08-51bb-9975-f74bd278e370",
+    "operatingName": "The Hollyfield School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cedd0e7f-fc6b-5dd7-97cc-42a8c8380238",
+    "operatingName": "The Iceni Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1G6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5803a2b7-6355-5427-a1af-3b92eb31a935",
     "operatingName": "The JCB Academy",
     "legalName": null,
@@ -15847,6 +20037,16 @@
     "code": "1BT",
     "ukprn": 10030656,
     "urn": "139234",
+    "website": null
+  },
+  {
+    "id": "a76e0811-3765-5a7a-954d-1fc1c48c1b8b",
+    "operatingName": "The John Henry Newman Catholic School",
+    "legalName": null,
+    "type": "school",
+    "code": "18B",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15870,6 +20070,16 @@
     "website": null
   },
   {
+    "id": "62fab8e6-3631-5945-a80c-b86348ebf462",
+    "operatingName": "The King's School Specialising In Mathematics And Computing",
+    "legalName": null,
+    "type": "school",
+    "code": "1P6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "b7259864-f451-5aaa-9ae9-6acd0a2ffa10",
     "operatingName": "The Kingsway School",
     "legalName": null,
@@ -15877,6 +20087,96 @@
     "code": "1D6",
     "ukprn": 10054989,
     "urn": "142509",
+    "website": null
+  },
+  {
+    "id": "834f32c1-2e53-5302-b6d4-c0f0c8dd9ec0",
+    "operatingName": "The Lark Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2JM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "245f2d4e-0f35-508c-9fc5-9cee8adfecb8",
+    "operatingName": "The Learning Institute South West (School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1HT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b9b55e6c-8cf4-53bb-8e8e-281bc5f57921",
+    "operatingName": "The London Diocesan Board For Schools",
+    "legalName": null,
+    "type": "school",
+    "code": "15K",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "83da19f7-1287-56bb-a3e6-7ba823e9eb8f",
+    "operatingName": "The Loyne Specialist School",
+    "legalName": null,
+    "type": "school",
+    "code": "1NR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f39f8248-0ee9-560a-87d7-4eb4f347e3ba",
+    "operatingName": "The Midland Academies Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1JY",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cff8e6cd-a5c6-56f8-98f4-ad444f1c27a2",
+    "operatingName": "The National SCITT in Outstanding Primary Schools",
+    "legalName": null,
+    "type": "school",
+    "code": "N10",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "fa6b46a6-5a72-5add-b54c-e29f2c7a5030",
+    "operatingName": "The Norwich Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SR",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "71c14250-83f4-5ea0-8608-4acea3fc299b",
+    "operatingName": "The Open University",
+    "legalName": null,
+    "type": "hei",
+    "code": "O11",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c41d71e6-bc8d-57cc-bb80-584d6c5e9ba8",
+    "operatingName": "The Orchards Community Middle School",
+    "legalName": null,
+    "type": "school",
+    "code": "1PR",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15897,6 +20197,36 @@
     "code": "1KO",
     "ukprn": 10016194,
     "urn": "131062",
+    "website": null
+  },
+  {
+    "id": "4dbbef17-0bdf-5bb9-8cd2-c72f528aa2cc",
+    "operatingName": "The Phoenix School",
+    "legalName": null,
+    "type": "school",
+    "code": "21O",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e6e1a435-a270-59ca-a0db-7b991b381128",
+    "operatingName": "The Port Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "19K",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "77c0820a-e90e-53c0-afe6-d99fa03c6962",
+    "operatingName": "The Potteries Teaching Alliance - KNSTE",
+    "legalName": null,
+    "type": "school",
+    "code": "2HW",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15940,6 +20270,46 @@
     "website": null
   },
   {
+    "id": "c67af044-1725-55a7-90ea-44b2cb914c2d",
+    "operatingName": "The Reach Free School",
+    "legalName": null,
+    "type": "school",
+    "code": "1VS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6010607f-4072-5c90-b65e-a7d5a791a6ee",
+    "operatingName": "The Robert Owen Society",
+    "legalName": null,
+    "type": "school",
+    "code": "R37",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a205dc17-7fed-50b5-aebf-8be5cd9852f4",
+    "operatingName": "The Rosedale Hewens Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1E8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d266d8f4-d9c3-5f00-8d37-54f6c496a612",
+    "operatingName": "The Royal Central School of Speech and Drama",
+    "legalName": null,
+    "type": "hei",
+    "code": "C35",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5e43868a-7087-5f8c-9eb7-f6ad037db3bc",
     "operatingName": "The Sele School",
     "legalName": null,
@@ -15947,6 +20317,16 @@
     "code": "1QA",
     "ukprn": 10038105,
     "urn": "138484",
+    "website": null
+  },
+  {
+    "id": "eeff2f38-1f11-587c-abbe-6ce00b553150",
+    "operatingName": "The Shared Learning Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "18N",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15960,6 +20340,36 @@
     "website": null
   },
   {
+    "id": "2d4331aa-5f33-5fc2-8b25-a330dd55d725",
+    "operatingName": "The Solent SCITT - Warblington School and Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "2E8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "91e0856e-f98b-565a-aa69-a2b3a8e8f7cf",
+    "operatingName": "The South Wolds Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1EA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "bd7ece61-ceef-5326-8a4e-013c369ab42a",
+    "operatingName": "The Spinney Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2AM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0f870204-4824-5671-b60e-5359f016661d",
     "operatingName": "The Steiner Academy Hereford",
     "legalName": null,
@@ -15967,6 +20377,16 @@
     "code": "1TG",
     "ukprn": 10024042,
     "urn": "135672",
+    "website": null
+  },
+  {
+    "id": "0120e22b-0b6d-5804-bee0-f11d2350bd91",
+    "operatingName": "The St. Mary's Schools Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "28G",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -15990,12 +20410,92 @@
     "website": null
   },
   {
+    "id": "d5025935-5786-560e-bf11-27cf60b2e39d",
+    "operatingName": "The Tamworth Teaching and Learning Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "17C",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a853febb-bb25-5408-8d70-f4719709aedc",
+    "operatingName": "The University of Aberdeen",
+    "legalName": null,
+    "type": "hei",
+    "code": "A20",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "b6cf6f63-62ad-5fe6-95eb-b56a87dba598",
     "operatingName": "The University of Buckingham",
     "legalName": null,
     "type": "hei",
     "code": "B90",
     "ukprn": 10007787,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "29f7c3ed-6f84-509a-9518-eaa6f4acdfec",
+    "operatingName": "The University of Edinburgh",
+    "legalName": null,
+    "type": "hei",
+    "code": "E56",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "73bf6ac7-eb0c-5831-be3c-d5194830241f",
+    "operatingName": "The University of Strathclyde",
+    "legalName": null,
+    "type": "hei",
+    "code": "S78",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1027a060-bc7b-575b-8c77-09f510bd9398",
+    "operatingName": "The Urmston Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1V3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b3bce1ce-d025-5087-b3b9-2259d3db0a87",
+    "operatingName": "The Warwick Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "171",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2c36a24f-be7a-5456-b88f-952f1711afa1",
+    "operatingName": "The Warwickshire Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "2DK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d07fde5f-7900-5d97-a841-bf0d521c5ca1",
+    "operatingName": "The West Grantham Academy St Hugh's",
+    "legalName": null,
+    "type": "school",
+    "code": "19Y",
+    "ukprn": null,
     "urn": null,
     "website": null
   },
@@ -16030,6 +20530,16 @@
     "website": null
   },
   {
+    "id": "45aa165b-ad37-5cc4-9272-d205dcc3e324",
+    "operatingName": "Three Rivers Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "5T5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "fb72bd1a-454a-54f5-bef8-3bdfe71bd37b",
     "operatingName": "Thrussington Church Of England Primary School",
     "legalName": null,
@@ -16060,6 +20570,56 @@
     "website": null
   },
   {
+    "id": "887e5ad9-7166-5d93-af43-201dcbcf5665",
+    "operatingName": "Torbay Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1DG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a9a66806-d13b-5a95-9133-cb340466ddd8",
+    "operatingName": "Town Farm Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "261",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "413cc5c0-2d1d-5534-a5f1-cedbbc1de82b",
+    "operatingName": "Train to Teach North London",
+    "legalName": null,
+    "type": "school",
+    "code": "1YO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "974fea00-dcb0-555b-af68-96949b404624",
+    "operatingName": "Transform Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1E4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "aa68783c-49fd-5a04-930f-e05f0fda7fb0",
+    "operatingName": "Transform Teaching School Derby",
+    "legalName": null,
+    "type": "school",
+    "code": "2JW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "b0d2c0aa-1bc8-5d61-bb76-30556d07bd9b",
     "operatingName": "Trenance Learning Academy",
     "legalName": null,
@@ -16067,6 +20627,16 @@
     "code": "1MV",
     "ukprn": 10032205,
     "urn": "136312",
+    "website": null
+  },
+  {
+    "id": "8250fed9-bedb-5238-ad57-75a86bcd4b76",
+    "operatingName": "Tudor Grange SCITT (School Direct)",
+    "legalName": null,
+    "type": "school",
+    "code": "1FV",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16090,6 +20660,36 @@
     "website": null
   },
   {
+    "id": "82ef4d50-600c-56cf-9a94-4c5d911271ca",
+    "operatingName": "Tyssen Community Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1QT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "da151f4c-c4c7-5d21-8b13-e8c332ede022",
+    "operatingName": "UCAT Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "2GA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "744bd8c3-5780-5226-adba-f099230f5173",
+    "operatingName": "Uckfield Community Technology College",
+    "legalName": null,
+    "type": "school",
+    "code": "1NU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "fc46c434-e0a4-5e78-856e-53017e96d8b8",
     "operatingName": "Unity College",
     "legalName": null,
@@ -16097,6 +20697,46 @@
     "code": "1KE",
     "ukprn": 10016004,
     "urn": "135003",
+    "website": null
+  },
+  {
+    "id": "1f9bc0b6-3966-55bb-881c-f6872d55b3f3",
+    "operatingName": "Unity Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "4D8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "fb15f052-23e0-5a06-a1c9-f299f5c84796",
+    "operatingName": "University Campus Barnsley",
+    "legalName": null,
+    "type": "school",
+    "code": "B13",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "899d1049-aee1-522a-8c0b-7b31b1c14ee9",
+    "operatingName": "University Centre Doncaster",
+    "legalName": null,
+    "type": "school",
+    "code": "25J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "070768ec-ee35-53cc-a607-a25f20e22f50",
+    "operatingName": "University Centre Grimsby",
+    "legalName": null,
+    "type": "school",
+    "code": "G80",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16117,6 +20757,76 @@
     "code": "C30",
     "ukprn": 10007141,
     "urn": "133869",
+    "website": null
+  },
+  {
+    "id": "16358c0b-7c92-52bd-913c-258a45c0e150",
+    "operatingName": "University of Chester Academies Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "1PB",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "81242ef4-9c4c-50b3-81b9-5cea01993889",
+    "operatingName": "University of Dundee",
+    "legalName": null,
+    "type": "hei",
+    "code": "D65",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "90aa8c7a-f362-53c8-afcf-93ee60f3eff3",
+    "operatingName": "University of Glasgow",
+    "legalName": null,
+    "type": "hei",
+    "code": "G28",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9f208d91-808e-524b-a0a5-4ebe8aaf2d18",
+    "operatingName": "University of South Wales (formerly University of Wales, Newport)",
+    "legalName": null,
+    "type": "hei",
+    "code": "N37",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4d4f2227-10dc-558c-ac10-441ea9556aa3",
+    "operatingName": "University of the Highlands and Islands",
+    "legalName": null,
+    "type": "hei",
+    "code": "H49",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "6da4876b-96a2-5386-9c34-8bb9a63e3ba6",
+    "operatingName": "University of the West of Scotland",
+    "legalName": null,
+    "type": "hei",
+    "code": "U40",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2688b876-59b7-568a-b0be-3c7b0857fe47",
+    "operatingName": "University of Wales Trinity Saint David (UWTSD Swansea)",
+    "legalName": null,
+    "type": "hei",
+    "code": "S96",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16160,6 +20870,16 @@
     "website": null
   },
   {
+    "id": "1bf400dc-b6ab-5ba1-9098-e62e95e56e59",
+    "operatingName": "Venture",
+    "legalName": null,
+    "type": "school",
+    "code": "2L3",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "460fd1a9-aa93-5656-b6d0-2ff184a613b6",
     "operatingName": "Victoria Park Primary",
     "legalName": null,
@@ -16170,6 +20890,36 @@
     "website": null
   },
   {
+    "id": "3df92753-a882-5ffd-b1ec-d8b84b4a893f",
+    "operatingName": "Wadsworth Field Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1CE",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "184a9cc8-208d-5f76-9dd7-994e1014f2ca",
+    "operatingName": "Wakefield City Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "284",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "881a66f0-ee72-5db8-82b5-e1513d0c3274",
+    "operatingName": "Wakefield Regional Partnership For Initial Teacher Training",
+    "legalName": null,
+    "type": "school",
+    "code": "W09",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0c2b5edc-18e8-5b19-bb42-cc80cdb3a356",
     "operatingName": "Walderslade Girls' School",
     "legalName": null,
@@ -16177,6 +20927,16 @@
     "code": "1TY",
     "ukprn": 10035669,
     "urn": "137630",
+    "website": null
+  },
+  {
+    "id": "1a5360bc-b521-596c-ada8-0c11ce0923c8",
+    "operatingName": "Walsall Nursery School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "29G",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16210,6 +20970,16 @@
     "website": null
   },
   {
+    "id": "38ca2d50-9e8b-594b-9077-2a406858781d",
+    "operatingName": "Washwood Heath School Direct",
+    "legalName": null,
+    "type": "school",
+    "code": "2K9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "407e6c92-6704-53dc-abb9-5299704e832a",
     "operatingName": "Watergate School",
     "legalName": null,
@@ -16217,6 +20987,16 @@
     "code": "2DN",
     "ukprn": 10077050,
     "urn": "100766",
+    "website": null
+  },
+  {
+    "id": "ea0cc230-dd0c-5bf4-b0a1-a1c01e53f9bc",
+    "operatingName": "Wayland Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1R8",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16230,6 +21010,16 @@
     "website": null
   },
   {
+    "id": "30647baf-21d2-57ea-baf5-3ac592854745",
+    "operatingName": "Wednesfield High School A Specialist Engineering College",
+    "legalName": null,
+    "type": "school",
+    "code": "1JC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "0fb497a2-9e8e-53c8-8e55-0bb6ab525860",
     "operatingName": "Wembley High Technology College",
     "legalName": null,
@@ -16237,6 +21027,16 @@
     "code": "16X",
     "ukprn": 10037857,
     "urn": "138457",
+    "website": null
+  },
+  {
+    "id": "19d77df5-538f-546e-82a3-d48f54d07215",
+    "operatingName": "West Berkshire Training Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "W38",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16250,6 +21050,16 @@
     "website": null
   },
   {
+    "id": "1aad161e-485a-5c04-bf99-07ce920a8f1c",
+    "operatingName": "West Coast Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1PH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "a951c190-daa5-57f2-ae68-8834ec13cbdf",
     "operatingName": "Westdene Primary School",
     "legalName": null,
@@ -16257,6 +21067,16 @@
     "code": "1RA",
     "ukprn": 10070820,
     "urn": "114380",
+    "website": null
+  },
+  {
+    "id": "16eaa644-71cd-5896-8edd-80b4c8e9f631",
+    "operatingName": "West Ealing Primary Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1E7",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16270,6 +21090,26 @@
     "website": null
   },
   {
+    "id": "82cd036f-0d61-5616-9fee-d12f2206bacc",
+    "operatingName": "Westerton Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1U1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5d6e9603-10d8-5a15-9934-a6deab8a28e6",
+    "operatingName": "West Exe School EX2 9JU",
+    "legalName": null,
+    "type": "school",
+    "code": "2J4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "b0ef419f-a91c-5735-b43e-7959acf192de",
     "operatingName": "Westfield Junior School",
     "legalName": null,
@@ -16277,6 +21117,46 @@
     "code": "2M2",
     "ukprn": 10079829,
     "urn": "110698",
+    "website": null
+  },
+  {
+    "id": "b9db5a22-2adf-5eb7-b0be-359589ee9121",
+    "operatingName": "West Hove Junior School",
+    "legalName": null,
+    "type": "school",
+    "code": "1TC",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a1ca395d-8b21-5bba-a986-bc923928a013",
+    "operatingName": "West Ipswich Teaching School",
+    "legalName": null,
+    "type": "school",
+    "code": "2FO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "bdb97172-459e-58a6-a595-fcceac115a05",
+    "operatingName": "West Lakes Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2HK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8b6533e2-2aeb-5034-b87d-59c02393adc3",
+    "operatingName": "West London Teaching School Alliance (Primary St Mary's)",
+    "legalName": null,
+    "type": "school",
+    "code": "2H3",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16290,6 +21170,16 @@
     "website": null
   },
   {
+    "id": "d6a4ff1f-0c1e-51a8-8380-e67b83ab00c8",
+    "operatingName": "West Raynham Church of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1BH",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "fbb9e3a6-09fe-5ed7-8cc2-aaca4310559a",
     "operatingName": "West Suffolk College",
     "legalName": null,
@@ -16297,6 +21187,26 @@
     "code": "2LE",
     "ukprn": 10007431,
     "urn": "130818",
+    "website": null
+  },
+  {
+    "id": "72d0ec49-be47-5c91-a90c-4b7922d2c64b",
+    "operatingName": "West Thornton Primary Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "16A",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a98fad34-be36-5478-8d27-86a1e7331dbe",
+    "operatingName": "West Wilts Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2FY",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16320,6 +21230,26 @@
     "website": null
   },
   {
+    "id": "7d995506-60c7-5667-95f2-1d93bc5df551",
+    "operatingName": "Whitburn Village Primary Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1DA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f6bb4066-00b9-55ba-8668-3862c827d5a0",
+    "operatingName": "Whitefield Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "2GF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "379c7bfa-ff34-5de3-928c-c41359158224",
     "operatingName": "Whitehill Community Academy",
     "legalName": null,
@@ -16340,6 +21270,36 @@
     "website": null
   },
   {
+    "id": "b4993240-9571-56a4-bd24-e6c40f76dbeb",
+    "operatingName": "White Meadows Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "22Y",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "eecbe02e-d3ab-567c-a130-88e75d328307",
+    "operatingName": "William De Ferrers",
+    "legalName": null,
+    "type": "school",
+    "code": "1KA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5e5b7cda-4bcd-5f4e-8a3a-641e81fad039",
+    "operatingName": "William Law CofE (Aided) Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1YG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "23866054-b7b0-5650-94de-55acf5fbb94c",
     "operatingName": "Wilmslow High School",
     "legalName": null,
@@ -16357,6 +21317,16 @@
     "code": "13W",
     "ukprn": 10073718,
     "urn": "118867",
+    "website": null
+  },
+  {
+    "id": "a8ec2b49-8dc9-5f31-b186-a74592ebc7a0",
+    "operatingName": "Winchester Schools Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "16O",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16410,6 +21380,16 @@
     "website": null
   },
   {
+    "id": "83ba29db-ed7d-562f-a6ca-4e6afd76ded1",
+    "operatingName": "Wistaston Green Primary and Nursery School",
+    "legalName": null,
+    "type": "school",
+    "code": "145",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "8d09aed6-2583-55e0-8b58-d8a0ab10230e",
     "operatingName": "Witchford Village College",
     "legalName": null,
@@ -16417,6 +21397,36 @@
     "code": "1U5",
     "ukprn": 10035488,
     "urn": "137547",
+    "website": null
+  },
+  {
+    "id": "b9c3ac8b-95cf-59c3-bda1-f3d8a3aafc0a",
+    "operatingName": "Wolds Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1Y8",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "bf660a35-5dfa-5181-b1b0-7083e4503700",
+    "operatingName": "Wollaston Community Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "15C",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "99dce7ea-eca8-5914-8155-355d5d4842d4",
+    "operatingName": "Wolstonbury Teaching Schools Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZK",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16440,6 +21450,16 @@
     "website": null
   },
   {
+    "id": "8d28561c-2177-599e-9d58-c2022f2f056d",
+    "operatingName": "Woodchurch High School Engineering College",
+    "legalName": null,
+    "type": "school",
+    "code": "1W9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "5f5290bc-b975-5f91-a4cc-6779394b931e",
     "operatingName": "Woodfield School",
     "legalName": null,
@@ -16457,6 +21477,26 @@
     "code": "1PF",
     "ukprn": 10038631,
     "urn": "138717",
+    "website": null
+  },
+  {
+    "id": "7cbb37c7-cc93-5ae3-9d16-960557d5dd2b",
+    "operatingName": "Woodland Community Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "25V",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c3c96f00-0442-5000-95d2-6f684a853603",
+    "operatingName": "Woodlands Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1XG",
+    "ukprn": null,
+    "urn": null,
     "website": null
   },
   {
@@ -16480,6 +21520,16 @@
     "website": null
   },
   {
+    "id": "56bde2fc-e17f-5f8a-a36c-00cfb912a9d8",
+    "operatingName": "Working together",
+    "legalName": null,
+    "type": "school",
+    "code": "26F",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
     "id": "4282e48f-8be6-59e8-9863-c8601b7aa70a",
     "operatingName": "Worlingham Church of England Voluntary Controlled Primary School",
     "legalName": null,
@@ -16497,6 +21547,806 @@
     "code": "1HO",
     "ukprn": 10057814,
     "urn": "143273",
+    "website": null
+  },
+  {
+    "id": "cd4fc689-a585-5032-9e7c-562925fd8282",
+    "operatingName": "Yarlside Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2GM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "283cade0-6cf6-5c50-9031-21f350ff4dbc",
+    "operatingName": "Alban Federation",
+    "legalName": null,
+    "type": "school",
+    "code": "A46",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "84aa4636-0793-56ad-b947-84e12f8d8371",
+    "operatingName": "Anton Andover Alliance",
+    "legalName": null,
+    "type": "scitt",
+    "code": "2AU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e46b8cdf-bc08-5157-8131-5a8524aacf22",
+    "operatingName": "ARK Teacher Training",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1ZU",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d4d94837-1e2d-5ea9-ac23-477e976c6c07",
+    "operatingName": "Black Pear Trust Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "2KW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a114b07b-e4d3-5035-a4d9-8149e48fb6e4",
+    "operatingName": "Boxgrove Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2CT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "d774aff5-9943-53e3-855e-254e45e2a829",
+    "operatingName": "Boxgrove Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1AW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "66a96c76-66b0-554a-9d9c-4945bbf92f6f",
+    "operatingName": "Bransgore Church of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2LT",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ea5a5339-d282-5ddf-81fd-a331ad09d38f",
+    "operatingName": "Bransgore Church of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2LO",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "02f414fc-c580-5458-a535-b19a4fc61fde",
+    "operatingName": "Brindishe Green School",
+    "legalName": null,
+    "type": "school",
+    "code": "2LG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3136ee24-101e-59aa-a757-f180be470a31",
+    "operatingName": "Bristol Redcliffe Open Interchange",
+    "legalName": null,
+    "type": "school",
+    "code": "28B",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9d3c1fec-eb90-5cc9-b6c7-6930c1fc7733",
+    "operatingName": "Cambridge & Suffolk Schools Alliance (CASSA)",
+    "legalName": null,
+    "type": "school",
+    "code": "1FL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "de288009-079b-5b7c-a5b2-38842f071368",
+    "operatingName": "Carmel Teacher Training (SCITT)",
+    "legalName": null,
+    "type": "scitt",
+    "code": "24G",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a948b310-8258-5db7-a740-22dd1dff18d5",
+    "operatingName": "Christ The King Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "19W",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "cd702191-6a2a-5b68-bcf1-deccde5dca61",
+    "operatingName": "Christ The King Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "2KJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f6d2fd78-d830-56da-a44d-6551925f5eaf",
+    "operatingName": "Cornwallis Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1NJ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7c8fc859-be8f-56bf-9e27-d3688ef3ca03",
+    "operatingName": "Cornwallis Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "28X",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2fc10dff-7269-5a18-870f-07e4b9744ba3",
+    "operatingName": "Cuckoo Hall Academies Trust (CHAT)",
+    "legalName": null,
+    "type": "school",
+    "code": "2JL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ea2ce7e4-8daf-5c96-8d89-a07eddb68901",
+    "operatingName": "Dartford Grammar School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "400c1537-e9b7-5327-ad61-124d5e1feaa3",
+    "operatingName": "Diocese of Truro",
+    "legalName": null,
+    "type": "school",
+    "code": "224",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f1bd9b02-6211-5253-af10-beb822a217f4",
+    "operatingName": "Encompass Learning Alliance Berkshire",
+    "legalName": null,
+    "type": "school",
+    "code": "2GL",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1c1f2ba8-5096-5ffa-b2a4-a70218f139af",
+    "operatingName": "George Spencer Academy SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1WQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a38e93c0-7141-5fab-bf15-c1c196a6bad9",
+    "operatingName": "Greet Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1S4",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "45c0610e-5b0b-54c4-81b4-c6c8e17a18ca",
+    "operatingName": "HART of Yorkshire",
+    "legalName": null,
+    "type": "scitt",
+    "code": "25C",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "38a26b6e-f7b0-5cd2-aa98-2033fbc2619c",
+    "operatingName": "Hawkley Hall High School",
+    "legalName": null,
+    "type": "school",
+    "code": "18T",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ed60fb3f-0883-5f6f-8ac1-ac489fd113ba",
+    "operatingName": "Kent Oaks Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "2JD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9caf4cb6-d8de-5611-974f-7203739a5d25",
+    "operatingName": "Kent Oaks Consortium",
+    "legalName": null,
+    "type": "school",
+    "code": "1U7",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "078836ad-6032-56dc-ae32-6479e3ca1c48",
+    "operatingName": "Landau Forte College Derby SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "25E",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "68efb1bd-a93d-5c12-984e-4947a78008bc",
+    "operatingName": "Lincolnshire Schools ITT Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "16L",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "1beb654b-f356-56d6-ad05-e4c042b29df4",
+    "operatingName": "Littleton CofE Infant School",
+    "legalName": null,
+    "type": "school",
+    "code": "23N",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b67d4dc1-11d1-5224-95a9-2e118da8e48d",
+    "operatingName": "London East Teacher Training Alliance",
+    "legalName": null,
+    "type": "scitt",
+    "code": "24Z",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "bc4d5682-a926-57be-b05c-c3f60d86b923",
+    "operatingName": "MAITT (Merseyside Alliance Initial Teacher Training)",
+    "legalName": null,
+    "type": "school",
+    "code": "2K6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b8f722d1-68de-54ff-bbe5-b3af06f09d72",
+    "operatingName": "Merseyside, Cheshire and Greater Manchester Teacher Training Consortium",
+    "legalName": null,
+    "type": "scitt",
+    "code": "M69",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0f162767-15d4-55aa-933d-e9a06251beac",
+    "operatingName": "Nene Park Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "263",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "23e0ab4d-6537-5445-8157-a992cec2eccf",
+    "operatingName": "Norfolk Teacher Training Centre",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1WF",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "01c6b69d-cacf-575c-aec0-dbd20dea5804",
+    "operatingName": "North Liverpool Teaching School Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1MX",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3df7bfcc-650e-5b46-850d-f97ebc4aeaa4",
+    "operatingName": "Oak Grove College",
+    "legalName": null,
+    "type": "school",
+    "code": "28V",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "0a9f9b1b-f2ed-535e-b995-a8da01583fc1",
+    "operatingName": "Oak Grove College",
+    "legalName": null,
+    "type": "school",
+    "code": "1P1",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f0b39165-e645-52af-90ce-4e6db0e8bdff",
+    "operatingName": "Park Community School",
+    "legalName": null,
+    "type": "school",
+    "code": "1SD",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ebca84e2-b878-51e8-aa48-3d7cfc6b537d",
+    "operatingName": "Penistone Area Partnership",
+    "legalName": null,
+    "type": "school",
+    "code": "1GZ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "db5653db-5e9c-590e-8054-4e0cac770626",
+    "operatingName": "Peterlee Partnership Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1ZQ",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "5149b0b6-6753-5faa-82f4-fab057ad4200",
+    "operatingName": "Pioneers Partnership SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "25H",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "59218e69-42ec-5a71-8a54-21b8d4b68573",
+    "operatingName": "Priory School",
+    "legalName": null,
+    "type": "school",
+    "code": "1WG",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e292fe66-9ebd-55aa-a0cf-b94519627f2b",
+    "operatingName": "Priory School",
+    "legalName": null,
+    "type": "school",
+    "code": "19L",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "060fb871-14a3-52d6-9e9e-ac79617857a0",
+    "operatingName": "Redwell Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "23A",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b8c2aca0-8b3a-54a6-9956-1dea90c00de4",
+    "operatingName": "Richmond School",
+    "legalName": null,
+    "type": "school",
+    "code": "2LM",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "93ba6105-d4a3-52d4-b64b-a9c580a2505b",
+    "operatingName": "Rosecroft Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1C5",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "dde0f8e9-fd2a-5fd1-9c15-080b362f7f69",
+    "operatingName": "Runshaw College",
+    "legalName": null,
+    "type": "school",
+    "code": "2LN",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "06ed80bd-0d1a-5df5-a56f-d8fd2c296d46",
+    "operatingName": "Runshaw College",
+    "legalName": null,
+    "type": "school",
+    "code": "R18",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9440e55e-309a-53e4-bfe0-3a0974bbd009",
+    "operatingName": "Sheringham Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1QV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7bad1994-68b8-5a0c-8ffa-5af02ef32272",
+    "operatingName": "Southend SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "S61",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ec7df11d-9a57-57c8-a6b4-294e2893a9a8",
+    "operatingName": "Springfield Junior School",
+    "legalName": null,
+    "type": "school",
+    "code": "29L",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "997bdaa3-d004-5c8f-b3a5-6da3f01625e6",
+    "operatingName": "St Francis of Assisi Catholic Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1YA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "e8ecab05-9cf3-5d69-afaf-d56226d13916",
+    "operatingName": "St George's Academy",
+    "legalName": null,
+    "type": "school",
+    "code": "1WV",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "f216c8a6-830d-5ba0-9f8e-66687aca4c17",
+    "operatingName": "Stradbroke Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "27F",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "2b4f7b35-5776-5c9a-a998-96390cdd1fa5",
+    "operatingName": "Tauheedul Islam Girls High School",
+    "legalName": null,
+    "type": "school",
+    "code": "26K",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "4d0343f0-730a-5482-93a9-3d97f7d71404",
+    "operatingName": "Teaching School Alliance 24",
+    "legalName": null,
+    "type": "school",
+    "code": "2LS",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "deb7c7df-8778-534e-a0c0-79aac84f7ba3",
+    "operatingName": "The Duston School",
+    "legalName": null,
+    "type": "school",
+    "code": "7H9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "93f4c74d-6287-5c02-b113-f046ecb2bcde",
+    "operatingName": "The Duston School",
+    "legalName": null,
+    "type": "school",
+    "code": "27J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "3195d817-eb32-5c28-9975-af73a196b025",
+    "operatingName": "The Learning Institute South West [School Direct]",
+    "legalName": null,
+    "type": "school",
+    "code": "25Y",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8c105d03-0646-5ca2-878c-8e5a58ffd809",
+    "operatingName": "The Phoenix School",
+    "legalName": null,
+    "type": "school",
+    "code": "143",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9d47096a-7409-5015-9b82-6547eab12b5c",
+    "operatingName": "The Radclyffe School",
+    "legalName": null,
+    "type": "school",
+    "code": "2J2",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9e9ec225-0cae-5db3-82a5-8bd257d5a7b2",
+    "operatingName": "The Ravensbourne School",
+    "legalName": null,
+    "type": "school",
+    "code": "19J",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "a321da52-ee6a-5e04-adb6-0955d6cfe975",
+    "operatingName": "The Ravensbourne School",
+    "legalName": null,
+    "type": "school",
+    "code": "29V",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8bd23fb3-3dc0-5e09-987d-6aa5379147e5",
+    "operatingName": "The Royal Greenwich Teaching School Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "26S",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "7318cd04-7fb2-5870-b21d-5b5876021a55",
+    "operatingName": "Tudor Grange SCITT",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1WW",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "9bb9f9f5-6f84-5217-a94d-1bac7de49969",
+    "operatingName": "University College London (UCL)",
+    "legalName": null,
+    "type": "school",
+    "code": "I30",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "92ff220b-5ead-5e2c-a7ba-b3f27f848d2c",
+    "operatingName": "West Midlands Consortium",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1K7",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "399c3733-6bbf-530b-b78b-b2652f5a45f0",
+    "operatingName": "Whitefield Alliance",
+    "legalName": null,
+    "type": "school",
+    "code": "1EK",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "effd2ae4-0287-55ca-ad07-ea4c5b760551",
+    "operatingName": "Woodland Academy Teacher Training",
+    "legalName": null,
+    "type": "school",
+    "code": "2G2",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "c1736bb4-9910-5989-b5c3-eaf321681026",
+    "operatingName": "Woodland Academy Teacher Training",
+    "legalName": null,
+    "type": "school",
+    "code": "282",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "b552689e-7492-523b-9f42-f984a0ca71da",
+    "operatingName": "Woodlands School",
+    "legalName": null,
+    "type": "school",
+    "code": "22W",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "432a46fc-afb0-5232-984e-3003993c801c",
+    "operatingName": "Woodlands School",
+    "legalName": null,
+    "type": "school",
+    "code": "1UA",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "ba4ea336-9b77-5560-8bbd-f90cd94c2fad",
+    "operatingName": "Kingsway Primary School East Riding",
+    "legalName": null,
+    "type": "school",
+    "code": "1V6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "edbdecc1-dd15-5baf-abb4-4c5a74215f06",
+    "operatingName": "Northampton Primary Academy Trust",
+    "legalName": null,
+    "type": "school",
+    "code": "26N",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "8ebc872f-b5f7-587d-8edf-a8e31939ea9d",
+    "operatingName": "Saint Mary Magdalene Church Of England Primary School",
+    "legalName": null,
+    "type": "school",
+    "code": "1J6",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "936ecb8a-bc24-5fc7-b64a-8a3aa4f19d47",
+    "operatingName": "United Teaching National SCITT",
+    "legalName": null,
+    "type": "school",
+    "code": "25A",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "58ade255-bb07-544a-8005-cacff565bf72",
+    "operatingName": "University Campus Oldham",
+    "legalName": null,
+    "type": "school",
+    "code": "O10",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "057f5c68-edb3-549c-a880-6c9fa2923cb3",
+    "operatingName": "Watton-at-Stone Primary",
+    "legalName": null,
+    "type": "school",
+    "code": "2H9",
+    "ukprn": null,
+    "urn": null,
+    "website": null
+  },
+  {
+    "id": "772980e4-696b-5218-8241-f81eed874cb4",
+    "operatingName": "West Berkshire Training Partnership",
+    "legalName": null,
+    "type": "scitt",
+    "code": "1WS",
+    "ukprn": null,
+    "urn": null,
     "website": null
   }
 ]

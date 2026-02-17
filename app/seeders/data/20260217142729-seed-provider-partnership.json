@@ -17597,6 +17597,21 @@
     ]
   },
   {
+    "id": "7eeb1c1f-b7cb-5885-9eae-70c1cec83ff8",
+    "trainingPartnerId": "87486b59-61a3-5f58-879e-e522dda07b41",
+    "trainingPartnerName": "Bristol Early Years Teaching Consortium",
+    "accreditedProviderId": "fb2120e5-a25c-565c-9271-798f1a9b7b6e",
+    "accreditedProviderName": "Bath Spa University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "ad988b62-cf85-5c04-8cca-4142569beb67",
     "trainingPartnerId": "bc334ae5-54d1-5601-8589-e20f49106008",
     "trainingPartnerName": "NIoT@Oasis Community Learning",
@@ -17608,6 +17623,21 @@
       "a9890ab7-66a6-4c64-91dc-af79305570b7",
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "26aed8b2-8685-5440-babd-384bb0ee429d",
+    "trainingPartnerId": "7e232cf1-e533-5200-888d-526d7ecd1465",
+    "trainingPartnerName": "Uttoxeter Learning Trust Teaching School",
+    "accreditedProviderId": "fd6f2c1e-dd0c-5ad1-ace3-776b1cd8e860",
+    "accreditedProviderName": "Birmingham City University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -17628,6 +17658,36 @@
     "trainingPartnerName": "Belle Vue Girls' Academy",
     "accreditedProviderId": "54c54d58-4e9b-555e-8dc7-9e52fcb54f93",
     "accreditedProviderName": "Bradford Birth to 19 SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "559bcc3c-fba6-5fc1-b017-00a8095c8473",
+    "trainingPartnerId": "87486b59-61a3-5f58-879e-e522dda07b41",
+    "trainingPartnerName": "Bristol Early Years Teaching Consortium",
+    "accreditedProviderId": "aebf98fc-f807-5502-aee9-29957e0530c8",
+    "accreditedProviderName": "Five Counties SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "918e0c26-8148-5e04-8249-a7d16c6a88f6",
+    "trainingPartnerId": "ee2689e4-9888-5338-a46c-28b247371489",
+    "trainingPartnerName": "Anglian Gateway Teaching Schools Alliance",
+    "accreditedProviderId": "539e3f33-925f-5a83-a6e7-1fe41384b13d",
+    "accreditedProviderName": "Cambridge Training Schools Network, CTSN SCITT",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2023-07-31T00:00:00Z",
     "academicYearIds": [
@@ -17788,6 +17848,21 @@
     ]
   },
   {
+    "id": "263195dd-f92d-50b2-af2c-1d28cfa18902",
+    "trainingPartnerId": "ba0a0654-c453-576e-95bb-adbd434fa132",
+    "trainingPartnerName": "Lee Chapel Teaching School Alliance",
+    "accreditedProviderId": "f2968c03-f5d1-59b3-8d3c-c85afd8ce66f",
+    "accreditedProviderName": "Essex Teacher Training",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "2d38c0c4-76fe-594c-976f-359c36349d8d",
     "trainingPartnerId": "a197902c-05a7-5e63-b97c-ca178c224aee",
     "trainingPartnerName": "Berlesduna Academy Trust Teacher Training",
@@ -17828,6 +17903,21 @@
     "academicYearIds": [
       "a9890ab7-66a6-4c64-91dc-af79305570b7",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "8eba839b-2bec-5e3d-a2c1-9110faa846f4",
+    "trainingPartnerId": "8cd5a7c0-cf33-5b62-a5f8-c703df1c3623",
+    "trainingPartnerName": "Future Stars TSA",
+    "accreditedProviderId": "27d3b548-1199-5fef-82c7-6435d62ac253",
+    "accreditedProviderName": "Goldsmiths, University of London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -17875,6 +17965,51 @@
     ]
   },
   {
+    "id": "fd7764e6-5de6-546a-ab81-125fd7359d62",
+    "trainingPartnerId": "7e232cf1-e533-5200-888d-526d7ecd1465",
+    "trainingPartnerName": "Uttoxeter Learning Trust Teaching School",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0ff1b105-fdd4-559c-a961-6a76532e5282",
+    "trainingPartnerId": "0287061b-fc99-513b-938e-0b17d424b86b",
+    "trainingPartnerName": "Pan Enfield Alliance",
+    "accreditedProviderId": "2c959a7b-a3b9-5f85-b67c-3b0395b400a2",
+    "accreditedProviderName": "King's College London (University of London)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "76ff575b-2eb5-588f-a374-a803ee76aaaa",
+    "trainingPartnerId": "b9ae2416-be7b-5af1-be1d-bff69d97a4e5",
+    "trainingPartnerName": "St James' Partnership",
+    "accreditedProviderId": "babd34bb-0dd3-5eb0-a23f-f82c1b2673ed",
+    "accreditedProviderName": "Kingston University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "2d392bf3-cef4-5166-ad1b-f0daded02ca8",
     "trainingPartnerId": "c5237676-5542-54b8-9bdc-0f85b73b16a0",
     "trainingPartnerName": "Aireborough Partnership",
@@ -17905,9 +18040,54 @@
     ]
   },
   {
+    "id": "5d47bad2-d622-5f02-ba33-c6b28c11292e",
+    "trainingPartnerId": "b01f0d50-6ec4-578f-b489-961392680b5a",
+    "trainingPartnerName": "Taunton Teaching Alliance (Heathfield School)",
+    "accreditedProviderId": "b8863454-53a4-5805-afb4-b54fe75c8e5d",
+    "accreditedProviderName": "Mid Somerset Consortium for Teacher Training",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "4235eb08-6a03-50c4-a3fb-39cb9ceec228",
+    "trainingPartnerId": "b01f0d50-6ec4-578f-b489-961392680b5a",
+    "trainingPartnerName": "Taunton Teaching Alliance (Heathfield School)",
+    "accreditedProviderId": "c051c4dc-5a3e-5c61-a04d-b7538c68530c",
+    "accreditedProviderName": "Somerset SCITT Consortium",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "4d389ca9-a5d7-5d80-90f5-de6e68fc4755",
     "trainingPartnerId": "904e4e1e-4c5e-5ff4-94cb-e81d06723048",
     "trainingPartnerName": "London West Alliance ITT",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0b183f7b-4462-5e3f-80c6-e807cd051cd6",
+    "trainingPartnerId": "450a8339-166d-5017-8010-39cc836cbe63",
+    "trainingPartnerName": "St Joseph's Alliance",
     "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
     "accreditedProviderName": "St Mary's University, Twickenham",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -17931,6 +18111,21 @@
       "a9890ab7-66a6-4c64-91dc-af79305570b7",
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "1d4ed07e-2746-59b7-9ba8-a742d0594ba4",
+    "trainingPartnerId": "7e232cf1-e533-5200-888d-526d7ecd1465",
+    "trainingPartnerName": "Uttoxeter Learning Trust Teaching School",
+    "accreditedProviderId": "d70c3632-cea8-5f0a-b5d8-a6a80da28623",
+    "accreditedProviderName": "The John Taylor SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -17964,6 +18159,21 @@
     ]
   },
   {
+    "id": "01ddee94-d0d6-5923-80af-1c190d30cfbe",
+    "trainingPartnerId": "aa287f3a-0a06-5f5a-8384-d2629317719b",
+    "trainingPartnerName": "Rivington School Direct",
+    "accreditedProviderId": "1c2e7384-c39e-5bca-99cc-be512498cf21",
+    "accreditedProviderName": "Manchester Metropolitan University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "183a3944-e9d2-563d-85ce-dd48c4215bbc",
     "trainingPartnerId": "47f5ea54-dde5-5f67-8858-748a1517b1c1",
     "trainingPartnerName": "Wycombe High School",
@@ -17975,6 +18185,66 @@
       "a9890ab7-66a6-4c64-91dc-af79305570b7",
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "5dc17942-4ae7-544b-a6db-e6c847bd72ee",
+    "trainingPartnerId": "87486b59-61a3-5f58-879e-e522dda07b41",
+    "trainingPartnerName": "Bristol Early Years Teaching Consortium",
+    "accreditedProviderId": "cba95997-9d83-562b-a12d-69b9fa6cb9f1",
+    "accreditedProviderName": "University of Gloucestershire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0f627f86-dad4-5b03-90f5-79ff62fea139",
+    "trainingPartnerId": "31156b00-0b65-5c27-a2ec-8cfb89f337ea",
+    "trainingPartnerName": "Pennine Teaching Alliance",
+    "accreditedProviderId": "102462b5-a1ce-5f87-9f79-582ec293c701",
+    "accreditedProviderName": "University of Manchester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "26adabd6-7e14-5c6e-8529-322072d625d6",
+    "trainingPartnerId": "e0d875c2-2820-5a42-8853-678dad0aff16",
+    "trainingPartnerName": "Cuckoo Hall Academies Trust (CHAT)",
+    "accreditedProviderId": "d5bcdb15-416f-5530-a89b-d54519ea6026",
+    "accreditedProviderName": "University of Warwick",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0724a32e-f400-581e-a663-3938eae6da6e",
+    "trainingPartnerId": "8cd5a7c0-cf33-5b62-a5f8-c703df1c3623",
+    "trainingPartnerName": "Future Stars TSA",
+    "accreditedProviderId": "49e186dc-5f8c-5b8e-bc45-da4dddec84f2",
+    "accreditedProviderName": "UCL, University College London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -18037,9 +18307,54 @@
     ]
   },
   {
+    "id": "133a04b0-51c7-514d-856a-8746e4f5eae4",
+    "trainingPartnerId": "a2150a46-bb9c-5708-a090-b2b49f8525d0",
+    "trainingPartnerName": "The Northworthy Alliance",
+    "accreditedProviderId": "66f11f43-05ec-58d5-bc7f-25399d963222",
+    "accreditedProviderName": "University of Derby",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "ae1b5eee-e366-5e91-b751-d3791cbef1f0",
+    "trainingPartnerId": "a8b63263-8ebf-5fc5-a677-fbf435493c96",
+    "trainingPartnerName": "East London Early Years and Schools Partnership",
+    "accreditedProviderId": "e9fecf84-0546-503a-899e-1bb98184a91a",
+    "accreditedProviderName": "University of East London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "c13c5c40-d65c-5f76-926f-0e93a72c53b7",
     "trainingPartnerId": "e04e0990-1cb4-5ba5-a0a1-bf7acfed20f5",
     "trainingPartnerName": "Amwell View School",
+    "accreditedProviderId": "d30c517c-5f1c-59d5-a711-e0382a849475",
+    "accreditedProviderName": "University of Hertfordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "a8c77ec8-dbdf-5d8c-adc6-13b404e103a1",
+    "trainingPartnerId": "0287061b-fc99-513b-938e-0b17d424b86b",
+    "trainingPartnerName": "Pan Enfield Alliance",
     "accreditedProviderId": "d30c517c-5f1c-59d5-a711-e0382a849475",
     "accreditedProviderName": "University of Hertfordshire",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -18057,6 +18372,36 @@
     "trainingPartnerName": "Warren Dell Primary School",
     "accreditedProviderId": "d30c517c-5f1c-59d5-a711-e0382a849475",
     "accreditedProviderName": "University of Hertfordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "61507905-67f8-5c77-9fab-de9a2940aba1",
+    "trainingPartnerId": "85e8d24a-8923-5706-a84b-327e7ba31e4d",
+    "trainingPartnerName": "New Collaborative",
+    "accreditedProviderId": "ca650bcc-4594-58ad-bde2-1a4a17cba308",
+    "accreditedProviderName": "University of Huddersfield",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "ea6bc806-d6ee-5d0a-897b-a38689977edb",
+    "trainingPartnerId": "3c44923e-6c15-57a3-921a-4050486f800f",
+    "trainingPartnerName": "Sola Fide Multi-Academy Trust",
+    "accreditedProviderId": "ca650bcc-4594-58ad-bde2-1a4a17cba308",
+    "accreditedProviderName": "University of Huddersfield",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2023-07-31T00:00:00Z",
     "academicYearIds": [
@@ -18111,6 +18456,21 @@
     ]
   },
   {
+    "id": "6de87575-a68a-5e2b-8763-5ea7421eaeee",
+    "trainingPartnerId": "87486b59-61a3-5f58-879e-e522dda07b41",
+    "trainingPartnerName": "Bristol Early Years Teaching Consortium",
+    "accreditedProviderId": "a75d23f2-3e8a-5703-aac0-029a5d7bc7ba",
+    "accreditedProviderName": "University of the West of England, Bristol",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "1e6325a6-f8c4-5000-a61f-7818fc6018b7",
     "trainingPartnerId": "2b3c8f61-3d0a-50d0-a41d-1757ce99d070",
     "trainingPartnerName": "Harrison Primary School",
@@ -18152,6 +18512,20 @@
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
       "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "45baef58-f56a-5e07-9886-2f42778c6f35",
+    "trainingPartnerId": "3ee628dc-b013-5cda-8673-bd60d7567131",
+    "trainingPartnerName": "St George's CofE VA Primary",
+    "accreditedProviderId": "8085858a-021a-5fc3-bd90-6d0a8dfc6d14",
+    "accreditedProviderName": "York St John University",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2023-07-31T00:00:00Z",
+    "academicYearIds": [
+      "a9890ab7-66a6-4c64-91dc-af79305570b7",
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
     ]
   },
   {
@@ -18226,6 +18600,34 @@
     ]
   },
   {
+    "id": "600689b7-40ac-5740-a3ef-6682fca9e843",
+    "trainingPartnerId": "a98fad34-be36-5478-8d27-86a1e7331dbe",
+    "trainingPartnerName": "West Wilts Alliance",
+    "accreditedProviderId": "fb2120e5-a25c-565c-9271-798f1a9b7b6e",
+    "accreditedProviderName": "Bath Spa University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "cd898906-90ef-5e0d-b96b-5fbc7e62a50d",
+    "trainingPartnerId": "960d463c-9a69-5808-abd3-b9a04ffabda2",
+    "trainingPartnerName": "Buttsbury Infant School",
+    "accreditedProviderId": "d806390e-99bc-59ca-801c-5e5c2a95fe08",
+    "accreditedProviderName": "BEC Teacher Training",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "f0ea93af-a137-5b9f-9cef-f9ad962bbb5b",
     "trainingPartnerId": "9c7d9ecb-39de-59c6-8b2e-9a4b6ab29d9c",
     "trainingPartnerName": "The Federation of Boldmere Schools",
@@ -18278,6 +18680,20 @@
     ]
   },
   {
+    "id": "27b56260-d17e-5a93-a10d-16c7886d4c1b",
+    "trainingPartnerId": "cfdafdd3-37ef-5e17-80b3-1bd7e333bf94",
+    "trainingPartnerName": "Ryders Hayes Teaching School",
+    "accreditedProviderId": "fd6f2c1e-dd0c-5ad1-ace3-776b1cd8e860",
+    "accreditedProviderName": "Birmingham City University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "41a626dc-96ee-5968-8f3d-929db3f04915",
     "trainingPartnerId": "88ca857c-bd79-5eca-bef6-8ad266182fc4",
     "trainingPartnerName": "Shireland Teacher Training",
@@ -18301,6 +18717,34 @@
     "academicYearIds": [
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "d228237a-a1bc-5229-9a78-9f7301395c71",
+    "trainingPartnerId": "21d3deb8-28ef-50e2-85fe-583998bfcc43",
+    "trainingPartnerName": "The Earls High School",
+    "accreditedProviderId": "fd6f2c1e-dd0c-5ad1-ace3-776b1cd8e860",
+    "accreditedProviderName": "Birmingham City University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "51d6a83a-ffc3-5622-9e0a-aaa4bd667cf4",
+    "trainingPartnerId": "f0da4138-7ce6-508f-8116-a2ff8501b00a",
+    "trainingPartnerName": "Aurum Schools Partnership",
+    "accreditedProviderId": "3d4f4cf2-9162-5b69-b71f-45bde4d7606f",
+    "accreditedProviderName": "Lincoln Bishop University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -18345,6 +18789,20 @@
     ]
   },
   {
+    "id": "85efc7c2-b3b6-5f38-b49f-7866bf7b302b",
+    "trainingPartnerId": "4dbbef17-0bdf-5bb9-8cd2-c72f528aa2cc",
+    "trainingPartnerName": "The Phoenix School",
+    "accreditedProviderId": "3d4f4cf2-9162-5b69-b71f-45bde4d7606f",
+    "accreditedProviderName": "Lincoln Bishop University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "d9158b3a-6648-5ba6-85aa-12d70cdede77",
     "trainingPartnerId": "58246700-7418-511a-83ab-8e4866d09683",
     "trainingPartnerName": "Bedgrove Infant School",
@@ -18373,11 +18831,52 @@
     ]
   },
   {
+    "id": "39c04266-b0a8-5899-a675-671cad0eaad4",
+    "trainingPartnerId": "7aeeea6f-e766-5a0b-a58b-048777463b04",
+    "trainingPartnerName": "Abbey MAT Primary Alliance",
+    "accreditedProviderId": "91f7c66e-7d30-59ef-a74a-208a94e109df",
+    "accreditedProviderName": "Bradford College",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "b1debc3b-47b9-505e-a336-4c1200374d9e",
+    "trainingPartnerId": "445bba61-e265-5c3a-9563-e196467e4320",
+    "trainingPartnerName": "Primary TS Alliance",
+    "accreditedProviderId": "46129c82-7026-574a-861f-1b6ba5f2831b",
+    "accreditedProviderName": "Brunel University London",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
     "id": "d1a74f79-3dfe-52fe-b420-38de57a59312",
     "trainingPartnerId": "f5161699-f1e1-560c-b3bb-7b61c735eeb3",
     "trainingPartnerName": "Learning In Harmony Teacher Training",
     "accreditedProviderId": "aebf98fc-f807-5502-aee9-29957e0530c8",
     "accreditedProviderName": "Five Counties SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "3c2ff798-cb2a-5d26-a9ce-21779103def9",
+    "trainingPartnerId": "0d916266-312a-5adf-a80a-d294b905f440",
+    "trainingPartnerName": "Bexley Teaching School Alliance",
+    "accreditedProviderId": "42602d13-821f-519f-b473-a577abd29e44",
+    "accreditedProviderName": "Canterbury Christ Church University",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -18404,6 +18903,20 @@
     "id": "f0799c97-11b7-5ec5-aa7b-d1428f733bd8",
     "trainingPartnerId": "e2a62f6f-4e65-5786-9ca4-d20211119580",
     "trainingPartnerName": "Dover, Deal and Sandwich Partnership",
+    "accreditedProviderId": "42602d13-821f-519f-b473-a577abd29e44",
+    "accreditedProviderName": "Canterbury Christ Church University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "ef5d7370-37d6-5763-b6d4-ea50237bcf58",
+    "trainingPartnerId": "877c10f7-f7bd-5931-898b-a9022546519e",
+    "trainingPartnerName": "Furley Park",
     "accreditedProviderId": "42602d13-821f-519f-b473-a577abd29e44",
     "accreditedProviderName": "Canterbury Christ Church University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -18485,6 +18998,20 @@
     ]
   },
   {
+    "id": "94808889-6ce6-5064-9149-165aca28b04a",
+    "trainingPartnerId": "3f535c51-0733-50a3-9395-f71a046641ba",
+    "trainingPartnerName": "Cambridge Early Years Teaching School Alliance (CEYTSA)",
+    "accreditedProviderId": "c53b3b0b-8b19-5c7b-b9f7-0f623ef35129",
+    "accreditedProviderName": "CREC Early Years Partnership",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "85eda47a-24c6-5b99-af98-775f43014e6f",
     "trainingPartnerId": "cb870bef-c0f6-515c-a92e-7fba129e6bd9",
     "trainingPartnerName": "CREC Early Years Partnership",
@@ -18517,6 +19044,34 @@
     "trainingPartnerName": "Whitburn Church of England Academy",
     "accreditedProviderId": "5f74fe07-7dbe-596b-a50a-08b5ad30e9d9",
     "accreditedProviderName": "Durham SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "132688ff-c9d0-5d5d-ac89-ee05fe85559d",
+    "trainingPartnerId": "ff1894d5-bbd1-5a8c-a97b-74e2a107a48d",
+    "trainingPartnerName": "The Hermitage Academy School Direct",
+    "accreditedProviderId": "5f74fe07-7dbe-596b-a50a-08b5ad30e9d9",
+    "accreditedProviderName": "Durham SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "ae8b5462-c028-5ee4-bbaf-b07ef5d9684d",
+    "trainingPartnerId": "bdb97172-459e-58a6-a595-fcceac115a05",
+    "trainingPartnerName": "West Lakes Teaching School Alliance",
+    "accreditedProviderId": "bb5c1d58-844c-5bd6-a196-f97d1e053284",
+    "accreditedProviderName": "Durham University",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -18609,6 +19164,32 @@
     ]
   },
   {
+    "id": "a80f07a5-ac0b-58ae-a968-ba37dd5376b0",
+    "trainingPartnerId": "92b39868-1ed6-59dd-81a3-eaaf80d8feb3",
+    "trainingPartnerName": "North Sefton Teaching School Alliance",
+    "accreditedProviderId": "5f167746-7099-5da0-81b0-a0b0415563d7",
+    "accreditedProviderName": "Edge Hill University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "7cb2bd7d-32cf-536d-b047-914c04913232",
+    "trainingPartnerId": "3a33718e-4f6d-5fb3-8e01-4e6aa48b9082",
+    "trainingPartnerName": "Yorkshire Inclusive TSA",
+    "accreditedProviderId": "3d99f6de-5b0b-545b-bc6c-a3be96131d16",
+    "accreditedProviderName": "Educate Group Initial Teacher Training",
+    "startsOn": "2021-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e"
+    ]
+  },
+  {
     "id": "c397d74e-2622-565e-ade0-4c74ddf8c322",
     "trainingPartnerId": "e1098fa2-2d59-51d7-9f1a-a844c8c3d2bb",
     "trainingPartnerName": "Burnham Teaching Partnership",
@@ -18638,6 +19219,33 @@
     "id": "8728e55f-8023-5303-97d0-09efa76df405",
     "trainingPartnerId": "f9f37760-fd05-5aa6-b9f6-45a1e1f1d120",
     "trainingPartnerName": "Kingston School Direct",
+    "accreditedProviderId": "0e2cf16a-49fa-5d42-bb1d-b8f1e57743c6",
+    "accreditedProviderName": "e-Qualitas",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "e637f875-5822-5fd3-a7bb-cb0f70b1fb93",
+    "trainingPartnerId": "a4f3439d-cbe9-5d4a-a8bd-d319f04e2d9d",
+    "trainingPartnerName": "Luton Futures",
+    "accreditedProviderId": "0e2cf16a-49fa-5d42-bb1d-b8f1e57743c6",
+    "accreditedProviderName": "e-Qualitas",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "721b733b-18cb-5596-9cd5-9ecdb325e7d2",
+    "trainingPartnerId": "c67542ce-cab5-518f-b58a-83065312c1c6",
+    "trainingPartnerName": "Swiss Cottage Teaching School Alliance",
     "accreditedProviderId": "0e2cf16a-49fa-5d42-bb1d-b8f1e57743c6",
     "accreditedProviderName": "e-Qualitas",
     "startsOn": "2020-08-01T00:00:00Z",
@@ -18811,6 +19419,20 @@
     ]
   },
   {
+    "id": "1b69a634-ac15-5420-9c27-74b776809d69",
+    "trainingPartnerId": "413cc5c0-2d1d-5534-a5f1-cedbbc1de82b",
+    "trainingPartnerName": "Train to Teach North London",
+    "accreditedProviderId": "27d3b548-1199-5fef-82c7-6435d62ac253",
+    "accreditedProviderName": "Goldsmiths, University of London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "ab2c6f70-a0ec-5acd-8eaf-8dffd90e66a7",
     "trainingPartnerId": "8985ae88-d44c-529f-a694-d637e7b1a571",
     "trainingPartnerName": "Vita London",
@@ -18830,6 +19452,34 @@
     "trainingPartnerName": "Wandle Teaching School Hub",
     "accreditedProviderId": "27d3b548-1199-5fef-82c7-6435d62ac253",
     "accreditedProviderName": "Goldsmiths, University of London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "fb3f5a6a-7b66-5e53-b38d-68dad65b3134",
+    "trainingPartnerId": "56bde2fc-e17f-5f8a-a36c-00cfb912a9d8",
+    "trainingPartnerName": "Working together",
+    "accreditedProviderId": "27d3b548-1199-5fef-82c7-6435d62ac253",
+    "accreditedProviderName": "Goldsmiths, University of London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0f62d6c9-875c-533d-907b-11f1806695c0",
+    "trainingPartnerId": "21d3deb8-28ef-50e2-85fe-583998bfcc43",
+    "trainingPartnerName": "The Earls High School",
+    "accreditedProviderId": "0a5dbe90-6277-562c-819d-fad980d07f40",
+    "accreditedProviderName": "Haybridge SCITT",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -18909,11 +19559,109 @@
     ]
   },
   {
+    "id": "47235b82-0790-54b0-bf09-45080f486d3c",
+    "trainingPartnerId": "a60baaac-ad63-5669-961f-d326bb22db8b",
+    "trainingPartnerName": "Hempstalls-KNSTE",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "00d55636-db55-59ce-bd9f-a9f20868ddd6",
+    "trainingPartnerId": "1781ed51-4e2b-5cbe-8cbf-7ac91293de9f",
+    "trainingPartnerName": "Parkside - KNSTE",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "5ee33e91-9726-5372-b0aa-0c6ee4814d66",
     "trainingPartnerId": "a5de5a33-f198-54db-9419-ac08d88592fc",
     "trainingPartnerName": "Seabridge-KNSTE",
     "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
     "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "52e9aa6c-7afe-516f-b1e4-1623df5e1d82",
+    "trainingPartnerId": "067b9efb-fc2d-5bc0-a655-59b8ba044e85",
+    "trainingPartnerName": "Societas - KNSTE",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "6835acce-5624-555d-a753-0947952f0d64",
+    "trainingPartnerId": "113caced-8855-5f33-a2f2-29c292aba046",
+    "trainingPartnerName": "St Mary's Catholic Academy - KNSTE",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "6d4328b1-a7cb-5ef4-a44a-4de1d7dfddbe",
+    "trainingPartnerId": "f4dccdee-59fb-50c2-aa45-e07870e34778",
+    "trainingPartnerName": "St Mary's CofE VA Primary School - KNSTE",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "9c84ca33-9ad7-59be-a471-f3805d70f885",
+    "trainingPartnerId": "77c0820a-e90e-53c0-afe6-d99fa03c6962",
+    "trainingPartnerName": "The Potteries Teaching Alliance - KNSTE",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "affc6898-56ef-582d-9f63-5ae9d1c4c2d4",
+    "trainingPartnerId": "a3f9d2c3-df06-5911-ac6d-c75bddba29aa",
+    "trainingPartnerName": "Kaizen Teaching School Alliance",
+    "accreditedProviderId": "f7001b1a-398d-535f-b86c-cfa0be3bef08",
+    "accreditedProviderName": "Kent and Medway Training",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -19156,6 +19904,34 @@
     ]
   },
   {
+    "id": "1a4b55b6-cb32-5b16-b86e-d461ce6f290d",
+    "trainingPartnerId": "4e3d678d-10d6-5f3a-9059-adda99b43f20",
+    "trainingPartnerName": "Field Lane J I & N School",
+    "accreditedProviderId": "9d33d68c-9f40-527e-afdf-af1e88537391",
+    "accreditedProviderName": "Kirklees and Calderdale SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "7bb8fd31-1c20-54ed-8443-b2fd6bb659cb",
+    "trainingPartnerId": "3a33718e-4f6d-5fb3-8e01-4e6aa48b9082",
+    "trainingPartnerName": "Yorkshire Inclusive TSA",
+    "accreditedProviderId": "9d33d68c-9f40-527e-afdf-af1e88537391",
+    "accreditedProviderName": "Kirklees and Calderdale SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "aaa5d6a6-72ea-5753-832d-a60658a8cd68",
     "trainingPartnerId": "1fbe0af8-ba48-52b1-baf1-53802a545432",
     "trainingPartnerName": "Mills Hill Primary",
@@ -19198,6 +19974,48 @@
     ]
   },
   {
+    "id": "3f482468-5b74-5e80-bd11-0a25f2147976",
+    "trainingPartnerId": "d68c4c1f-9b2c-552c-bd6e-431461d6cdc1",
+    "trainingPartnerName": "St Marys Menston",
+    "accreditedProviderId": "b68ecc93-a3d4-53bd-b0f2-4d71ca59f2cb",
+    "accreditedProviderName": "Leeds SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "bb21b70c-698c-5217-969f-99970027db83",
+    "trainingPartnerId": "b7ebb341-8b7c-501a-9261-4ac26315453f",
+    "trainingPartnerName": "Catholic Coastal Partnership",
+    "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
+    "accreditedProviderName": "Leeds Trinity University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "f345c6e3-8a6b-52ad-909f-66bb38c09087",
+    "trainingPartnerId": "990bf9d2-5b10-5f26-82e8-a7021c2eb750",
+    "trainingPartnerName": "Pathways",
+    "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
+    "accreditedProviderName": "Leeds Trinity University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "056d6fe2-56a0-570b-920f-90a11f4aff4b",
     "trainingPartnerId": "ac332734-1018-58ab-ac78-9d810d593101",
     "trainingPartnerName": "Pathways Partnership",
@@ -19207,6 +20025,20 @@
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
       "d99ba67e-2f21-4319-b662-1bbd28f4137e"
+    ]
+  },
+  {
+    "id": "bf82d36f-28f4-51b8-94dd-cfc0f9291d1b",
+    "trainingPartnerId": "d68c4c1f-9b2c-552c-bd6e-431461d6cdc1",
+    "trainingPartnerName": "St Marys Menston",
+    "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
+    "accreditedProviderName": "Leeds Trinity University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -19293,6 +20125,20 @@
     ]
   },
   {
+    "id": "2a9c1fdc-34af-5492-a696-fe003d643c74",
+    "trainingPartnerId": "9933ba1d-c34b-56e6-a288-0414d6f67793",
+    "trainingPartnerName": "CAPITAL (Sefton)",
+    "accreditedProviderId": "36cc2715-66d9-5ea5-b878-34511acc14b9",
+    "accreditedProviderName": "Liverpool John Moores University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "f3f99233-44a3-5ad2-9e39-49f872ae85dc",
     "trainingPartnerId": "0ee818ce-f743-5577-8886-ed49c2300a54",
     "trainingPartnerName": "Longford Park School",
@@ -19310,6 +20156,20 @@
     "id": "83d36a60-a640-5a82-aac5-841260de830c",
     "trainingPartnerId": "3f56ce99-e7d5-56ad-b5c4-bb29a37ad381",
     "trainingPartnerName": "North Liverpool Academy",
+    "accreditedProviderId": "36cc2715-66d9-5ea5-b878-34511acc14b9",
+    "accreditedProviderName": "Liverpool John Moores University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "5ed47712-1b7d-572c-a3d4-64955e50af29",
+    "trainingPartnerId": "5d1b5ac0-c938-5b17-ae32-d2006846c7c7",
+    "trainingPartnerName": "Our Lady of Pity RC Primary School",
     "accreditedProviderId": "36cc2715-66d9-5ea5-b878-34511acc14b9",
     "accreditedProviderName": "Liverpool John Moores University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -19348,6 +20208,34 @@
     ]
   },
   {
+    "id": "bb7d90e5-a4d4-57de-a74c-a550a6d012ef",
+    "trainingPartnerId": "b11b16f4-adc7-5fdd-b067-36cc28728c16",
+    "trainingPartnerName": "Inner London Teacher Training Alliance",
+    "accreditedProviderId": "79283bbf-f38a-503d-a372-5f3c4f4c31b8",
+    "accreditedProviderName": "London Metropolitan University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "08108f3d-b7a6-5d34-8c99-421d9677f646",
+    "trainingPartnerId": "fb4c0570-9ffb-517c-9b8f-43a0c10856a0",
+    "trainingPartnerName": "Kingsmead Primary School",
+    "accreditedProviderId": "79283bbf-f38a-503d-a372-5f3c4f4c31b8",
+    "accreditedProviderName": "London Metropolitan University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "1481d511-935d-57ea-87f2-5c8ac59c4d6b",
     "trainingPartnerId": "c354ee63-2178-59e3-9dfd-8f8b3c355d30",
     "trainingPartnerName": "Princess May Primary School",
@@ -19375,6 +20263,20 @@
     ]
   },
   {
+    "id": "5ed71024-1e2a-5ba7-ae58-fc3a7ea61b1b",
+    "trainingPartnerId": "413cc5c0-2d1d-5534-a5f1-cedbbc1de82b",
+    "trainingPartnerName": "Train to Teach North London",
+    "accreditedProviderId": "79283bbf-f38a-503d-a372-5f3c4f4c31b8",
+    "accreditedProviderName": "London Metropolitan University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "3eb5e782-927a-55e0-95a1-e5203776915f",
     "trainingPartnerId": "157152df-7712-524d-984f-e59eb67a0235",
     "trainingPartnerName": "Achieve with TELA",
@@ -19392,6 +20294,34 @@
     "id": "31a0a0c3-bedf-53ea-8b60-ea267d268ef8",
     "trainingPartnerId": "688d7aab-b964-5b15-8fd9-9600990e43ad",
     "trainingPartnerName": "Forest Way Initial Teacher Training",
+    "accreditedProviderId": "0165c5d8-e2d1-5482-8297-8d527665adf0",
+    "accreditedProviderName": "Loughborough University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "fce7997a-99ad-514c-8e9c-66f1ad649e4c",
+    "trainingPartnerId": "de152b17-63a0-51bc-9924-277e8f62b8c5",
+    "trainingPartnerName": "Leicestershire Learning Alliance",
+    "accreditedProviderId": "0165c5d8-e2d1-5482-8297-8d527665adf0",
+    "accreditedProviderName": "Loughborough University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "47ade0fd-3ebd-57d0-9cfc-51b636b4fcb0",
+    "trainingPartnerId": "222670e6-22a0-52a3-9878-8b3d38bd99d8",
+    "trainingPartnerName": "North Charnwood Learning Partnership",
     "accreditedProviderId": "0165c5d8-e2d1-5482-8297-8d527665adf0",
     "accreditedProviderName": "Loughborough University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -19441,6 +20371,20 @@
     "academicYearIds": [
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "3f4748e5-b06e-5e3a-b90d-e5607068e045",
+    "trainingPartnerId": "f659a842-3e3e-5e15-adfb-3a9c73b74dbb",
+    "trainingPartnerName": "Enfield County School",
+    "accreditedProviderId": "6ebd5eb6-7d1a-5b00-9f3f-44eb0f90823b",
+    "accreditedProviderName": "Middlesex University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -19555,6 +20499,20 @@
     ]
   },
   {
+    "id": "1c4704fd-f01c-52c1-9014-d09102093bce",
+    "trainingPartnerId": "168f4ae8-a9fa-5063-a04a-4ff2a02c377d",
+    "trainingPartnerName": "St Francis Xavier Teaching School Alliance",
+    "accreditedProviderId": "6d189a0f-5b77-5196-9db4-de5c49345ebe",
+    "accreditedProviderName": "Birmingham Newman University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "2a5a3cd2-c5ed-5ec2-a82e-2a524ab217a0",
     "trainingPartnerId": "8f8a749b-fa34-5021-a9f0-104784fce421",
     "trainingPartnerName": "The Academy at Shotton Hall",
@@ -19597,6 +20555,34 @@
     ]
   },
   {
+    "id": "b98ed48e-ee23-5ed2-a9cf-1e9939342daa",
+    "trainingPartnerId": "de152b17-63a0-51bc-9924-277e8f62b8c5",
+    "trainingPartnerName": "Leicestershire Learning Alliance",
+    "accreditedProviderId": "a65f2fe8-ef80-55db-965c-1be44eeb12d5",
+    "accreditedProviderName": "Nottingham Trent University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "2e207162-b850-578c-86ca-39427f394fc3",
+    "trainingPartnerId": "1920ba45-b3f5-5ede-bcea-571442c1e2be",
+    "trainingPartnerName": "Redhill Primary Teacher Training",
+    "accreditedProviderId": "a65f2fe8-ef80-55db-965c-1be44eeb12d5",
+    "accreditedProviderName": "Nottingham Trent University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "8a865f51-fc7e-591f-8d25-4f441de35262",
     "trainingPartnerId": "5407917d-045d-55ee-aa51-ffebe52ee866",
     "trainingPartnerName": "Shirebrook Academy",
@@ -19625,6 +20611,34 @@
     ]
   },
   {
+    "id": "ff8b6162-5050-5aea-9169-2a18f2f8cd6e",
+    "trainingPartnerId": "f695b38b-0d1c-50c8-b4cd-85a6ad4a4b41",
+    "trainingPartnerName": "Berkshire Teaching Alliance",
+    "accreditedProviderId": "f94e2a73-8008-5d44-8d94-5f732a452db0",
+    "accreditedProviderName": "Oxford Brookes University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "4712d035-1b7b-5e57-a7ec-f46d0a4f235a",
+    "trainingPartnerId": "d493caa4-e1ea-5c2e-8993-5bd603765a74",
+    "trainingPartnerName": "Atlantic Coast Cooperative Trust",
+    "accreditedProviderId": "c956a060-b8bc-590c-9007-3bcd7ff7d23a",
+    "accreditedProviderName": "Plymouth Marjon University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "58d59fc5-a134-53b2-82d5-71d1fef9956d",
     "trainingPartnerId": "9105acb6-0e65-5bcc-a4af-fb07f0d084fc",
     "trainingPartnerName": "Cornerstone Academy Trust",
@@ -19641,6 +20655,20 @@
     "id": "a7874eba-7b38-50b2-bfac-8e32432a1f1d",
     "trainingPartnerId": "02b03625-67bc-5157-8105-3401e7018755",
     "trainingPartnerName": "Devon Moorland Schools Partnership",
+    "accreditedProviderId": "c956a060-b8bc-590c-9007-3bcd7ff7d23a",
+    "accreditedProviderName": "Plymouth Marjon University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "f811a695-9ff3-5116-99fe-66ea36a389b5",
+    "trainingPartnerId": "1bf400dc-b6ab-5ba1-9098-e62e95e56e59",
+    "trainingPartnerName": "Venture",
     "accreditedProviderId": "c956a060-b8bc-590c-9007-3bcd7ff7d23a",
     "accreditedProviderName": "Plymouth Marjon University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -19708,6 +20736,32 @@
     ]
   },
   {
+    "id": "32131951-23bc-55c0-ae33-35d10f4edb92",
+    "trainingPartnerId": "d31defbc-a26a-5ecc-bacf-d52cf48b16eb",
+    "trainingPartnerName": "Red Kite Secondary School Direct",
+    "accreditedProviderId": "9ceb1b58-16d4-58c8-9d06-40750b5db582",
+    "accreditedProviderName": "Red Kite Teacher Training",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "20d8a051-10e4-5320-a4ef-3481994c420c",
+    "trainingPartnerId": "3a33718e-4f6d-5fb3-8e01-4e6aa48b9082",
+    "trainingPartnerName": "Yorkshire Inclusive TSA",
+    "accreditedProviderId": "9ceb1b58-16d4-58c8-9d06-40750b5db582",
+    "accreditedProviderName": "Red Kite Teacher Training",
+    "startsOn": "2021-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e"
+    ]
+  },
+  {
     "id": "f2e1dd3e-7d4c-5016-ac70-ad3a1ff28527",
     "trainingPartnerId": "b991345e-f9ec-5097-8a63-dcf9d061e192",
     "trainingPartnerName": "Agnus Dei Catholic Schools",
@@ -19764,6 +20818,20 @@
     ]
   },
   {
+    "id": "e919fb6c-469f-54a0-8d0f-47f141132807",
+    "trainingPartnerId": "15b1635e-62ea-557e-8c6f-42823a98fc9d",
+    "trainingPartnerName": "Paradigm Teaching School",
+    "accreditedProviderId": "d3ff6187-1d48-504c-af90-25817ddafb7c",
+    "accreditedProviderName": "Roehampton University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "dc04d114-c9d7-5682-bcea-44def98c0f87",
     "trainingPartnerId": "0159a3eb-7c36-5517-818c-45ae10f947d9",
     "trainingPartnerName": "Southfields Academy",
@@ -19775,6 +20843,19 @@
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
       "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "f26fa4ba-2a1d-5ecd-837b-4eca2423831e",
+    "trainingPartnerId": "f68eebd3-c589-5a78-bc97-b79008fbda99",
+    "trainingPartnerName": "The Aspirations Academies Trust",
+    "accreditedProviderId": "d3ff6187-1d48-504c-af90-25817ddafb7c",
+    "accreditedProviderName": "Roehampton University",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
     ]
   },
   {
@@ -19847,9 +20928,51 @@
     ]
   },
   {
+    "id": "93854bba-6023-58a1-9477-ea4146740a68",
+    "trainingPartnerId": "0841ed01-5a75-544b-b4cc-075748abc65f",
+    "trainingPartnerName": "Fields of Learning Teaching School Alliance",
+    "accreditedProviderId": "a5252b89-489c-5e35-a21f-d1ded21c5bf0",
+    "accreditedProviderName": "Sheffield Hallam University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "c894eac8-4ddf-5471-b388-296ed98bdec4",
+    "trainingPartnerId": "62b06a78-3edf-56e4-af9e-231b805edfba",
+    "trainingPartnerName": "Learning Unlimited Teaching School Alliance",
+    "accreditedProviderId": "a5252b89-489c-5e35-a21f-d1ded21c5bf0",
+    "accreditedProviderName": "Sheffield Hallam University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "38fe7b5d-dea8-592a-8e99-ebc9b0ff691f",
     "trainingPartnerId": "c59ea972-c31f-5ce1-b3ff-8b779dacb4b3",
     "trainingPartnerName": "Penistone Area Partnership",
+    "accreditedProviderId": "a5252b89-489c-5e35-a21f-d1ded21c5bf0",
+    "accreditedProviderName": "Sheffield Hallam University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "fe94b3f3-e0fb-5d99-b799-8acd4205869b",
+    "trainingPartnerId": "db19672a-bcce-5c9d-bc09-ae932c472c82",
+    "trainingPartnerName": "Sheffield South Primary Partnership",
     "accreditedProviderId": "a5252b89-489c-5e35-a21f-d1ded21c5bf0",
     "accreditedProviderName": "Sheffield Hallam University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -19922,6 +21045,20 @@
     "trainingPartnerName": "Southfields Academy",
     "accreditedProviderId": "71eaeb15-4772-56d0-bc47-cab8a5b3d59a",
     "accreditedProviderName": "Southfields Academy Teaching School SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "3579ef84-dd17-50a8-ada2-f9ec22552912",
+    "trainingPartnerId": "5d202500-2ec1-5d54-86f4-63def9faad07",
+    "trainingPartnerName": "St Luke's Science and Sports College",
+    "accreditedProviderId": "61f37301-2499-51df-916c-d464e5194c27",
+    "accreditedProviderName": "Ted Wragg Teacher Training Partnership",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -20013,9 +21150,64 @@
     ]
   },
   {
+    "id": "c81e950b-5ba6-52ce-ae63-412b9790ab96",
+    "trainingPartnerId": "b11b16f4-adc7-5fdd-b067-36cc28728c16",
+    "trainingPartnerName": "Inner London Teacher Training Alliance",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "c37857a9-03c6-587b-83db-276bd7fae37d",
     "trainingPartnerId": "772bde1e-3d51-523b-a6f2-84f3b284950c",
     "trainingPartnerName": "Merton Special Training Association",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "8418d678-29ee-566a-882a-e34e9e8077e4",
+    "trainingPartnerId": "15b1635e-62ea-557e-8c6f-42823a98fc9d",
+    "trainingPartnerName": "Paradigm Teaching School",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "1c7d4bf4-00b6-5cb3-83a9-8fb29c269d0b",
+    "trainingPartnerId": "445bba61-e265-5c3a-9563-e196467e4320",
+    "trainingPartnerName": "Primary TS Alliance",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "c92b07d9-bbfb-5024-88a7-9d476340e75b",
+    "trainingPartnerId": "f9fcceef-080b-521d-9ffb-a8b67979a665",
+    "trainingPartnerName": "Richmond Teaching School Alliance",
     "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
     "accreditedProviderName": "St Mary's University, Twickenham",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -20069,6 +21261,48 @@
     ]
   },
   {
+    "id": "c5e4e48e-f480-581d-8a95-8f81c6dc8073",
+    "trainingPartnerId": "f110d3ce-5746-5959-b8ea-14a97f5a3c47",
+    "trainingPartnerName": "Stradbroke Church of England Primary School IP21 5HH",
+    "accreditedProviderId": "1cc42474-7cb2-5286-83cf-19a7381f8ddd",
+    "accreditedProviderName": "Suffolk and Norfolk Primary SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "aab7b457-adbc-56ff-bc38-8f371b6aed85",
+    "trainingPartnerId": "fa6b46a6-5a72-5add-b54c-e29f2c7a5030",
+    "trainingPartnerName": "The Norwich Teaching School",
+    "accreditedProviderId": "1cc42474-7cb2-5286-83cf-19a7381f8ddd",
+    "accreditedProviderName": "Suffolk and Norfolk Primary SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "d063b745-871f-5866-a2fd-f8bf39bdd777",
+    "trainingPartnerId": "a1ca395d-8b21-5bba-a986-bc923928a013",
+    "trainingPartnerName": "West Ipswich Teaching School",
+    "accreditedProviderId": "1cc42474-7cb2-5286-83cf-19a7381f8ddd",
+    "accreditedProviderName": "Suffolk and Norfolk Primary SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "5505d661-c0d8-5b4f-ad6b-aaa8a751f890",
     "trainingPartnerId": "25ea36a8-3855-5fb7-a343-dd7fc39066b2",
     "trainingPartnerName": "Bury St Edmunds County Upper School",
@@ -20088,6 +21322,62 @@
     "trainingPartnerName": "Claydon High School",
     "accreditedProviderId": "95c64f1b-321f-55f9-ac85-671e16c5b815",
     "accreditedProviderName": "Norfolk, Essex and Suffolk Teacher Training (NESTT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "b35f76d5-d9ee-516e-91e6-fc381ef5ef4b",
+    "trainingPartnerId": "d2af3f18-459f-5d21-b6fd-88ecfa88a95c",
+    "trainingPartnerName": "Farlingaye & Kesgrave Teaching School Alliance",
+    "accreditedProviderId": "95c64f1b-321f-55f9-ac85-671e16c5b815",
+    "accreditedProviderName": "Norfolk, Essex and Suffolk Teacher Training (NESTT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0f93923c-6eeb-595f-96ca-b8e29834ad62",
+    "trainingPartnerId": "fa6b46a6-5a72-5add-b54c-e29f2c7a5030",
+    "trainingPartnerName": "The Norwich Teaching School",
+    "accreditedProviderId": "95c64f1b-321f-55f9-ac85-671e16c5b815",
+    "accreditedProviderName": "Norfolk, Essex and Suffolk Teacher Training (NESTT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "be7ded85-e17c-5fc8-a8e1-acb9ebfcef9e",
+    "trainingPartnerId": "5b8c8fe5-03b4-5ed9-9e38-a6898bc0d305",
+    "trainingPartnerName": "East Sussex Teacher Training Partnership SCITT IK",
+    "accreditedProviderId": "3a95e49c-141e-5aab-a734-c8d13d915fa9",
+    "accreditedProviderName": "Sussex Teacher Training Partnership",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "ebf652ad-26b2-5b2e-9902-ce1d08702ac3",
+    "trainingPartnerId": "99fda9d4-2fb8-552d-b79a-f192b686062c",
+    "trainingPartnerName": "St Marks's teaching School Partnership",
+    "accreditedProviderId": "3a95e49c-141e-5aab-a734-c8d13d915fa9",
+    "accreditedProviderName": "Sussex Teacher Training Partnership",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -20192,6 +21482,62 @@
     ]
   },
   {
+    "id": "717e4e9e-3d0e-5987-ba21-a781bde7acf8",
+    "trainingPartnerId": "a4f3439d-cbe9-5d4a-a8bd-d319f04e2d9d",
+    "trainingPartnerName": "Luton Futures",
+    "accreditedProviderId": "4ba1d7b0-935d-5946-9266-89abf60d9aea",
+    "accreditedProviderName": "The Bedfordshire Schools Training Partnership",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "3437c10b-f4c9-5b48-a847-4d670aaa1f64",
+    "trainingPartnerId": "c9f881e7-a307-571e-b998-169c53e62505",
+    "trainingPartnerName": "Catalyst Teaching School Alliance",
+    "accreditedProviderId": "539e3f33-925f-5a83-a6e7-1fe41384b13d",
+    "accreditedProviderName": "Cambridge Training Schools Network, CTSN SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "6dc15209-3b66-5502-81a0-4b3dd1779ce4",
+    "trainingPartnerId": "0600f51c-238c-55c2-9c62-42c25cbe078d",
+    "trainingPartnerName": "Morris Teaching School Alliance",
+    "accreditedProviderId": "539e3f33-925f-5a83-a6e7-1fe41384b13d",
+    "accreditedProviderName": "Cambridge Training Schools Network, CTSN SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0aa2d4e6-1099-5bff-a15f-05c799504281",
+    "trainingPartnerId": "834f32c1-2e53-5302-b6d4-c0f0c8dd9ec0",
+    "trainingPartnerName": "The Lark Teaching School Alliance",
+    "accreditedProviderId": "539e3f33-925f-5a83-a6e7-1fe41384b13d",
+    "accreditedProviderName": "Cambridge Training Schools Network, CTSN SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "19c733e4-f946-512b-93c0-99f78a01d163",
     "trainingPartnerId": "9de89502-0ed5-562b-87cb-a681cec33fa6",
     "trainingPartnerName": "Sidney Stringer Academy",
@@ -20237,6 +21583,20 @@
     "id": "693d02b8-627b-5ec3-a57a-56fffd91da5e",
     "trainingPartnerId": "2226abed-1459-5efa-a75d-5fb9243e7785",
     "trainingPartnerName": "Loreto Grammar School Lead Partner",
+    "accreditedProviderId": "1c2e7384-c39e-5bca-99cc-be512498cf21",
+    "accreditedProviderName": "Manchester Metropolitan University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "95bfa5d9-eb0d-5b1e-9d5a-2ec8fbf127d2",
+    "trainingPartnerId": "a129ad13-0ecd-5427-b445-05496038f105",
+    "trainingPartnerName": "Optimus Alliance",
     "accreditedProviderId": "1c2e7384-c39e-5bca-99cc-be512498cf21",
     "accreditedProviderName": "Manchester Metropolitan University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -20295,6 +21655,20 @@
     "trainingPartnerName": "The Bridge AP Academy",
     "accreditedProviderId": "75c0d311-7e52-5660-852b-66c06b8e79c9",
     "accreditedProviderName": "Future Teacher Training",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "c335ad61-d51e-5ab2-b307-970b658d19db",
+    "trainingPartnerId": "62b06a78-3edf-56e4-af9e-231b805edfba",
+    "trainingPartnerName": "Learning Unlimited Teaching School Alliance",
+    "accreditedProviderId": "0eba7ca1-420c-5199-ae53-dd7ff8d7f308",
+    "accreditedProviderName": "The Sheffield SCITT",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -20384,11 +21758,66 @@
     ]
   },
   {
+    "id": "23d5e1fe-9567-5994-980c-286787eb0d11",
+    "trainingPartnerId": "305a84a1-b152-531b-a0b1-fcd954fb7c50",
+    "trainingPartnerName": "Bristol E-ACT Partnership",
+    "accreditedProviderId": "cba95997-9d83-562b-a12d-69b9fa6cb9f1",
+    "accreditedProviderName": "University of Gloucestershire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "140bbd55-dbf4-546b-84ad-15162e23e6a1",
+    "trainingPartnerId": "fb14e325-e773-5b6b-b47b-dfe2ee479831",
+    "trainingPartnerName": "Swindon Initial Teacher Education",
+    "accreditedProviderId": "cba95997-9d83-562b-a12d-69b9fa6cb9f1",
+    "accreditedProviderName": "University of Gloucestershire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "6c03570c-5e00-59bc-a515-302345148086",
+    "trainingPartnerId": "8968f6b5-7669-535f-89e4-3ae16815bb35",
+    "trainingPartnerName": "Swindon Initial Teacher Education in Gloucester",
+    "accreditedProviderId": "cba95997-9d83-562b-a12d-69b9fa6cb9f1",
+    "accreditedProviderName": "University of Gloucestershire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "ee2169fa-7110-5649-ab57-d1a782da1cee",
     "trainingPartnerId": "a83029bb-903b-54ea-bbc9-b0066f0a083d",
     "trainingPartnerName": "Harbour Learning Trust",
     "accreditedProviderId": "df2d87a9-1feb-5ab4-aff8-845ce19ec1df",
     "accreditedProviderName": "University of Hull",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "61cef863-9c0b-522d-8af7-6350eddd8c4e",
+    "trainingPartnerId": "7fe31f0f-5b26-5196-a722-644a061451f8",
+    "trainingPartnerName": "IPLCN",
+    "accreditedProviderId": "102462b5-a1ce-5f87-9f79-582ec293c701",
+    "accreditedProviderName": "University of Manchester",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -20429,6 +21858,20 @@
     "id": "4f98f259-05b1-5b81-9b7c-83733645628f",
     "trainingPartnerId": "d8542893-3ed5-5b13-b1eb-b1527b3b6f57",
     "trainingPartnerName": "The Minster Learning Alliance",
+    "accreditedProviderId": "baec1c96-75f9-5b3a-9ae8-8c287162e253",
+    "accreditedProviderName": "University of Nottingham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "a6243375-c44b-5f2d-bfdb-c286cfbf7741",
+    "trainingPartnerId": "974fea00-dcb0-555b-af68-96949b404624",
+    "trainingPartnerName": "Transform Teaching School Alliance",
     "accreditedProviderId": "baec1c96-75f9-5b3a-9ae8-8c287162e253",
     "accreditedProviderName": "University of Nottingham",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -20535,6 +21978,19 @@
     ]
   },
   {
+    "id": "34e6ebdd-8b3d-5a4f-911b-a1026fb6e5f3",
+    "trainingPartnerId": "fa8de30b-1c0d-5ad0-94d0-57cb00e904cc",
+    "trainingPartnerName": "St Matthew's Teaching School",
+    "accreditedProviderId": "2e3fc00e-8ac7-5d32-a804-29c694cb2d73",
+    "accreditedProviderName": "Titan Teacher Training",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
     "id": "cfde1b08-35c1-5355-98fa-b1cad0f59c7a",
     "trainingPartnerId": "4c6ab9fd-5758-5747-bd87-47170e17dd8e",
     "trainingPartnerName": "Peter Pan Training Partnership",
@@ -20576,6 +22032,20 @@
     ]
   },
   {
+    "id": "cb7137f9-1830-5a41-994c-e1acea205ddd",
+    "trainingPartnerId": "0d916266-312a-5adf-a80a-d294b905f440",
+    "trainingPartnerName": "Bexley Teaching School Alliance",
+    "accreditedProviderId": "49e186dc-5f8c-5b8e-bc45-da4dddec84f2",
+    "accreditedProviderName": "UCL, University College London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "49a87937-1b39-511c-a31c-c0c592b34dec",
     "trainingPartnerId": "20eb91d1-374c-5bc7-9658-4088ff46162a",
     "trainingPartnerName": "Charlotte Sharman Primary School",
@@ -20593,6 +22063,20 @@
     "id": "3d32a0b1-7beb-5562-a6a1-d9cb8a0781aa",
     "trainingPartnerId": "ab974d3f-569a-5f0a-b91d-c1480df7cada",
     "trainingPartnerName": "St Angela's Teacher Training Centre",
+    "accreditedProviderId": "49e186dc-5f8c-5b8e-bc45-da4dddec84f2",
+    "accreditedProviderName": "UCL, University College London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "c9fce8c2-3f4e-5229-bde6-d45ac7874352",
+    "trainingPartnerId": "cb350a85-857a-5f8b-856d-9d2b571de829",
+    "trainingPartnerName": "Elmhurst Teaching School Alliance",
     "accreditedProviderId": "49e186dc-5f8c-5b8e-bc45-da4dddec84f2",
     "accreditedProviderName": "UCL, University College London",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -20674,11 +22158,39 @@
     ]
   },
   {
+    "id": "4d152f1b-7c93-5a70-8470-0cc92b88c655",
+    "trainingPartnerId": "c67542ce-cab5-518f-b58a-83065312c1c6",
+    "trainingPartnerName": "Swiss Cottage Teaching School Alliance",
+    "accreditedProviderId": "49e186dc-5f8c-5b8e-bc45-da4dddec84f2",
+    "accreditedProviderName": "UCL, University College London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "b8b495cb-9a4b-58b2-83b5-9b292f174f60",
     "trainingPartnerId": "82f14fb4-0d22-594f-9d54-86155e9c3471",
     "trainingPartnerName": "The City Academy, Hackney",
     "accreditedProviderId": "49e186dc-5f8c-5b8e-bc45-da4dddec84f2",
     "accreditedProviderName": "UCL, University College London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "3a3db09c-078e-5e87-80fc-3d8c8a78e730",
+    "trainingPartnerId": "941c5edf-2b45-5c0e-a755-753bb834fc31",
+    "trainingPartnerName": "Birmingham Nursery Schools Teaching School Alliance",
+    "accreditedProviderId": "90da0f08-761a-55ff-aaa8-3722e82ff73f",
+    "accreditedProviderName": "University College Birmingham",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -20702,6 +22214,34 @@
     ]
   },
   {
+    "id": "df3c2c77-e752-513e-b131-f22a88975ae9",
+    "trainingPartnerId": "a4f3439d-cbe9-5d4a-a8bd-d319f04e2d9d",
+    "trainingPartnerName": "Luton Futures",
+    "accreditedProviderId": "16b98188-754e-5e71-b322-f24f9cc5097f",
+    "accreditedProviderName": "University of Bedfordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "4dd0c7b3-91f0-5918-bfe6-242999adc8d7",
+    "trainingPartnerId": "0a71c047-0e44-5be7-bff5-0836d858bc40",
+    "trainingPartnerName": "Nene and Ramnoth",
+    "accreditedProviderId": "16b98188-754e-5e71-b322-f24f9cc5097f",
+    "accreditedProviderName": "University of Bedfordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "37f6ec2c-52a2-543f-9531-ae39afa9aa52",
     "trainingPartnerId": "9d7eb5d1-6979-5c7d-918d-e42e16148b8b",
     "trainingPartnerName": "REAch Teach Primary Partnership",
@@ -20712,6 +22252,34 @@
     "academicYearIds": [
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "c7ffbb71-89c9-5eac-a6f7-130c92193090",
+    "trainingPartnerId": "21d3deb8-28ef-50e2-85fe-583998bfcc43",
+    "trainingPartnerName": "The Earls High School",
+    "accreditedProviderId": "efcc00a7-dd10-57e1-a1c9-a71ebebabc4d",
+    "accreditedProviderName": "University of Birmingham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "f1710575-00e7-5b8c-b8ab-762361d19aa0",
+    "trainingPartnerId": "38ca2d50-9e8b-594b-9077-2a406858781d",
+    "trainingPartnerName": "Washwood Heath School Direct",
+    "accreditedProviderId": "efcc00a7-dd10-57e1-a1c9-a71ebebabc4d",
+    "accreditedProviderName": "University of Birmingham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -20743,11 +22311,52 @@
     ]
   },
   {
+    "id": "6c7a5da7-cea8-5772-a967-88f6833782da",
+    "trainingPartnerId": "16d7ccbd-52d7-5a58-827a-6184e9e59ae0",
+    "trainingPartnerName": "SCLP Alliance",
+    "accreditedProviderId": "41510e9f-8e43-5b0f-b9c5-f336fce82638",
+    "accreditedProviderName": "University of Brighton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "99d3def0-a19c-5d50-b232-6a2515958e41",
+    "trainingPartnerId": "b3bce1ce-d025-5087-b3b9-2259d3db0a87",
+    "trainingPartnerName": "The Warwick Partnership",
+    "accreditedProviderId": "41510e9f-8e43-5b0f-b9c5-f336fce82638",
+    "accreditedProviderName": "University of Brighton",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
     "id": "35661b55-9d9a-5f9d-834f-98dc25417b15",
     "trainingPartnerId": "641c91b9-8c2d-5e91-b055-cb48bb3a5a5c",
     "trainingPartnerName": "University of Brighton Academies Trust School Direct Programme",
     "accreditedProviderId": "41510e9f-8e43-5b0f-b9c5-f336fce82638",
     "accreditedProviderName": "University of Brighton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "08a88cf6-7dc2-5061-89be-aeef84c73b37",
+    "trainingPartnerId": "ff8e4909-2daa-502c-9c46-81df412b1df0",
+    "trainingPartnerName": "Castle Consortium",
+    "accreditedProviderId": "97146b28-1773-50ae-98dd-1705211c34f7",
+    "accreditedProviderName": "University of Bristol",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -20787,6 +22396,20 @@
     "id": "0080371f-a17d-5184-aa4d-17da31e234bc",
     "trainingPartnerId": "5718c030-8975-5be9-9769-87317929da8a",
     "trainingPartnerName": "Queen Elizabeth II Silver Jubilee School, Horsham",
+    "accreditedProviderId": "64dbb40a-a4d8-50cc-9eb7-066843f93e74",
+    "accreditedProviderName": "University of Chichester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "d22a5dc5-8836-5988-9eae-afc20ff32d95",
+    "trainingPartnerId": "530a18d9-96cc-5c5d-8f98-2d0dd5e92622",
+    "trainingPartnerName": "SPARKLE ALLIANCE",
     "accreditedProviderId": "64dbb40a-a4d8-50cc-9eb7-066843f93e74",
     "accreditedProviderName": "University of Chichester",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -20853,6 +22476,34 @@
     ]
   },
   {
+    "id": "2af56309-40f2-533f-8dc3-813aecbfda47",
+    "trainingPartnerId": "fb4c0570-9ffb-517c-9b8f-43a0c10856a0",
+    "trainingPartnerName": "Kingsmead Primary School",
+    "accreditedProviderId": "358a4833-4b49-5802-8831-26a68619659d",
+    "accreditedProviderName": "University of Cumbria",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "cbcd6684-c3f7-5dd7-93a0-40a38e431a7c",
+    "trainingPartnerId": "3c5deedd-7e2e-51a1-8253-507b561afad8",
+    "trainingPartnerName": "Lancaster and Fylde Schools' Alliance",
+    "accreditedProviderId": "358a4833-4b49-5802-8831-26a68619659d",
+    "accreditedProviderName": "University of Cumbria",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "87463d2c-1c42-5271-a3ec-0ba9ef36cfef",
     "trainingPartnerId": "bf83a1c4-9675-57d1-bdba-7d521a4d1449",
     "trainingPartnerName": "Parbold Douglas Church of England Academy",
@@ -20884,6 +22535,20 @@
     "id": "20414d31-8954-56fa-be8c-78dd20b397be",
     "trainingPartnerId": "50af18ed-9568-5a1b-988b-eb5316960a21",
     "trainingPartnerName": "St Ninian Catholic Federation",
+    "accreditedProviderId": "358a4833-4b49-5802-8831-26a68619659d",
+    "accreditedProviderName": "University of Cumbria",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "316e175a-28a0-5a06-888b-1a88e65e93ec",
+    "trainingPartnerId": "cd4fc689-a585-5032-9e7c-562925fd8282",
+    "trainingPartnerName": "Yarlside Teaching School Alliance",
     "accreditedProviderId": "358a4833-4b49-5802-8831-26a68619659d",
     "accreditedProviderName": "University of Cumbria",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -20963,6 +22628,20 @@
     ]
   },
   {
+    "id": "105f9105-947c-51a2-ba1c-64819aa07de7",
+    "trainingPartnerId": "aa68783c-49fd-5a04-930f-e05f0fda7fb0",
+    "trainingPartnerName": "Transform Teaching School Derby",
+    "accreditedProviderId": "66f11f43-05ec-58d5-bc7f-25399d963222",
+    "accreditedProviderName": "University of Derby",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "ea8320eb-35e6-5bdc-a8f2-d3003fd1df4a",
     "trainingPartnerId": "25ea36a8-3855-5fb7-a343-dd7fc39066b2",
     "trainingPartnerName": "Bury St Edmunds County Upper School",
@@ -20987,6 +22666,20 @@
     "academicYearIds": [
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "a4213495-8c62-545e-9534-e48c6c348868",
+    "trainingPartnerId": "d2af3f18-459f-5d21-b6fd-88ecfa88a95c",
+    "trainingPartnerName": "Farlingaye & Kesgrave Teaching School Alliance",
+    "accreditedProviderId": "6eaa5ff4-af08-5f65-a58f-4b609505fe68",
+    "accreditedProviderName": "University of East Anglia",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -21032,11 +22725,39 @@
     ]
   },
   {
+    "id": "dc9556a4-fbc7-5ef9-9146-5cb6da566588",
+    "trainingPartnerId": "72d0ec49-be47-5c91-a90c-4b7922d2c64b",
+    "trainingPartnerName": "West Thornton Primary Academy",
+    "accreditedProviderId": "e9fecf84-0546-503a-899e-1bb98184a91a",
+    "accreditedProviderName": "University of East London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "0f8aba0c-8995-57d6-ab49-daa79afc71e5",
     "trainingPartnerId": "69b8b796-1d48-5aa4-813a-596d14534e10",
     "trainingPartnerName": "Whitefield Alliance",
     "accreditedProviderId": "e9fecf84-0546-503a-899e-1bb98184a91a",
     "accreditedProviderName": "University of East London",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "0aaf9389-0cf4-5e16-9c88-e9310c1f59c0",
+    "trainingPartnerId": "a8049e0a-f66e-599f-aff2-877bfa0aeaf6",
+    "trainingPartnerName": "Affinity Teaching School Alliance (Somerset)",
+    "accreditedProviderId": "b733446c-de01-509d-a823-4680f6aeba85",
+    "accreditedProviderName": "University of Exeter",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -21074,6 +22795,34 @@
     ]
   },
   {
+    "id": "86a89989-29c8-50f0-9e86-f8aada7a4a49",
+    "trainingPartnerId": "e1fb92a7-3cd0-58e0-8f38-3dae96bddcd4",
+    "trainingPartnerName": "Launceston College MAT and Duchy Academy Trust",
+    "accreditedProviderId": "b733446c-de01-509d-a823-4680f6aeba85",
+    "accreditedProviderName": "University of Exeter",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "5f1f2337-41d5-512d-a661-0a4e891dac0d",
+    "trainingPartnerId": "5de0b745-01b2-5ecf-914e-4cca7fdf1e62",
+    "trainingPartnerName": "North Devon Teaching School Alliance",
+    "accreditedProviderId": "b733446c-de01-509d-a823-4680f6aeba85",
+    "accreditedProviderName": "University of Exeter",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "e68a76c5-6155-58c2-b7b1-414017f6a5b6",
     "trainingPartnerId": "e6b6a797-f4e5-5dbe-9499-3f1cb1aff267",
     "trainingPartnerName": "QE School, Wimborne",
@@ -21088,9 +22837,51 @@
     ]
   },
   {
+    "id": "ab252b88-3c3c-5875-81f3-daa00f23dcba",
+    "trainingPartnerId": "ab56510a-c4d8-55fd-9638-b0e971362e85",
+    "trainingPartnerName": "Quantock Teaching Alliance",
+    "accreditedProviderId": "b733446c-de01-509d-a823-4680f6aeba85",
+    "accreditedProviderName": "University of Exeter",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "661294ec-be73-510d-bb4a-c6d347b18c3f",
+    "trainingPartnerId": "0d916266-312a-5adf-a80a-d294b905f440",
+    "trainingPartnerName": "Bexley Teaching School Alliance",
+    "accreditedProviderId": "c17fce91-86b1-5660-b24b-9286b7a59b01",
+    "accreditedProviderName": "University of Greenwich",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "2f883254-9731-521a-8e6d-7bf418532a37",
     "trainingPartnerId": "c51c305a-275b-5b6a-bad7-7cce3e090f08",
     "trainingPartnerName": "Connect Teaching Partnership",
+    "accreditedProviderId": "c17fce91-86b1-5660-b24b-9286b7a59b01",
+    "accreditedProviderName": "University of Greenwich",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "844c7b77-6f5c-58f2-9422-49a382fa3c76",
+    "trainingPartnerId": "6326626d-3e33-52b3-9529-6e351ae23d6f",
+    "trainingPartnerName": "Early Foundations Teaching School Alliance",
     "accreditedProviderId": "c17fce91-86b1-5660-b24b-9286b7a59b01",
     "accreditedProviderName": "University of Greenwich",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -21117,6 +22908,20 @@
     "id": "72191faa-7536-548c-8ee9-73b3a5016bcf",
     "trainingPartnerId": "3a32c704-4e6a-5764-a03d-c65263106421",
     "trainingPartnerName": "Harrow First",
+    "accreditedProviderId": "d30c517c-5f1c-59d5-a711-e0382a849475",
+    "accreditedProviderName": "University of Hertfordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "9b1222e0-5e82-514b-b959-ae1d5887d2d3",
+    "trainingPartnerId": "eeff2f38-1f11-587c-abbe-6ce00b553150",
+    "trainingPartnerName": "The Shared Learning Trust",
     "accreditedProviderId": "d30c517c-5f1c-59d5-a711-e0382a849475",
     "accreditedProviderName": "University of Hertfordshire",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -21197,9 +23002,65 @@
     ]
   },
   {
+    "id": "cdaf30f8-2168-564e-ae31-27cf1115d413",
+    "trainingPartnerId": "de152b17-63a0-51bc-9924-277e8f62b8c5",
+    "trainingPartnerName": "Leicestershire Learning Alliance",
+    "accreditedProviderId": "ab61118f-393c-5556-b68f-419a82e2fa5e",
+    "accreditedProviderName": "University of Leicester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "cd6c0460-673e-54cf-a3ce-8ee58fff1866",
     "trainingPartnerId": "a45033d4-130d-50eb-ad7c-f43a23d069c3",
     "trainingPartnerName": "Loughborough Learning Alliance",
+    "accreditedProviderId": "ab61118f-393c-5556-b68f-419a82e2fa5e",
+    "accreditedProviderName": "University of Leicester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "fd956930-2505-5fe2-9855-55685e2c916c",
+    "trainingPartnerId": "1d6ccf02-ffe3-5dd0-b8d6-777e3bae33e6",
+    "trainingPartnerName": "Newcroft School Direct",
+    "accreditedProviderId": "ab61118f-393c-5556-b68f-419a82e2fa5e",
+    "accreditedProviderName": "University of Leicester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "2b655960-23ff-5185-a235-687f23a29f45",
+    "trainingPartnerId": "222670e6-22a0-52a3-9878-8b3d38bd99d8",
+    "trainingPartnerName": "North Charnwood Learning Partnership",
+    "accreditedProviderId": "ab61118f-393c-5556-b68f-419a82e2fa5e",
+    "accreditedProviderName": "University of Leicester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "9ba9b13c-4017-5d7f-96b2-192589c649a0",
+    "trainingPartnerId": "cd2a0cf6-9bf9-5ac5-9799-caf03945bc18",
+    "trainingPartnerName": "Park Junior School",
     "accreditedProviderId": "ab61118f-393c-5556-b68f-419a82e2fa5e",
     "accreditedProviderName": "University of Leicester",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -21230,6 +23091,48 @@
     "trainingPartnerName": "Greenwood Academies Trust",
     "accreditedProviderId": "f191d12d-404b-59bf-81b1-30f068e0c255",
     "accreditedProviderName": "University of Northampton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "34fe835c-554f-5aa3-9a42-1b57f060298b",
+    "trainingPartnerId": "5de0b745-01b2-5ecf-914e-4cca7fdf1e62",
+    "trainingPartnerName": "North Devon Teaching School Alliance",
+    "accreditedProviderId": "759e8e5a-1594-5f90-9bcc-0520c64e3048",
+    "accreditedProviderName": "University of Plymouth",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "a3a0c5f9-42bc-5e1f-9127-665408dece59",
+    "trainingPartnerId": "887e5ad9-7166-5d93-af43-201dcbcf5665",
+    "trainingPartnerName": "Torbay Teaching School Alliance",
+    "accreditedProviderId": "759e8e5a-1594-5f90-9bcc-0520c64e3048",
+    "accreditedProviderName": "University of Plymouth",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "f888304a-27f0-5212-af02-3c08eb55ba8a",
+    "trainingPartnerId": "8255d8bf-2745-5fce-8109-863c824cbe07",
+    "trainingPartnerName": "Child First Partnership",
+    "accreditedProviderId": "25623834-e79e-543c-b8c9-9e71878eab33",
+    "accreditedProviderName": "University of Southampton",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -21300,6 +23203,47 @@
     "trainingPartnerName": "Eastbourne Area School District Alliance",
     "accreditedProviderId": "5871ab6b-289a-536d-b7b5-dc5c555e9703",
     "accreditedProviderName": "University of Sussex",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "9ec284b6-4b70-594b-bff5-108429afbcb3",
+    "trainingPartnerId": "99fda9d4-2fb8-552d-b79a-f192b686062c",
+    "trainingPartnerName": "St Marks's teaching School Partnership",
+    "accreditedProviderId": "5871ab6b-289a-536d-b7b5-dc5c555e9703",
+    "accreditedProviderName": "University of Sussex",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "8eaa315a-2546-5512-9cfd-c8604eb24c3a",
+    "trainingPartnerId": "b3bce1ce-d025-5087-b3b9-2259d3db0a87",
+    "trainingPartnerName": "The Warwick Partnership",
+    "accreditedProviderId": "5871ab6b-289a-536d-b7b5-dc5c555e9703",
+    "accreditedProviderName": "University of Sussex",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "ec1d4270-23bc-54fc-a4ef-595f0391621c",
+    "trainingPartnerId": "a8aad45f-8818-5e43-9558-a7c273ffe97d",
+    "trainingPartnerName": "Severnside Learning Partnership",
+    "accreditedProviderId": "a75d23f2-3e8a-5703-aac0-029a5d7bc7ba",
+    "accreditedProviderName": "University of the West of England, Bristol",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
@@ -21407,6 +23351,34 @@
     ]
   },
   {
+    "id": "71613d92-e890-5083-9fac-e9a734c918f5",
+    "trainingPartnerId": "500940e6-c4e2-562f-8a68-d3b8c10c07b1",
+    "trainingPartnerName": "Oakham Alliance",
+    "accreditedProviderId": "10676bfe-0dd4-5247-992c-2f3d6cfb9d40",
+    "accreditedProviderName": "University of Wolverhampton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "b9c0512b-7a57-5d25-992f-f00b417177d7",
+    "trainingPartnerId": "ec0804ea-2d57-593c-9ab0-41c334142b58",
+    "trainingPartnerName": "Spring Vale Primary Schools Direct Alliance",
+    "accreditedProviderId": "10676bfe-0dd4-5247-992c-2f3d6cfb9d40",
+    "accreditedProviderName": "University of Wolverhampton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "8e9dc4d4-082f-5930-a018-ca679676417a",
     "trainingPartnerId": "94136e53-d001-52c7-9115-36e68723095e",
     "trainingPartnerName": "St Edmunds Catholic Academy",
@@ -21424,6 +23396,20 @@
     "id": "4469bd7f-fc25-5aa2-b06b-4a661cca106d",
     "trainingPartnerId": "5dc4278b-09dd-5fcb-9cb4-cbdb849aa6a5",
     "trainingPartnerName": "St John's Training School",
+    "accreditedProviderId": "10676bfe-0dd4-5247-992c-2f3d6cfb9d40",
+    "accreditedProviderName": "University of Wolverhampton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "9de2c449-f31b-5444-a64f-b49076754a6b",
+    "trainingPartnerId": "21d3deb8-28ef-50e2-85fe-583998bfcc43",
+    "trainingPartnerName": "The Earls High School",
     "accreditedProviderId": "10676bfe-0dd4-5247-992c-2f3d6cfb9d40",
     "accreditedProviderName": "University of Wolverhampton",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -21463,6 +23449,20 @@
     ]
   },
   {
+    "id": "629c5d5a-6766-5d12-8dcc-13ea884add9c",
+    "trainingPartnerId": "21d3deb8-28ef-50e2-85fe-583998bfcc43",
+    "trainingPartnerName": "The Earls High School",
+    "accreditedProviderId": "570f414c-e350-5ec8-b96b-01d2484dd2f5",
+    "accreditedProviderName": "University of Worcester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "26201b1f-a0a7-5a09-918d-a78409cc3eb9",
     "trainingPartnerId": "1b816374-18ae-51fa-b738-4b74977c607a",
     "trainingPartnerName": "Ilkley All Saints' Teacher Training Partnership",
@@ -21484,6 +23484,33 @@
     "endsOn": "2022-07-31T00:00:00Z",
     "academicYearIds": [
       "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "01a9c573-f6c8-59ac-8cf3-c2181ba0c81d",
+    "trainingPartnerId": "e16ca469-ba22-5840-b17f-6f7970524847",
+    "trainingPartnerName": "Parkinson Lane School Direct Partnership (Calderdale)",
+    "accreditedProviderId": "8085858a-021a-5fc3-bd90-6d0a8dfc6d14",
+    "accreditedProviderName": "York St John University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2022-07-31T00:00:00Z",
+    "academicYearIds": [
+      "d99ba67e-2f21-4319-b662-1bbd28f4137e",
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "82bf5866-992c-56a9-874c-eddd93cb5291",
+    "trainingPartnerId": "fdb5ac1b-3f7e-5fee-bf5e-215294c2d784",
+    "trainingPartnerName": "Anton Junior School",
+    "accreditedProviderId": "84aa4636-0793-56ad-b947-84e12f8d8371",
+    "accreditedProviderName": "Anton Andover Alliance",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
       "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
@@ -21730,6 +23757,58 @@
     ]
   },
   {
+    "id": "336dd861-131a-5baf-be14-0a31049a74bb",
+    "trainingPartnerId": "0d432372-c02a-5935-a559-eae5db574d85",
+    "trainingPartnerName": "Carmel College",
+    "accreditedProviderId": "de288009-079b-5b7c-a5b2-38842f071368",
+    "accreditedProviderName": "Carmel Teacher Training (SCITT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "1c08e60b-30db-5c8b-b0fa-e9d4492d128c",
+    "trainingPartnerId": "a47db60f-f280-5e23-b21c-175a265507af",
+    "trainingPartnerName": "St Cuthbert's High School",
+    "accreditedProviderId": "de288009-079b-5b7c-a5b2-38842f071368",
+    "accreditedProviderName": "Carmel Teacher Training (SCITT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "417b6956-2d5f-5768-9dc4-d72a899cca67",
+    "trainingPartnerId": "3e71daf0-3974-5446-a797-c576207fa8c1",
+    "trainingPartnerName": "St John's School and Sixth Form College",
+    "accreditedProviderId": "de288009-079b-5b7c-a5b2-38842f071368",
+    "accreditedProviderName": "Carmel Teacher Training (SCITT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "88d06286-a487-5c80-80fd-b47c51676faa",
+    "trainingPartnerId": "e7faf54f-64e2-5616-93b2-be8d3aad6d54",
+    "trainingPartnerName": "St Thomas More Catholic School",
+    "accreditedProviderId": "de288009-079b-5b7c-a5b2-38842f071368",
+    "accreditedProviderName": "Carmel Teacher Training (SCITT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "1a6da158-248b-5778-8512-9bf736c7a413",
     "trainingPartnerId": "61fade6b-3a45-5b4b-8512-fb773c4556ee",
     "trainingPartnerName": "Unity Teaching School Hub",
@@ -21781,11 +23860,50 @@
     ]
   },
   {
+    "id": "8ebc99eb-558d-59b4-800f-cd73cbc75aa6",
+    "trainingPartnerId": "e5152513-3397-538e-bdb8-98a5263c38d3",
+    "trainingPartnerName": "West Cumbria and North Lakes School Direct",
+    "accreditedProviderId": "a69b824a-84e5-5518-9675-e1dc5fd9f437",
+    "accreditedProviderName": "Cumbria Primary Teacher Training",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "063d26d4-d390-5778-8787-6f7b20320147",
+    "trainingPartnerId": "db5653db-5e9c-590e-8054-4e0cac770626",
+    "trainingPartnerName": "Peterlee Partnership Teaching School Alliance",
+    "accreditedProviderId": "bb5c1d58-844c-5bd6-a196-f97d1e053284",
+    "accreditedProviderName": "Durham University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "c7602c64-b436-5316-ac7e-ba5c011043da",
     "trainingPartnerId": "c946af92-4607-5d51-9326-646c7a888cc3",
     "trainingPartnerName": "Teach North: County Durham",
     "accreditedProviderId": "bb5c1d58-844c-5bd6-a196-f97d1e053284",
     "accreditedProviderName": "Durham University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "545c0f39-3178-50e6-a444-f16ad7b765f1",
+    "trainingPartnerId": "7dcfd37e-d053-5622-9a41-e6d2525402d8",
+    "trainingPartnerName": "Sussex Teacher Training Partnership SCITT RSW",
+    "accreditedProviderId": "3a95e49c-141e-5aab-a734-c8d13d915fa9",
+    "accreditedProviderName": "Sussex Teacher Training Partnership",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
@@ -21883,6 +24001,19 @@
     ]
   },
   {
+    "id": "b3f55be6-5d41-5986-97ae-dc045457601d",
+    "trainingPartnerId": "3a33718e-4f6d-5fb3-8e01-4e6aa48b9082",
+    "trainingPartnerName": "Yorkshire Inclusive TSA",
+    "accreditedProviderId": "45c0610e-5b0b-54c4-81b4-c6c8e17a18ca",
+    "accreditedProviderName": "HART of Yorkshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "d36ee5a8-6f93-578f-89f6-aa94df394457",
     "trainingPartnerId": "932eb946-db0c-58bb-95a6-577318e141ed",
     "trainingPartnerName": "Rivers Teaching Alliance",
@@ -21905,6 +24036,19 @@
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "92a82996-5d30-53c1-9ea5-46f6e97c694f",
+    "trainingPartnerId": "5dd37ee6-cdd8-5929-901d-93bc4011b1c4",
+    "trainingPartnerName": "City Learning Trust",
+    "accreditedProviderId": "433dfc2f-1d9f-5199-a9ce-e4bf15310538",
+    "accreditedProviderName": "Keele and North Staffordshire Teacher Education",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -21987,6 +24131,19 @@
     "id": "cdccf349-4124-5ae2-9337-f00e47853849",
     "trainingPartnerId": "47416fc5-8a5f-5606-b73e-303a26a9f781",
     "trainingPartnerName": "The Rodillian Multi Academy Trust",
+    "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
+    "accreditedProviderName": "Leeds Trinity University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "acad23ff-3a4f-5a7e-8270-cd161fce0879",
+    "trainingPartnerId": "e5dd2229-ff67-55f1-a85e-6d01ca72ba0e",
+    "trainingPartnerName": "St Bede's Deanery Teaching Alliance",
     "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
     "accreditedProviderName": "Leeds Trinity University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -22113,6 +24270,32 @@
     ]
   },
   {
+    "id": "1a52a949-0de8-516c-8009-2c6c735b3724",
+    "trainingPartnerId": "586ba110-188e-5f15-9d80-d996cf45f648",
+    "trainingPartnerName": "London East Teacher Training Alliance",
+    "accreditedProviderId": "b67d4dc1-11d1-5224-95a9-2e118da8e48d",
+    "accreditedProviderName": "London East Teacher Training Alliance",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "1b40ad40-c33a-588e-ae9a-31d8c21e423a",
+    "trainingPartnerId": "9f818297-b83f-5a1b-b660-5757b298c96d",
+    "trainingPartnerName": "Gipsy Hill Federation",
+    "accreditedProviderId": "025943c5-3d1a-5619-a650-14187cfbea87",
+    "accreditedProviderName": "London South Bank University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "9548d631-827f-5fed-9639-3c244e75441b",
     "trainingPartnerId": "8ce8c04b-f0a3-522c-a3d4-3c5003d20f32",
     "trainingPartnerName": "CAT Institute of Education",
@@ -22126,9 +24309,34 @@
     ]
   },
   {
+    "id": "0baeb5f9-660c-5afa-a961-00bfc8a5c7e9",
+    "trainingPartnerId": "01c6b69d-cacf-575c-aec0-dbd20dea5804",
+    "trainingPartnerName": "North Liverpool Teaching School Partnership",
+    "accreditedProviderId": "b8f722d1-68de-54ff-bbe5-b3af06f09d72",
+    "accreditedProviderName": "Merseyside, Cheshire and Greater Manchester Teacher Training Consortium",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
     "id": "04938a5b-4c14-5ef9-94fd-4927f214c61e",
     "trainingPartnerId": "7d330f59-d7d2-56fa-af79-404c3437b820",
     "trainingPartnerName": "Brent Initial Teacher Training (BITT)",
+    "accreditedProviderId": "6ebd5eb6-7d1a-5b00-9f3f-44eb0f90823b",
+    "accreditedProviderName": "Middlesex University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "13f217ed-0863-54b8-a425-696e149aba88",
+    "trainingPartnerId": "7a68dd9f-fead-53c5-88af-0d4d96b22d77",
+    "trainingPartnerName": "Lime Trust",
     "accreditedProviderId": "6ebd5eb6-7d1a-5b00-9f3f-44eb0f90823b",
     "accreditedProviderName": "Middlesex University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -22190,6 +24398,18 @@
     ]
   },
   {
+    "id": "e1487ddb-eab1-59c1-9adb-798e9967d256",
+    "trainingPartnerId": "01c6b69d-cacf-575c-aec0-dbd20dea5804",
+    "trainingPartnerName": "North Liverpool Teaching School Partnership",
+    "accreditedProviderId": "88596fdf-7c52-54d1-b33c-5f93113c3b86",
+    "accreditedProviderName": "North West SHARES SCITT",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
     "id": "d86c60f3-5f6f-5a43-8e7f-d6072966abdb",
     "trainingPartnerId": "68c8b9cf-1354-51e4-8b25-06eb430c7776",
     "trainingPartnerName": "St. Andrew's Teaching Alliance",
@@ -22228,6 +24448,31 @@
     ]
   },
   {
+    "id": "8ebf9872-6fb1-5757-822d-d991e1fa082a",
+    "trainingPartnerId": "6984b82a-a598-5446-8021-f244efbcfca3",
+    "trainingPartnerName": "Pioneers Partnership SCITT",
+    "accreditedProviderId": "5149b0b6-6753-5faa-82f4-fab057ad4200",
+    "accreditedProviderName": "Pioneers Partnership SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "82f443cf-abf3-5e3d-bc23-d5e3300f01e0",
+    "trainingPartnerId": "cc30e8ca-5c1a-555e-b3cd-c38a3360d73f",
+    "trainingPartnerName": "Portsmouth Teaching School Alliance",
+    "accreditedProviderId": "1c737664-e5b4-5024-b93a-da1942f00c36",
+    "accreditedProviderName": "Portsmouth SCITT",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
     "id": "055d50b1-6873-5072-950b-02b5a3f491aa",
     "trainingPartnerId": "e0740940-9616-5a57-a8db-fe80ac94285b",
     "trainingPartnerName": "South Worcestershire and ITT Consortium",
@@ -22244,6 +24489,19 @@
     "id": "100c05a0-71e4-5191-aa55-4881bf178e58",
     "trainingPartnerId": "9e2692f3-de2f-52bb-ba32-113bcf290a75",
     "trainingPartnerName": "Castlebar School",
+    "accreditedProviderId": "d3ff6187-1d48-504c-af90-25817ddafb7c",
+    "accreditedProviderName": "Roehampton University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "bff215c4-3341-5a1c-a21a-4a1d8cebf72f",
+    "trainingPartnerId": "6f4de817-fc21-5970-acdf-e2a5838be994",
+    "trainingPartnerName": "Essendine Primary School Alliance",
     "accreditedProviderId": "d3ff6187-1d48-504c-af90-25817ddafb7c",
     "accreditedProviderName": "Roehampton University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -22332,9 +24590,35 @@
     ]
   },
   {
+    "id": "3d5e72fc-cb68-51f0-ba85-a46cc9d400d8",
+    "trainingPartnerId": "f97f1ea9-51ed-5375-89b0-ec9ab1901ab6",
+    "trainingPartnerName": "Southend Initial Teacher Training",
+    "accreditedProviderId": "7bad1994-68b8-5a0c-8ffa-5af02ef32272",
+    "accreditedProviderName": "Southend SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "62a849ec-87f1-5e83-aaa3-6fbf2a5a4d9a",
     "trainingPartnerId": "5f9c94ec-57d1-5a1b-bea4-b0eec5f3cad8",
     "trainingPartnerName": "Biddulph High School",
+    "accreditedProviderId": "8dc13a5d-0c02-560a-a73f-007b81462b85",
+    "accreditedProviderName": "University of Staffordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "8cf658be-1e79-587e-beef-5e99fa70f791",
+    "trainingPartnerId": "5dd37ee6-cdd8-5929-901d-93bc4011b1c4",
+    "trainingPartnerName": "City Learning Trust",
     "accreditedProviderId": "8dc13a5d-0c02-560a-a73f-007b81462b85",
     "accreditedProviderName": "University of Staffordshire",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -22371,6 +24655,19 @@
     ]
   },
   {
+    "id": "0ba8c727-1314-5c09-a7b4-8019cac73b0b",
+    "trainingPartnerId": "f1bd9b02-6211-5253-af10-beb822a217f4",
+    "trainingPartnerName": "Encompass Learning Alliance Berkshire",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "73903b01-833c-51af-b1ea-2b83e18ff7f4",
     "trainingPartnerId": "41962070-3a7e-5a9d-be85-417e2fa7b034",
     "trainingPartnerName": "Bosco Sussex",
@@ -22389,6 +24686,58 @@
     "trainingPartnerName": "St Mary's Catholic School",
     "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
     "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "af2e5666-e591-5df1-afd7-17b913022cd6",
+    "trainingPartnerId": "8b6533e2-2aeb-5034-b87d-59c02393adc3",
+    "trainingPartnerName": "West London Teaching School Alliance (Primary St Mary's)",
+    "accreditedProviderId": "b210f1ce-068f-5b4f-bef1-141f1c8c37b2",
+    "accreditedProviderName": "St Mary's University, Twickenham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "cd6bed91-4ecf-5212-8d3a-b2d5051780af",
+    "trainingPartnerId": "9d3c1fec-eb90-5cc9-b6c7-6930c1fc7733",
+    "trainingPartnerName": "Cambridge & Suffolk Schools Alliance (CASSA)",
+    "accreditedProviderId": "1cc42474-7cb2-5286-83cf-19a7381f8ddd",
+    "accreditedProviderName": "Suffolk and Norfolk Primary SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "af0abea5-73dd-58d9-960b-b48804964b09",
+    "trainingPartnerId": "60e6c17f-f725-57d0-b83f-ca09961b9766",
+    "trainingPartnerName": "Ignite Teaching School",
+    "accreditedProviderId": "1cc42474-7cb2-5286-83cf-19a7381f8ddd",
+    "accreditedProviderName": "Suffolk and Norfolk Primary SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "146a8534-b48a-59a9-bc64-df72746dc1fe",
+    "trainingPartnerId": "93ba6105-d4a3-52d4-b64b-a9c580a2505b",
+    "trainingPartnerName": "Rosecroft Primary School",
+    "accreditedProviderId": "1cc42474-7cb2-5286-83cf-19a7381f8ddd",
+    "accreditedProviderName": "Suffolk and Norfolk Primary SCITT",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
@@ -22419,6 +24768,32 @@
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "b3030603-0adb-512e-9af6-a59db754b9b0",
+    "trainingPartnerId": "9d3c1fec-eb90-5cc9-b6c7-6930c1fc7733",
+    "trainingPartnerName": "Cambridge & Suffolk Schools Alliance (CASSA)",
+    "accreditedProviderId": "95c64f1b-321f-55f9-ac85-671e16c5b815",
+    "accreditedProviderName": "Norfolk, Essex and Suffolk Teacher Training (NESTT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "950e4da5-7a95-5ca9-a54c-e94a17e5cdb1",
+    "trainingPartnerId": "60e6c17f-f725-57d0-b83f-ca09961b9766",
+    "trainingPartnerName": "Ignite Teaching School",
+    "accreditedProviderId": "95c64f1b-321f-55f9-ac85-671e16c5b815",
+    "accreditedProviderName": "Norfolk, Essex and Suffolk Teacher Training (NESTT)",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
     ]
   },
   {
@@ -22526,6 +24901,19 @@
     ]
   },
   {
+    "id": "9d88a02e-7406-5efd-8fd4-13666248324a",
+    "trainingPartnerId": "9d3c1fec-eb90-5cc9-b6c7-6930c1fc7733",
+    "trainingPartnerName": "Cambridge & Suffolk Schools Alliance (CASSA)",
+    "accreditedProviderId": "539e3f33-925f-5a83-a6e7-1fe41384b13d",
+    "accreditedProviderName": "Cambridge Training Schools Network, CTSN SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "aeac5146-c600-5289-b121-289c199c01db",
     "trainingPartnerId": "61fade6b-3a45-5b4b-8512-fb773c4556ee",
     "trainingPartnerName": "Unity Teaching School Hub",
@@ -22568,6 +24956,19 @@
     "id": "e11c5d06-1fc1-5aab-b16e-4c3855b3a46a",
     "trainingPartnerId": "1e68b247-5079-58ec-aaad-454dfdb36e00",
     "trainingPartnerName": "Bury Schools Alliance",
+    "accreditedProviderId": "1c2e7384-c39e-5bca-99cc-be512498cf21",
+    "accreditedProviderName": "Manchester Metropolitan University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "b52bed1e-12cc-5291-8da2-185da1ae9dd8",
+    "trainingPartnerId": "5dd37ee6-cdd8-5929-901d-93bc4011b1c4",
+    "trainingPartnerName": "City Learning Trust",
     "accreditedProviderId": "1c2e7384-c39e-5bca-99cc-be512498cf21",
     "accreditedProviderName": "Manchester Metropolitan University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -22682,6 +25083,19 @@
     ]
   },
   {
+    "id": "7c0a5170-d8a2-552b-aba6-de762368601a",
+    "trainingPartnerId": "49dfa064-25b6-5507-ab69-861e323b9232",
+    "trainingPartnerName": "Seymour Park Community Primary School",
+    "accreditedProviderId": "102462b5-a1ce-5f87-9f79-582ec293c701",
+    "accreditedProviderName": "University of Manchester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "15b7c256-3428-57f9-82de-5528f14acf44",
     "trainingPartnerId": "17712ab4-51f8-5ada-8b20-3e5378375207",
     "trainingPartnerName": "The Radclyffe School",
@@ -22718,6 +25132,44 @@
     "academicYearIds": [
       "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
       "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "31facedd-fe1f-50b4-97c3-70bd3822183d",
+    "trainingPartnerId": "a948b310-8258-5db7-a740-22dd1dff18d5",
+    "trainingPartnerName": "Christ The King Catholic Primary School",
+    "accreditedProviderId": "afc32a33-0969-598e-821f-52787bd2e703",
+    "accreditedProviderName": "University of Reading",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "1a61513d-1366-5c68-81b4-189be8a48c57",
+    "trainingPartnerId": "f1bd9b02-6211-5253-af10-beb822a217f4",
+    "trainingPartnerName": "Encompass Learning Alliance Berkshire",
+    "accreditedProviderId": "afc32a33-0969-598e-821f-52787bd2e703",
+    "accreditedProviderName": "University of Reading",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "35e6849e-a512-5990-9fc4-fda816e16010",
+    "trainingPartnerId": "01ad3aa7-1b07-5f92-b60c-981838b380a3",
+    "trainingPartnerName": "School Direct Reading Area",
+    "accreditedProviderId": "afc32a33-0969-598e-821f-52787bd2e703",
+    "accreditedProviderName": "University of Reading",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
     ]
   },
   {
@@ -22862,6 +25314,19 @@
     ]
   },
   {
+    "id": "5614f574-abfb-5737-b432-23bbcad8212c",
+    "trainingPartnerId": "a38e93c0-7141-5fab-bf15-c1c196a6bad9",
+    "trainingPartnerName": "Greet Teaching School Alliance",
+    "accreditedProviderId": "efcc00a7-dd10-57e1-a1c9-a71ebebabc4d",
+    "accreditedProviderName": "University of Birmingham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "4c4b5038-9633-55bb-a19a-ffa9d4ab3447",
     "trainingPartnerId": "a62e1628-be42-57e5-85b8-429f4981935b",
     "trainingPartnerName": "Lordswood Girls' School and Sixth Form Centre",
@@ -22880,6 +25345,56 @@
     "trainingPartnerName": "Our Lady and St Hubert's Catholic Primary School",
     "accreditedProviderId": "efcc00a7-dd10-57e1-a1c9-a71ebebabc4d",
     "accreditedProviderName": "University of Birmingham",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "b60b93ca-4fb5-5de5-97ea-51a0d2f456c2",
+    "trainingPartnerId": "cc30e8ca-5c1a-555e-b3cd-c38a3360d73f",
+    "trainingPartnerName": "Portsmouth Teaching School Alliance",
+    "accreditedProviderId": "41510e9f-8e43-5b0f-b9c5-f336fce82638",
+    "accreditedProviderName": "University of Brighton",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "26321b92-6980-5338-ae38-0b9c48682032",
+    "trainingPartnerId": "99fda9d4-2fb8-552d-b79a-f192b686062c",
+    "trainingPartnerName": "St Marks's teaching School Partnership",
+    "accreditedProviderId": "41510e9f-8e43-5b0f-b9c5-f336fce82638",
+    "accreditedProviderName": "University of Brighton",
+    "startsOn": "2020-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2"
+    ]
+  },
+  {
+    "id": "e938436d-b24a-58c1-8459-4c76adf5c623",
+    "trainingPartnerId": "4d0343f0-730a-5482-93a9-3d97f7d71404",
+    "trainingPartnerName": "Teaching School Alliance 24",
+    "accreditedProviderId": "41510e9f-8e43-5b0f-b9c5-f336fce82638",
+    "accreditedProviderName": "University of Brighton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "b343f572-b0d7-5bda-a012-640643c0e58b",
+    "trainingPartnerId": "3136ee24-101e-59aa-a757-f180be470a31",
+    "trainingPartnerName": "Bristol Redcliffe Open Interchange",
+    "accreditedProviderId": "97146b28-1773-50ae-98dd-1705211c34f7",
+    "accreditedProviderName": "University of Bristol",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
@@ -22926,9 +25441,35 @@
     ]
   },
   {
+    "id": "d6d5984a-a312-58be-96d9-a832d8dcec3c",
+    "trainingPartnerId": "307140c0-f4be-5753-bf8a-af63a5ff970b",
+    "trainingPartnerName": "Neston Primary and Secondary ITT Partnership",
+    "accreditedProviderId": "81f85541-a4a8-55bc-ae11-c4fb9787e402",
+    "accreditedProviderName": "University of Chester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "bf7d0385-02c5-5191-9cab-9d4eeedc7aca",
     "trainingPartnerId": "fdbf4208-df6f-549b-ad4a-d70760047f36",
     "trainingPartnerName": "Innovation Teacher Training",
+    "accreditedProviderId": "64dbb40a-a4d8-50cc-9eb7-066843f93e74",
+    "accreditedProviderName": "University of Chichester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "69e4b3ed-9d44-571b-a26c-4cffb2a53485",
+    "trainingPartnerId": "cc30e8ca-5c1a-555e-b3cd-c38a3360d73f",
+    "trainingPartnerName": "Portsmouth Teaching School Alliance",
     "accreditedProviderId": "64dbb40a-a4d8-50cc-9eb7-066843f93e74",
     "accreditedProviderName": "University of Chichester",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -22978,6 +25519,19 @@
     ]
   },
   {
+    "id": "c79d229d-d9a1-58c6-a7dd-3482b65afa9a",
+    "trainingPartnerId": "a34b2726-25e7-552f-8022-6935b2e5b61c",
+    "trainingPartnerName": "Inspiring Leaders - 4 Derbyshire",
+    "accreditedProviderId": "66f11f43-05ec-58d5-bc7f-25399d963222",
+    "accreditedProviderName": "University of Derby",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "0321b2d9-2ce3-5f56-9869-73ce1367f72c",
     "trainingPartnerId": "e15d8990-d2e8-5b84-9227-4d57d580643d",
     "trainingPartnerName": "Chellaston Academy",
@@ -22996,6 +25550,19 @@
     "trainingPartnerName": "John Taylor High School",
     "accreditedProviderId": "66f11f43-05ec-58d5-bc7f-25399d963222",
     "accreditedProviderName": "University of Derby",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "a5468a4b-3f4c-5a40-826d-750fff5210a4",
+    "trainingPartnerId": "60e6c17f-f725-57d0-b83f-ca09961b9766",
+    "trainingPartnerName": "Ignite Teaching School",
+    "accreditedProviderId": "6eaa5ff4-af08-5f65-a58f-4b609505fe68",
+    "accreditedProviderName": "University of East Anglia",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
@@ -23171,6 +25738,19 @@
     ]
   },
   {
+    "id": "7c27473d-45ac-51c2-b5a6-40a394ab5e6b",
+    "trainingPartnerId": "f1338958-78fd-5cee-9c88-c120ca7afa37",
+    "trainingPartnerName": "InMAT Northamptonshire",
+    "accreditedProviderId": "f191d12d-404b-59bf-81b1-30f068e0c255",
+    "accreditedProviderName": "University of Northampton",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "097e369d-2fa2-563b-92d3-4dae4ac5f6c3",
     "trainingPartnerId": "74fe79f8-7937-5a24-bd7c-817c20ff0bfd",
     "trainingPartnerName": "Maplefields Academy (Mainstream and Special Needs)",
@@ -23240,6 +25820,19 @@
     "trainingPartnerName": "Whitley Bay Teacher Training",
     "accreditedProviderId": "e4d61840-38f3-5644-a906-c7c83863543e",
     "accreditedProviderName": "University of Northumbria at Newcastle",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "111a12f5-d5c6-5a90-a548-2606ac776013",
+    "trainingPartnerId": "cc30e8ca-5c1a-555e-b3cd-c38a3360d73f",
+    "trainingPartnerName": "Portsmouth Teaching School Alliance",
+    "accreditedProviderId": "eb4a4654-d3e2-5009-9fda-00ff84d371e9",
+    "accreditedProviderName": "University of Portsmouth",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
@@ -23325,6 +25918,19 @@
     ]
   },
   {
+    "id": "40876d98-fd34-5190-8573-68f3c625543c",
+    "trainingPartnerId": "cc30e8ca-5c1a-555e-b3cd-c38a3360d73f",
+    "trainingPartnerName": "Portsmouth Teaching School Alliance",
+    "accreditedProviderId": "5871ab6b-289a-536d-b7b5-dc5c555e9703",
+    "accreditedProviderName": "University of Sussex",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "e9c9611f-dba7-5dc7-8890-7ed39d060781",
     "trainingPartnerId": "b7edd7db-ef22-5355-af34-1743a1384367",
     "trainingPartnerName": "The Millais Alliance",
@@ -23382,6 +25988,32 @@
     "trainingPartnerName": "South Worcestershire and ITT Consortium",
     "accreditedProviderId": "570f414c-e350-5ec8-b96b-01d2484dd2f5",
     "accreditedProviderName": "University of Worcester",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "562fb42f-4a9d-52ce-a6f3-c7d7b499bc98",
+    "trainingPartnerId": "7a68dd9f-fead-53c5-88af-0d4d96b22d77",
+    "trainingPartnerName": "Lime Trust",
+    "accreditedProviderId": "acff7ede-3ce0-5829-95d5-11c16e6fa5e7",
+    "accreditedProviderName": "West Essex SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2021-07-31T00:00:00Z",
+    "academicYearIds": [
+      "e1d36652-0d94-439f-b2f9-ead9c09dc3a2",
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "dedebea5-f870-50de-abe8-1ff671df61e3",
+    "trainingPartnerId": "5dd37ee6-cdd8-5929-901d-93bc4011b1c4",
+    "trainingPartnerName": "City Learning Trust",
+    "accreditedProviderId": "93c21670-f0cd-54bd-87fd-519bc42b308e",
+    "accreditedProviderName": "Thomas Telford Multi Academy Trust",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2021-07-31T00:00:00Z",
     "academicYearIds": [
@@ -23490,6 +26122,18 @@
     "id": "f4cde19e-85b4-517f-a752-92df2f55020e",
     "trainingPartnerId": "89e67048-7937-57b5-9ea4-64ec92912eaa",
     "trainingPartnerName": "Lift Schools: North",
+    "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
+    "accreditedProviderName": "Leeds Trinity University",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2020-07-31T00:00:00Z",
+    "academicYearIds": [
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "37d39d7b-bf7c-5313-9f4a-6fcb83d484c2",
+    "trainingPartnerId": "c7e27536-0b7b-5eda-a96d-9ab796e7e4f0",
+    "trainingPartnerName": "Co-op Academies Trust School Direct - Primary",
     "accreditedProviderId": "300765ec-2f47-5a9a-aba3-b94c009f4a5f",
     "accreditedProviderName": "Leeds Trinity University",
     "startsOn": "2019-08-01T00:00:00Z",
@@ -23691,6 +26335,18 @@
     ]
   },
   {
+    "id": "964ade3d-327f-5593-98c3-33a7eb244385",
+    "trainingPartnerId": "b772c4a6-7fc3-51dd-b414-12085fbb274b",
+    "trainingPartnerName": "United Teaching National SCITT",
+    "accreditedProviderId": "936ecb8a-bc24-5fc7-b64a-8a3aa4f19d47",
+    "accreditedProviderName": "United Teaching National SCITT",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2020-07-31T00:00:00Z",
+    "academicYearIds": [
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
     "id": "7846cb50-02b0-5b11-a72e-9e77f34cdb01",
     "trainingPartnerId": "2acb0525-4305-565b-9313-051fdbfb028d",
     "trainingPartnerName": "Hatton Centre for Education",
@@ -23732,6 +26388,30 @@
     "trainingPartnerName": "Bishop Rawstorne School Direct Programme",
     "accreditedProviderId": "358a4833-4b49-5802-8831-26a68619659d",
     "accreditedProviderName": "University of Cumbria",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2020-07-31T00:00:00Z",
+    "academicYearIds": [
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "476873e9-d3df-55a8-92cf-d9dd04ed553c",
+    "trainingPartnerId": "057f5c68-edb3-549c-a880-6c9fa2923cb3",
+    "trainingPartnerName": "Watton-at-Stone Primary",
+    "accreditedProviderId": "d30c517c-5f1c-59d5-a711-e0382a849475",
+    "accreditedProviderName": "University of Hertfordshire",
+    "startsOn": "2019-08-01T00:00:00Z",
+    "endsOn": "2020-07-31T00:00:00Z",
+    "academicYearIds": [
+      "7b3d9c5d-8301-4a47-b0f8-fef8dfeb4587"
+    ]
+  },
+  {
+    "id": "e413af8a-73cd-542b-93d7-40e7c7774a51",
+    "trainingPartnerId": "edbdecc1-dd15-5baf-abb4-4c5a74215f06",
+    "trainingPartnerName": "Northampton Primary Academy Trust",
+    "accreditedProviderId": "f191d12d-404b-59bf-81b1-30f068e0c255",
+    "accreditedProviderName": "University of Northampton",
     "startsOn": "2019-08-01T00:00:00Z",
     "endsOn": "2020-07-31T00:00:00Z",
     "academicYearIds": [
