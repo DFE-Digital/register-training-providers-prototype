@@ -16,7 +16,7 @@ module.exports = {
         entity_type: 'provider'
       }, { transaction })
 
-      const dataPath = path.join(__dirname, '/data/20260217142726-seed-providers.json')
+      const dataPath = path.join(__dirname, '/data/20260217144416-seed-providers.json')
       const rawData = fs.readFileSync(dataPath, 'utf8')
       const providers = JSON.parse(rawData)
 
