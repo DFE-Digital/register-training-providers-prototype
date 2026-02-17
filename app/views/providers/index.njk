@@ -49,6 +49,15 @@
             classes: "govuk-!-margin-left-1"
           }) }}
         {% endif %}
+        {% if provider.code | length or provider.ukprn | length or provider.urn | length %}
+        <p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+          {% if provider.code | length %}Provider code: {{ provider.code }}{% endif %}
+          {%- if (provider.code | length) and (provider.ukprn | length or provider.urn | length) %}, {% endif %}
+          {% if provider.ukprn | length %}UKPRN: {{ provider.ukprn }}{% endif %}
+          {%- if (provider.ukprn | length) and (provider.urn | length) %}, {% endif %}
+          {% if provider.urn | length %}URN: {{ provider.urn }}{% endif %}
+        </p>
+        {% endif %}
       {% endset %}
 
       {% set academicYearsHtml %}
@@ -111,7 +120,7 @@
               value: {
                 text: provider.ukprn
               }
-            },
+            } if 1==0,
             {
               key: {
                 text: "Unique reference number (URN)"
@@ -120,7 +129,7 @@
                 text: provider.urn if provider.urn.length else "Not entered",
                 classes: "govuk-hint" if not provider.urn.length
               }
-            },
+            } if 1==0,
             {
               key: {
                 text: "Provider code"
@@ -128,7 +137,7 @@
               value: {
                 text: provider.code
               }
-            },
+            } if 1==0,
             {
               key: {
                 text: "Academic years"
