@@ -29,7 +29,7 @@
         <dd class="govuk-summary-list__value">
         {% for field in item.summary.fields %}
           {% if field.key in ["Address line 1", "Address line 2", "Address line 3", "Town or city", "Postcode"] %}
-            {{ field.value if field.value }}{% if field.value | length %}<br>{% endif %}
+            {{ field.value if field.value }}{% if field.value | length %}<br aria-hidden="true">{% endif %}
           {% endif %}
         {% endfor %}
         </dd>

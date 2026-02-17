@@ -49,22 +49,22 @@
 
         {% set addressHtml %}
           {% if address.line1.length %}
-            {{ address.line1 }}<br>
+            {{ address.line1 }}<br aria-hidden="true">
           {% endif %}
           {% if address.line2.length %}
-            {{ address.line2 }}<br>
+            {{ address.line2 }}<br aria-hidden="true">
           {% endif %}
           {% if address.line3.length %}
-            {{ address.line3 }}<br>
+            {{ address.line3 }}<br aria-hidden="true">
           {% endif %}
           {% if address.town.length %}
-            {{ address.town }}<br>
+            {{ address.town }}<br aria-hidden="true">
           {% endif %}
           {% if address.county.length %}
-            {{ address.county }}<br>
+            {{ address.county }}<br aria-hidden="true">
           {% endif %}
           {% if address.postcode.length %}
-            {{ address.postcode }}<br>
+            {{ address.postcode }}<br aria-hidden="true">
           {% endif %}
         {% endset %}
 

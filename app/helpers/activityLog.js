@@ -9,9 +9,11 @@ const {
   ProviderContact,
   ProviderContactRevision,
   ProviderRevision,
+  ProviderAcademicYear,
   ProviderPartnership,
   ProviderPartnershipAcademicYear,
   ProviderPartnershipRevision,
+  ProviderAcademicYearRevision,
   ApiClientToken,
   ApiClientTokenRevision,
   User,
@@ -25,6 +27,44 @@ const { getProviderTypeLabel } = require('./content')
 const { appendSection } = require('./string')
 const EXCLUDED_REVISION_TABLES = ['provider_partnership_academic_year_revisions']
 
+const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone, year: 'numeric', month: 'numeric', day: 'numeric'
+  }).formatToParts(now)
+  const y = Number(parts.find(p => p.type === 'year').value)
+  const m = Number(parts.find(p => p.type === 'month').value) // 1–12
+  const d = Number(parts.find(p => p.type === 'day').value)
+  // If on/after 1 Aug => current AY starts this calendar year; else previous year
+  return (m > 8 || (m === 8 && d >= 1)) ? y : (y - 1)
+}
+
+const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = getCurrentAcademicYearStart()) => {
+  if (!academicYear || !academicYear.startsOn) {
+    return null
+  }
+
+  const startDate = new Date(academicYear.startsOn)
+  if (Number.isNaN(startDate.getTime())) {
+    return null
+  }
+
+  const startYear = startDate.getUTCFullYear()
+
+  if (startYear === currentAcademicYearStart) {
+    return 'current'
+  }
+
+  if (startYear === currentAcademicYearStart - 1) {
+    return 'last'
+  }
+
+  if (startYear === currentAcademicYearStart + 1) {
+    return 'next'
+  }
+
+  return null
+}
+
 /**
  * Maps revision table names to their associated include alias.
  * @type {Object.<string, string>}
@@ -35,6 +75,7 @@ const revisionAssociationMap = {
   provider_address_revisions: 'providerAddressRevision',
   provider_contact_revisions: 'providerContactRevision',
   provider_partnership_revisions: 'providerPartnershipRevision',
+  provider_academic_year_revisions: 'providerAcademicYearRevision',
   api_client_token_revisions: 'apiClientTokenRevision',
   user_revisions: 'userRevision',
   academic_year_revisions: 'academicYearRevision'
@@ -50,6 +91,7 @@ const revisionModels = {
   provider_address_revisions: ProviderAddressRevision,
   provider_contact_revisions: ProviderContactRevision,
   provider_partnership_revisions: ProviderPartnershipRevision,
+  provider_academic_year_revisions: ProviderAcademicYearRevision,
   api_client_token_revisions: ApiClientTokenRevision,
   user_revisions: UserRevision,
   academic_year_revisions: AcademicYearRevision
@@ -62,6 +104,53 @@ const revisionModels = {
  * @returns {import('sequelize').Model} The associated Sequelize model.
  */
 const getRevisionModel = (revisionTable) => revisionModels[revisionTable]
+
+/**
+ * Collapse duplicate provider academic year activity logs that were created
+ * as part of the same change (e.g. selecting multiple academic years at once).
+ *
+ * We keep only the first entry for each (provider, changedAt, changedById, action)
+ * combination because the summary already lists all academic years for the provider.
+ *
+ * @param {import('sequelize').Model[]} logs
+ * @returns {import('sequelize').Model[]} Collapsed logs.
+ */
+const collapseProviderAcademicYearLogs = (logs) => {
+  const seen = new Set()
+  const collapsed = []
+
+  for (const log of logs) {
+    if (log.revisionTable !== 'provider_academic_year_revisions') {
+      collapsed.push(log)
+      continue
+    }
+
+    const providerId =
+      log.providerAcademicYearRevision?.providerId ||
+      log.providerAcademicYearRevision?.provider_id ||
+      log.revision?.providerId
+
+    if (!providerId) {
+      collapsed.push(log)
+      continue
+    }
+
+    const changedAtKey = log.changedAt ? new Date(log.changedAt).toISOString() : 'unknown'
+    const key = [
+      log.revisionTable,
+      providerId,
+      log.changedById || '',
+      log.action || '',
+      changedAtKey
+    ].join('|')
+
+    if (seen.has(key)) continue
+    seen.add(key)
+    collapsed.push(log)
+  }
+
+  return collapsed
+}
 
 /**
  * Normalise an action into the activity verb we display.
@@ -367,6 +456,8 @@ const getEntityKeys = (revisionTable) => {
       return ['academicYearId']
     case 'provider_partnership_revisions':
       return ['providerPartnershipId']
+    case 'provider_academic_year_revisions':
+      return ['providerAcademicYearId']
     case 'api_client_token_revisions':
       return ['apiClientTokenId']
     default:
@@ -452,6 +543,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         ]
       },
       {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
         model: UserRevision,
         as: 'userRevision'
       },
@@ -473,7 +572,32 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
     offset
   })
 
-  return Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(collapseProviderAcademicYearLogs(activityLogs).map(formatActivityLog))
+}
+
+/**
+ * Returns the total number of activity logs after collapsing provider academic year entries.
+ *
+ * @async
+ * @returns {Promise<number>} Total number of logs.
+ */
+const getActivityTotalCount = async () => {
+  const activityLogs = await ActivityLog.findAll({
+    where: {
+      revisionTable: { [Op.notIn]: EXCLUDED_REVISION_TABLES }
+    },
+    attributes: ['id', 'revisionTable', 'changedAt', 'changedById', 'action'],
+    include: [
+      {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
+        required: false,
+        attributes: ['providerId']
+      }
+    ]
+  })
+
+  return collapseProviderAcademicYearLogs(activityLogs).length
 }
 
 /**
@@ -524,6 +648,11 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
             { '$providerPartnershipRevision.accredited_provider_id$': providerId },
             { '$providerPartnershipRevision.training_partner_id$': providerId }
           ]
+        },
+        // Provider academic year revisions
+        {
+          revisionTable: 'provider_academic_year_revisions',
+          '$providerAcademicYearRevision.provider_id$': providerId
         }
       ]
     },
@@ -555,6 +684,12 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
       {
         model: ProviderPartnershipRevision,
         as: 'providerPartnershipRevision',
+        attributes: [],
+        required: false
+      },
+      {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
         attributes: [],
         required: false
       }
@@ -613,6 +748,15 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
         ]
       },
       {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
+        required: false,
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
         model: User,
         as: 'changedByUser'
       },
@@ -625,7 +769,7 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
     order: [['changedAt', 'DESC'], ['id', 'DESC']]
   })
 
-  return Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(collapseProviderAcademicYearLogs(activityLogs).map(formatActivityLog))
 }
 
 /**
@@ -641,8 +785,8 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
 const getProviderActivityTotalCount = async ({ providerId }) => {
   if (!providerId) throw new Error('providerId is required')
 
-  // Single optimized count query matching the same WHERE logic as getProviderActivityLogs
-  return ActivityLog.count({
+  // Single optimized query matching the same WHERE logic as getProviderActivityLogs
+  const activityLogs = await ActivityLog.findAll({
     where: {
       [Op.or]: [
         {
@@ -667,9 +811,14 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
             { '$providerPartnershipRevision.accredited_provider_id$': providerId },
             { '$providerPartnershipRevision.training_partner_id$': providerId }
           ]
+        },
+        {
+          revisionTable: 'provider_academic_year_revisions',
+          '$providerAcademicYearRevision.provider_id$': providerId
         }
       ]
     },
+    attributes: ['id', 'revisionTable', 'changedAt', 'changedById', 'action'],
     include: [
       {
         model: ProviderRevision,
@@ -700,12 +849,18 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
         as: 'providerPartnershipRevision',
         required: false,
         attributes: []
+      },
+      {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
+        required: false,
+        attributes: ['providerId']
       }
     ],
-    distinct: true,
-    col: 'id',
     subQuery: false
   })
+
+  return collapseProviderAcademicYearLogs(activityLogs).length
 }
 
 /**
@@ -761,6 +916,14 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         ]
       },
       {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
         model: UserRevision,
         as: 'userRevision'
       },
@@ -778,7 +941,7 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
     offset
   })
 
-  return Promise.all(activityLogs.map(formatActivityLog))
+  return Promise.all(collapseProviderAcademicYearLogs(activityLogs).map(formatActivityLog))
 }
 
 /**
@@ -800,8 +963,9 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
     whereClause.revisionTable = { [Op.notIn]: EXCLUDED_REVISION_TABLES }
   }
 
-  const totalCount = await ActivityLog.count({
+  const activityLogs = await ActivityLog.findAll({
     where: whereClause,
+    attributes: ['id', 'revisionTable', 'changedAt', 'changedById', 'action'],
     include: [
       {
         model: ProviderRevision,
@@ -837,6 +1001,15 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         ]
       },
       {
+        model: ProviderAcademicYearRevision,
+        as: 'providerAcademicYearRevision',
+        required: false,
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
         model: UserRevision,
         as: 'userRevision',
         required: false
@@ -849,7 +1022,7 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
     ]
   })
 
-  return totalCount
+  return collapseProviderAcademicYearLogs(activityLogs).length
 }
 
 /**
@@ -1071,6 +1244,13 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         ? previousLinkedAcademicYears
         : linkedAcademicYears
 
+      const currentAcademicYearStart = getCurrentAcademicYearStart()
+      summaryLinkedAcademicYears = summaryLinkedAcademicYears.map((academicYear) => {
+        const statusLabel = getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
+        const text = statusLabel ? `${academicYear.name} - ${statusLabel}` : academicYear.name
+        return { ...academicYear, text }
+      })
+
       if (log.action === 'create') {
         activity = 'Provider partnership added'
       } else if (log.action === 'delete') {
@@ -1093,6 +1273,52 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Partnership start date', value: revision.startsOn ? govukDate(revision.startsOn) : 'Not recorded' })
       fields.push({ key: 'Partnership end date', value: revision.endsOn ? govukDate(revision.endsOn) : 'No end date' })
       fields.push({ key: 'Academic years', value: academicYearSummary })
+      break
+    }
+
+    case 'provider_academic_year_revisions': {
+      const provider = revision.provider
+      const providerName = provider?.operatingName || provider?.legalName || 'Provider'
+      const { text: providerText, href: providerHref } = await buildProviderLink(revision.providerId, providerName)
+      const academicYears = await ProviderAcademicYear.findAll({
+        where: { providerId: revision.providerId },
+        include: [
+          {
+            model: AcademicYear,
+            as: 'academicYear',
+            attributes: ['id', 'name', 'code', 'startsOn', 'endsOn']
+          }
+        ],
+        order: [[{ model: AcademicYear, as: 'academicYear' }, 'startsOn', 'DESC']]
+      })
+
+      const currentAcademicYearStart = getCurrentAcademicYearStart()
+      const academicYearItems = academicYears
+        .map((entry) => {
+          const academicYear = entry.academicYear
+          if (!academicYear) return null
+          const statusLabel = getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
+          const text = statusLabel
+            ? `${academicYear.name || academicYear.code || 'Academic year'} - ${statusLabel}`
+            : (academicYear.name || academicYear.code || 'Academic year')
+          return {
+            text,
+            startsOn: academicYear.startsOn,
+            endsOn: academicYear.endsOn
+          }
+        })
+        .filter(Boolean)
+
+      activity = log.action === 'create'
+        ? 'Provider academic years added'
+        : 'Provider academic years updated'
+      label = providerText
+      href = providerHref
+
+      fields.push({
+        key: `Academic year${academicYearItems.length > 1 ? 's' : ''}`,
+        academicYears: academicYearItems
+      })
       break
     }
 
@@ -1508,6 +1734,7 @@ const getProviderLastUpdated = async (providerId, opts = {}) => {
 
 module.exports = {
   getActivityLogs,
+  getActivityTotalCount,
   getProviderActivityLogs,
   getProviderActivityTotalCount,
   getUserActivityLogs,

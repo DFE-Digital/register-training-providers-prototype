@@ -1,5 +1,4 @@
-const { ActivityLog } = require('../models')
-const { getActivityLogs, groupActivityLogsByDate } = require('../helpers/activityLog')
+const { getActivityLogs, getActivityTotalCount, groupActivityLogsByDate } = require('../helpers/activityLog')
 const Pagination = require('../helpers/pagination')
 
 exports.activityList = async (req, res) => {
@@ -9,7 +8,7 @@ exports.activityList = async (req, res) => {
   const offset = (page - 1) * limit
 
   // Get the total amount of activity for pagination metadata
-  const totalCount = await ActivityLog.count()
+  const totalCount = await getActivityTotalCount()
 
   const activityItems = await getActivityLogs({ limit, offset })
 

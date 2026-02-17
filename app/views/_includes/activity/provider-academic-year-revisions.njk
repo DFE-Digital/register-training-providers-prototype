@@ -1,0 +1,49 @@
+<h3 class="govuk-summary-card__title">
+  {{ item.summary.activity }}
+</h3>
+<p class="govuk-body">
+  By {{ item.changedByUser.firstName + " " + item.changedByUser.lastName }} on {{ item.changedAt | govukDateTime }}
+</p>
+<div class="govuk-summary-card">
+  {% if showSummaryCardTitle %}
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        {% if item.summary.labelHtml | length %}
+          {{ item.summary.labelHtml | safe }}
+        {% elif item.summary.href | length %}
+          <a href="{{ item.summary.href }}" class="govuk-link">
+            {{ item.summary.label }}
+          </a>
+        {% else %}
+          {{ item.summary.label }}
+        {% endif %}
+      </h2>
+    </div>
+  {% endif %}
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+      {% for field in item.summary.fields %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{ field.key }}
+          </dt>
+          <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+            {% if field.academicYears and field.academicYears.length %}
+              <ul class="govuk-list {{- ' govuk-list--bullet' if field.academicYears.length > 1 }}">
+                {% for academicYear in field.academicYears %}
+                  <li>
+                    {{ academicYear.text }}<br aria-hidden="true">
+                    <span class="govuk-hint">Starts on {{ academicYear.startsOn | govukDate -}}
+                    {% if academicYear.endsOn %}, ends on {{ academicYear.endsOn | govukDate }}{% endif %}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              {{ field.value if field.value else "Not entered" }}
+            {% endif %}
+          </dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </div>
+</div>

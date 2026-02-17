@@ -37,7 +37,7 @@
         <ul class="govuk-list {{- ' govuk-list--bullet' if academicYearItems.length > 1 }}">
           {% for academicYear in academicYearItems %}
             <li>
-              {{ academicYear.text }}<br>
+              {{ academicYear.text }}<br aria-hidden="true">
               <span class="govuk-hint">{{ academicYear.hint.text }}</span>
             </li>
           {% endfor %}
