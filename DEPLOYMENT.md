@@ -78,6 +78,9 @@ Manual setup:
 # Run migrations
 npm run db:migrate
 
+# Regenerate seed data from CSVs (optional)
+npm run data:regen-seeds
+
 # Seed database with sample data
 npm run db:seed
 ```
@@ -99,6 +102,13 @@ NODE_ENV=production npm run db:migrate
 If you do want demo data in production (e.g. staging), run:
 
 ```bash
+NODE_ENV=production npm run db:seed
+```
+
+If you need to refresh seed data from the latest CSVs in `app/data/dist`, run:
+
+```bash
+NODE_ENV=production npm run data:regen-seeds
 NODE_ENV=production npm run db:seed
 ```
 

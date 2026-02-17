@@ -27,10 +27,11 @@ module.exports = {
       },
       ukprn: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       urn: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
       },
       code: {
         type: Sequelize.STRING,
