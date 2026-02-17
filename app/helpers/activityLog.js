@@ -1310,8 +1310,8 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         .filter(Boolean)
 
       activity = log.action === 'create'
-        ? 'Provider academic year added'
-        : 'Provider academic year updated'
+        ? 'Provider academic years added'
+        : 'Provider academic years updated'
       label = providerText
       href = providerHref
 
