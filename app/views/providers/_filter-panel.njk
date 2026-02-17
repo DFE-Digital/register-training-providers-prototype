@@ -65,6 +65,26 @@
   ]
 }) }}
 
+{% if academicYearFilterItems | length %}
+{{ govukCheckboxes({
+  id: "filters-academic-year",
+  name: "filters[academicYear]",
+  fieldset: {
+    legend: {
+      text: "Academic year",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  formGroup: {
+    classes: "app-filter__group"
+  },
+  classes: "govuk-checkboxes--small",
+  values: data.filters.academicYear,
+  items: academicYearFilterItems
+}) }}
+{% endif %}
+
 {{ govukCheckboxes({
   id: "filters-show-archived",
   name: "filters[showArchivedProvider]",

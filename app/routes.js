@@ -258,6 +258,7 @@ router.get('/providers/:providerId/partnerships', ...supportOnly, providerPartne
 router.get('/providers/remove-provider-type-filter/:providerType', ...supportOnly, providerController.removeProviderTypeFilter)
 router.get('/providers/remove-accreditation-type-filter/:accreditationType', ...supportOnly, providerController.removeAccreditationTypeFilter)
 router.get('/providers/remove-show-archived-provider-filter/:showArchivedProvider', ...supportOnly, providerController.removeShowArchivedProviderFilter)
+router.get('/providers/remove-academic-year-filter/:academicYear', ...supportOnly, providerController.removeAcademicYearFilter)
 
 router.get('/providers/remove-all-filters', ...supportOnly, providerController.removeAllFilters)
 
