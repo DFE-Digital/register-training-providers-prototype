@@ -93,7 +93,7 @@
             <ul class="{{ listClass }}">
               {% for academicYear in academicYears %}
                 <li>
-                  {{ academicYear.name }}<br>
+                  {{ academicYear.text or academicYear.name }}<br>
                   <span class="govuk-hint">
                     Starts on {{ academicYear.startsOn | govukDate -}}
                     {% if academicYear.endsOn %}, ends on {{ academicYear.endsOn | govukDate }}{% endif %}

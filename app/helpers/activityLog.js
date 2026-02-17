@@ -1244,6 +1244,13 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         ? previousLinkedAcademicYears
         : linkedAcademicYears
 
+      const currentAcademicYearStart = getCurrentAcademicYearStart()
+      summaryLinkedAcademicYears = summaryLinkedAcademicYears.map((academicYear) => {
+        const statusLabel = getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
+        const text = statusLabel ? `${academicYear.name} - ${statusLabel}` : academicYear.name
+        return { ...academicYear, text }
+      })
+
       if (log.action === 'create') {
         activity = 'Provider partnership added'
       } else if (log.action === 'delete') {
