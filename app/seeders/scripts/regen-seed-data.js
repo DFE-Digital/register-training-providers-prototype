@@ -139,6 +139,7 @@ function main() {
   const timestampAddresses = formatTimestamp(addSeconds(baseDate, 1));
   const timestampAccreditations = formatTimestamp(addSeconds(baseDate, 2));
   const timestampPartnerships = formatTimestamp(addSeconds(baseDate, 3));
+  const timestampProviderAcademicYears = formatTimestamp(addSeconds(baseDate, 4));
   const appDir = path.join(__dirname, "..", "..");
   const distDir = path.join(appDir, "data", "dist");
   const seedersDir = path.join(appDir, "seeders");
@@ -164,8 +165,10 @@ function main() {
   const providers = [];
   const addresses = [];
   const accreditations = [];
+  const providerAcademicYears = [];
   const providerIdByCode = new Map();
   const providerNameByCode = new Map();
+  const providerAcademicYearKeys = new Set();
 
   const providerRows = readCsv(providersCsv);
   for (const row of providerRows) {
@@ -230,6 +233,23 @@ function main() {
         endsOn,
       });
     }
+
+    const yearsActive = trimToNull(row.provider__academic_years_active);
+    if (yearsActive) {
+      yearsActive.split(",").forEach((year) => {
+        const code = year.trim();
+        const academicYearId = academicYearIdByCode.get(code);
+        if (!academicYearId) return;
+        const key = `${providerId}:${academicYearId}`;
+        if (providerAcademicYearKeys.has(key)) return;
+        providerAcademicYearKeys.add(key);
+        providerAcademicYears.push({
+          id: uuidv5(`provider-academic-year:${key}`, NAMESPACE),
+          providerId,
+          academicYearId
+        });
+      });
+    }
   }
 
   const partnerships = [];
@@ -289,6 +309,7 @@ function main() {
     addresses: `${timestampAddresses}-seed-provider-addresses.json`,
     accreditations: `${timestampAccreditations}-seed-provider-accreditations.json`,
     partnerships: `${timestampPartnerships}-seed-provider-partnership.json`,
+    providerAcademicYears: `${timestampProviderAcademicYears}-seed-provider-academic-years.json`
   };
 
   const dataTargets = [
@@ -315,6 +336,12 @@ function main() {
       fileName: dataFiles.partnerships,
       payload: partnerships,
       regex: /-seed-provider-partnership\.json$/,
+    },
+    {
+      kind: "providerAcademicYears",
+      fileName: dataFiles.providerAcademicYears,
+      payload: providerAcademicYears,
+      regex: /-seed-provider-academic-years\.json$/,
     },
   ];
 
@@ -351,6 +378,11 @@ function main() {
       dataFileName: dataFiles.partnerships,
       newSeederName: `${timestampPartnerships}-seed-provider-partnerships.js`,
     },
+    {
+      regex: /-seed-provider-academic-years\.js$/,
+      dataFileName: dataFiles.providerAcademicYears,
+      newSeederName: `${timestampProviderAcademicYears}-seed-provider-academic-years.js`,
+    },
   ];
 
   const renames = seederUpdates.map((update) =>
@@ -367,6 +399,7 @@ function main() {
   console.log(`- addresses: ${addresses.length}`);
   console.log(`- accreditations: ${accreditations.length}`);
   console.log(`- partnerships: ${partnerships.length}`);
+  console.log(`- provider academic years: ${providerAcademicYears.length}`);
 
   if (missingCodes.size) {
     console.warn(
