@@ -12,6 +12,7 @@
     "db:seed": "npx sequelize db:seed:all --seeders-path ./app/seeders --config ./app/config/config.json",
     "data:build-providers": "node app/data/scripts/build-providers.js",
     "data:build-partnerships": "node app/data/scripts/build-provider-partnerships.js",
+    "data:regen-seeds": "node app/seeders/scripts/regen-seed-data.js",
     "postinstall": "npm run db:build",
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
