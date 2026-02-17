@@ -27,6 +27,44 @@ const { getProviderTypeLabel } = require('./content')
 const { appendSection } = require('./string')
 const EXCLUDED_REVISION_TABLES = ['provider_partnership_academic_year_revisions']
 
+const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone, year: 'numeric', month: 'numeric', day: 'numeric'
+  }).formatToParts(now)
+  const y = Number(parts.find(p => p.type === 'year').value)
+  const m = Number(parts.find(p => p.type === 'month').value) // 1–12
+  const d = Number(parts.find(p => p.type === 'day').value)
+  // If on/after 1 Aug => current AY starts this calendar year; else previous year
+  return (m > 8 || (m === 8 && d >= 1)) ? y : (y - 1)
+}
+
+const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = getCurrentAcademicYearStart()) => {
+  if (!academicYear || !academicYear.startsOn) {
+    return null
+  }
+
+  const startDate = new Date(academicYear.startsOn)
+  if (Number.isNaN(startDate.getTime())) {
+    return null
+  }
+
+  const startYear = startDate.getUTCFullYear()
+
+  if (startYear === currentAcademicYearStart) {
+    return 'current'
+  }
+
+  if (startYear === currentAcademicYearStart - 1) {
+    return 'last'
+  }
+
+  if (startYear === currentAcademicYearStart + 1) {
+    return 'next'
+  }
+
+  return null
+}
+
 /**
  * Maps revision table names to their associated include alias.
  * @type {Object.<string, string>}
@@ -1247,12 +1285,17 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
         order: [[{ model: AcademicYear, as: 'academicYear' }, 'startsOn', 'DESC']]
       })
 
+      const currentAcademicYearStart = getCurrentAcademicYearStart()
       const academicYearItems = academicYears
         .map((entry) => {
           const academicYear = entry.academicYear
           if (!academicYear) return null
+          const statusLabel = getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
+          const text = statusLabel
+            ? `${academicYear.name || academicYear.code || 'Academic year'} - ${statusLabel}`
+            : (academicYear.name || academicYear.code || 'Academic year')
           return {
-            name: academicYear.name || academicYear.code || 'Academic year',
+            text,
             startsOn: academicYear.startsOn,
             endsOn: academicYear.endsOn
           }
