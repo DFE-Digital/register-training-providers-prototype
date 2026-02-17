@@ -110,6 +110,7 @@ exports.handlerName_get = async (req, res) => {
 - `ProviderAccreditation` - Accreditations owned by providers
 - `ProviderPartnership` - Accredited ↔ training provider partnerships
 - `ProviderPartnershipAcademicYear` - Academic year links for partnerships
+- `ProviderAcademicYear` - Provider ↔ academic year links
 - `ProviderAddress` - Provider addresses
 - `ProviderContact` - Provider contacts
 - `ApiClientToken` - API clients and token metadata (hashed tokens, expiry, revoke/delete)
@@ -124,6 +125,7 @@ exports.handlerName_get = async (req, res) => {
 - `ProviderContactRevision`
 - `ProviderPartnershipRevision`
 - `ProviderPartnershipAcademicYearRevision`
+- `ProviderAcademicYearRevision`
 - `ApiClientTokenRevision`
 - `UserRevision`
 - `AcademicYearRevision`
@@ -134,6 +136,7 @@ Provider
   ├── hasMany ProviderAccreditation
   ├── hasMany ProviderAddress
   ├── hasMany ProviderContact
+  ├── hasMany ProviderAcademicYear
   ├── hasMany ProviderPartnership (as accreditedProvider)
   └── hasMany ProviderPartnership (as trainingPartner)
 
@@ -144,6 +147,10 @@ ProviderPartnership
 
 ProviderPartnershipAcademicYear
   ├── belongsTo ProviderPartnership
+  └── belongsTo AcademicYear
+
+ProviderAcademicYear
+  ├── belongsTo Provider
   └── belongsTo AcademicYear
 
 ApiClientToken
@@ -241,7 +248,7 @@ ApiClientToken
 - **Audit trail:** `revisionHook` snapshots tracked fields into revision tables; `activityHook` creates `ActivityLog` rows for each revision.
 - **Data lifecycle:** Soft deletes (`deletedAt`/`deletedById`) preserve history and feed the audit trail.
 - **Config:** `app/config/config.json` uses SQLite for all environments; override via env vars if deploying elsewhere.
-- **Data seeding:** `db:seed` populates personas, providers, partnerships, and reference data for demos.
+- **Data seeding:** `db:seed` populates personas, providers, partnerships, provider academic years, and reference data for demos. Seed data is generated from `app/data/dist` by running `npm run data:regen-seeds`, which refreshes the JSON in `app/seeders/data` and updates timestamped seeder filenames.
 
 ## Key design patterns
 

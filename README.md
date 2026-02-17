@@ -39,6 +39,30 @@ The database is built automatically during `npm install`. To rebuild with fresh 
 npm run db:build:dev
 ```
 
+### Regenerating seed data from CSV
+
+Provider and partnership seed data is generated from the CSVs in `app/data/dist`. To regenerate the seed JSON (and update the timestamped seeder filenames), run:
+
+```bash
+npm run data:regen-seeds
+```
+
+This will generate:
+
+- providers
+- provider addresses
+- provider accreditations
+- provider partnerships
+- provider academic years
+
+Then seed as normal:
+
+```bash
+npm run db:seed
+```
+
+Note: `ukprn` and `urn` can be `NULL` in the database. This allows all rows in the CSVs to be seeded even when those fields are missing.
+
 ## Environment variables
 
 The prototype uses environment variables to configure runtime and integrations:
