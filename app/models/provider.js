@@ -102,16 +102,19 @@ module.exports = (sequelize) => {
       },
       ukprn:  {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+        allowNull: true,
         validate: {
-          notEmpty: true,
-          is: /^1\d{7}$/
+          isValidUkprn(value) {
+            if (value == null || value === '') return
+            if (!/^1\\d{7}$/.test(value)) {
+              throw new Error('Invalid UKPRN')
+            }
+          }
         }
       },
       urn:  {
         type: DataTypes.STRING,
-        unique: true
+        allowNull: true
       },
       code:  {
         type: DataTypes.STRING,
