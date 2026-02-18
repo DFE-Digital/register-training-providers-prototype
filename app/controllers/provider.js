@@ -2,11 +2,12 @@ const Pagination = require('../helpers/pagination')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require('../helpers/address')
-const { isoDateFromDateInput } = require('../helpers/date')
+const { isoDateFromDateInput, govukDate } = require('../helpers/date')
 const { nullIfEmpty } = require('../helpers/string')
 const { isValidPostcode, isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { getAccreditationTypeLabel, getProviderTypeLabel } = require('../helpers/content')
 const { findByPostcode, findByUPRN, geocodeAddress } = require('../services/ordnanceSurveyPlaces')
+const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { Provider, ProviderAddress, ProviderAccreditation, AcademicYear, ProviderAcademicYear } = require('../models')
 
 const { Op, literal, Sequelize } = require('sequelize')
@@ -46,6 +47,51 @@ const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = get
   }
 
   return null
+}
+
+const normaliseAcademicYearSelection = (value) => {
+  if (!value) return []
+  if (Array.isArray(value)) {
+    return value.filter(item => item !== '_unchecked')
+  }
+  return value === '_unchecked' ? [] : [value]
+}
+
+const formatAcademicYearItems = (academicYears, { includeStatusLabels = false } = {}) => {
+  const currentAcademicYearStart = includeStatusLabels ? getCurrentAcademicYearStart() : null
+
+  return academicYears.map(academicYear => {
+    const startsOn = govukDate(academicYear.startsOn)
+    const endsOn = academicYear.endsOn ? `, ends on ${govukDate(academicYear.endsOn)}` : ''
+    const label = includeStatusLabels
+      ? getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
+      : null
+    const text = label ? `${academicYear.name} - ${label}` : academicYear.name
+
+    return {
+      text,
+      value: academicYear.id,
+      hint: { text: `Starts on ${startsOn}${endsOn}` }
+    }
+  })
+}
+
+const listAcademicYearsForSelection = async () => {
+  const academicYearCutoff = getCurrentAcademicYearStart() + 1
+  const academicYearCodeAsInteger = Sequelize.cast(Sequelize.col('code'), 'INTEGER')
+
+  return AcademicYear.findAll({
+    where: {
+      deletedAt: null,
+      [Op.and]: [
+        Sequelize.where(
+          academicYearCodeAsInteger,
+          { [Op.lte]: academicYearCutoff }
+        )
+      ]
+    },
+    order: [['startsOn', 'DESC']]
+  })
 }
 
 const getCheckboxValues = (name, data) => {
@@ -447,6 +493,7 @@ exports.providerDetails = async (req, res, next) => {
     delete req.session.data.keywords
     delete req.session.data.filters
     delete req.session.data.find
+    delete req.session.data.providerAcademicYears
 
     // get the providerId from the request for use in subsequent queries
     const { providerId } = req.params
@@ -461,8 +508,38 @@ exports.providerDetails = async (req, res, next) => {
       getProviderLastUpdated(providerId, { includeDeletedChildren: true })
     ])
 
+    const providerAcademicYears = await ProviderAcademicYear.findAll({
+      where: {
+        providerId,
+        deletedAt: null
+      },
+      include: [{
+        model: AcademicYear,
+        as: 'academicYear',
+        where: {
+          deletedAt: null
+        },
+        required: false
+      }]
+    })
+
+    const academicYears = providerAcademicYears
+      .map((link) => link.academicYear)
+      .filter(Boolean)
+      .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
+      .map((academicYear) => {
+        const statusLabel = getAcademicYearStatusLabel(academicYear)
+        const suffix = statusLabel ? ` - ${statusLabel}` : ''
+        return `${academicYear.name}${suffix}`
+      })
+
+    const providerJson = provider.toJSON ? provider.toJSON() : provider
+
     res.render('providers/show', {
-      provider,
+      provider: {
+        ...providerJson,
+        academicYears
+      },
       isAccredited,
       lastUpdate,
       actions: {
@@ -474,6 +551,189 @@ exports.providerDetails = async (req, res, next) => {
   } catch (err) {
     next(err)
   }
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Edit provider academic years
+/// ------------------------------------------------------------------------ ///
+
+exports.editProviderAcademicYears_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  if (!provider) {
+    return res.status(404).render('errors/404')
+  }
+
+  const academicYears = await listAcademicYearsForSelection()
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
+
+  req.session.data = req.session.data || {}
+  const hasSessionSelection = Object.prototype.hasOwnProperty.call(req.session.data, 'providerAcademicYears')
+  let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
+
+  if (!hasSessionSelection) {
+    const existingLinks = await ProviderAcademicYear.findAll({
+      where: {
+        providerId,
+        deletedAt: null
+      }
+    })
+    selectedAcademicYears = existingLinks.map(link => link.academicYearId.toString())
+    req.session.data.providerAcademicYears = selectedAcademicYears
+  }
+
+  let back = `/providers/${providerId}`
+  if (req.query.referrer === 'check') {
+    back = `/providers/${providerId}/academic-years/check`
+  }
+
+  res.render('providers/academic-years/academic-years', {
+    provider,
+    academicYearItems,
+    selectedAcademicYears,
+    errors: [],
+    actions: {
+      back,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/academic-years`
+    }
+  })
+}
+
+exports.editProviderAcademicYears_post = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  if (!provider) {
+    return res.status(404).render('errors/404')
+  }
+
+  const academicYears = await listAcademicYearsForSelection()
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.body.academicYears)
+
+  req.session.data = req.session.data || {}
+  req.session.data.providerAcademicYears = selectedAcademicYears
+
+  const errors = []
+
+  if (!selectedAcademicYears.length) {
+    const error = {}
+    error.fieldName = 'academicYears'
+    error.href = '#academicYears'
+    error.text = 'Select academic year'
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    res.render('providers/academic-years/academic-years', {
+      provider,
+      academicYearItems,
+      selectedAcademicYears,
+      errors,
+      actions: {
+        back: `/providers/${providerId}`,
+        cancel: `/providers/${providerId}`,
+        save: `/providers/${providerId}/academic-years`
+      }
+    })
+  } else {
+    res.redirect(`/providers/${providerId}/academic-years/check`)
+  }
+}
+
+exports.editProviderAcademicYearsCheck_get = async (req, res) => {
+  const { providerId } = req.params
+  const provider = await Provider.findByPk(providerId)
+
+  if (!provider) {
+    return res.status(404).render('errors/404')
+  }
+
+  req.session.data = req.session.data || {}
+  const hasSessionSelection = Object.prototype.hasOwnProperty.call(req.session.data, 'providerAcademicYears')
+  let selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
+
+  if (!hasSessionSelection) {
+    const existingLinks = await ProviderAcademicYear.findAll({
+      where: {
+        providerId,
+        deletedAt: null
+      }
+    })
+    selectedAcademicYears = existingLinks.map(link => link.academicYearId.toString())
+    req.session.data.providerAcademicYears = selectedAcademicYears
+  }
+
+  const academicYearDetails = await getAcademicYearDetails(selectedAcademicYears)
+  academicYearDetails.sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
+  const academicYearItems = formatAcademicYearItems(academicYearDetails, { includeStatusLabels: true })
+
+  res.render('providers/academic-years/check-your-answers', {
+    provider,
+    academicYearItems,
+    actions: {
+      back: `/providers/${providerId}/academic-years?referrer=check`,
+      change: `/providers/${providerId}/academic-years`,
+      cancel: `/providers/${providerId}`,
+      save: `/providers/${providerId}/academic-years/check`
+    }
+  })
+}
+
+exports.editProviderAcademicYearsCheck_post = async (req, res) => {
+  const { providerId } = req.params
+  const userId = req.user.id
+  const provider = await Provider.findByPk(providerId)
+
+  if (!provider) {
+    return res.status(404).render('errors/404')
+  }
+
+  req.session.data = req.session.data || {}
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
+
+  const existingLinks = await ProviderAcademicYear.findAll({
+    where: {
+      providerId,
+      deletedAt: null
+    }
+  })
+
+  const existingIds = existingLinks.map(link => link.academicYearId.toString())
+  const toDelete = existingLinks.filter(link => !selectedAcademicYears.includes(link.academicYearId.toString()))
+  const toAdd = selectedAcademicYears.filter(id => !existingIds.includes(id))
+  const now = new Date()
+
+  for (const record of toDelete) {
+    await record.update({
+      deletedAt: now,
+      deletedById: userId,
+      updatedById: userId
+    })
+  }
+
+  if (toAdd.length) {
+    const rows = toAdd.map(academicYearId => ({
+      academicYearId,
+      providerId,
+      createdAt: now,
+      createdById: userId,
+      updatedAt: now,
+      updatedById: userId
+    }))
+
+    await ProviderAcademicYear.bulkCreate(rows, {
+      individualHooks: true,
+      returning: true
+    })
+  }
+
+  delete req.session.data.providerAcademicYears
+
+  req.flash('success', 'Academic years updated')
+  res.redirect(`/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
