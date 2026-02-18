@@ -36,28 +36,46 @@
 
     {% if providers.length %}
 
-
       {% for provider in providers %}
 
-        {% set operatingNameHtml %}
-          <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">
-            {{ provider.operatingName }}
-          </a>
-          {% if provider.archivedAt %}
-            {{ govukTag({
-              text: "Archived",
-              classes: "govuk-!-margin-left-1"
-            }) }}
-          {% endif %}
-        {% endset %}
+      {% set operatingNameHtml %}
+        <a href="{{ actions.view }}/{{ provider.id }}" class="govuk-link">
+          {{ provider.operatingName }}
+        </a>
+        {% if provider.archivedAt %}
+          {{ govukTag({
+            text: "Archived",
+            classes: "govuk-!-margin-left-1"
+          }) }}
+        {% endif %}
+        {% if provider.code.length or provider.ukprn.length or provider.urn.length %}
+        <p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+          {% if provider.code.length %}<b>Provider code:</b> {{ provider.code }}{% endif %}
+          {% if provider.ukprn.length %}<b>UKPRN:</b> {{ provider.ukprn }}{% endif %}
+          {% if provider.urn.length %}<b>URN:</b> {{ provider.urn }}{% endif %}
+        </p>
+        {% endif %}
+      {% endset %}
 
-        {{ govukSummaryList({
-          card: {
-            title: {
-              html: operatingNameHtml
-            }
-          },
-          rows: [
+      {% set academicYearsHtml %}
+        {% if provider.academicYears and provider.academicYears.length %}
+          <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYears.length > 1 }}">
+            {% for academicYear in provider.academicYears %}
+              <li>{{ academicYear }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="govuk-hint">Not entered</p>
+        {% endif %}
+      {% endset %}
+
+      {{ govukSummaryList({
+        card: {
+          title: {
+            html: operatingNameHtml
+          }
+        },
+        rows: [
             {
               key: {
                 text: "Provider type"
@@ -99,7 +117,7 @@
               value: {
                 text: provider.ukprn
               }
-            },
+            } if 1==0,
             {
               key: {
                 text: "Unique reference number (URN)"
@@ -108,13 +126,21 @@
                 text: provider.urn if provider.urn.length else "Not entered",
                 classes: "govuk-hint" if not provider.urn.length
               }
-            },
+            } if 1==0,
             {
               key: {
                 text: "Provider code"
               },
               value: {
                 text: provider.code
+              }
+            } if 1==0,
+            {
+              key: {
+                text: "Academic years"
+              },
+              value: {
+                html: academicYearsHtml
               }
             }
           ]
