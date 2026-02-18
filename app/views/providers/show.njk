@@ -49,10 +49,15 @@
     </div>
 
     {% set academicYearsHtml %}
-      {% if provider.academicYears and provider.academicYears.length %}
-        <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYears.length > 1 }}">
-          {% for academicYear in provider.academicYears %}
-            <li>{{ academicYear }}</li>
+      {% if provider.academicYearItems and provider.academicYearItems.length %}
+        <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYearItems.length > 1 }}">
+          {% for academicYear in provider.academicYearItems %}
+            <li>
+              {{ academicYear.text }}<br aria-hidden="true">
+              <span class="govuk-hint">
+                Starts on {{ academicYear.startsOn }}{{ ", ends on " + academicYear.endsOn if academicYear.endsOn }}
+              </span>
+            </li>
           {% endfor %}
         </ul>
       {% else %}

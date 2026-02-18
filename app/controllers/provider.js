@@ -523,14 +523,18 @@ exports.providerDetails = async (req, res, next) => {
       }]
     })
 
-    const academicYears = providerAcademicYears
+    const academicYearItems = providerAcademicYears
       .map((link) => link.academicYear)
       .filter(Boolean)
       .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
       .map((academicYear) => {
         const statusLabel = getAcademicYearStatusLabel(academicYear)
         const suffix = statusLabel ? ` - ${statusLabel}` : ''
-        return `${academicYear.name}${suffix}`
+        return {
+          text: `${academicYear.name}${suffix}`,
+          startsOn: academicYear.startsOn ? govukDate(academicYear.startsOn) : null,
+          endsOn: academicYear.endsOn ? govukDate(academicYear.endsOn) : null
+        }
       })
 
     const providerJson = provider.toJSON ? provider.toJSON() : provider
@@ -538,7 +542,7 @@ exports.providerDetails = async (req, res, next) => {
     res.render('providers/show', {
       provider: {
         ...providerJson,
-        academicYears
+        academicYearItems
       },
       isAccredited,
       lastUpdate,
