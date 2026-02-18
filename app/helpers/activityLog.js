@@ -1280,22 +1280,17 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { text: providerText, href: providerHref } = await buildProviderLink(revision.providerId, providerName)
-      const academicYears = await ProviderAcademicYear.findAll({
-        where: { providerId: revision.providerId },
-        include: [
-          {
-            model: AcademicYear,
-            as: 'academicYear',
-            attributes: ['id', 'name', 'code', 'startsOn', 'endsOn']
-          }
-        ],
-        order: [[{ model: AcademicYear, as: 'academicYear' }, 'startsOn', 'DESC']]
+      const changedAtDate = log.changedAt ? new Date(log.changedAt) : null
+      const asOf = changedAtDate ? new Date(changedAtDate) : null
+      const academicYears = await getProviderAcademicYearsAsOf({
+        providerId: revision.providerId,
+        asOf
       })
 
       const currentAcademicYearStart = getCurrentAcademicYearStart()
       const academicYearItems = academicYears
         .map((entry) => {
-          const academicYear = entry.academicYear
+          const academicYear = entry.academicYear || entry
           if (!academicYear) return null
           const statusLabel = getAcademicYearStatusLabel(academicYear, currentAcademicYearStart)
           const text = statusLabel
@@ -1544,7 +1539,7 @@ const buildAcademicYearWhere = (partnershipId, asOf) => {
   return {
     partnershipId,
     createdAt: { [Op.lte]: asOf },
-    [Op.or]: [{ deletedAt: null }, { deletedAt: { [Op.gte]: asOf } }]
+    [Op.or]: [{ deletedAt: null }, { deletedAt: { [Op.gt]: asOf } }]
   }
 }
 
@@ -1574,6 +1569,35 @@ const getPrevLinkedAcademicYears = async ({ sequelize, partnershipId, asOf, epsi
   const prevAsOf = new Date(asOf.getTime() - epsilonMs)
   return getLinkedAcademicYearsAsOf({ sequelize, partnershipId, asOf: prevAsOf })
 }
+
+function buildProviderAcademicYearWhere (providerId, asOf) {
+  if (!asOf) {
+    return {
+      providerId,
+      deletedAt: null
+    }
+  }
+
+  return {
+    providerId,
+    createdAt: { [Op.lte]: asOf },
+    [Op.or]: [{ deletedAt: null }, { deletedAt: { [Op.gte]: asOf } }]
+  }
+}
+
+async function getProviderAcademicYearsAsOf ({ providerId, asOf = null }) {
+  return ProviderAcademicYear.findAll({
+    paranoid: false,
+    where: buildProviderAcademicYearWhere(providerId, asOf),
+    include: [{
+      model: AcademicYear,
+      as: 'academicYear',
+      attributes: ['id', 'name', 'code', 'startsOn', 'endsOn']
+    }],
+    order: [[{ model: AcademicYear, as: 'academicYear' }, 'startsOn', 'DESC']]
+  })
+}
+
 
 /**
  * Get the last update for a provider across:

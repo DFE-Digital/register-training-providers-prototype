@@ -91,10 +91,11 @@ const revisionHook = ({ revisionModelName, modelKey }) => {
     }
 
     const hasChanged = trackedFields.some((field) => instance.get(field) !== latest.get(field))
-    if (!hasChanged) return
-
     const deletedAtChanged =
       typeof instance.changed === 'function' ? instance.changed('deletedAt') : false
+
+    if (!hasChanged && !deletedAtChanged) return
+
     const isDelete = deletedAtChanged && instance.get('deletedAt') != null
 
     await RevisionModel.create(
