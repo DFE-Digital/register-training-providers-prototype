@@ -1,0 +1,74 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% set title = "Check your answers" %}
+{% set caption = provider.operatingName %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    {% set academicYearsHtml %}
+      {% if academicYearItems | length %}
+        <ul class="govuk-list {{- ' govuk-list--bullet' if academicYearItems.length > 1 }}">
+          {% for academicYear in academicYearItems %}
+            <li>
+              {{ academicYear.text }}<br aria-hidden="true">
+              <span class="govuk-hint">{{ academicYear.hint.text }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="govuk-hint">Not entered</p>
+      {% endif %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Academic years"
+            },
+            value: {
+              html: academicYearsHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "academic years"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Save academic years"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
