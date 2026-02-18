@@ -178,18 +178,6 @@ exports.providersList = async (req, res) => {
       })
     }
 
-    if (showArchivedProviders?.length) {
-      selectedFilters.categories.push({
-        heading: { text: 'Archived providers' },
-        items: showArchivedProviders.map((showArchivedProvider) => {
-          return {
-            text: 'Include archived providers',
-            href: `/providers/remove-show-archived-provider-filter/${showArchivedProvider}`
-          }
-        })
-      })
-    }
-
     if (academicYears?.length) {
       const academicYearMap = new Map(academicYearFilterItems.map((item) => [item.value, item.text]))
       selectedFilters.categories.push({
@@ -198,6 +186,18 @@ exports.providersList = async (req, res) => {
           return {
             text: academicYearMap.get(academicYearId) || 'Academic year',
             href: `/providers/remove-academic-year-filter/${academicYearId}`
+          }
+        })
+      })
+    }
+
+    if (showArchivedProviders?.length) {
+      selectedFilters.categories.push({
+        heading: { text: 'Archived providers' },
+        items: showArchivedProviders.map((showArchivedProvider) => {
+          return {
+            text: 'Include archived providers',
+            href: `/providers/remove-show-archived-provider-filter/${showArchivedProvider}`
           }
         })
       })
