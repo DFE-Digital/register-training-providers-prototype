@@ -106,7 +106,7 @@ module.exports = (sequelize) => {
         validate: {
           isValidUkprn(value) {
             if (value == null || value === '') return
-            if (!/^1\\d{7}$/.test(value)) {
+            if (!/^1\d{7}$/.test(value)) {
               throw new Error('Invalid UKPRN')
             }
           }
