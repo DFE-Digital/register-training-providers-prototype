@@ -273,6 +273,9 @@ router.post('/providers/new/type', ...supportOnly, providerController.newProvide
 router.get('/providers/new/details', ...supportOnly, providerController.newProviderDetails_get)
 router.post('/providers/new/details', ...supportOnly, providerController.newProviderDetails_post)
 
+router.get('/providers/new/academic-years', ...supportOnly, providerController.newProviderAcademicYears_get)
+router.post('/providers/new/academic-years', ...supportOnly, providerController.newProviderAcademicYears_post)
+
 router.get('/providers/new/accreditation', ...supportOnly, providerController.newProviderAccreditation_get)
 router.post('/providers/new/accreditation', ...supportOnly, providerController.newProviderAccreditation_post)
 
