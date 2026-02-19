@@ -48,6 +48,22 @@
     {% endif %}
     </div>
 
+    {% set academicYearsHtml %}
+      {% if provider.academicYearItems and provider.academicYearItems.length %}
+        <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYearItems.length > 1 }}">
+          {% for academicYear in provider.academicYearItems %}
+            <li>
+              {{ academicYear.text }}<br aria-hidden="true">
+              <span class="govuk-hint">
+                Starts on {{ academicYear.startsOn }}{{ ", ends on " + academicYear.endsOn if academicYear.endsOn }}
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="govuk-hint">Not entered</p>
+      {% endif %}
+    {% endset %}
 
     {{ govukSummaryList({
       rows: [
@@ -160,6 +176,23 @@
                 href: "/providers/" + provider.id + "/edit",
                 text: "Change",
                 visuallyHiddenText: "provider code"
+              }
+            ]
+          } if not provider.archivedAt
+        },
+        {
+          key: {
+            text: "Academic years"
+          },
+          value: {
+            html: academicYearsHtml
+          },
+          actions: {
+            items: [
+              {
+                href: "/providers/" + provider.id + "/academic-years",
+                text: "Change",
+                visuallyHiddenText: "academic years"
               }
             ]
           } if not provider.archivedAt

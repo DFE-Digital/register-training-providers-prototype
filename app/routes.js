@@ -294,6 +294,12 @@ router.post('/providers/:providerId/edit', ...supportOnly, providerController.ed
 router.get('/providers/:providerId/edit/check', ...supportOnly, providerController.editProviderCheck_get)
 router.post('/providers/:providerId/edit/check', ...supportOnly, providerController.editProviderCheck_post)
 
+router.get('/providers/:providerId/academic-years', ...supportOnly, providerController.editProviderAcademicYears_get)
+router.post('/providers/:providerId/academic-years', ...supportOnly, providerController.editProviderAcademicYears_post)
+
+router.get('/providers/:providerId/academic-years/check', ...supportOnly, providerController.editProviderAcademicYearsCheck_get)
+router.post('/providers/:providerId/academic-years/check', ...supportOnly, providerController.editProviderAcademicYearsCheck_post)
+
 router.get('/providers/:providerId/delete', ...supportOnly, providerController.deleteProvider_get)
 router.post('/providers/:providerId/delete', ...supportOnly, providerController.deleteProvider_post)
 
