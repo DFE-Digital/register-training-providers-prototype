@@ -123,6 +123,7 @@ exports.providersList = async (req, res) => {
   delete req.session.data.address
   delete req.session.data.contact
   delete req.session.data.find
+  delete req.session.data.providerAcademicYears
   delete req.session.data.feedback
 
   const { filters } = req.session.data
@@ -594,6 +595,7 @@ exports.editProviderAcademicYears_get = async (req, res) => {
 
   res.render('providers/academic-years/academic-years', {
     provider,
+    caption: 'Add provider',
     academicYearItems,
     selectedAcademicYears,
     errors: [],
@@ -633,6 +635,7 @@ exports.editProviderAcademicYears_post = async (req, res) => {
   if (errors.length) {
     res.render('providers/academic-years/academic-years', {
       provider,
+      caption: 'Add provider',
       academicYearItems,
       selectedAcademicYears,
       errors,
@@ -893,11 +896,78 @@ exports.newProviderDetails_post = async (req, res) => {
       }
     })
   } else {
-    if (provider.isAccredited == "yes") {
-      res.redirect('/providers/new/accreditation')
-    } else {
-      res.redirect('/providers/new/address')
+    res.redirect('/providers/new/academic-years')
+  }
+}
+
+exports.newProviderAcademicYears_get = async (req, res) => {
+  const { provider } = req.session.data
+  const academicYears = await listAcademicYearsForSelection()
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
+
+  req.session.data = req.session.data || {}
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
+
+  let back = '/providers/new/details'
+  if (req.query.referrer === 'check') {
+    back = '/providers/new/check'
+  }
+
+  res.render('providers/academic-years/academic-years', {
+    provider,
+    caption: 'Add provider',
+    academicYearItems,
+    selectedAcademicYears,
+    errors: [],
+    actions: {
+      back,
+      cancel: '/providers',
+      save: '/providers/new/academic-years'
     }
+  })
+}
+
+exports.newProviderAcademicYears_post = async (req, res) => {
+  const { provider } = req.session.data
+  const academicYears = await listAcademicYearsForSelection()
+  const academicYearItems = formatAcademicYearItems(academicYears, { includeStatusLabels: true })
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.body.academicYears)
+
+  req.session.data = req.session.data || {}
+  req.session.data.providerAcademicYears = selectedAcademicYears
+
+  const errors = []
+
+  if (!selectedAcademicYears.length) {
+    const error = {}
+    error.fieldName = 'academicYears'
+    error.href = '#academicYears'
+    error.text = 'Select academic year'
+    errors.push(error)
+  }
+
+  if (errors.length) {
+    let back = '/providers/new/details'
+    if (req.query.referrer === 'check') {
+      back = '/providers/new/check'
+    }
+
+    res.render('providers/academic-years/academic-years', {
+      provider,
+      caption: 'Add provider',
+      academicYearItems,
+      selectedAcademicYears,
+      errors,
+      actions: {
+        back,
+        cancel: '/providers',
+        save: '/providers/new/academic-years'
+      }
+    })
+  } else if (provider.isAccredited == "yes") {
+    res.redirect('/providers/new/accreditation')
+  } else {
+    res.redirect('/providers/new/address')
   }
 }
 
@@ -906,7 +976,7 @@ exports.newProviderAccreditation_get = async (req, res) => {
   res.render('providers/new/accreditation', {
     provider,
     actions: {
-      back: '/providers/new/details',
+      back: '/providers/new/academic-years',
       cancel: '/providers',
       save: '/providers/new/accreditation'
     }
@@ -951,7 +1021,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
       provider,
       errors,
       actions: {
-        back: '/providers/new/details',
+        back: '/providers/new/academic-years',
         cancel: '/providers',
         save: '/providers/new/accreditation'
       }
@@ -968,7 +1038,7 @@ exports.newProviderFindAddress_get = async (req, res) => {
   if (provider.isAccredited == "yes") {
     back = '/providers/new/accreditation'
   } else {
-    back = '/providers/new/details'
+    back = '/providers/new/academic-years'
   }
 
   res.render('providers/new/address/find', {
@@ -1005,7 +1075,7 @@ exports.newProviderFindAddress_post = async (req, res) => {
     if (provider.isAccredited == "yes") {
       back = '/providers/new/accreditation'
     } else {
-      back = '/providers/new/details'
+      back = '/providers/new/academic-years'
     }
 
     res.render('providers/new/address/find', {
@@ -1177,6 +1247,10 @@ exports.newProviderEnterAddress_post = async (req, res) => {
 exports.newProviderCheck_get = async (req, res) => {
   const { find, provider } = req.session.data
   let { address } = req.session.data
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
+  const academicYearDetails = await getAcademicYearDetails(selectedAcademicYears)
+  academicYearDetails.sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
+  const academicYearItems = formatAcademicYearItems(academicYearDetails, { includeStatusLabels: true })
 
   if (find.uprn) {
     address = await findByUPRN(
@@ -1209,6 +1283,7 @@ exports.newProviderCheck_get = async (req, res) => {
   res.render('providers/new/check-your-answers', {
     provider,
     address,
+    academicYearItems,
     actions: {
       back,
       cancel: `/providers`,
@@ -1221,6 +1296,7 @@ exports.newProviderCheck_get = async (req, res) => {
 exports.newProviderCheck_post = async (req, res) => {
   const { address, provider } = req.session.data
   const userId = req.user.id
+  const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
 
   const newProvider = await Provider.create({
     operatingName: provider.operatingName,
@@ -1253,6 +1329,23 @@ exports.newProviderCheck_post = async (req, res) => {
     })
   }
 
+  if (selectedAcademicYears.length) {
+    const now = new Date()
+    const rows = selectedAcademicYears.map(academicYearId => ({
+      academicYearId,
+      providerId: newProvider.id,
+      createdAt: now,
+      createdById: userId,
+      updatedAt: now,
+      updatedById: userId
+    }))
+
+    await ProviderAcademicYear.bulkCreate(rows, {
+      individualHooks: true,
+      returning: true
+    })
+  }
+
   if (address) {
     await ProviderAddress.create({
       providerId: newProvider.id,
@@ -1273,6 +1366,7 @@ exports.newProviderCheck_post = async (req, res) => {
   delete req.session.data.provider
   delete req.session.data.address
   delete req.session.data.addressFinderIncomplete
+  delete req.session.data.providerAcademicYears
 
   req.flash('success', 'Provider added')
   res.redirect(`/providers`)
