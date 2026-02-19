@@ -98,9 +98,10 @@
           <ul class="govuk-list {{- ' govuk-list--bullet' if partnership.academicYears.length > 1 }}">
             {% for academicYear in partnership.academicYears %}
               <li>
-                {{ academicYear.name }}<br aria-hidden="true">
+                {{ academicYear.name }}
+                {# <br aria-hidden="true">
                 <span class="govuk-hint">Starts on {{ academicYear.startsOn | govukDate -}}
-                {% if academicYear.endsOn %}, ends on {{ academicYear.endsOn | govukDate }}{% endif %}</span>
+                {% if academicYear.endsOn %}, ends on {{ academicYear.endsOn | govukDate }}{% endif %}</span> #}
               </li>
             {% endfor %}
           </ul>

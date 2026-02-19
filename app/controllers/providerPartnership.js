@@ -146,7 +146,7 @@ const listAcademicYearsForSelection = async ({ startsOn, endsOn } = {}) => {
 
   return AcademicYear.findAll({
     where,
-    order: [['startsOn', 'ASC']]
+    order: [['startsOn', 'DESC']]
   })
 }
 
@@ -909,6 +909,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
   const trainingPartner = await Provider.findByPk(providers.trainingPartnerId)
 
   const selectedAcademicYears = await getAcademicYearDetails(req.session.data?.academicYears)
+  selectedAcademicYears.sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
 
   const academicYearItems = formatAcademicYearItems(selectedAcademicYears, { includeStatusLabels: true })
   const partnershipDates = {
@@ -1269,7 +1270,7 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
   req.session.data.partnershipEdit.academicYears = selectedAcademicYears
 
   const academicYearDetails = await getAcademicYearDetails(selectedAcademicYears)
-  academicYearDetails.sort((a, b) => new Date(a.startsOn) - new Date(b.startsOn))
+  academicYearDetails.sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
   const academicYearItems = formatAcademicYearItems(academicYearDetails, { includeStatusLabels: true })
   const pendingDates = editSession.partnershipDates || {}
   const startsOnValue = pendingDates.startsOnIso || partnership.startsOn
