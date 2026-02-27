@@ -6,7 +6,7 @@ const checkIsAuthenticated = (req, res, next) => {
 
     // Set base URLs for navigation
     res.locals.baseUrl = `/providers/${req.params.providerId}`
-    res.locals.supportBaseUrl = `/providers/${req.params.providerId}`
+    res.locals.supportBaseUrl = `/support/providers/${req.params.providerId}`
     // Make user available in templates
     res.locals.passport = {
       user: {
