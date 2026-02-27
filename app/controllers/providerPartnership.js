@@ -403,11 +403,11 @@ exports.providerPartnershipsList = async (req, res) => {
 
     // Build hrefs only when linkable; append `/partnerships` once.
     p.partnerHref = p.partnerIsLinkable
-      ? appendSection(`/providers/${p.trainingPartner.id}`, 'partnerships')
+      ? appendSection(`/support/providers/${p.trainingPartner.id}`, 'partnerships')
       : null
 
     p.accreditedHref = p.accreditedIsLinkable
-      ? appendSection(`/providers/${p.accreditedProvider.id}`, 'partnerships')
+      ? appendSection(`/support/providers/${p.accreditedProvider.id}`, 'partnerships')
       : null
   }
 
@@ -433,9 +433,9 @@ exports.providerPartnershipsList = async (req, res) => {
     partnerships: pagination.getData(),
     pagination,
     actions: {
-      new: `/providers/${providerId}/partnerships/new`,
-      delete: `/providers/${providerId}/partnerships`,
-      change: `/providers/${providerId}/partnerships`
+      new: `/support/providers/${providerId}/partnerships/new`,
+      delete: `/support/providers/${providerId}/partnerships`,
+      change: `/support/providers/${providerId}/partnerships`
     }
   })
 }
@@ -477,9 +477,9 @@ exports.providerPartnershipsList = async (req, res) => {
 //     partnership,
 //     isAccredited,
 //     actions: {
-//       back: `/providers/${providerId}`,
-//       cancel: `/providers/${providerId}/partnerships`,
-//       delete: `/providers/${providerId}/partnerships`
+//       back: `/support/providers/${providerId}`,
+//       cancel: `/support/providers/${providerId}/partnerships`,
+//       delete: `/support/providers/${providerId}/partnerships`
 //     }
 //   })
 // }
@@ -508,9 +508,9 @@ exports.newProviderPartnership_get = async (req, res) => {
   //   delete req.session.data.provider.id
   // }
 
-  let back = `/providers/${providerId}/partnerships`
+  let back = `/support/providers/${providerId}/partnerships`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/partnerships/new/check`
+    back = `/support/providers/${providerId}/partnerships/new/check`
   }
 
   res.render('providers/partnerships/find', {
@@ -518,8 +518,8 @@ exports.newProviderPartnership_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/new`
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/new`
     }
   })
 }
@@ -549,9 +549,9 @@ exports.newProviderPartnership_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}/partnerships`
+    let back = `/support/providers/${providerId}/partnerships`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/partnerships/new/check`
+      back = `/support/providers/${providerId}/partnerships/new/check`
     }
 
     res.render('providers/partnerships/find', {
@@ -560,18 +560,18 @@ exports.newProviderPartnership_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/new`
+        cancel: `/support/providers/${providerId}/partnerships`,
+        save: `/support/providers/${providerId}/partnerships/new`
       }
     })
   } else {
     const selectedProviderId = req.session.data?.provider?.id
 
     if (!selectedProviderId) {
-      return res.redirect(`/providers/${providerId}/partnerships/new/choose`)
+      return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
     }
 
-    res.redirect(`/providers/${providerId}/partnerships/new/dates`)
+    res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
   }
 }
 
@@ -586,9 +586,9 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
     provider,
     partner,
     actions: {
-      back: `/providers/${providerId}/partnerships/new/dates`,
-      cancel: `/providers/${providerId}/partnerships`,
-      change: `/providers/${providerId}/partnerships/new/dates`
+      back: `/support/providers/${providerId}/partnerships/new/dates`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      change: `/support/providers/${providerId}/partnerships/new/dates`
     }
   })
 }
@@ -609,9 +609,9 @@ exports.newProviderPartnershipChoose_get = async (req, res) => {
     providerCount: providers.length,
     searchTerm: query,
     actions: {
-      back: `/providers/${providerId}/partnerships/new`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/new/choose`
+      back: `/support/providers/${providerId}/partnerships/new`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/new/choose`
     }
   })
 }
@@ -647,9 +647,9 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
       searchTerm: query,
       errors,
       actions: {
-        back: `/providers/${providerId}/partnerships/new`,
-        cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/new/choose`
+        back: `/support/providers/${providerId}/partnerships/new`,
+        cancel: `/support/providers/${providerId}/partnerships`,
+        save: `/support/providers/${providerId}/partnerships/new/choose`
       }
     })
   } else {
@@ -657,7 +657,7 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
     delete req.session.data.endsOn
     delete req.session.data.partnershipDates
     delete req.session.data.academicYears
-    res.redirect(`/providers/${providerId}/partnerships/new/dates`)
+    res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
   }
 }
 
@@ -668,7 +668,7 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/choose`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
   }
 
   const providers = isAccredited
@@ -689,11 +689,11 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
 
   const fromCheck = req.query.referrer === 'check'
   const back = fromCheck
-    ? `/providers/${providerId}/partnerships/new/check`
-    : `/providers/${providerId}/partnerships/new`
+    ? `/support/providers/${providerId}/partnerships/new/check`
+    : `/support/providers/${providerId}/partnerships/new`
   const save = fromCheck
-    ? `/providers/${providerId}/partnerships/new/dates?referrer=check`
-    : `/providers/${providerId}/partnerships/new/dates`
+    ? `/support/providers/${providerId}/partnerships/new/dates?referrer=check`
+    : `/support/providers/${providerId}/partnerships/new/dates`
 
   res.render('providers/partnerships/dates', {
     accreditedProvider,
@@ -703,7 +703,7 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
     endsOn,
     actions: {
       back,
-      cancel: `/providers/${providerId}/partnerships`,
+      cancel: `/support/providers/${providerId}/partnerships`,
       save
     }
   })
@@ -717,7 +717,7 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
   const selectedProviderId = req.session.data?.provider?.id
 
   if (!selectedProviderId) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/choose`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
   }
 
   const providers = isAccredited
@@ -756,9 +756,9 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
       endsOnFieldErrors,
       errors,
       actions: {
-        back: `/providers/${providerId}/partnerships/new`,
-        cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/new/dates`
+        back: `/support/providers/${providerId}/partnerships/new`,
+        cancel: `/support/providers/${providerId}/partnerships`,
+        save: `/support/providers/${providerId}/partnerships/new/dates`
       }
     })
   } else {
@@ -777,9 +777,9 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
     )
 
     if (hasOverlappingPartnership) {
-      res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
+      res.redirect(`/support/providers/${providerId}/partnerships/new/duplicate`)
     } else {
-      res.redirect(`/providers/${providerId}/partnerships/new/academic-years`)
+      res.redirect(`/support/providers/${providerId}/partnerships/new/academic-years`)
     }
   }
 }
@@ -790,12 +790,12 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
   const isAccredited = await isAccreditedProvider({ providerId })
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
   }
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/providers/${providerId}/partnerships/new`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new`)
   }
 
   const providers = isAccredited
@@ -821,9 +821,9 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
     academicYearItems,
     selectedAcademicYears,
     actions: {
-      back: `/providers/${providerId}/partnerships/new/dates`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/new/academic-years`
+      back: `/support/providers/${providerId}/partnerships/new/dates`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/new/academic-years`
     }
   })
 }
@@ -834,12 +834,12 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   const isAccredited = await isAccreditedProvider({ providerId })
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
   }
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/providers/${providerId}/partnerships/new`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new`)
   }
 
   const providers = isAccredited
@@ -877,13 +877,13 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
       selectedAcademicYears,
       errors,
       actions: {
-        back: `/providers/${providerId}/partnerships/new/dates`,
-        cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/new/academic-years`
+        back: `/support/providers/${providerId}/partnerships/new/dates`,
+        cancel: `/support/providers/${providerId}/partnerships`,
+        save: `/support/providers/${providerId}/partnerships/new/academic-years`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/partnerships/new/check`)
+    res.redirect(`/support/providers/${providerId}/partnerships/new/check`)
   }
 }
 
@@ -893,12 +893,12 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/choose`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
   }
   req.session.data = req.session.data || {}
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
   }
 
   const providers = isAccredited
@@ -926,10 +926,10 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
     academicYearItems,
     partnershipDates,
     actions: {
-      back: `/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
-      cancel: `/providers/${providerId}/partnerships`,
-      change: `/providers/${providerId}/partnerships/new`,
-      save: `/providers/${providerId}/partnerships/new/check`
+      back: `/support/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      change: `/support/providers/${providerId}/partnerships/new`,
+      save: `/support/providers/${providerId}/partnerships/new/check`
     }
   })
 }
@@ -949,11 +949,11 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   const isAccredited = await isAccreditedProvider({ providerId })
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
   }
 
   if (!provider?.id) {
-    return res.redirect(`/providers/${providerId}/partnerships/new`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new`)
   }
 
   const accreditedProviderId = isAccredited ? providerId : provider.id
@@ -974,7 +974,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   )
 
   if (partnershipExists) {
-    return res.redirect(`/providers/${providerId}/partnerships/new/duplicate`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/new/duplicate`)
   }
 
   // save the partnership and get the partnershipId
@@ -1003,7 +1003,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   delete req.session.data.partnershipDates
 
   req.flash('success', 'Partnership added')
-  res.redirect(`/providers/${providerId}/partnerships`)
+  res.redirect(`/support/providers/${providerId}/partnerships`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1038,9 +1038,9 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
     startsOn: req.session.data.startsOn || formatDateForInput(partnership.startsOn),
     endsOn: req.session.data.endsOn || formatDateForInput(partnership.endsOn),
     actions: {
-      back: `/providers/${providerId}/partnerships`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/${partnershipId}/dates`
+      back: `/support/providers/${providerId}/partnerships`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/${partnershipId}/dates`
     }
   })
 }
@@ -1090,9 +1090,9 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
       endsOnFieldErrors,
       errors,
       actions: {
-        back: `/providers/${providerId}/partnerships`,
-        cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/${partnershipId}/dates`
+        back: `/support/providers/${providerId}/partnerships`,
+        cancel: `/support/providers/${providerId}/partnerships`,
+        save: `/support/providers/${providerId}/partnerships/${partnershipId}/dates`
       }
     })
   }
@@ -1105,7 +1105,7 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     endsOnIso
   }
 
-  res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
+  res.redirect(`/support/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
 }
 
 exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
@@ -1170,10 +1170,10 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
     selectedAcademicYears,
     actions: {
       back: cameFromCheck
-        ? `/providers/${providerId}/partnerships/${partnershipId}/check`
-        : `/providers/${providerId}/partnerships/${partnershipId}/dates`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
+        ? `/support/providers/${providerId}/partnerships/${partnershipId}/check`
+        : `/support/providers/${providerId}/partnerships/${partnershipId}/dates`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
     }
   })
 }
@@ -1226,17 +1226,17 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
       errors,
       actions: {
         back: cameFromCheck
-          ? `/providers/${providerId}/partnerships/${partnershipId}/check`
-          : `/providers/${providerId}/partnerships/${partnershipId}/dates`,
-        cancel: `/providers/${providerId}/partnerships`,
-        save: `/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
+          ? `/support/providers/${providerId}/partnerships/${partnershipId}/check`
+          : `/support/providers/${providerId}/partnerships/${partnershipId}/dates`,
+        cancel: `/support/providers/${providerId}/partnerships`,
+        save: `/support/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
       }
     })
   } else {
     req.session.data.academicYears = selectedAcademicYears
     req.session.data.partnershipEdit = req.session.data.partnershipEdit || { partnershipId }
     req.session.data.partnershipEdit.academicYears = selectedAcademicYears
-    res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/check`)
+    res.redirect(`/support/providers/${providerId}/partnerships/${partnershipId}/check`)
   }
 }
 
@@ -1289,10 +1289,10 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     academicYearItems,
     partnershipDates,
     actions: {
-      back: `/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`,
-      change: `/providers/${providerId}/partnerships/${partnershipId}`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/${partnershipId}/check`
+      back: `/support/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`,
+      change: `/support/providers/${providerId}/partnerships/${partnershipId}`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/${partnershipId}/check`
     }
   })
 }
@@ -1311,7 +1311,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
 
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
   if (!selectedAcademicYears.length) {
-    return res.redirect(`/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
+    return res.redirect(`/support/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
   }
 
   const now = new Date()
@@ -1363,7 +1363,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
   clearPartnershipEditSession(req)
 
   req.flash('success', 'Partnership updated')
-  res.redirect(`/providers/${providerId}/partnerships`)
+  res.redirect(`/support/providers/${providerId}/partnerships`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1412,10 +1412,10 @@ exports.deleteProviderPartnership_get = async (req, res) => {
     titlePartnerName,
     captionProviderName,
     actions: {
-      back: `/providers/${providerId}/partnerships`,
-      cancel: `/providers/${providerId}/partnerships`,
-      save: `/providers/${providerId}/partnerships/${partnershipId}/delete`,
-      change: `/providers/${providerId}/partnerships/${partnershipId}/dates`
+      back: `/support/providers/${providerId}/partnerships`,
+      cancel: `/support/providers/${providerId}/partnerships`,
+      save: `/support/providers/${providerId}/partnerships/${partnershipId}/delete`,
+      change: `/support/providers/${providerId}/partnerships/${partnershipId}/dates`
     }
   })
 }
@@ -1465,7 +1465,7 @@ exports.deleteProviderPartnership_post = async (req, res) => {
 
     await t.commit()
     req.flash('success', 'Partnership deleted')
-    res.redirect(`/providers/${providerId}/partnerships`)
+    res.redirect(`/support/providers/${providerId}/partnerships`)
   } catch (err) {
     await t.rollback()
     console.error('[delete partnership]', err)

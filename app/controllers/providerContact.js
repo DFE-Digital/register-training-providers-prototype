@@ -61,9 +61,9 @@ exports.providerContactsList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/providers/${providerId}/contacts/new`,
-      change: `/providers/${providerId}/contacts`,
-      delete: `/providers/${providerId}/contacts`
+      new: `/support/providers/${providerId}/contacts/new`,
+      change: `/support/providers/${providerId}/contacts`,
+      delete: `/support/providers/${providerId}/contacts`
     }
   })
 }
@@ -98,9 +98,9 @@ exports.newProviderContact_get = async (req, res) => {
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
 
-  let back = `/providers/${providerId}/contacts`
+  let back = `/support/providers/${providerId}/contacts`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/contacts/new/check`
+    back = `/support/providers/${providerId}/contacts/new/check`
   }
 
   res.render('providers/contacts/edit', {
@@ -108,8 +108,8 @@ exports.newProviderContact_get = async (req, res) => {
     contact,
     actions: {
       back,
-      cancel: `/providers/${providerId}/contacts`,
-      save: `/providers/${providerId}/contacts/new`
+      cancel: `/support/providers/${providerId}/contacts`,
+      save: `/support/providers/${providerId}/contacts/new`
     }
   })
 }
@@ -159,9 +159,9 @@ exports.newProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}/contacts`
+    let back = `/support/providers/${providerId}/contacts`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/contacts/new/check`
+      back = `/support/providers/${providerId}/contacts/new/check`
     }
 
     res.render('providers/contacts/edit', {
@@ -170,12 +170,12 @@ exports.newProviderContact_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/contacts`,
-        save: `/providers/${providerId}/contacts/new`
+        cancel: `/support/providers/${providerId}/contacts`,
+        save: `/support/providers/${providerId}/contacts/new`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/contacts/new/check`)
+    res.redirect(`/support/providers/${providerId}/contacts/new/check`)
   }
 }
 
@@ -187,10 +187,10 @@ exports.newProviderContactCheck_get = async (req, res) => {
     provider,
     contact,
     actions: {
-      back: `/providers/${providerId}/contacts/new`,
-      cancel: `/providers/${providerId}/contacts`,
-      change: `/providers/${providerId}/contacts/new`,
-      save: `/providers/${providerId}/contacts/new/check`
+      back: `/support/providers/${providerId}/contacts/new`,
+      cancel: `/support/providers/${providerId}/contacts`,
+      change: `/support/providers/${providerId}/contacts/new`,
+      save: `/support/providers/${providerId}/contacts/new/check`
     }
   })
 }
@@ -213,7 +213,7 @@ exports.newProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact added')
-  res.redirect(`/providers/${req.params.providerId}/contacts`)
+  res.redirect(`/support/providers/${req.params.providerId}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -232,9 +232,9 @@ exports.editProviderContact_get = async (req, res) => {
     contact = await ProviderContact.findByPk(contactId)
   }
 
-  let back = `/providers/${providerId}/contacts`
+  let back = `/support/providers/${providerId}/contacts`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/contacts/${contactId}/edit/check`
+    back = `/support/providers/${providerId}/contacts/${contactId}/edit/check`
   }
 
   res.render('providers/contacts/edit', {
@@ -243,8 +243,8 @@ exports.editProviderContact_get = async (req, res) => {
     contact,
     actions: {
       back,
-      cancel: `/providers/${providerId}/contacts`,
-      save: `/providers/${providerId}/contacts/${contactId}/edit`
+      cancel: `/support/providers/${providerId}/contacts`,
+      save: `/support/providers/${providerId}/contacts/${contactId}/edit`
     }
   })
 }
@@ -296,9 +296,9 @@ exports.editProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}/contacts`
+    let back = `/support/providers/${providerId}/contacts`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/contacts/${contactId}/edit/check`
+      back = `/support/providers/${providerId}/contacts/${contactId}/edit/check`
     }
 
     res.render('providers/contacts/edit', {
@@ -308,12 +308,12 @@ exports.editProviderContact_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/contacts`,
-        save: `/providers/${providerId}/contacts/${contactId}/edit`
+        cancel: `/support/providers/${providerId}/contacts`,
+        save: `/support/providers/${providerId}/contacts/${contactId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/contacts/${contactId}/edit/check`)
+    res.redirect(`/support/providers/${providerId}/contacts/${contactId}/edit/check`)
   }
 }
 
@@ -328,10 +328,10 @@ exports.editProviderContactCheck_get = async (req, res) => {
     currentContact,
     contact,
     actions: {
-      back: `/providers/${providerId}/contacts/${contactId}/edit`,
-      cancel: `/providers/${providerId}/contacts`,
-      change: `/providers/${providerId}/contacts/${contactId}/edit`,
-      save: `/providers/${providerId}/contacts/${contactId}/edit/check`
+      back: `/support/providers/${providerId}/contacts/${contactId}/edit`,
+      cancel: `/support/providers/${providerId}/contacts`,
+      change: `/support/providers/${providerId}/contacts/${contactId}/edit`,
+      save: `/support/providers/${providerId}/contacts/${contactId}/edit/check`
     }
   })
 }
@@ -350,7 +350,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact updated')
-  res.redirect(`/providers/${providerId}/contacts`)
+  res.redirect(`/support/providers/${providerId}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -366,9 +366,9 @@ exports.deleteProviderContact_get = async (req, res) => {
     provider,
     contact,
     actions: {
-      back: `/providers/${providerId}/contacts`,
-      cancel: `/providers/${providerId}/contacts`,
-      save: `/providers/${providerId}/contacts/${contactId}/delete`
+      back: `/support/providers/${providerId}/contacts`,
+      cancel: `/support/providers/${providerId}/contacts`,
+      save: `/support/providers/${providerId}/contacts/${contactId}/delete`
     }
   })
 }
@@ -384,5 +384,5 @@ exports.deleteProviderContact_post = async (req, res) => {
   })
 
   req.flash('success', 'Contact deleted')
-  res.redirect(`/providers/${providerId}/contacts`)
+  res.redirect(`/support/providers/${providerId}/contacts`)
 }

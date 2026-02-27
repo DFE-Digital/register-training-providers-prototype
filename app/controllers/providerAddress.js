@@ -66,9 +66,9 @@ exports.providerAddressesList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/providers/${providerId}/addresses/new`,
-      change: `/providers/${providerId}/addresses`,
-      delete: `/providers/${providerId}/addresses`
+      new: `/support/providers/${providerId}/addresses/new`,
+      change: `/support/providers/${providerId}/addresses`,
+      delete: `/support/providers/${providerId}/addresses`
     }
   })
 }
@@ -106,9 +106,9 @@ exports.newFindProviderAddress_get = async (req, res) => {
     provider,
     find: req.session.data.find,
     actions: {
-      back: `/providers/${providerId}/addresses`,
-      cancel: `/providers/${providerId}/addresses`,
-      save: `/providers/${providerId}/addresses/new`
+      back: `/support/providers/${providerId}/addresses`,
+      cancel: `/support/providers/${providerId}/addresses`,
+      save: `/support/providers/${providerId}/addresses/new`
     }
   })
 }
@@ -139,13 +139,13 @@ exports.newFindProviderAddress_post = async (req, res) => {
       find,
       errors,
       actions: {
-        back: `/providers/${providerId}/addresses`,
-        cancel: `/providers/${providerId}/addresses`,
-        save: `/providers/${providerId}/addresses/new`
+        back: `/support/providers/${providerId}/addresses`,
+        cancel: `/support/providers/${providerId}/addresses`,
+        save: `/support/providers/${providerId}/addresses/new`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/addresses/new/select`)
+    res.redirect(`/support/providers/${providerId}/addresses/new/select`)
   }
 }
 
@@ -164,9 +164,9 @@ exports.newSelectProviderAddress_get = async (req, res) => {
     addresses = await parseForGovukRadios(addresses)
   }
 
-  let back = `/providers/${providerId}/addresses/new`
+  let back = `/support/providers/${providerId}/addresses/new`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/addresses/new/check`
+    back = `/support/providers/${providerId}/addresses/new/check`
   }
 
   res.render('providers/addresses/select', {
@@ -176,10 +176,10 @@ exports.newSelectProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers/${providerId}/addresses`,
-      change: `/providers/${providerId}/addresses/new`,
-      enter: `/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
-      save: `/providers/${providerId}/addresses/new/select`
+      cancel: `/support/providers/${providerId}/addresses`,
+      change: `/support/providers/${providerId}/addresses/new`,
+      enter: `/support/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
+      save: `/support/providers/${providerId}/addresses/new/select`
     }
   })
 }
@@ -209,9 +209,9 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       addresses = await parseForGovukRadios(addresses)
     }
 
-    let back = `/providers/${providerId}/addresses/new`
+    let back = `/support/providers/${providerId}/addresses/new`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/addresses/new/check`
+      back = `/support/providers/${providerId}/addresses/new/check`
     }
 
     res.render('providers/addresses/select', {
@@ -222,14 +222,14 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/addresses`,
-        change: `/providers/${providerId}/addresses/new`,
-        enter: `/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
-        save: `/providers/${providerId}/addresses/new/select`
+        cancel: `/support/providers/${providerId}/addresses`,
+        change: `/support/providers/${providerId}/addresses/new`,
+        enter: `/support/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
+        save: `/support/providers/${providerId}/addresses/new/select`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/addresses/new/check`)
+    res.redirect(`/support/providers/${providerId}/addresses/new/check`)
   }
 }
 
@@ -247,9 +247,9 @@ exports.newEnterProviderAddress_get = async (req, res) => {
     address,
     showAddressFinderInset,
     actions: {
-      back: `/providers/${providerId}/addresses/new/select`,
-      cancel: `/providers/${providerId}/addresses`,
-      save: `/providers/${providerId}/addresses/new/enter`
+      back: `/support/providers/${providerId}/addresses/new/select`,
+      cancel: `/support/providers/${providerId}/addresses`,
+      save: `/support/providers/${providerId}/addresses/new/enter`
     }
   })
 }
@@ -298,13 +298,13 @@ exports.newEnterProviderAddress_post = async (req, res) => {
       showAddressFinderInset,
       errors,
       actions: {
-        back: `/providers/${providerId}/addresses/new/select`,
-        cancel: `/providers/${providerId}/addresses`,
-        save: `/providers/${providerId}/addresses/new/enter`
+        back: `/support/providers/${providerId}/addresses/new/select`,
+        cancel: `/support/providers/${providerId}/addresses`,
+        save: `/support/providers/${providerId}/addresses/new/enter`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/addresses/new/check`)
+    res.redirect(`/support/providers/${providerId}/addresses/new/check`)
   }
 }
 
@@ -324,7 +324,7 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     if (!address.line1?.trim() || !address.town?.trim() || !address.postcode?.trim()) {
       req.session.data.address = address
       req.session.data.addressFinderIncomplete = true
-      return res.redirect(`/providers/${providerId}/addresses/new/enter`)
+      return res.redirect(`/support/providers/${providerId}/addresses/new/enter`)
     }
   }
   // Geocode the address data if we don't already have coordinates
@@ -337,9 +337,9 @@ exports.newProviderAddressCheck_get = async (req, res) => {
   // put address into the session data for use later
   req.session.data.address = address
 
-  let back = `/providers/${providerId}/addresses/new/select`
+  let back = `/support/providers/${providerId}/addresses/new/select`
   if (!req.session.data.find.uprn) {
-    back = `/providers/${providerId}/addresses/new/enter`
+    back = `/support/providers/${providerId}/addresses/new/enter`
   }
 
   res.render('providers/addresses/check-your-answers', {
@@ -347,9 +347,9 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     address: req.session.data.address,
     actions: {
       back,
-      cancel: `/providers/${providerId}/addresses`,
+      cancel: `/support/providers/${providerId}/addresses`,
       change: back,
-      save: `/providers/${providerId}/addresses/new/check`
+      save: `/support/providers/${providerId}/addresses/new/check`
     }
   })
 }
@@ -380,7 +380,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
   delete req.session.data.addressFinderIncomplete
 
   req.flash('success', 'Address added')
-  res.redirect(`/providers/${providerId}/addresses`)
+  res.redirect(`/support/providers/${providerId}/addresses`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -399,9 +399,9 @@ exports.editProviderAddress_get = async (req, res) => {
     address = await ProviderAddress.findByPk(addressId)
   }
 
-  let back = `/providers/${providerId}/addresses`
+  let back = `/support/providers/${providerId}/addresses`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/addresses/${addressId}/edit/check`
+    back = `/support/providers/${providerId}/addresses/${addressId}/edit/check`
   }
 
   res.render('providers/addresses/edit', {
@@ -410,8 +410,8 @@ exports.editProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers/${providerId}/addresses`,
-      save: `/providers/${providerId}/addresses/${addressId}/edit`
+      cancel: `/support/providers/${providerId}/addresses`,
+      save: `/support/providers/${providerId}/addresses/${addressId}/edit`
     }
   })
 }
@@ -454,9 +454,9 @@ exports.editProviderAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}/addresses`
+    let back = `/support/providers/${providerId}/addresses`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/addresses/${addressId}/edit/check`
+      back = `/support/providers/${providerId}/addresses/${addressId}/edit/check`
     }
 
     res.render('providers/addresses/edit', {
@@ -466,12 +466,12 @@ exports.editProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/addresses`,
-        save: `/providers/${providerId}/addresses/${addressId}/edit`
+        cancel: `/support/providers/${providerId}/addresses`,
+        save: `/support/providers/${providerId}/addresses/${addressId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/addresses/${addressId}/edit/check`)
+    res.redirect(`/support/providers/${providerId}/addresses/${addressId}/edit/check`)
   }
 }
 
@@ -497,10 +497,10 @@ exports.editProviderAddressCheck_get = async (req, res) => {
     currentAddress,
     address: req.session.data.address,
     actions: {
-      back: `/providers/${providerId}/addresses/${addressId}/edit`,
-      cancel: `/providers/${providerId}/addresses`,
-      change: `/providers/${providerId}/addresses/${addressId}/edit`,
-      save: `/providers/${providerId}/addresses/${addressId}/edit/check`
+      back: `/support/providers/${providerId}/addresses/${addressId}/edit`,
+      cancel: `/support/providers/${providerId}/addresses`,
+      change: `/support/providers/${providerId}/addresses/${addressId}/edit`,
+      save: `/support/providers/${providerId}/addresses/${addressId}/edit/check`
     }
   })
 }
@@ -529,7 +529,7 @@ exports.editProviderAddressCheck_post = async (req, res) => {
   delete req.session.data.address
 
   req.flash('success', 'Address updated')
-  res.redirect(`/providers/${providerId}/addresses`)
+  res.redirect(`/support/providers/${providerId}/addresses`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -545,9 +545,9 @@ exports.deleteProviderAddress_get = async (req, res) => {
     provider,
     address,
     actions: {
-      back: `/providers/${providerId}`,
-      cancel: `/providers/${providerId}/addresses`,
-      save: `/providers/${providerId}/addresses/${addressId}/delete`
+      back: `/support/providers/${providerId}`,
+      cancel: `/support/providers/${providerId}/addresses`,
+      save: `/support/providers/${providerId}/addresses/${addressId}/delete`
     }
   })
 }
@@ -563,5 +563,5 @@ exports.deleteProviderAddress_post = async (req, res) => {
   })
 
   req.flash('success', 'Address deleted')
-  res.redirect(`/providers/${providerId}/addresses`)
+  res.redirect(`/support/providers/${providerId}/addresses`)
 }

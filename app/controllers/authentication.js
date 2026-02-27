@@ -29,14 +29,14 @@ const getPersonaItems = async () => {
 }
 
 const resolveRedirectPath = (user, requestedPath = null) => {
-  const defaultPath = user?.isApiUser ? '/api-clients' : '/providers'
+  const defaultPath = user?.isApiUser ? '/support/api-clients' : '/support/providers'
 
   if (!user?.isApiUser) {
     return requestedPath || defaultPath
   }
 
   // API users can only access API client and account pages
-  const allowedPrefixes = ['/api-clients', '/account']
+  const allowedPrefixes = ['/support/api-clients', '/account']
   const isAllowed = requestedPath &&
     allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
 
