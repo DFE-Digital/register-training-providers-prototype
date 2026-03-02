@@ -75,7 +75,7 @@ const loadApiClientTokenOrRedirect = async (apiClientId, res, currentUser, optio
     include: options.include
   })
   if (!token) {
-    res.redirect('/api-clients')
+    res.redirect('/support/api-clients')
     return null
   }
   return token
@@ -136,8 +136,8 @@ exports.apiClientList = async (req, res) => {
     apiClientTokens: items,
     pagination,
     actions: {
-      new: '/api-clients/new',
-      view: '/api-clients'
+      new: '/support/api-clients/new',
+      view: '/support/api-clients'
     }
   })
 }
@@ -155,9 +155,9 @@ exports.newApiClientToken_get = async (req, res) => {
     errors: [],
     expiryHintExample,
     actions: {
-      back: '/api-clients',
-      cancel: '/api-clients',
-      save: '/api-clients/new'
+      back: '/support/api-clients',
+      cancel: '/support/api-clients',
+      save: '/support/api-clients/new'
     }
   })
 }
@@ -196,16 +196,16 @@ exports.newApiClientToken_post = async (req, res) => {
       expiresOnFieldErrors,
       expiryHintExample,
       actions: {
-        back: '/api-clients',
-        cancel: '/api-clients',
-        save: '/api-clients/new'
+        back: '/support/api-clients',
+        cancel: '/support/api-clients',
+        save: '/support/api-clients/new'
       }
     })
     return
   }
 
   req.session.data.apiClientToken.expiresOnIso = expiresOnIso
-  res.redirect('/api-clients/new/check')
+  res.redirect('/support/api-clients/new/check')
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -217,7 +217,7 @@ exports.newApiClientTokenCheck_get = async (req, res) => {
   const expiresOnIso = apiClientToken.expiresOnIso
 
   if (!apiClientToken.clientName || !expiresOnIso) {
-    return res.redirect('/api-clients/new')
+    return res.redirect('/support/api-clients/new')
   }
 
   res.render('api-clients/check-your-answers', {
@@ -226,10 +226,10 @@ exports.newApiClientTokenCheck_get = async (req, res) => {
     title: 'Check your answers',
     caption: 'Add API client',
     actions: {
-      back: '/api-clients/new',
-      cancel: '/api-clients',
-      change: '/api-clients/new',
-      save: '/api-clients/new/check'
+      back: '/support/api-clients/new',
+      cancel: '/support/api-clients',
+      change: '/support/api-clients/new',
+      save: '/support/api-clients/new/check'
     }
   })
 }
@@ -239,7 +239,7 @@ exports.newApiClientTokenCheck_post = async (req, res) => {
   const expiresOnIso = apiClientToken.expiresOnIso
 
   if (!apiClientToken.clientName || !expiresOnIso) {
-    return res.redirect('/api-clients/new')
+    return res.redirect('/support/api-clients/new')
   }
 
   const plainToken = generatePlainToken()
@@ -265,7 +265,7 @@ exports.newApiClientTokenCheck_post = async (req, res) => {
 
   delete req.session.data.apiClientToken
 
-  res.redirect('/api-clients/new/confirmation')
+  res.redirect('/support/api-clients/new/confirmation')
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -276,7 +276,7 @@ exports.newApiClientTokenConfirmation_get = async (req, res) => {
   const confirmation = req.session.data.apiClientTokenGenerated
 
   if (!confirmation?.plainToken) {
-    return res.redirect('/api-clients')
+    return res.redirect('/support/api-clients')
   }
 
   const { clientName, plainToken } = confirmation
@@ -288,8 +288,8 @@ exports.newApiClientTokenConfirmation_get = async (req, res) => {
     clientName,
     plainToken,
     actions: {
-      back: '/api-clients',
-      finish: '/api-clients'
+      back: '/support/api-clients',
+      finish: '/support/api-clients'
     }
   })
 }
@@ -305,7 +305,7 @@ exports.editApiClientToken_get = async (req, res) => {
 
   if (currentApiClientToken.status === 'revoked') {
     req.flash('warning', 'You cannot edit a revoked API client')
-    return res.redirect(`/api-clients/${currentApiClientToken.id}`)
+    return res.redirect(`/support/api-clients/${currentApiClientToken.id}`)
   }
 
   let apiClientToken = ensureApiClientTokenSession(req, sessionKey)
@@ -323,9 +323,9 @@ exports.editApiClientToken_get = async (req, res) => {
     currentApiClientToken,
     errors: [],
     actions: {
-      back: '/api-clients',
-      cancel: '/api-clients',
-      save: `/api-clients/${req.params.apiClientId}/edit`
+      back: '/support/api-clients',
+      cancel: '/support/api-clients',
+      save: `/support/api-clients/${req.params.apiClientId}/edit`
     }
   })
 }
@@ -361,15 +361,15 @@ exports.editApiClientToken_post = async (req, res) => {
       currentApiClientToken,
       errors,
       actions: {
-        back: '/api-clients',
-        cancel: '/api-clients',
-        save: `/api-clients/${req.params.apiClientId}/edit`
+        back: '/support/api-clients',
+        cancel: '/support/api-clients',
+        save: `/support/api-clients/${req.params.apiClientId}/edit`
       }
     })
     return
   }
 
-  res.redirect(`/api-clients/${req.params.apiClientId}/check`)
+  res.redirect(`/support/api-clients/${req.params.apiClientId}/check`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -383,11 +383,11 @@ exports.editApiClientTokenCheck_get = async (req, res) => {
   if (!currentApiClientToken) return
 
   if (apiClientToken.id !== req.params.apiClientId) {
-    return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
+    return res.redirect(`/support/api-clients/${req.params.apiClientId}/edit`)
   }
 
   if (!apiClientToken.clientName) {
-    return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
+    return res.redirect(`/support/api-clients/${req.params.apiClientId}/edit`)
   }
 
   res.render('api-clients/check-your-answers', {
@@ -395,10 +395,10 @@ exports.editApiClientTokenCheck_get = async (req, res) => {
     expiresOn: currentApiClientToken.expiresAt ? govukDate(currentApiClientToken.expiresAt) : 'Not entered',
     currentApiClientToken,
     actions: {
-      back: `/api-clients/${req.params.apiClientId}/edit`,
-      cancel: '/api-clients',
-      change: `/api-clients/${req.params.apiClientId}/edit`,
-      save: `/api-clients/${req.params.apiClientId}/check`
+      back: `/support/api-clients/${req.params.apiClientId}/edit`,
+      cancel: '/support/api-clients',
+      change: `/support/api-clients/${req.params.apiClientId}/edit`,
+      save: `/support/api-clients/${req.params.apiClientId}/check`
     }
   })
 }
@@ -408,7 +408,7 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
   const apiClientToken = ensureApiClientTokenSession(req, sessionKey)
 
   if (apiClientToken.id !== req.params.apiClientId || !apiClientToken.clientName) {
-    return res.redirect(`/api-clients/${req.params.apiClientId}/edit`)
+    return res.redirect(`/support/api-clients/${req.params.apiClientId}/edit`)
   }
 
   const token = await loadApiClientTokenOrRedirect(req.params.apiClientId, res, req.user)
@@ -424,7 +424,7 @@ exports.editApiClientTokenCheck_post = async (req, res) => {
   delete req.session.data[sessionKey]
 
   req.flash('success', 'API client updated')
-  res.redirect(`/api-clients/${req.params.apiClientId}`)
+  res.redirect(`/support/api-clients/${req.params.apiClientId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -438,9 +438,9 @@ exports.revokeApiClientTokenCheck_get = async (req, res) => {
   res.render('api-clients/revoke', {
     apiClientToken,
     actions: {
-      back: `/api-clients/${apiClientToken.id}`,
-      cancel: `/api-clients/${apiClientToken.id}`,
-      revoke: `/api-clients/${apiClientToken.id}/revoke`
+      back: `/support/api-clients/${apiClientToken.id}`,
+      cancel: `/support/api-clients/${apiClientToken.id}`,
+      revoke: `/support/api-clients/${apiClientToken.id}/revoke`
     }
   })
 }
@@ -457,7 +457,7 @@ exports.revokeApiClientTokenCheck_post = async (req, res) => {
   })
 
   req.flash('success', 'API client revoked')
-  res.redirect(`/api-clients/${apiClientToken.id}`)
+  res.redirect(`/support/api-clients/${apiClientToken.id}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -471,9 +471,9 @@ exports.deleteApiClientTokenCheck_get = async (req, res) => {
   res.render('api-clients/delete', {
     apiClientToken,
     actions: {
-      back: `/api-clients/${apiClientToken.id}`,
-      cancel: `/api-clients/${apiClientToken.id}`,
-      delete: `/api-clients/${apiClientToken.id}/delete`
+      back: `/support/api-clients/${apiClientToken.id}`,
+      cancel: `/support/api-clients/${apiClientToken.id}`,
+      delete: `/support/api-clients/${apiClientToken.id}/delete`
     }
   })
 }
@@ -489,7 +489,7 @@ exports.deleteApiClientTokenCheck_post = async (req, res) => {
   })
 
   req.flash('success', 'API client deleted')
-  res.redirect('/api-clients')
+  res.redirect('/support/api-clients')
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -520,10 +520,10 @@ exports.apiClientTokenDetails = async (req, res) => {
     createdDisplay: buildCreatedDisplay(token),
     isRevoked: token.status === 'revoked',
     actions: {
-      back: '/api-clients',
-      change: token.status === 'revoked' ? null : `/api-clients/${token.id}/edit`,
-      revoke: token.status === 'revoked' ? null : `/api-clients/${token.id}/revoke`,
-      delete: `/api-clients/${token.id}/delete`
+      back: '/support/api-clients',
+      change: token.status === 'revoked' ? null : `/support/api-clients/${token.id}/edit`,
+      revoke: token.status === 'revoked' ? null : `/support/api-clients/${token.id}/revoke`,
+      delete: `/support/api-clients/${token.id}/delete`
     }
   })
 }

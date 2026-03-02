@@ -40,22 +40,22 @@
       navigation: [
         {
           text: "Providers",
-          href: "/providers",
+          href: "/support/providers",
           active: primaryNavId == "providers"
         } if not isApiUser,
         {
           text: "Users",
-          href: "/users",
+          href: "/support/users",
           active: primaryNavId == "users"
         } if not isApiUser,
         {
           text: "API clients",
-          href: "/api-clients",
+          href: "/support/api-clients",
           active: primaryNavId == "apiClients"
         },
         {
           text: "Activity log",
-          href: "/activity",
+          href: "/support/activity",
           active: primaryNavId == "activity"
         } if not isApiUser
       ],

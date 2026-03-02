@@ -236,7 +236,7 @@ const buildApiClientTokenLink = async (apiClientTokenId, fallbackName = 'API cli
     return { text, href: '', html: escapeHtml(text) }
   }
 
-  const href = `/api-clients/${apiClientTokenId}`
+  const href = `/support/api-clients/${apiClientTokenId}`
   return {
     text,
     href,
@@ -280,7 +280,7 @@ const buildProviderLink = async (providerId, fallbackName) => {
   })
 
   const text = provider?.operatingName || provider?.legalName || fallbackName || 'Provider'
-  const href = isProviderListable(provider) ? `/providers/${provider.id}` : ''
+  const href = isProviderListable(provider) ? `/support/providers/${provider.id}` : ''
   const html = href ? `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>` : escapeHtml(text)
   return { text, href, html }
 }
@@ -352,8 +352,8 @@ const buildUserLink = async (userId, fallbackName) => {
     : ''
   const text = derivedName || user?.email || fallbackName || 'User'
 
-  // TODO: If your route isn’t `/users/:id`, change the href here.
-  const href = isUserListable(user) ? `/users/${user.id}` : ''
+  // TODO: If your route isn’t `/support/users/:id`, change the href here.
+  const href = isUserListable(user) ? `/support/users/${user.id}` : ''
   const html = href
     ? `<a class="govuk-link" href="${href}">${escapeHtml(text)}</a>`
     : escapeHtml(text)

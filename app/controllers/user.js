@@ -41,15 +41,15 @@ exports.usersList = async (req, res) => {
     // the pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: '/users/new/',
-      view: '/users',
+      new: '/support/users/new/',
+      view: '/support/users',
       filters: {
-        apply: '/users',
-        remove: '/users/remove-all-filters'
+        apply: '/support/users',
+        remove: '/support/users/remove-all-filters'
       },
       search: {
-        find: '/users',
-        remove: '/users/remove-keyword-search'
+        find: '/support/users',
+        remove: '/support/users/remove-keyword-search'
       }
     }
   })
@@ -71,9 +71,9 @@ exports.userDetails = async (req, res) => {
     showChangeLink,
     showStatusChangeLink,
     actions: {
-      back: '/users',
-      change: `/users/${user.id}/edit`,
-      delete: `/users/${user.id}/delete`
+      back: '/support/users',
+      change: `/support/users/${user.id}/edit`,
+      delete: `/support/users/${user.id}/delete`
     }
   })
 }
@@ -85,9 +85,9 @@ exports.newUser_get = async (req, res) => {
     // Explicitly null to avoid clashing with the signed-in user injected into res.locals
     currentUser: null,
     actions: {
-      back: '/users',
-      cancel: '/users',
-      save: '/users/new'
+      back: '/support/users',
+      cancel: '/support/users',
+      save: '/support/users/new'
     }
   })
 }
@@ -160,13 +160,13 @@ exports.newUser_post = async (req, res) => {
       errors,
       currentUser: null,
       actions: {
-        back: '/users',
-        cancel: '/users',
-        save: '/users/new'
+        back: '/support/users',
+        cancel: '/support/users',
+        save: '/support/users/new'
       }
     })
   } else {
-    res.redirect('/users/new/check')
+    res.redirect('/support/users/new/check')
   }
 }
 
@@ -176,10 +176,10 @@ exports.newUserCheck_get = async (req, res) => {
     user,
     currentUser: null,
     actions: {
-      back: `/users/new`,
-      cancel: `/users`,
-      change: `/users/new`,
-      save: `/users/new/check`
+      back: `/support/users/new`,
+      cancel: `/support/users`,
+      change: `/support/users/new`,
+      save: `/support/users/new/check`
     }
   })
 }
@@ -205,7 +205,7 @@ exports.newUserCheck_post = async (req, res) => {
   delete req.session.data.user
 
   req.flash('success', 'User added')
-  res.redirect('/users')
+  res.redirect('/support/users')
 }
 
 exports.editUser_get = async (req, res) => {
@@ -223,9 +223,9 @@ exports.editUser_get = async (req, res) => {
     currentUser,
     user,
     actions: {
-      back: `/users/${userId}`,
-      cancel: `/users/${userId}`,
-      save: `/users/${userId}/edit`
+      back: `/support/users/${userId}`,
+      cancel: `/support/users/${userId}`,
+      save: `/support/users/${userId}/edit`
     }
   })
 }
@@ -322,13 +322,13 @@ exports.editUser_post = async (req, res) => {
       user,
       errors,
       actions: {
-        back: `/users/${userId}`,
-        cancel: `/users/${userId}`,
-        save: `/users/${userId}/edit`
+        back: `/support/users/${userId}`,
+        cancel: `/support/users/${userId}`,
+        save: `/support/users/${userId}/edit`
       }
     })
   } else {
-    res.redirect(`/users/${userId}/edit/check`)
+    res.redirect(`/support/users/${userId}/edit/check`)
   }
 }
 
@@ -342,10 +342,10 @@ exports.editUserCheck_get = async (req, res) => {
     currentUser,
     user,
     actions: {
-      back: `/users/${userId}/edit`,
-      cancel: `/users/${userId}`,
-      change: `/users/${userId}/edit`,
-      save: `/users/${userId}/edit/check`
+      back: `/support/users/${userId}/edit`,
+      cancel: `/support/users/${userId}`,
+      change: `/support/users/${userId}/edit`,
+      save: `/support/users/${userId}/edit/check`
     }
   })
 }
@@ -379,7 +379,7 @@ exports.editUserCheck_post = async (req, res) => {
   delete req.session.data.user
 
   req.flash('success', 'User updated')
-  res.redirect(`/users/${userId}`)
+  res.redirect(`/support/users/${userId}`)
 }
 
 exports.deleteUser_get = async (req, res) => {
@@ -388,9 +388,9 @@ exports.deleteUser_get = async (req, res) => {
   res.render('users/delete', {
     user,
     actions: {
-      back: `/users/${userId}`,
-      cancel: `/users/${userId}`,
-      delete: `/users/${userId}/delete`
+      back: `/support/users/${userId}`,
+      cancel: `/support/users/${userId}`,
+      delete: `/support/users/${userId}/delete`
     }
   })
 }
@@ -405,5 +405,5 @@ exports.deleteUser_post = async (req, res) => {
   })
 
   req.flash('success', 'User deleted')
-  res.redirect('/users')
+  res.redirect('/support/users')
 }

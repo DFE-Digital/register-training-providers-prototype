@@ -42,7 +42,7 @@ const nullIfEmpty = (value) => {
  * - Normalises slashes to avoid double slashes.
  * - **Won't duplicate** the section if the base URL already ends with it.
  *
- * @param {string | null | undefined} href - Base provider URL (e.g. "/providers/12345").
+ * @param {string | null | undefined} href - Base provider URL (e.g. "/support/providers/12345").
  * @param {string} section - Section path to append (e.g. "partnerships" or "/partnerships/").
  * @returns {string} The combined URL, or '' if `href` is falsy.
  */

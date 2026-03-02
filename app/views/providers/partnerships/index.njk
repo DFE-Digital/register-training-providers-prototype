@@ -15,7 +15,7 @@
 {% block beforeContent %}
 {{ govukBackLink({
   text: "Back",
-  href: "/providers"
+  href: "/support/providers"
 }) }}
 {% endblock %}
 
@@ -51,7 +51,7 @@
         {% set summaryCardTitleHtml %}
           {% if partnership.isAccreditedSide %}
             {% if partnership.partnerIsLinkable %}
-              <a href="/providers/{{ partnership.trainingPartner.id }}/partnerships">
+              <a href="/support/providers/{{ partnership.trainingPartner.id }}/partnerships">
                 {{ partnership.trainingPartner.operatingName }}
               </a>
             {% else %}
@@ -59,7 +59,7 @@
             {% endif %}
           {% else %}
             {% if partnership.accreditedIsLinkable %}
-              <a href="/providers/{{ partnership.accreditedProvider.id }}/partnerships">
+              <a href="/support/providers/{{ partnership.accreditedProvider.id }}/partnerships">
                 {{ partnership.accreditedProvider.operatingName }}
               </a>
             {% else %}

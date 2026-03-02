@@ -207,7 +207,7 @@ exports.providersList = async (req, res) => {
         items: providerTypes.map((providerType) => {
           return {
             text: getProviderTypeLabel(providerType),
-            href: `/providers/remove-provider-type-filter/${providerType}`
+            href: `/support/providers/remove-provider-type-filter/${providerType}`
           }
         })
       })
@@ -219,7 +219,7 @@ exports.providersList = async (req, res) => {
         items: accreditationTypes.map((accreditationType) => {
           return {
             text: getAccreditationTypeLabel(accreditationType),
-            href: `/providers/remove-accreditation-type-filter/${accreditationType}`
+            href: `/support/providers/remove-accreditation-type-filter/${accreditationType}`
           }
         })
       })
@@ -232,7 +232,7 @@ exports.providersList = async (req, res) => {
         items: academicYears.map((academicYearId) => {
           return {
             text: academicYearMap.get(academicYearId) || 'Academic year',
-            href: `/providers/remove-academic-year-filter/${academicYearId}`
+            href: `/support/providers/remove-academic-year-filter/${academicYearId}`
           }
         })
       })
@@ -244,7 +244,7 @@ exports.providersList = async (req, res) => {
         items: showArchivedProviders.map((showArchivedProvider) => {
           return {
             text: 'Include archived providers',
-            href: `/providers/remove-show-archived-provider-filter/${showArchivedProvider}`
+            href: `/support/providers/remove-show-archived-provider-filter/${showArchivedProvider}`
           }
         })
       })
@@ -420,15 +420,15 @@ exports.providersList = async (req, res) => {
     //
     hasFilters,
     actions: {
-      new: '/providers/new/',
-      view: '/providers',
+      new: '/support/providers/new/',
+      view: '/support/providers',
       filters: {
-        apply: '/providers',
-        remove: '/providers/remove-all-filters'
+        apply: '/support/providers',
+        remove: '/support/providers/remove-all-filters'
       },
       search: {
-        find: '/providers',
-        remove: '/providers/remove-keyword-search'
+        find: '/support/providers',
+        remove: '/support/providers/remove-keyword-search'
       }
     }
   })
@@ -440,7 +440,7 @@ exports.removeProviderTypeFilter = (req, res) => {
     req.params.providerType,
     filters.providerType
   )
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 exports.removeAccreditationTypeFilter = (req, res) => {
@@ -449,7 +449,7 @@ exports.removeAccreditationTypeFilter = (req, res) => {
     req.params.accreditationType,
     filters.accreditationType
   )
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 exports.removeShowArchivedProviderFilter = (req, res) => {
@@ -458,7 +458,7 @@ exports.removeShowArchivedProviderFilter = (req, res) => {
     req.params.showArchivedProvider,
     filters.showArchivedProvider
   )
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 exports.removeAcademicYearFilter = (req, res) => {
@@ -467,17 +467,17 @@ exports.removeAcademicYearFilter = (req, res) => {
     req.params.academicYear,
     filters.academicYear
   )
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 exports.removeAllFilters = (req, res) => {
   delete req.session.data.filters
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 exports.removeKeywordSearch = (req, res) => {
   delete req.session.data.keywords
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -548,9 +548,9 @@ exports.providerDetails = async (req, res, next) => {
       isAccredited,
       lastUpdate,
       actions: {
-        archive: `/providers/${providerId}/archive`,
-        delete: `/providers/${providerId}/delete`,
-        restore: `/providers/${providerId}/restore`
+        archive: `/support/providers/${providerId}/archive`,
+        delete: `/support/providers/${providerId}/delete`,
+        restore: `/support/providers/${providerId}/restore`
       }
     })
   } catch (err) {
@@ -588,9 +588,9 @@ exports.editProviderAcademicYears_get = async (req, res) => {
     req.session.data.providerAcademicYears = selectedAcademicYears
   }
 
-  let back = `/providers/${providerId}`
+  let back = `/support/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/academic-years/check`
+    back = `/support/providers/${providerId}/academic-years/check`
   }
 
   res.render('providers/academic-years/academic-years', {
@@ -601,8 +601,8 @@ exports.editProviderAcademicYears_get = async (req, res) => {
     errors: [],
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
-      save: `/providers/${providerId}/academic-years`
+      cancel: `/support/providers/${providerId}`,
+      save: `/support/providers/${providerId}/academic-years`
     }
   })
 }
@@ -640,13 +640,13 @@ exports.editProviderAcademicYears_post = async (req, res) => {
       selectedAcademicYears,
       errors,
       actions: {
-        back: `/providers/${providerId}`,
-        cancel: `/providers/${providerId}`,
-        save: `/providers/${providerId}/academic-years`
+        back: `/support/providers/${providerId}`,
+        cancel: `/support/providers/${providerId}`,
+        save: `/support/providers/${providerId}/academic-years`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/academic-years/check`)
+    res.redirect(`/support/providers/${providerId}/academic-years/check`)
   }
 }
 
@@ -681,10 +681,10 @@ exports.editProviderAcademicYearsCheck_get = async (req, res) => {
     provider,
     academicYearItems,
     actions: {
-      back: `/providers/${providerId}/academic-years?referrer=check`,
-      change: `/providers/${providerId}/academic-years`,
-      cancel: `/providers/${providerId}`,
-      save: `/providers/${providerId}/academic-years/check`
+      back: `/support/providers/${providerId}/academic-years?referrer=check`,
+      change: `/support/providers/${providerId}/academic-years`,
+      cancel: `/support/providers/${providerId}`,
+      save: `/support/providers/${providerId}/academic-years/check`
     }
   })
 }
@@ -744,7 +744,7 @@ exports.editProviderAcademicYearsCheck_post = async (req, res) => {
   delete req.session.data.providerAcademicYears
 
   req.flash('success', 'Academic years updated')
-  res.redirect(`/providers/${providerId}`)
+  res.redirect(`/support/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -756,9 +756,9 @@ exports.newProviderIsAccredited_get = async (req, res) => {
   res.render('providers/new/is-accredited', {
     provider,
     actions: {
-      back: '/providers',
-      cancel: '/providers',
-      save: '/providers/new'
+      back: '/support/providers',
+      cancel: '/support/providers',
+      save: '/support/providers/new'
     }
   })
 }
@@ -780,13 +780,13 @@ exports.newProviderIsAccredited_post = async (req, res) => {
       provider,
       errors,
       actions: {
-        back: '/providers',
-        cancel: '/providers',
-        save: '/providers/new'
+        back: '/support/providers',
+        cancel: '/support/providers',
+        save: '/support/providers/new'
       }
     })
   } else {
-    res.redirect('/providers/new/type')
+    res.redirect('/support/providers/new/type')
   }
 }
 
@@ -795,9 +795,9 @@ exports.newProviderType_get = async (req, res) => {
   res.render('providers/new/type', {
     provider,
     actions: {
-      back: '/providers/new',
-      cancel: '/providers',
-      save: '/providers/new/type'
+      back: '/support/providers/new',
+      cancel: '/support/providers',
+      save: '/support/providers/new/type'
     }
   })
 }
@@ -819,13 +819,13 @@ exports.newProviderType_post = async (req, res) => {
       provider,
       errors,
       actions: {
-        back: '/providers/new',
-        cancel: '/providers',
-        save: '/providers/new/type'
+        back: '/support/providers/new',
+        cancel: '/support/providers',
+        save: '/support/providers/new/type'
       }
     })
   } else {
-    res.redirect('/providers/new/details')
+    res.redirect('/support/providers/new/details')
   }
 }
 
@@ -834,9 +834,9 @@ exports.newProviderDetails_get = async (req, res) => {
   res.render('providers/edit', {
     provider,
     actions: {
-      back: '/providers/new/type',
-      cancel: '/providers',
-      save: '/providers/new/details'
+      back: '/support/providers/new/type',
+      cancel: '/support/providers',
+      save: '/support/providers/new/details'
     }
   })
 }
@@ -894,13 +894,13 @@ exports.newProviderDetails_post = async (req, res) => {
       provider,
       errors,
       actions: {
-        back: '/providers/new/type',
-        cancel: '/providers',
-        save: '/providers/new/details'
+        back: '/support/providers/new/type',
+        cancel: '/support/providers',
+        save: '/support/providers/new/details'
       }
     })
   } else {
-    res.redirect('/providers/new/academic-years')
+    res.redirect('/support/providers/new/academic-years')
   }
 }
 
@@ -912,9 +912,9 @@ exports.newProviderAcademicYears_get = async (req, res) => {
   req.session.data = req.session.data || {}
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.providerAcademicYears)
 
-  let back = '/providers/new/details'
+  let back = '/support/providers/new/details'
   if (req.query.referrer === 'check') {
-    back = '/providers/new/check'
+    back = '/support/providers/new/check'
   }
 
   res.render('providers/academic-years/academic-years', {
@@ -925,8 +925,8 @@ exports.newProviderAcademicYears_get = async (req, res) => {
     errors: [],
     actions: {
       back,
-      cancel: '/providers',
-      save: '/providers/new/academic-years'
+      cancel: '/support/providers',
+      save: '/support/providers/new/academic-years'
     }
   })
 }
@@ -951,9 +951,9 @@ exports.newProviderAcademicYears_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = '/providers/new/details'
+    let back = '/support/providers/new/details'
     if (req.query.referrer === 'check') {
-      back = '/providers/new/check'
+      back = '/support/providers/new/check'
     }
 
     res.render('providers/academic-years/academic-years', {
@@ -964,14 +964,14 @@ exports.newProviderAcademicYears_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: '/providers',
-        save: '/providers/new/academic-years'
+        cancel: '/support/providers',
+        save: '/support/providers/new/academic-years'
       }
     })
   } else if (provider.isAccredited == "yes") {
-    res.redirect('/providers/new/accreditation')
+    res.redirect('/support/providers/new/accreditation')
   } else {
-    res.redirect('/providers/new/address')
+    res.redirect('/support/providers/new/address')
   }
 }
 
@@ -980,9 +980,9 @@ exports.newProviderAccreditation_get = async (req, res) => {
   res.render('providers/new/accreditation', {
     provider,
     actions: {
-      back: '/providers/new/academic-years',
-      cancel: '/providers',
-      save: '/providers/new/accreditation'
+      back: '/support/providers/new/academic-years',
+      cancel: '/support/providers',
+      save: '/support/providers/new/accreditation'
     }
   })
 }
@@ -1025,13 +1025,13 @@ exports.newProviderAccreditation_post = async (req, res) => {
       provider,
       errors,
       actions: {
-        back: '/providers/new/academic-years',
-        cancel: '/providers',
-        save: '/providers/new/accreditation'
+        back: '/support/providers/new/academic-years',
+        cancel: '/support/providers',
+        save: '/support/providers/new/accreditation'
       }
     })
   } else {
-    res.redirect('/providers/new/address')
+    res.redirect('/support/providers/new/address')
   }
 }
 
@@ -1040,9 +1040,9 @@ exports.newProviderFindAddress_get = async (req, res) => {
 
   let back
   if (provider.isAccredited == "yes") {
-    back = '/providers/new/accreditation'
+    back = '/support/providers/new/accreditation'
   } else {
-    back = '/providers/new/academic-years'
+    back = '/support/providers/new/academic-years'
   }
 
   res.render('providers/new/address/find', {
@@ -1050,8 +1050,8 @@ exports.newProviderFindAddress_get = async (req, res) => {
     find,
     actions: {
       back,
-      cancel: `/providers`,
-      save: `/providers/new/address`
+      cancel: `/support/providers`,
+      save: `/support/providers/new/address`
     }
   })
 }
@@ -1077,9 +1077,9 @@ exports.newProviderFindAddress_post = async (req, res) => {
   if (errors.length) {
     let back
     if (provider.isAccredited == "yes") {
-      back = '/providers/new/accreditation'
+      back = '/support/providers/new/accreditation'
     } else {
-      back = '/providers/new/academic-years'
+      back = '/support/providers/new/academic-years'
     }
 
     res.render('providers/new/address/find', {
@@ -1088,12 +1088,12 @@ exports.newProviderFindAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers`,
-        save: `/providers/new/address`
+        cancel: `/support/providers`,
+        save: `/support/providers/new/address`
       }
     })
   } else {
-    res.redirect(`/providers/new/address/select`)
+    res.redirect(`/support/providers/new/address/select`)
   }
 }
 
@@ -1110,9 +1110,9 @@ exports.newProviderSelectAddress_get = async (req, res) => {
     addresses = await parseForGovukRadios(addresses)
   }
 
-  let back = `/providers/new/address`
+  let back = `/support/providers/new/address`
   if (req.query.referrer === 'check') {
-    back = `/providers/new/check`
+    back = `/support/providers/new/check`
   }
 
   res.render('providers/new/address/select', {
@@ -1122,10 +1122,10 @@ exports.newProviderSelectAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/providers`,
-      change: `/providers/new/address`,
-      enter: `/providers/new/address/enter?addressFinderIncomplete=`,
-      save: `/providers/new/address/select`
+      cancel: `/support/providers`,
+      change: `/support/providers/new/address`,
+      enter: `/support/providers/new/address/enter?addressFinderIncomplete=`,
+      save: `/support/providers/new/address/select`
     }
   })
 }
@@ -1153,9 +1153,9 @@ exports.newProviderSelectAddress_post = async (req, res) => {
       addresses = await parseForGovukRadios(addresses)
     }
 
-    let back = `/providers/new/address`
+    let back = `/support/providers/new/address`
     if (req.query.referrer === 'check') {
-      back = `/providers/new/check`
+      back = `/support/providers/new/check`
     }
 
     res.render('providers/new/address/select', {
@@ -1166,14 +1166,14 @@ exports.newProviderSelectAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers`,
-        change: `/providers/new/address`,
-        enter: `/providers/new/address/enter?addressFinderIncomplete=`,
-        save: `/providers/new/address/select`
+        cancel: `/support/providers`,
+        change: `/support/providers/new/address`,
+        enter: `/support/providers/new/address/enter?addressFinderIncomplete=`,
+        save: `/support/providers/new/address/select`
       }
     })
   } else {
-    res.redirect(`/providers/new/check`)
+    res.redirect(`/support/providers/new/check`)
   }
 }
 
@@ -1189,9 +1189,9 @@ exports.newProviderEnterAddress_get = async (req, res) => {
     address,
     showAddressFinderInset,
     actions: {
-      back: `/providers/new/address/select`,
-      cancel: `/providers`,
-      save: `/providers/new/address/enter`
+      back: `/support/providers/new/address/select`,
+      cancel: `/support/providers`,
+      save: `/support/providers/new/address/enter`
     }
   })
 }
@@ -1238,13 +1238,13 @@ exports.newProviderEnterAddress_post = async (req, res) => {
       showAddressFinderInset,
       errors,
       actions: {
-        back: `/providers/new/address/select`,
-        cancel: `/providers`,
-        save: `/providers/new/address/enter`
+        back: `/support/providers/new/address/select`,
+        cancel: `/support/providers`,
+        save: `/support/providers/new/address/enter`
       }
     })
   } else {
-    res.redirect(`/providers/new/check`)
+    res.redirect(`/support/providers/new/check`)
   }
 }
 
@@ -1266,7 +1266,7 @@ exports.newProviderCheck_get = async (req, res) => {
     if (!address.line1?.trim() || !address.town?.trim() || !address.postcode?.trim()) {
       req.session.data.address = address
       req.session.data.addressFinderIncomplete = true
-      return res.redirect('/providers/new/address/enter')
+      return res.redirect('/support/providers/new/address/enter')
     }
   }
   // Geocode the address data if we don't already have coordinates
@@ -1279,9 +1279,9 @@ exports.newProviderCheck_get = async (req, res) => {
   // put address into the session data for use later
   req.session.data.address = address
 
-  let back = `/providers/new/address/enter`
+  let back = `/support/providers/new/address/enter`
   if (find.uprn) {
-    back = `/providers/new/address/select`
+    back = `/support/providers/new/address/select`
   }
 
   res.render('providers/new/check-your-answers', {
@@ -1290,9 +1290,9 @@ exports.newProviderCheck_get = async (req, res) => {
     academicYearItems,
     actions: {
       back,
-      cancel: `/providers`,
-      change: `/providers/new`,
-      save: `/providers/new/check`
+      cancel: `/support/providers`,
+      change: `/support/providers/new`,
+      save: `/support/providers/new/check`
     }
   })
 }
@@ -1374,7 +1374,7 @@ exports.newProviderCheck_post = async (req, res) => {
   delete req.session.data.providerAcademicYears
 
   req.flash('success', 'Provider added')
-  res.redirect(`/providers`)
+  res.redirect(`/support/providers`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1399,9 +1399,9 @@ exports.editProvider_get = async (req, res) => {
     provider = currentProvider
   }
 
-  let back = `/providers/${providerId}`
+  let back = `/support/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/edit/check`
+    back = `/support/providers/${providerId}/edit/check`
   }
 
   res.render('providers/edit', {
@@ -1410,8 +1410,8 @@ exports.editProvider_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/providers/${providerId}`,
-      save: `/providers/${providerId}/edit`
+      cancel: `/support/providers/${providerId}`,
+      save: `/support/providers/${providerId}/edit`
     }
   })
 }
@@ -1476,9 +1476,9 @@ exports.editProvider_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/support/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/edit/check`
+      back = `/support/providers/${providerId}/edit/check`
     }
 
     res.render('providers/edit', {
@@ -1488,12 +1488,12 @@ exports.editProvider_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}`,
-        save: `/providers/${providerId}/edit`
+        cancel: `/support/providers/${providerId}`,
+        save: `/support/providers/${providerId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${req.params.providerId}/edit/check`)
+    res.redirect(`/support/providers/${req.params.providerId}/edit/check`)
   }
 }
 
@@ -1508,9 +1508,9 @@ exports.editProviderCheck_get = async (req, res) => {
     provider,
     isAccredited,
     actions: {
-      back: `/providers/${providerId}/edit`,
-      cancel: `/providers/${providerId}`,
-      save: `/providers/${providerId}/edit/check`
+      back: `/support/providers/${providerId}/edit`,
+      cancel: `/support/providers/${providerId}`,
+      save: `/support/providers/${providerId}/edit/check`
     }
   })
 }
@@ -1533,7 +1533,7 @@ exports.editProviderCheck_post = async (req, res) => {
   delete req.session.data.provider
 
   req.flash('success', 'Provider updated')
-  res.redirect(`/providers/${providerId}`)
+  res.redirect(`/support/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1546,8 +1546,8 @@ exports.archiveProvider_get = async (req, res) => {
   res.render('providers/archive', {
     provider,
     actions: {
-      archive: `/providers/${providerId}/archive`,
-      cancel: `/providers/${providerId}`
+      archive: `/support/providers/${providerId}/archive`,
+      cancel: `/support/providers/${providerId}`
     }
   })
 }
@@ -1563,7 +1563,7 @@ exports.archiveProvider_post = async (req, res) => {
   })
 
   req.flash('success', 'Provider archived')
-  res.redirect(`/providers/${providerId}`)
+  res.redirect(`/support/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1576,8 +1576,8 @@ exports.restoreProvider_get = async (req, res) => {
   res.render('providers/restore', {
     provider,
     actions: {
-      cancel: `/providers/${providerId}`,
-      restore: `/providers/${providerId}/restore`
+      cancel: `/support/providers/${providerId}`,
+      restore: `/support/providers/${providerId}/restore`
     }
   })
 }
@@ -1593,7 +1593,7 @@ exports.restoreProvider_post = async (req, res) => {
   })
 
   req.flash('success', 'Provider restored')
-  res.redirect(`/providers/${providerId}`)
+  res.redirect(`/support/providers/${providerId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1606,8 +1606,8 @@ exports.deleteProvider_get = async (req, res) => {
   res.render('providers/delete', {
     provider,
     actions: {
-      cancel: `/providers/${providerId}`,
-      delete: `/providers/${providerId}/delete`
+      cancel: `/support/providers/${providerId}`,
+      delete: `/support/providers/${providerId}/delete`
     }
   })
 }
@@ -1623,7 +1623,7 @@ exports.deleteProvider_post = async (req, res) => {
   })
 
   req.flash('success', 'Provider deleted')
-  res.redirect('/providers')
+  res.redirect('/support/providers')
 }
 
 /// ------------------------------------------------------------------------ ///

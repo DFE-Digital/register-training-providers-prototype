@@ -166,9 +166,9 @@ exports.providerAccreditationsList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/providers/${providerId}/accreditations/new`,
-      change: `/providers/${providerId}/accreditations`,
-      delete: `/providers/${providerId}/accreditations`
+      new: `/support/providers/${providerId}/accreditations/new`,
+      change: `/support/providers/${providerId}/accreditations`,
+      delete: `/support/providers/${providerId}/accreditations`
     }
   })
 }
@@ -207,9 +207,9 @@ exports.newProviderAccreditation_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
 
-  let back = `/providers/${providerId}`
+  let back = `/support/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/accreditations/new/check`
+    back = `/support/providers/${providerId}/accreditations/new/check`
   }
 
   res.render('providers/accreditations/edit', {
@@ -219,8 +219,8 @@ exports.newProviderAccreditation_get = async (req, res) => {
     endsOn: normaliseDateValue(accreditation.endsOn),
     actions: {
       back,
-      cancel: `/providers/${providerId}/accreditations`,
-      save: `/providers/${providerId}/accreditations/new`
+      cancel: `/support/providers/${providerId}/accreditations`,
+      save: `/support/providers/${providerId}/accreditations/new`
     }
   })
 }
@@ -265,9 +265,9 @@ exports.newProviderAccreditation_post = async (req, res) => {
   errors.push(...dateErrors)
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/support/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/accreditations/new/check`
+      back = `/support/providers/${providerId}/accreditations/new/check`
     }
 
     res.render('providers/accreditations/edit', {
@@ -280,12 +280,12 @@ exports.newProviderAccreditation_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/accreditations`,
-        save: `/providers/${providerId}/accreditations/new`
+        cancel: `/support/providers/${providerId}/accreditations`,
+        save: `/support/providers/${providerId}/accreditations/new`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/accreditations/new/check`)
+    res.redirect(`/support/providers/${providerId}/accreditations/new/check`)
   }
 }
 
@@ -303,10 +303,10 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
     accreditation,
     accreditationDates,
     actions: {
-      back: `/providers/${providerId}/accreditations/new`,
-      cancel: `/providers/${providerId}/accreditations`,
-      change: `/providers/${providerId}/accreditations/new`,
-      save: `/providers/${providerId}/accreditations/new/check`
+      back: `/support/providers/${providerId}/accreditations/new`,
+      cancel: `/support/providers/${providerId}/accreditations`,
+      change: `/support/providers/${providerId}/accreditations/new`,
+      save: `/support/providers/${providerId}/accreditations/new/check`
     }
   })
 }
@@ -341,7 +341,7 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation added')
-  res.redirect(`/providers/${providerId}/accreditations`)
+  res.redirect(`/support/providers/${providerId}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -360,9 +360,9 @@ exports.editProviderAccreditation_get = async (req, res) => {
     accreditation = await ProviderAccreditation.findByPk(accreditationId)
   }
 
-  let back = `/providers/${providerId}`
+  let back = `/support/providers/${providerId}`
   if (req.query.referrer === 'check') {
-    back = `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
+    back = `/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`
   }
 
   const startsOn = normaliseDateValue(accreditation?.startsOn)
@@ -376,8 +376,8 @@ exports.editProviderAccreditation_get = async (req, res) => {
     endsOn,
     actions: {
       back,
-      cancel: `/providers/${providerId}/accreditations`,
-      save: `/providers/${providerId}/accreditations/${accreditationId}/edit`
+      cancel: `/support/providers/${providerId}/accreditations`,
+      save: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`
     }
   })
 }
@@ -410,9 +410,9 @@ exports.editProviderAccreditation_post = async (req, res) => {
   errors.push(...dateErrors)
 
   if (errors.length) {
-    let back = `/providers/${providerId}`
+    let back = `/support/providers/${providerId}`
     if (req.query.referrer === 'check') {
-      back = `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
+      back = `/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`
     }
 
     res.render('providers/accreditations/edit', {
@@ -426,12 +426,12 @@ exports.editProviderAccreditation_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/providers/${providerId}/accreditations`,
-        save: `/providers/${providerId}/accreditations/${accreditationId}/edit`
+        cancel: `/support/providers/${providerId}/accreditations`,
+        save: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`
       }
     })
   } else {
-    res.redirect(`/providers/${providerId}/accreditations/${accreditationId}/edit/check`)
+    res.redirect(`/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`)
   }
 }
 
@@ -448,10 +448,10 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
     accreditation,
     accreditationDates,
     actions: {
-      back: `/providers/${providerId}/accreditations/${accreditationId}/edit`,
-      cancel: `/providers/${providerId}/accreditations`,
-      change: `/providers/${providerId}/accreditations/${accreditationId}/edit`,
-      save: `/providers/${providerId}/accreditations/${accreditationId}/edit/check`
+      back: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`,
+      cancel: `/support/providers/${providerId}/accreditations`,
+      change: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`,
+      save: `/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`
     }
   })
 }
@@ -485,7 +485,7 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation updated')
-  res.redirect(`/providers/${providerId}/accreditations`)
+  res.redirect(`/support/providers/${providerId}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -500,9 +500,9 @@ exports.deleteProviderAccreditation_get = async (req, res) => {
     provider,
     accreditation,
     actions: {
-      back: `/providers/${providerId}/accreditations`,
-      cancel: `/providers/${providerId}/accreditations`,
-      save: `/providers/${providerId}/accreditations/${accreditationId}/delete`
+      back: `/support/providers/${providerId}/accreditations`,
+      cancel: `/support/providers/${providerId}/accreditations`,
+      save: `/support/providers/${providerId}/accreditations/${accreditationId}/delete`
     }
   })
 }
@@ -518,5 +518,5 @@ exports.deleteProviderAccreditation_post = async (req, res) => {
   })
 
   req.flash('success', 'Accreditation deleted')
-  res.redirect(`/providers/${providerId}/accreditations`)
+  res.redirect(`/support/providers/${providerId}/accreditations`)
 }
