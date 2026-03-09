@@ -42,3 +42,14 @@ exports.privacy = (req, res) => {
     content: markdown.content
   })
 }
+
+exports.howToUseService = (req, res) => {
+  const markdown = getContent({
+    fileName: 'how-to-use-this-service'
+  })
+
+  res.render('../views/content/show', {
+    contentData: markdown.data,
+    content: markdown.content
+  })
+}
