@@ -394,6 +394,8 @@ router.get('/cookies', contentController.cookies)
 
 router.get('/privacy', contentController.privacy)
 
+router.get('/how-to-use-this-service', contentController.howToUseService)
+
 router.get('/404', checkIsAuthenticated, errorController.pageNotFound)
 router.get('/page-not-found', checkIsAuthenticated, errorController.pageNotFound)
 
