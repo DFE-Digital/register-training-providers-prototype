@@ -32,7 +32,7 @@ Accredited providers should use their operating name as published here:
 - [List of providers accredited to deliver ITT from September 2024](https://www.gov.uk/government/publications/accredited-initial-teacher-training-itt-providers/list-of-providers-accredited-to-deliver-itt-from-september-2024)
 - [List of providers accredited to deliver ITT from September 2026](https://www.gov.uk/government/publications/accredited-initial-teacher-training-itt-providers/list-of-providers-accredited-to-deliver-itt-from-september-2026)
 
-If the operating name cannot be used, legal names may be used instead. If there are inaccuracies in the published list, providers should contact the Department for Education (DfE) via <itt.accreditation@education.gov.uk> to have them amended. Accredited providers should use the same name across all DfE services.
+If the operating name cannot be used, legal names may be used instead. If there are inaccuracies in the published list, providers should contact the DfE via <itt.accreditation@education.gov.uk> to have them amended. Accredited providers should use the same name across all DfE services.
 
 ## Partnerships and how they work
 
@@ -45,7 +45,7 @@ Partnerships can take various forms, from simple collaborations between two or t
 Partnerships can form between:
 
 - accredited ITT providers
-- training partner
+- training partners
 - placement schools
 
 ### Accredited ITT providers
@@ -64,7 +64,7 @@ The accredited ITT provider has been awarded accreditation and has full and fina
 
 A training partner is also known as a:
 
-- lead delivery partner (old terminology)
+- lead delivery partner
 - lead partner
 - delivery partner
 - strategic partner
@@ -79,7 +79,7 @@ Training partners work in collaboration with their accredited ITT provider, and 
 - trainee recruitment
 - delivering ITT courses
 - contributing to curriculum design
-- designing and delivering mentor curricula
+- designing and delivering mentor curriculum
 - supplying lead mentors
 - running Intensive Training and Practice (ITP)
 - quality assurance of aspects such as mentoring
@@ -95,7 +95,7 @@ A placement school is also known as a:
 
 Schools provide high-quality general school placements for ITT trainees and supply mentors. RoTP does not keep a log of placement schools; it only keeps a log of training providers.
 
-Placement schools or other school partners may have the capacity and expertise to offer the ITT partnership’s school-based Intensive Training and Practice (ITP) element.
+Placement schools or other school partners may have the capacity and expertise to offer the ITT partnership’s school-based Intensive ITP element.
 
 School placements and other training may take place in special schools, alternative provision, pupil referral units, and mainstream schools with special educational needs (SEN) resource units, mainly where an accredited ITT provider offers an additional specialism in SEN.
 
