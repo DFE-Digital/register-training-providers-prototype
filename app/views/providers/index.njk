@@ -25,17 +25,21 @@
         href: actions.new
       }) }}
 
-      {{ govukButton({
-        text: "Download providers as CSV",
+      <a href="{{ actions.downloadCsv }}" class="govuk-link">Download providers (CSV)</a>
+
+      <a href="{{ actions.downloadOds }}" class="govuk-link">Download providers (ODS)</a>
+
+      {# {{ govukButton({
+        text: "Download providers (CSV)",
         href: actions.downloadCsv,
         classes: "govuk-button--secondary"
       }) }}
 
       {{ govukButton({
-        text: "Download providers as ODS",
+        text: "Download providers (ODS)",
         href: actions.downloadOds,
         classes: "govuk-button--secondary"
-      }) }}
+      }) }} #}
 
       {# {{ appButtonMenu({
         classes: "govuk-button-group__item",
