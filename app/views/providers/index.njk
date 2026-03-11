@@ -13,10 +13,14 @@
 
     {% include "_includes/page-heading.njk" %}
 
-    {{ govukButton({
-      text: "Add provider",
-      href: actions.new
-    }) }}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Add provider",
+        href: actions.new
+      }) }}
+
+      <a class="govuk-link" href="{{ actions.download }}">Download providers as CSV</a>
+    </div>
 
   </div>
 </div>
