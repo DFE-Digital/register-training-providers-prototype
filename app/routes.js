@@ -265,6 +265,7 @@ router.get('/support/providers/remove-all-filters', ...supportOnly, providerCont
 router.get('/support/providers/remove-keyword-search', ...supportOnly, providerController.removeKeywordSearch)
 
 router.get('/support/providers/download/csv', ...supportOnly, providerController.providersDownloadCsv)
+router.get('/support/providers/download/ods', ...supportOnly, providerController.providersDownloadOds)
 
 router.get('/support/providers/new', ...supportOnly, providerController.newProviderIsAccredited_get)
 router.post('/support/providers/new', ...supportOnly, providerController.newProviderIsAccredited_post)
