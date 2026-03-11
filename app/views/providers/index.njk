@@ -25,7 +25,19 @@
         href: actions.new
       }) }}
 
-      {{ appButtonMenu({
+      {{ govukButton({
+        text: "Download providers as CSV",
+        href: actions.downloadCsv,
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Download providers as ODS",
+        href: actions.downloadOds,
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {# {{ appButtonMenu({
         classes: "govuk-button-group__item",
         button: {
           text: "Download data",
@@ -41,7 +53,7 @@
             href: actions.downloadOds
           }
         ]
-      }) }}
+      }) }} #}
     </div>
 
   </div>
