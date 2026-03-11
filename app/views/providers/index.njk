@@ -19,7 +19,11 @@
         href: actions.new
       }) }}
 
-      <a class="govuk-link" href="{{ actions.download }}">Download providers as CSV</a>
+      {{ govukButton({
+        text: "Download providers as CSV",
+        href: actions.download,
+        classes: "govuk-button--secondary"
+      }) }}
     </div>
 
   </div>
