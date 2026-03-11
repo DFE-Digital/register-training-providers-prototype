@@ -3,8 +3,14 @@
 // https://prototype-kit.service.gov.uk/docs/adding-css-javascript-and-images
 //
 import { FilterToggleButton } from '/public/javascripts/components/filter-toggle-button.js'
+import { ButtonMenu } from '/public/javascripts/components/button-menu.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  document.querySelectorAll('[data-module="app-button-menu"]').forEach((module) => {
+    const buttonMenu = new ButtonMenu(module)
+    buttonMenu.init()
+  })
+
   const filterContainer = document.querySelector('.app-filter-layout__filter')
   const actionBarFilterContainer = document.querySelector('.app-action-bar__filter')
   const filterHeaderActionContainer = document.querySelector('.app-filter__header-action')

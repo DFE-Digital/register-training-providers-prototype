@@ -1,0 +1,132 @@
+$app-button-menu-color: govuk-colour("black", $variant: "tint-80");
+$app-button-menu-hover-color: govuk-colour("black", $variant: "tint-25");
+
+.app-button-menu {
+  --app-button-menu-gap: 0px;
+  display: inline-block;
+  position: relative;
+}
+
+.app-button-menu.govuk-button-group__item {
+  margin-bottom: 0;
+}
+
+.app-button-menu__toggle-button,
+.app-button-menu__single-button {
+  margin-bottom: 0;
+  vertical-align: baseline;
+  display: inline-flex;
+  align-items: center;
+}
+
+.app-button-menu__toggle-button span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-button-menu__toggle-button svg {
+  margin-top: 2px;
+  transform: rotate(180deg);
+}
+
+.app-button-menu__toggle-button[aria-expanded="true"] svg {
+  transform: rotate(0deg);
+}
+
+.app-button-menu__wrapper {
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  top: calc(100% + var(--app-button-menu-gap));
+  left: 0;
+  background: govuk-colour("white");
+  border: 1px solid govuk-colour("mid-grey");
+  box-shadow: 0 2px 6px rgba(11, 12, 12, 0.15);
+
+  &,
+  .app-button-group--inline {
+    position: absolute;
+    width: 200px;
+  }
+
+  &--right {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* Menu items with no JS */
+.app-button-menu__item {
+  display: inline-block;
+  width: auto;
+  margin-right: govuk-spacing(2);
+  margin-bottom: govuk-spacing(2);
+  vertical-align: baseline;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+/* Menu items with JS */
+.app-button-menu li > .app-button-menu__item,
+.app-button-menu__wrapper .app-button-menu__item {
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  padding: govuk-spacing(2);
+  border: $govuk-border-width-form-element solid transparent;
+  border-bottom: 1px solid $app-button-menu-color;
+  border-radius: 0;
+  color: $govuk-text-colour;
+  background-color: govuk-colour("black", $variant: "tint-95");
+  text-align: left;
+  vertical-align: top;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  @include govuk-font($size: 19, $line-height: 19px);
+
+  &:link,
+  &:visited,
+  &:active,
+  &:hover {
+    color: $govuk-text-colour;
+    text-decoration: none;
+  }
+
+  &:active,
+  &:hover {
+    color: govuk-colour("white");
+  }
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &:hover {
+    background-color: $app-button-menu-hover-color;
+  }
+
+  &:focus {
+    z-index: 10;
+    border-color: $govuk-focus-colour;
+    outline: $govuk-focus-width solid transparent;
+    box-shadow: inset 0 0 0 1px $govuk-focus-colour;
+  }
+
+  &:focus:not(:active):not(:hover) {
+    border-color: $govuk-focus-colour;
+    color: $govuk-focus-text-colour;
+    background-color: $govuk-focus-colour;
+    box-shadow: 0 2px 0 $govuk-focus-text-colour;
+  }
+}
