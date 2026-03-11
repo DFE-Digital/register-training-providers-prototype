@@ -11,6 +11,7 @@ const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { Provider, ProviderAddress, ProviderAccreditation, AcademicYear, ProviderAcademicYear } = require('../models')
 
 const { Op, literal, Sequelize } = require('sequelize')
+const XLSX = require('xlsx')
 
 const csvEscape = (value) => {
   if (value === null || value === undefined) return ''
@@ -26,6 +27,28 @@ const csvTimestamp = (now = new Date(), timeZone = 'Europe/London') => {
   }).formatToParts(now).reduce((acc, part) => (acc[part.type] = part.value, acc), {})
   return `${parts.year}${parts.month}${parts.day}-${parts.hour}${parts.minute}${parts.second}`
 }
+
+const buildProviderExportRow = (provider, academicYears = []) => ([
+  provider.operatingName,
+  provider.legalName || '',
+  provider.type ? getProviderTypeLabel(provider.type, provider.isAccredited) : '',
+  provider.isAccredited ? 'Accredited' : 'Not accredited',
+  provider.ukprn || '',
+  provider.urn || '',
+  provider.code || '',
+  academicYears.join('; '),
+  provider.archivedAt ? 'Yes' : 'No'
+])
+
+const formatAcademicYearsForExport = (academicYears = []) => (
+  academicYears
+    .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
+    .map((academicYear) => {
+      const statusLabel = getAcademicYearStatusLabel(academicYear)
+      const suffix = statusLabel ? ` - ${statusLabel}` : ''
+      return `${academicYear.name}${suffix}`
+    })
+)
 
 const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -445,7 +468,8 @@ exports.providersList = async (req, res) => {
     actions: {
       new: '/support/providers/new/',
       view: '/support/providers',
-      download: '/support/providers/download/csv',
+      downloadCsv: '/support/providers/download/csv',
+      downloadOds: '/support/providers/download/ods',
       filters: {
         apply: '/support/providers',
         remove: '/support/providers/remove-all-filters'
@@ -525,26 +549,8 @@ exports.providersDownloadCsv = async (req, res, next) => {
         if (req.aborted) return res.end()
 
         const providerJson = provider.toJSON ? provider.toJSON() : provider
-        const academicYears = (academicYearsByProviderId[provider.id] || [])
-          .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
-          .map((academicYear) => {
-            const statusLabel = getAcademicYearStatusLabel(academicYear)
-            const suffix = statusLabel ? ` - ${statusLabel}` : ''
-            return `${academicYear.name}${suffix}`
-          })
-          .join('; ')
-
-        const row = [
-          providerJson.operatingName,
-          providerJson.legalName || '',
-          providerJson.type ? getProviderTypeLabel(providerJson.type, providerJson.isAccredited) : '',
-          providerJson.isAccredited ? 'Accredited' : 'Not accredited',
-          providerJson.ukprn || '',
-          providerJson.urn || '',
-          providerJson.code || '',
-          academicYears,
-          providerJson.archivedAt ? 'Yes' : 'No'
-        ]
+        const academicYears = formatAcademicYearsForExport(academicYearsByProviderId[provider.id] || [])
+        const row = buildProviderExportRow(providerJson, academicYears)
 
         res.write(row.map(csvEscape).join(',') + '\r\n')
       }
@@ -558,6 +564,88 @@ exports.providersDownloadCsv = async (req, res, next) => {
     if (res.headersSent) {
       try { res.end() } catch (_) {}
     }
+    return next(err)
+  }
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Download providers as ODS
+/// ------------------------------------------------------------------------ ///
+
+exports.providersDownloadOds = async (req, res, next) => {
+  const PAGE_SIZE = 1000
+
+  try {
+    const { filters } = req.session.data
+
+    const keywords = req.session.data.keywords || ''
+
+    const selectedProviderType = filters?.providerType ? getCheckboxValues(null, filters.providerType) : []
+    const selectedAccreditationType = filters?.accreditationType ? getCheckboxValues(null, filters.accreditationType) : []
+    const selectedArchivedProvider = filters?.showArchivedProvider ? getCheckboxValues(null, filters.showArchivedProvider) : []
+    const selectedAcademicYear = filters?.academicYear ? getCheckboxValues(null, filters.academicYear) : []
+
+    const { whereClause, providerAcademicYearFilterInclude } = buildProviderQuery({
+      keywords,
+      selectedProviderType,
+      selectedAccreditationType,
+      selectedArchivedProvider,
+      selectedAcademicYear
+    })
+
+    const header = [
+      'operating name',
+      'legal name',
+      'provider type',
+      'accreditation status',
+      'ukprn',
+      'urn',
+      'provider code',
+      'academic years',
+      'archived'
+    ]
+
+    const rows = [header]
+
+    let page = 1
+    while (true) {
+      const offset = (page - 1) * PAGE_SIZE
+      const providers = await Provider.findAll({
+        where: whereClause,
+        include: providerAcademicYearFilterInclude,
+        order: [['operatingName', 'ASC']],
+        distinct: true,
+        limit: PAGE_SIZE,
+        offset,
+        subQuery: providerAcademicYearFilterInclude.length > 0
+      })
+
+      if (!providers.length) break
+
+      const providerIds = providers.map((provider) => provider.id)
+      const academicYearsByProviderId = await fetchAcademicYearsByProviderId(providerIds)
+
+      for (const provider of providers) {
+        const providerJson = provider.toJSON ? provider.toJSON() : provider
+        const academicYears = formatAcademicYearsForExport(academicYearsByProviderId[provider.id] || [])
+        rows.push(buildProviderExportRow(providerJson, academicYears))
+      }
+
+      if (providers.length < PAGE_SIZE) break
+      page += 1
+    }
+
+    const workbook = XLSX.utils.book_new()
+    const worksheet = XLSX.utils.aoa_to_sheet(rows)
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Providers')
+
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'ods' })
+    const filename = `training-providers-${csvTimestamp()}.ods`
+
+    res.setHeader('Content-Type', 'application/vnd.oasis.opendocument.spreadsheet')
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+    return res.end(buffer)
+  } catch (err) {
     return next(err)
   }
 }
