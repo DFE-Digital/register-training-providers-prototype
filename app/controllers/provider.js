@@ -29,6 +29,7 @@ const csvTimestamp = (now = new Date(), timeZone = 'Europe/London') => {
 }
 
 const buildProviderExportRow = (provider, academicYears = []) => ([
+  provider.id || '',
   provider.operatingName,
   provider.legalName || '',
   provider.type ? getProviderTypeLabel(provider.type, provider.isAccredited) : '',
@@ -509,14 +510,15 @@ exports.providersDownloadCsv = async (req, res, next) => {
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
 
     const header = [
-      'operating name',
-      'legal name',
-      'provider type',
-      'accreditation status',
+      'provider_id',
+      'operating_name',
+      'legal_name',
+      'provider_type',
+      'accreditation_status',
       'ukprn',
       'urn',
-      'provider code',
-      'academic years',
+      'provider_code',
+      'academic_years',
       'archived'
     ]
 
@@ -590,6 +592,7 @@ exports.providersDownloadOds = async (req, res, next) => {
     })
 
     const header = [
+      'provider id',
       'operating name',
       'legal name',
       'provider type',
