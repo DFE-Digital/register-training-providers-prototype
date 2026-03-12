@@ -43,11 +43,7 @@ const buildProviderExportRow = (provider, academicYears = []) => ([
 const formatAcademicYearsForExport = (academicYears = []) => (
   academicYears
     .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
-    .map((academicYear) => {
-      const statusLabel = getAcademicYearStatusLabel(academicYear)
-      const suffix = statusLabel ? ` - ${statusLabel}` : ''
-      return `${academicYear.name}${suffix}`
-    })
+    .map((academicYear) => academicYear.name)
 )
 
 const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
