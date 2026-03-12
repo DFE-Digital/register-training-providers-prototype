@@ -13,10 +13,52 @@
 
     {% include "_includes/page-heading.njk" %}
 
-    {{ govukButton({
-      text: "Add provider",
-      href: actions.new
-    }) }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Add provider",
+        href: actions.new
+      }) }}
+
+      <a href="{{ actions.downloadCsv }}" class="govuk-link">Download providers (CSV)</a>
+
+      <a href="{{ actions.downloadOds }}" class="govuk-link">Download providers (ODS)</a>
+
+      {# {{ govukButton({
+        text: "Download providers (CSV)",
+        href: actions.downloadCsv,
+        classes: "govuk-button--secondary"
+      }) }}
+
+      {{ govukButton({
+        text: "Download providers (ODS)",
+        href: actions.downloadOds,
+        classes: "govuk-button--secondary"
+      }) }} #}
+
+      {# {{ appButtonMenu({
+        classes: "govuk-button-group__item",
+        button: {
+          text: "Download data",
+          classes: "govuk-button--secondary"
+        },
+        items: [
+          {
+            text: "Download providers as CSV",
+            href: actions.downloadCsv
+          },
+          {
+            text: "Download providers as ODS",
+            href: actions.downloadOds
+          }
+        ]
+      }) }} #}
+    </div>
 
   </div>
 </div>

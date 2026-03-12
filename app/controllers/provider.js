@@ -11,6 +11,41 @@ const { getAcademicYearDetails } = require('../helpers/academicYear')
 const { Provider, ProviderAddress, ProviderAccreditation, AcademicYear, ProviderAcademicYear } = require('../models')
 
 const { Op, literal, Sequelize } = require('sequelize')
+const XLSX = require('xlsx')
+
+const csvEscape = (value) => {
+  if (value === null || value === undefined) return ''
+  const str = String(value)
+  return /[",\r\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str
+}
+
+const csvTimestamp = (now = new Date(), timeZone = 'Europe/London') => {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  }).formatToParts(now).reduce((acc, part) => (acc[part.type] = part.value, acc), {})
+  return `${parts.year}${parts.month}${parts.day}-${parts.hour}${parts.minute}${parts.second}`
+}
+
+const buildProviderExportRow = (provider, academicYears = []) => ([
+  provider.id || '',
+  provider.operatingName,
+  provider.legalName || '',
+  provider.type ? getProviderTypeLabel(provider.type, provider.isAccredited) : '',
+  provider.isAccredited ? 'Accredited' : 'Not accredited',
+  provider.ukprn || '',
+  provider.urn || '',
+  provider.code || '',
+  academicYears.join('; '),
+  provider.archivedAt ? 'Yes' : 'No'
+])
+
+const formatAcademicYearsForExport = (academicYears = []) => (
+  academicYears
+    .sort((a, b) => new Date(b.startsOn) - new Date(a.startsOn))
+    .map((academicYear) => academicYear.name)
+)
 
 const getCurrentAcademicYearStart = (now = new Date(), timeZone = 'Europe/London') => {
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -100,6 +135,95 @@ const getCheckboxValues = (name, data) => {
     : [name].filter((name) => {
         return name !== '_unchecked'
       })) || data && (Array.isArray(data) ? data : [data])
+}
+
+const buildProviderQuery = ({
+  keywords,
+  selectedProviderType,
+  selectedAccreditationType,
+  selectedArchivedProvider,
+  selectedAcademicYear
+}) => {
+  const whereClause = {
+    [Op.and]: [
+      {
+        [Op.or]: [
+          { operatingName: { [Op.like]: `%${keywords}%` } },
+          { legalName: { [Op.like]: `%${keywords}%` } },
+          { ukprn: { [Op.like]: `%${keywords}%` } },
+          { urn: { [Op.like]: `%${keywords}%` } },
+          { code: { [Op.like]: `%${keywords}%` } }
+        ]
+      }
+    ]
+  }
+
+  if (selectedProviderType.length > 0) {
+    whereClause[Op.and].push({ type: { [Op.in]: selectedProviderType } })
+  }
+
+  if (selectedAccreditationType.length === 1) {
+    if (selectedAccreditationType[0] === 'accredited') {
+      whereClause[Op.and].push({ isAccredited: true })
+    } else if (selectedAccreditationType[0] === 'notAccredited') {
+      whereClause[Op.and].push({ isAccredited: false })
+    }
+  }
+
+  if (!selectedArchivedProvider.length) {
+    whereClause[Op.and].push({
+      archivedAt: null
+    })
+  }
+
+  whereClause[Op.and].push({
+    deletedAt: null
+  })
+
+  const providerAcademicYearFilterInclude = selectedAcademicYear.length > 0
+    ? [{
+        model: ProviderAcademicYear,
+        as: 'providerAcademicYears',
+        attributes: [],
+        where: {
+          deletedAt: null,
+          academicYearId: {
+            [Op.in]: selectedAcademicYear
+          }
+        },
+        required: true
+      }]
+    : []
+
+  return { whereClause, providerAcademicYearFilterInclude }
+}
+
+const fetchAcademicYearsByProviderId = async (providerIds = []) => {
+  if (!providerIds.length) return {}
+
+  const providerAcademicYears = await ProviderAcademicYear.findAll({
+    where: {
+      providerId: {
+        [Op.in]: providerIds
+      },
+      deletedAt: null
+    },
+    include: [{
+      model: AcademicYear,
+      as: 'academicYear',
+      where: {
+        deletedAt: null
+      },
+      required: false
+    }]
+  })
+
+  return providerAcademicYears.reduce((acc, link) => {
+    const providerId = link.providerId
+    if (!acc[providerId]) acc[providerId] = []
+    if (link.academicYear) acc[providerId].push(link.academicYear)
+    return acc
+  }, {})
 }
 
 const removeFilter = (value, data) => {
@@ -272,70 +396,13 @@ exports.providersList = async (req, res) => {
   }
 
   // build the WHERE conditions
-  const whereClause = {
-    [Op.and]: [
-      // first, apply the keyword match (an OR across multiple columns)
-      {
-        [Op.or]: [
-          { operatingName: { [Op.like]: `%${keywords}%` } },
-          { legalName: { [Op.like]: `%${keywords}%` } },
-          { ukprn: { [Op.like]: `%${keywords}%` } },
-          { urn: { [Op.like]: `%${keywords}%` } },
-          { code: { [Op.like]: `%${keywords}%` } }
-        ]
-      }
-    ]
-  }
-
-  // if there's a provider type filter, add it as another condition in the AND array
-  if (selectedProviderType.length > 0) {
-    whereClause[Op.and].push({ type: { [Op.in]: selectedProviderType } })
-  }
-
-  // Apply accreditation filters if user has selected them
-  //
-  //  - If both "accredited" and "notAccredited" are selected, we want them all—so no extra filter.
-  //
-  //  - If only "accredited" is selected, we need providers who have isAccredited = true
-  //
-  //  - If only "notAccredited" is selected, we need providers who have isAccredited = false
-  if (selectedAccreditationType.length === 1) {
-    if (selectedAccreditationType[0] === 'accredited') {
-      whereClause[Op.and].push({ isAccredited: true })
-    } else if (selectedAccreditationType[0] === 'notAccredited') {
-      whereClause[Op.and].push({ isAccredited: false })
-    }
-  }
-  // If selectedAccreditationType includes both 'accredited' and 'notAccredited',
-  // we do nothing—because that means return everything.
-
-  // Only show active providers unless user has selected to also show deleted providers
-  if (!selectedArchivedProvider.length) {
-    whereClause[Op.and].push({
-      'archivedAt': null
-    })
-  }
-
-  // Only show providers that have not been deleted
-  whereClause[Op.and].push({
-    'deletedAt': null
+  const { whereClause, providerAcademicYearFilterInclude } = buildProviderQuery({
+    keywords,
+    selectedProviderType,
+    selectedAccreditationType,
+    selectedArchivedProvider,
+    selectedAcademicYear
   })
-
-  // Filter providers by selected academic years
-  const providerAcademicYearFilterInclude = selectedAcademicYear.length > 0
-    ? [{
-        model: ProviderAcademicYear,
-        as: 'providerAcademicYears',
-        attributes: [],
-        where: {
-          deletedAt: null,
-          academicYearId: {
-            [Op.in]: selectedAcademicYear
-          }
-        },
-        required: true
-      }]
-    : []
 
   // Get the total number of providers for pagination metadata
   const totalCount = await Provider.count({
@@ -363,31 +430,7 @@ exports.providersList = async (req, res) => {
   const pagedProviders = pagination.getData()
   const providerIds = pagedProviders.map((provider) => provider.id)
 
-  const providerAcademicYears = providerIds.length
-    ? await ProviderAcademicYear.findAll({
-        where: {
-          providerId: {
-            [Op.in]: providerIds
-          },
-          deletedAt: null
-        },
-        include: [{
-          model: AcademicYear,
-          as: 'academicYear',
-          where: {
-            deletedAt: null
-          },
-          required: false
-        }]
-      })
-    : []
-
-  const academicYearsByProviderId = providerAcademicYears.reduce((acc, link) => {
-    const providerId = link.providerId
-    if (!acc[providerId]) acc[providerId] = []
-    if (link.academicYear) acc[providerId].push(link.academicYear)
-    return acc
-  }, {})
+  const academicYearsByProviderId = await fetchAcademicYearsByProviderId(providerIds)
 
   const providersWithAcademicYears = pagedProviders.map((provider) => {
     const providerJson = provider.toJSON ? provider.toJSON() : provider
@@ -422,6 +465,8 @@ exports.providersList = async (req, res) => {
     actions: {
       new: '/support/providers/new/',
       view: '/support/providers',
+      downloadCsv: '/support/providers/download/csv',
+      downloadOds: '/support/providers/download/ods',
       filters: {
         apply: '/support/providers',
         remove: '/support/providers/remove-all-filters'
@@ -432,6 +477,176 @@ exports.providersList = async (req, res) => {
       }
     }
   })
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Download providers as CSV
+/// ------------------------------------------------------------------------ ///
+
+exports.providersDownloadCsv = async (req, res, next) => {
+  const PAGE_SIZE = 1000
+
+  try {
+    const { filters } = req.session.data
+
+    const keywords = req.session.data.keywords || ''
+
+    const selectedProviderType = filters?.providerType ? getCheckboxValues(null, filters.providerType) : []
+    const selectedAccreditationType = filters?.accreditationType ? getCheckboxValues(null, filters.accreditationType) : []
+    const selectedArchivedProvider = filters?.showArchivedProvider ? getCheckboxValues(null, filters.showArchivedProvider) : []
+    const selectedAcademicYear = filters?.academicYear ? getCheckboxValues(null, filters.academicYear) : []
+
+    const { whereClause, providerAcademicYearFilterInclude } = buildProviderQuery({
+      keywords,
+      selectedProviderType,
+      selectedAccreditationType,
+      selectedArchivedProvider,
+      selectedAcademicYear
+    })
+
+    const filename = `training-providers-${csvTimestamp()}.csv`
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+
+    const header = [
+      'provider_id',
+      'operating_name',
+      'legal_name',
+      'provider_type',
+      'accreditation_status',
+      'ukprn',
+      'urn',
+      'provider_code',
+      'academic_years',
+      'archived'
+    ]
+
+    res.write('\uFEFF')
+    res.write(header.map(csvEscape).join(',') + '\r\n')
+
+    let page = 1
+    while (true) {
+      const offset = (page - 1) * PAGE_SIZE
+      const providers = await Provider.findAll({
+        where: whereClause,
+        include: providerAcademicYearFilterInclude,
+        order: [['operatingName', 'ASC']],
+        distinct: true,
+        limit: PAGE_SIZE,
+        offset,
+        subQuery: providerAcademicYearFilterInclude.length > 0
+      })
+
+      if (!providers.length) break
+
+      const providerIds = providers.map((provider) => provider.id)
+      const academicYearsByProviderId = await fetchAcademicYearsByProviderId(providerIds)
+
+      for (const provider of providers) {
+        if (req.aborted) return res.end()
+
+        const providerJson = provider.toJSON ? provider.toJSON() : provider
+        const academicYears = formatAcademicYearsForExport(academicYearsByProviderId[provider.id] || [])
+        const row = buildProviderExportRow(providerJson, academicYears)
+
+        res.write(row.map(csvEscape).join(',') + '\r\n')
+      }
+
+      if (providers.length < PAGE_SIZE) break
+      page += 1
+    }
+
+    return res.end()
+  } catch (err) {
+    if (res.headersSent) {
+      try { res.end() } catch (_) {}
+    }
+    return next(err)
+  }
+}
+
+/// ------------------------------------------------------------------------ ///
+/// Download providers as ODS
+/// ------------------------------------------------------------------------ ///
+
+exports.providersDownloadOds = async (req, res, next) => {
+  const PAGE_SIZE = 1000
+
+  try {
+    const { filters } = req.session.data
+
+    const keywords = req.session.data.keywords || ''
+
+    const selectedProviderType = filters?.providerType ? getCheckboxValues(null, filters.providerType) : []
+    const selectedAccreditationType = filters?.accreditationType ? getCheckboxValues(null, filters.accreditationType) : []
+    const selectedArchivedProvider = filters?.showArchivedProvider ? getCheckboxValues(null, filters.showArchivedProvider) : []
+    const selectedAcademicYear = filters?.academicYear ? getCheckboxValues(null, filters.academicYear) : []
+
+    const { whereClause, providerAcademicYearFilterInclude } = buildProviderQuery({
+      keywords,
+      selectedProviderType,
+      selectedAccreditationType,
+      selectedArchivedProvider,
+      selectedAcademicYear
+    })
+
+    const header = [
+      'provider id',
+      'operating name',
+      'legal name',
+      'provider type',
+      'accreditation status',
+      'ukprn',
+      'urn',
+      'provider code',
+      'academic years',
+      'archived'
+    ]
+
+    const rows = [header]
+
+    let page = 1
+    while (true) {
+      const offset = (page - 1) * PAGE_SIZE
+      const providers = await Provider.findAll({
+        where: whereClause,
+        include: providerAcademicYearFilterInclude,
+        order: [['operatingName', 'ASC']],
+        distinct: true,
+        limit: PAGE_SIZE,
+        offset,
+        subQuery: providerAcademicYearFilterInclude.length > 0
+      })
+
+      if (!providers.length) break
+
+      const providerIds = providers.map((provider) => provider.id)
+      const academicYearsByProviderId = await fetchAcademicYearsByProviderId(providerIds)
+
+      for (const provider of providers) {
+        const providerJson = provider.toJSON ? provider.toJSON() : provider
+        const academicYears = formatAcademicYearsForExport(academicYearsByProviderId[provider.id] || [])
+        rows.push(buildProviderExportRow(providerJson, academicYears))
+      }
+
+      if (providers.length < PAGE_SIZE) break
+      page += 1
+    }
+
+    const workbook = XLSX.utils.book_new()
+    const worksheet = XLSX.utils.aoa_to_sheet(rows)
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Providers')
+
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'ods' })
+    const filename = `training-providers-${csvTimestamp()}.ods`
+
+    res.setHeader('Content-Type', 'application/vnd.oasis.opendocument.spreadsheet')
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+    return res.end(buffer)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 exports.removeProviderTypeFilter = (req, res) => {
