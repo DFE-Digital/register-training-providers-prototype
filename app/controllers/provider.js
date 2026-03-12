@@ -137,6 +137,11 @@ const getCheckboxValues = (name, data) => {
       })) || data && (Array.isArray(data) ? data : [data])
 }
 
+const normaliseFilterArray = (value) => {
+  if (!value) return []
+  return Array.isArray(value) ? value : [value]
+}
+
 const buildProviderQuery = ({
   keywords,
   selectedProviderType,
@@ -144,6 +149,11 @@ const buildProviderQuery = ({
   selectedArchivedProvider,
   selectedAcademicYear
 }) => {
+  selectedProviderType = normaliseFilterArray(selectedProviderType)
+  selectedAccreditationType = normaliseFilterArray(selectedAccreditationType)
+  selectedArchivedProvider = normaliseFilterArray(selectedArchivedProvider)
+  selectedAcademicYear = normaliseFilterArray(selectedAcademicYear)
+
   const whereClause = {
     [Op.and]: [
       {
