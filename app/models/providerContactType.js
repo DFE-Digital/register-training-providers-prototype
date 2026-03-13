@@ -3,6 +3,11 @@ const { Model, DataTypes } = require('sequelize')
 module.exports = (sequelize) => {
   class ProviderContactType extends Model {
     static associate(models) {
+      ProviderContactType.hasMany(models.ProviderContact, {
+        foreignKey: 'contactTypeId',
+        as: 'contacts'
+      })
+
       ProviderContactType.belongsTo(models.User, {
         foreignKey: 'createdById',
         as: 'createdByUser'
