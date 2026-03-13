@@ -1,6 +1,23 @@
+{% set helpHtml %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h3 class="govuk-heading-m govuk-!-margin-top-5 govuk-!-margin-bottom-1">
+      Get help
+    </h3>
+    <p class="govuk-body govuk-!-margin-bottom-1">
+      <a class="govuk-footer__link" href="mailto:ittmentor.funding@education.gov.uk">
+        becomingateacher@digital.education.gov.uk
+      </a>
+    </p>
+    <p class="govuk-body">You’ll get a response within 5 working days.</p>
+  </div>
+</div>
+{% endset %}
+
 {{ govukFooter({
   rebrand: true,
   meta: {
+    html: helpHtml,
     items: [
     {
       href: "/how-to-use-this-service",
