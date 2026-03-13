@@ -18,6 +18,7 @@ module.exports = {
       const rows = contactTypes.map((contactType) => ({
         id: contactType.id,
         name: contactType.name,
+        description: contactType.description ?? null,
         rank: contactType.rank,
         created_at: createdAt,
         created_by_id: userId,
