@@ -2,8 +2,51 @@ const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isValidEmail,isValidTelephone } = require('../helpers/validation')
 const { nullIfEmpty } = require('../helpers/string')
-const { Provider, ProviderContact } = require('../models')
+const { Provider, ProviderContact, ProviderContactType } = require('../models')
 const Pagination = require('../helpers/pagination')
+
+const getContactTypes = async () => {
+  return ProviderContactType.findAll({
+    where: {
+      deletedAt: null
+    },
+    order: [
+      ['rank', 'ASC'],
+      ['name', 'ASC']
+    ]
+  })
+}
+
+const getContactTypeLabel = (contactTypes, contact) => {
+  if (!contact?.contactTypeId) {
+    return 'Not entered'
+  }
+
+  const contactType = contactTypes.find((type) => type.id === contact.contactTypeId)
+
+  if (!contactType) {
+    return 'Not entered'
+  }
+
+  if (contactType.name === 'Other' && contact.contactTypeOther?.length) {
+    return `Other - ${contact.contactTypeOther}`
+  }
+
+  return contactType.name
+}
+
+const getContactTypeOtherValue = async (contactTypeId, contactTypeOther) => {
+  if (!contactTypeId) {
+    return null
+  }
+
+  const contactType = await ProviderContactType.findByPk(contactTypeId)
+  if (!contactType || contactType.name !== 'Other') {
+    return null
+  }
+
+  return nullIfEmpty(contactTypeOther)
+}
 
 /// ------------------------------------------------------------------------ ///
 /// List provider contacts
@@ -40,6 +83,12 @@ exports.providerContactsList = async (req, res) => {
       providerId,
       'deletedAt': null
     },
+    include: [
+      {
+        model: ProviderContactType,
+        as: 'contactType'
+      }
+    ],
     order: [['id', 'ASC']],
     limit,
     offset
@@ -97,6 +146,7 @@ exports.newProviderContact_get = async (req, res) => {
   const { providerId } = req.params
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
+  const contactTypes = await getContactTypes()
 
   let back = `/support/providers/${providerId}/contacts`
   if (req.query.referrer === 'check') {
@@ -106,6 +156,7 @@ exports.newProviderContact_get = async (req, res) => {
   res.render('providers/contacts/edit', {
     provider,
     contact,
+    contactTypes,
     actions: {
       back,
       cancel: `/support/providers/${providerId}/contacts`,
@@ -118,6 +169,7 @@ exports.newProviderContact_post = async (req, res) => {
   const { providerId } = req.params
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
+  const contactTypes = await getContactTypes()
   const errors = []
 
   if (!contact.firstName.length) {
@@ -158,6 +210,23 @@ exports.newProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
+  if (!contact.contactTypeId?.length) {
+    const error = {}
+    error.fieldName = 'contactTypeId'
+    error.href = '#contactTypeId'
+    error.text = 'Select role'
+    errors.push(error)
+  } else {
+    const selectedType = contactTypes.find((type) => type.id === contact.contactTypeId)
+    if (selectedType?.name === 'Other' && !contact.contactTypeOther?.length) {
+      const error = {}
+      error.fieldName = 'contactTypeOther'
+      error.href = '#contactTypeOther'
+      error.text = 'Enter other role'
+      errors.push(error)
+    }
+  }
+
   if (errors.length) {
     let back = `/support/providers/${providerId}/contacts`
     if (req.query.referrer === 'check') {
@@ -167,6 +236,7 @@ exports.newProviderContact_post = async (req, res) => {
     res.render('providers/contacts/edit', {
       provider,
       contact,
+      contactTypes,
       errors,
       actions: {
         back,
@@ -183,9 +253,11 @@ exports.newProviderContactCheck_get = async (req, res) => {
   const { providerId } = req.params
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
+  const contactTypes = await getContactTypes()
   res.render('providers/contacts/check-your-answers', {
     provider,
     contact,
+    contactTypeLabel: getContactTypeLabel(contactTypes, contact),
     actions: {
       back: `/support/providers/${providerId}/contacts/new`,
       cancel: `/support/providers/${providerId}/contacts`,
@@ -199,9 +271,12 @@ exports.newProviderContactCheck_post = async (req, res) => {
   const { providerId } = req.params
   const { contact } = req.session.data
   const userId = req.user.id
+  const contactTypeOther = await getContactTypeOtherValue(contact.contactTypeId, contact.contactTypeOther)
 
   await ProviderContact.create({
     providerId,
+    contactTypeId: contact.contactTypeId,
+    contactTypeOther,
     firstName: contact.firstName,
     lastName: contact.lastName,
     email: nullIfEmpty(contact.email),
@@ -224,6 +299,7 @@ exports.editProviderContact_get = async (req, res) => {
   const { contactId, providerId } = req.params
   const provider = await Provider.findByPk(providerId)
   const currentContact = await ProviderContact.findByPk(contactId)
+  const contactTypes = await getContactTypes()
 
   let contact
   if (req.session.data?.contact) {
@@ -241,6 +317,7 @@ exports.editProviderContact_get = async (req, res) => {
     provider,
     currentContact,
     contact,
+    contactTypes,
     actions: {
       back,
       cancel: `/support/providers/${providerId}/contacts`,
@@ -254,6 +331,7 @@ exports.editProviderContact_post = async (req, res) => {
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentContact = await ProviderContact.findByPk(contactId)
+  const contactTypes = await getContactTypes()
 
   const errors = []
 
@@ -295,6 +373,23 @@ exports.editProviderContact_post = async (req, res) => {
     errors.push(error)
   }
 
+  if (!contact.contactTypeId?.length) {
+    const error = {}
+    error.fieldName = 'contactTypeId'
+    error.href = '#contactTypeId'
+    error.text = 'Select role'
+    errors.push(error)
+  } else {
+    const selectedType = contactTypes.find((type) => type.id === contact.contactTypeId)
+    if (selectedType?.name === 'Other' && !contact.contactTypeOther?.length) {
+      const error = {}
+      error.fieldName = 'contactTypeOther'
+      error.href = '#contactTypeOther'
+      error.text = 'Enter other role'
+      errors.push(error)
+    }
+  }
+
   if (errors.length) {
     let back = `/support/providers/${providerId}/contacts`
     if (req.query.referrer === 'check') {
@@ -305,6 +400,7 @@ exports.editProviderContact_post = async (req, res) => {
       provider,
       currentContact,
       contact,
+      contactTypes,
       errors,
       actions: {
         back,
@@ -322,11 +418,13 @@ exports.editProviderContactCheck_get = async (req, res) => {
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentContact = await ProviderContact.findByPk(contactId)
+  const contactTypes = await getContactTypes()
 
   res.render('providers/contacts/check-your-answers', {
     provider,
     currentContact,
     contact,
+    contactTypeLabel: getContactTypeLabel(contactTypes, contact),
     actions: {
       back: `/support/providers/${providerId}/contacts/${contactId}/edit`,
       cancel: `/support/providers/${providerId}/contacts`,
@@ -339,7 +437,13 @@ exports.editProviderContactCheck_get = async (req, res) => {
 exports.editProviderContactCheck_post = async (req, res) => {
   const { contactId, providerId } = req.params
   const contact = await ProviderContact.findByPk(contactId)
+  const contactTypeOther = await getContactTypeOtherValue(
+    req.session.data.contact.contactTypeId,
+    req.session.data.contact.contactTypeOther
+  )
   await contact.update({
+    contactTypeId: req.session.data.contact.contactTypeId,
+    contactTypeOther,
     firstName: req.session.data.contact.firstName,
     lastName: req.session.data.contact.lastName,
     email: nullIfEmpty(req.session.data.contact.email),

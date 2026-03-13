@@ -46,6 +46,13 @@
 
     {% if contacts.length %}
       {% for contact in contacts %}
+        {% set contactTypeLabel = "Not entered" %}
+        {% if contact.contactType %}
+          {% set contactTypeLabel = contact.contactType.name %}
+          {% if contact.contactType.name == "Other" and contact.contactTypeOther and contact.contactTypeOther.length %}
+            {% set contactTypeLabel = "Other - " + contact.contactTypeOther %}
+          {% endif %}
+        {% endif %}
         {{ govukSummaryList({
           card: {
             title: {
@@ -99,6 +106,15 @@
               value: {
                 text: contact.telephone if contact.telephone.length else "Not entered",
                 classes: "govuk-hint" if not contact.telephone.length
+              }
+            },
+            {
+              key: {
+                text: "Role"
+              },
+              value: {
+                text: contactTypeLabel,
+                classes: "govuk-hint" if contactTypeLabel == "Not entered"
               }
             }
           ]

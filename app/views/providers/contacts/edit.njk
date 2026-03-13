@@ -95,6 +95,56 @@
           classes: "govuk-!-width-one-half"
         }) }}
 
+        {% set contactTypeOtherHtml %}
+          {{ govukInput({
+            id: "contactTypeOther",
+            name: "contact[contactTypeOther]",
+            label: {
+              text: "Enter other role",
+              classes: "govuk-label--s"
+            },
+            errorMessage: errors | getErrorMessage("contactTypeOther"),
+            value: contact.contactTypeOther,
+            classes: "govuk-!-width-two-thirds"
+          }) }}
+        {% endset %}
+
+        {% set contactTypeItems = [] %}
+        {% set otherDividerAdded = false %}
+        {% for contactType in contactTypes %}
+          {% if contactType.name == "Other" and not otherDividerAdded %}
+            {% set contactTypeItems = contactTypeItems.concat([{ divider: "or" }]) %}
+            {% set otherDividerAdded = true %}
+          {% endif %}
+          {% if contactType.name == "Other" %}
+            {% set item = {
+              value: contactType.id,
+              text: contactType.name,
+              conditional: { html: contactTypeOtherHtml }
+            } %}
+          {% else %}
+            {% set item = {
+              value: contactType.id,
+              text: contactType.name
+            } %}
+          {% endif %}
+          {% set contactTypeItems = contactTypeItems.concat([item]) %}
+        {% endfor %}
+
+        {{ govukRadios({
+          idPrefix: "contactTypeId",
+          name: "contact[contactTypeId]",
+          fieldset: {
+            legend: {
+              text: "Role",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          errorMessage: errors | getErrorMessage("contactTypeId"),
+          value: contact.contactTypeId,
+          items: contactTypeItems
+        }) }}
+
         {{ govukButton({
           text: "Continue"
         }) }}

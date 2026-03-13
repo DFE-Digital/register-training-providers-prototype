@@ -13,6 +13,11 @@ module.exports = (sequelize) => {
         as: 'provider'
       })
 
+      ProviderContactRevision.belongsTo(models.ProviderContactType, {
+        foreignKey: 'contactTypeId',
+        as: 'contactType'
+      })
+
       ProviderContactRevision.belongsTo(models.User, {
         foreignKey: 'revisionById',
         as: 'revisionByUser'
@@ -36,6 +41,16 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false,
         field: 'provider_id'
+      },
+      contactTypeId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'contact_type_id'
+      },
+      contactTypeOther: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'contact_type_other'
       },
       firstName: {
         type: DataTypes.STRING,

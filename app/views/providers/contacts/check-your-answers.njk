@@ -97,6 +97,24 @@
                 }
               ]
             }
+          },
+          {
+            key: {
+              text: "Role"
+            },
+            value: {
+              text: contactTypeLabel,
+              classes: "govuk-hint" if contactTypeLabel == "Not entered"
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change + "?referrer=check",
+                  text: "Change",
+                  visuallyHiddenText: "contact type"
+                }
+              ]
+            }
           }
         ]
       }) }}
