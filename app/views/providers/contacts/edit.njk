@@ -110,7 +110,12 @@
         {% endset %}
 
         {% set contactTypeItems = [] %}
+        {% set otherDividerAdded = false %}
         {% for contactType in contactTypes %}
+          {% if contactType.name == "Other" and not otherDividerAdded %}
+            {% set contactTypeItems = contactTypeItems.concat([{ divider: "or" }]) %}
+            {% set otherDividerAdded = true %}
+          {% endif %}
           {% if contactType.name == "Other" %}
             {% set item = {
               value: contactType.id,
