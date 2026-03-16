@@ -50,7 +50,7 @@
         {% if contact.contactType %}
           {% set contactTypeLabel = contact.contactType.name %}
           {% if contact.contactType.name == "Other" and contact.contactTypeOther and contact.contactTypeOther.length %}
-            {% set contactTypeLabel = "Other - " + contact.contactTypeOther %}
+            {% set contactTypeLabel = contact.contactTypeOther %}
           {% endif %}
         {% endif %}
         {{ govukSummaryList({

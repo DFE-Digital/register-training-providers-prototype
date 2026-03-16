@@ -29,7 +29,7 @@ const getContactTypeLabel = (contactTypes, contact) => {
   }
 
   if (contactType.name === 'Other' && contact.contactTypeOther?.length) {
-    return `Other - ${contact.contactTypeOther}`
+    return contact.contactTypeOther
   }
 
   return contactType.name
