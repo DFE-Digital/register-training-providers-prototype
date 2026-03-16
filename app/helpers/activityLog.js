@@ -8,6 +8,7 @@ const {
   ProviderAddressRevision,
   ProviderContact,
   ProviderContactRevision,
+  ProviderContactType,
   ProviderRevision,
   ProviderAcademicYear,
   ProviderPartnership,
@@ -63,6 +64,24 @@ const getAcademicYearStatusLabel = (academicYear, currentAcademicYearStart = get
   }
 
   return null
+}
+
+const getContactTypeLabel = async (contactTypeId, contactTypeOther) => {
+  if (!contactTypeId) {
+    return 'Not entered'
+  }
+
+  const contactType = await ProviderContactType.findByPk(contactTypeId)
+
+  if (!contactType) {
+    return 'Not entered'
+  }
+
+  if (contactType.name === 'Other' && contactTypeOther?.length) {
+    return contactTypeOther
+  }
+
+  return contactType.name
 }
 
 /**
@@ -1137,6 +1156,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const provider = revision.provider
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { href: safeHref } = await buildProviderLink(revision.providerId, providerName)
+      const contactTypeLabel = await getContactTypeLabel(revision.contactTypeId, revision.contactTypeOther)
       activity = `Provider contact ${getActivityVerb(log.action)}`
       label = providerName
       href = safeHref ? `${safeHref}/contacts` : ''
@@ -1145,6 +1165,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'Last name', value: revision.lastName })
       fields.push({ key: 'Email address', value: revision.email })
       fields.push({ key: 'Phone number', value: revision.telephone })
+      fields.push({ key: 'Role', value: contactTypeLabel })
       break
     }
 
