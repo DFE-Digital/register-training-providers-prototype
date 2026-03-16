@@ -222,7 +222,7 @@ exports.newProviderContact_post = async (req, res) => {
       const error = {}
       error.fieldName = 'contactTypeOther'
       error.href = '#contactTypeOther'
-      error.text = 'Enter other role'
+      error.text = 'Enter role name'
       errors.push(error)
     }
   }
@@ -385,7 +385,7 @@ exports.editProviderContact_post = async (req, res) => {
       const error = {}
       error.fieldName = 'contactTypeOther'
       error.href = '#contactTypeOther'
-      error.text = 'Enter other role'
+      error.text = 'Enter role name'
       errors.push(error)
     }
   }

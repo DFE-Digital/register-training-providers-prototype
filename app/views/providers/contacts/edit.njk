@@ -100,7 +100,7 @@
             id: "contactTypeOther",
             name: "contact[contactTypeOther]",
             label: {
-              text: "Other role",
+              text: "Role name",
               classes: "govuk-label--s"
             },
             errorMessage: errors | getErrorMessage("contactTypeOther"),
@@ -119,7 +119,7 @@
           {% if contactType.name == "Other" %}
             {% set item = {
               value: contactType.id,
-              text: contactType.name,
+              text: "Another role",
               conditional: { html: contactTypeOtherHtml }
             } %}
           {% else %}
