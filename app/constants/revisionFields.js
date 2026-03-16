@@ -37,6 +37,8 @@ module.exports = {
     'lastName',
     'email',
     'telephone',
+    'contactTypeId',
+    'contactTypeOther',
     'deletedAt',
     'deletedById'
   ],

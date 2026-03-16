@@ -23,6 +23,14 @@ module.exports = {
           key: 'id'
         }
       },
+      contact_type_id: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
+      contact_type_other: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       first_name: {
         type: Sequelize.STRING,
         allowNull: false

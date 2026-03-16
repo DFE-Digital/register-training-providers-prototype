@@ -1,39 +1,23 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('provider_contacts', {
+    await queryInterface.createTable('provider_contact_types', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         primaryKey: true
       },
-      provider_id: {
-        type: Sequelize.UUID,
+      name: {
+        type: Sequelize.STRING,
         allowNull: false
       },
-      contact_type_id: {
-        type: Sequelize.UUID,
-        allowNull: false
-      },
-      contact_type_other: {
+      description: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      first_name: {
-        type: Sequelize.STRING,
+      rank: {
+        type: Sequelize.TINYINT,
         allowNull: false
-      },
-      last_name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      telephone: {
-        type: Sequelize.STRING,
-        allowNull: true
       },
       created_at: {
         type: Sequelize.DATE,
@@ -58,14 +42,8 @@ module.exports = {
         type: Sequelize.UUID
       }
     })
-
-    // indexes
-    await queryInterface.addIndex('provider_contacts', {
-      fields: ['provider_id'],
-      name: 'idx_provider_contacts_provider_id'
-    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('provider_contacts')
+    await queryInterface.dropTable('provider_contact_types')
   }
 }
