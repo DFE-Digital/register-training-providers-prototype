@@ -1,0 +1,166 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% block pageTitle -%}
+{{ "Error: " if errors.length -}}
+{% if currentUser -%}
+  Change user - personal details
+{%- else -%}
+  Add user - personal details
+{%- endif %}
+ - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = "Personal details" %}
+
+{% if currentUser %}
+  {% set caption = currentUser.firstName + " " + currentUser.lastName + " - " + provider.operatingName %}
+{% else %}
+  {% set caption = "Add user - " + provider.operatingName %}
+{% endif %}
+{% set userHasSignedIn = currentUser and currentUser.lastSignedInAt %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingHtml %}
+      {% include "_includes/page-heading-legend.njk" %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: headingHtml,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+      {% if userHasSignedIn %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "First name"
+              },
+              value: {
+                text: currentUser.firstName
+              }
+            },
+            {
+              key: {
+                text: "Last name"
+              },
+              value: {
+                text: currentUser.lastName
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                text: currentUser.email
+              }
+            }
+          ]
+        }) }}
+
+        <input type="hidden" name="providerUser[firstName]" value="{{ currentUser.firstName | default('') }}">
+        <input type="hidden" name="providerUser[lastName]" value="{{ currentUser.lastName | default('') }}">
+        <input type="hidden" name="providerUser[email]" value="{{ currentUser.email | default('') }}">
+      {% else %}
+        {{ govukInput({
+          id: "firstName",
+          name: "providerUser[firstName]",
+          label: {
+            text: "First name",
+            classes: "govuk-label--s"
+          },
+            errorMessage: errors | getErrorMessage("firstName"),
+          value: user.firstName,
+          classes: "govuk-!-width-two-thirds"
+        }) }}
+
+        {{ govukInput({
+          id: "lastName",
+          name: "providerUser[lastName]",
+          label: {
+            text: "Last name",
+            classes: "govuk-label--s"
+          },
+          errorMessage: errors | getErrorMessage("lastName"),
+          value: user.lastName,
+          classes: "govuk-!-width-two-thirds"
+        }) }}
+
+        {{ govukInput({
+          id: "email",
+          name: "providerUser[email]",
+          label: {
+            text: "Email address",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "Enter an email address in the correct format, like name@example.com"
+          },
+          errorMessage: errors | getErrorMessage("email"),
+          value: user.email
+        }) }}
+      {% endif %}
+
+      {% if currentUser %}
+        {{ govukRadios({
+          name: "providerUser[isActive]",
+          classes: "govuk-radios--inline",
+          fieldset: {
+            legend: {
+              text: "Is the account active?",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          errorMessage: errors | getErrorMessage("isActive"),
+          items: [
+            {
+              value: "true",
+              text: "Yes",
+              checked: user.isActive === true or user.isActive === "true"
+            },
+            {
+              value: "false",
+              text: "No",
+              checked: user.isActive === false or user.isActive === "false"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
