@@ -58,6 +58,7 @@ const providerAccreditationController = require('./controllers/providerAccredita
 const providerActivityController = require('./controllers/providerActivity')
 const providerAddressController = require('./controllers/providerAddress')
 const providerContactController = require('./controllers/providerContact')
+const providerUserController = require('./controllers/providerUser')
 const providerController = require('./controllers/provider')
 const providerPartnershipController = require('./controllers/providerPartnership')
 const userController = require('./controllers/user')
@@ -184,6 +185,29 @@ router.post('/support/providers/:providerId/contacts/:contactId/delete', ...supp
 router.get('/support/providers/:providerId/contacts/:contactId', ...supportOnly, providerContactController.providerContactDetails)
 
 router.get('/support/providers/:providerId/contacts', ...supportOnly, providerContactController.providerContactsList)
+
+/// ------------------------------------------------------------------------ ///
+/// PROVIDER USER ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/support/providers/:providerId/users/new', ...supportOnly, providerUserController.newProviderUser_get)
+router.post('/support/providers/:providerId/users/new', ...supportOnly, providerUserController.newProviderUser_post)
+
+router.get('/support/providers/:providerId/users/new/check', ...supportOnly, providerUserController.newProviderUserCheck_get)
+router.post('/support/providers/:providerId/users/new/check', ...supportOnly, providerUserController.newProviderUserCheck_post)
+
+router.get('/support/providers/:providerId/users/:userId/edit', ...supportOnly, providerUserController.editProviderUser_get)
+router.post('/support/providers/:providerId/users/:userId/edit', ...supportOnly, providerUserController.editProviderUser_post)
+
+router.get('/support/providers/:providerId/users/:userId/edit/check', ...supportOnly, providerUserController.editProviderUserCheck_get)
+router.post('/support/providers/:providerId/users/:userId/edit/check', ...supportOnly, providerUserController.editProviderUserCheck_post)
+
+router.get('/support/providers/:providerId/users/:userId/delete', ...supportOnly, providerUserController.deleteProviderUser_get)
+router.post('/support/providers/:providerId/users/:userId/delete', ...supportOnly, providerUserController.deleteProviderUser_post)
+
+router.get('/support/providers/:providerId/users/:userId', ...supportOnly, providerUserController.providerUserDetails)
+
+router.get('/support/providers/:providerId/users', ...supportOnly, providerUserController.providerUsersList)
 
 /// ------------------------------------------------------------------------ ///
 /// PROVIDER ADDRESS ROUTES
