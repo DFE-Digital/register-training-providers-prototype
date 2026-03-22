@@ -3,9 +3,60 @@ const Pagination = require('../helpers/pagination')
 const { getProviderLastUpdated } = require('../helpers/activityLog')
 const { isAccreditedProvider } = require('../helpers/accreditation')
 const { isValidEmail } = require('../helpers/validation')
-const { Provider, ProviderUser, User } = require('../models')
+const { Provider, ProviderUser, User, Sequelize } = require('../models')
 
 const { Op } = require('sequelize')
+
+const normalizeEmail = (value) => (value ? value.trim() : '')
+
+const findActiveUserByEmail = async (email) => {
+  if (!email) return null
+  const normalizedEmail = email.toLowerCase()
+  return User.findOne({
+    where: {
+      deletedAt: null,
+      [Op.and]: [
+        Sequelize.where(
+          Sequelize.fn('lower', Sequelize.col('email')),
+          normalizedEmail
+        )
+      ]
+    }
+  })
+}
+
+const findProviderUserByEmail = async (providerId, email, options = {}) => {
+  if (!email) return null
+  const normalizedEmail = email.toLowerCase()
+  const whereClause = {
+    providerId,
+    deletedAt: null
+  }
+
+  if (options.excludeUserId) {
+    whereClause.userId = { [Op.ne]: options.excludeUserId }
+  }
+
+  return ProviderUser.findOne({
+    where: whereClause,
+    include: [
+      {
+        model: User,
+        as: 'user',
+        required: true,
+        where: {
+          deletedAt: null,
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('lower', Sequelize.col('email')),
+              normalizedEmail
+            )
+          ]
+        }
+      }
+    ]
+  })
+}
 
 /// ------------------------------------------------------------------------ ///
 /// List provider users
@@ -96,6 +147,25 @@ exports.providerUserDetails = async (req, res) => {
 
   const provider = await Provider.findByPk(providerId)
   const user = await User.findOne({ where: { id: userId, deletedAt: null } })
+  const providerUsers = await ProviderUser.findAll({
+    where: {
+      userId,
+      deletedAt: null,
+      providerId: { [Op.ne]: providerId }
+    },
+    include: [
+      {
+        model: Provider,
+        as: 'provider',
+        where: {
+          deletedAt: null
+        }
+      }
+    ],
+    order: [[{ model: Provider, as: 'provider' }, 'operatingName', 'ASC']]
+  })
+
+  const relatedProviders = providerUsers.map((providerUser) => providerUser.provider)
 
   const [isAccredited, lastUpdate] = await Promise.all([
     isAccreditedProvider({ providerId }),
@@ -113,6 +183,7 @@ exports.providerUserDetails = async (req, res) => {
     isAccredited,
     lastUpdate,
     user,
+    relatedProviders,
     showDeleteLink,
     showChangeLink,
     showStatusChangeLink,
@@ -156,7 +227,7 @@ exports.newProviderUser_post = async (req, res) => {
 
   user.firstName = user.firstName ? user.firstName.trim() : ''
   user.lastName = user.lastName ? user.lastName.trim() : ''
-  user.email = user.email ? user.email.trim() : ''
+  user.email = normalizeEmail(user.email)
 
   if (!user.firstName.length) {
     const error = {}
@@ -174,16 +245,9 @@ exports.newProviderUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const whereClause = {
-    [Op.and]: [
-      { email: user.email },
-      { deletedAt: null }
-    ]
-  }
-
-  const userCount = await User.count({ where: whereClause })
-
   const isValidEmailAddress = !!(isValidEmail(user.email))
+  const existingUser = await findActiveUserByEmail(user.email)
+  const existingProviderUser = await findProviderUserByEmail(providerId, user.email)
 
   if (!user.email.length) {
     const error = {}
@@ -197,11 +261,11 @@ exports.newProviderUser_post = async (req, res) => {
     error.href = '#email'
     error.text = 'Enter an email address in the correct format, like name@example.com'
     errors.push(error)
-  } else if (userCount) {
+  } else if (existingProviderUser) {
     const error = {}
     error.fieldName = 'email'
     error.href = '#email'
-    error.text = 'Email address already in use'
+    error.text = 'User already added to this provider'
     errors.push(error)
   }
 
@@ -218,6 +282,13 @@ exports.newProviderUser_post = async (req, res) => {
       }
     })
   } else {
+    if (existingUser) {
+      user.existingUserId = existingUser.id
+      user.firstName = existingUser.firstName
+      user.lastName = existingUser.lastName
+    } else {
+      delete user.existingUserId
+    }
     res.redirect(`/support/providers/${providerId}/users/new/check`)
   }
 }
@@ -244,23 +315,71 @@ exports.newProviderUserCheck_post = async (req, res) => {
   const { providerId } = req.params
   const user = req.session.data.providerUser
 
-  // Hash the default password for new users
-  const hashedPassword = await bcrypt.hash('bat', 10)
+  let targetUser = null
 
-  const newUser = await User.create({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    isActive: true,
-    isApiUser: false,
-    password: hashedPassword,
-    createdById: req.user.id,
-    updatedById: req.user.id
-  })
+  if (user?.existingUserId) {
+    targetUser = await User.findOne({
+      where: {
+        id: user.existingUserId,
+        deletedAt: null
+      }
+    })
+  }
+
+  if (!targetUser) {
+    targetUser = await findActiveUserByEmail(user.email)
+  }
+
+  if (targetUser) {
+    const existingProviderUser = await ProviderUser.findOne({
+      where: {
+        providerId,
+        userId: targetUser.id,
+        deletedAt: null
+      }
+    })
+
+    if (existingProviderUser) {
+      const provider = await Provider.findByPk(providerId)
+      const errors = [{
+        fieldName: 'email',
+        href: '#email',
+        text: 'User already added to this provider'
+      }]
+
+      return res.render('providers/users/edit', {
+        provider,
+        user,
+        errors,
+        currentUser: null,
+        actions: {
+          back: `/support/providers/${providerId}/users`,
+          cancel: `/support/providers/${providerId}/users`,
+          save: `/support/providers/${providerId}/users/new`
+        }
+      })
+    }
+  }
+
+  if (!targetUser) {
+    // Hash the default password for new users
+    const hashedPassword = await bcrypt.hash('bat', 10)
+
+    targetUser = await User.create({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isActive: true,
+      isApiUser: false,
+      password: hashedPassword,
+      createdById: req.user.id,
+      updatedById: req.user.id
+    })
+  }
 
   await ProviderUser.create({
     providerId,
-    userId: newUser.id,
+    userId: targetUser.id,
     createdById: req.user.id,
     updatedById: req.user.id
   })
@@ -317,7 +436,7 @@ exports.editProviderUser_post = async (req, res) => {
   } else {
     user.firstName = user.firstName ? user.firstName.trim() : ''
     user.lastName = user.lastName ? user.lastName.trim() : ''
-    user.email = user.email ? user.email.trim() : ''
+    user.email = normalizeEmail(user.email)
 
     if (!user.firstName.length) {
       const error = {}
@@ -336,19 +455,21 @@ exports.editProviderUser_post = async (req, res) => {
     }
   }
 
-  let userCount = 0
-
   if (
     !hasSignedInBefore &&
     currentUser.email.toLowerCase() !== user.email.toLowerCase()
   ) {
-    const whereClause = {
-      [Op.and]: [
-        { email: user.email },
-        { deletedAt: null }
-      ]
+    const existingProviderUser = await findProviderUserByEmail(providerId, user.email, {
+      excludeUserId: currentUser.id
+    })
+
+    if (existingProviderUser) {
+      const error = {}
+      error.fieldName = 'email'
+      error.href = '#email'
+      error.text = 'User already added to this provider'
+      errors.push(error)
     }
-    userCount = await User.count({ where: whereClause })
   }
 
   if (!hasSignedInBefore) {
@@ -365,12 +486,6 @@ exports.editProviderUser_post = async (req, res) => {
       error.fieldName = 'email'
       error.href = '#email'
       error.text = 'Enter an email address in the correct format, like name@example.com'
-      errors.push(error)
-    } else if (userCount) {
-      const error = {}
-      error.fieldName = 'email'
-      error.href = '#email'
-      error.text = 'Email address already in use'
       errors.push(error)
     }
   }
@@ -473,7 +588,15 @@ exports.deleteProviderUser_post = async (req, res) => {
   })
 
   if (providerUser) {
-    if (user) {
+    const otherProviderLinksCount = await ProviderUser.count({
+      where: {
+        userId,
+        deletedAt: null,
+        providerId: { [Op.ne]: providerId }
+      }
+    })
+
+    if (!otherProviderLinksCount && user) {
       await user.update({
         deletedAt: new Date(),
         deletedById: req.user.id,
