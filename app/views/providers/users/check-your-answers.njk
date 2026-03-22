@@ -31,6 +31,12 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
+      {% if user.existingUserId %}
+        {{ govukInsetText({
+          text: "This user already exists and will be linked to this provider."
+        }) }}
+      {% endif %}
+
       {{ govukSummaryList({
         rows: [
           {
