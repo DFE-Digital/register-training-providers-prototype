@@ -110,10 +110,10 @@
       ]
     }) }}
 
-    <h2 class="govuk-heading-m">Related providers</h2>
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Related providers</h2>
 
     {% if relatedProviders.length %}
-      <ul class="govuk-list govuk-list--bullet">
+      <ul class="govuk-list govuk-list--spaced">
         {% for relatedProvider in relatedProviders %}
           <li>
             <a class="govuk-link" href="/support/providers/{{ relatedProvider.id }}/users/{{ user.id }}">
