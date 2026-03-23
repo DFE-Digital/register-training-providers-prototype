@@ -15,6 +15,8 @@ const {
   ProviderPartnershipAcademicYear,
   ProviderPartnershipRevision,
   ProviderAcademicYearRevision,
+  ProviderUser,
+  ProviderUserRevision,
   ApiClientToken,
   ApiClientTokenRevision,
   User,
@@ -95,6 +97,7 @@ const revisionAssociationMap = {
   provider_contact_revisions: 'providerContactRevision',
   provider_partnership_revisions: 'providerPartnershipRevision',
   provider_academic_year_revisions: 'providerAcademicYearRevision',
+  provider_user_revisions: 'providerUserRevision',
   api_client_token_revisions: 'apiClientTokenRevision',
   user_revisions: 'userRevision',
   academic_year_revisions: 'academicYearRevision'
@@ -111,6 +114,7 @@ const revisionModels = {
   provider_contact_revisions: ProviderContactRevision,
   provider_partnership_revisions: ProviderPartnershipRevision,
   provider_academic_year_revisions: ProviderAcademicYearRevision,
+  provider_user_revisions: ProviderUserRevision,
   api_client_token_revisions: ApiClientTokenRevision,
   user_revisions: UserRevision,
   academic_year_revisions: AcademicYearRevision
@@ -476,6 +480,8 @@ const getEntityKeys = (revisionTable) => {
       return ['providerPartnershipId']
     case 'provider_academic_year_revisions':
       return ['providerAcademicYearId']
+    case 'provider_user_revisions':
+      return ['providerUserId']
     case 'api_client_token_revisions':
       return ['apiClientTokenId']
     default:
@@ -566,6 +572,14 @@ const getActivityLogs = async ({ entityId = null, limit = 25, offset = 0 }) => {
         include: [
           { model: Provider, as: 'provider' },
           { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
+        model: ProviderUserRevision,
+        as: 'providerUserRevision',
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: User, as: 'user' }
         ]
       },
       {
@@ -671,6 +685,11 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
         {
           revisionTable: 'provider_academic_year_revisions',
           '$providerAcademicYearRevision.provider_id$': providerId
+        },
+        // Provider user revisions
+        {
+          revisionTable: 'provider_user_revisions',
+          '$providerUserRevision.provider_id$': providerId
         }
       ]
     },
@@ -708,6 +727,12 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
       {
         model: ProviderAcademicYearRevision,
         as: 'providerAcademicYearRevision',
+        attributes: [],
+        required: false
+      },
+      {
+        model: ProviderUserRevision,
+        as: 'providerUserRevision',
         attributes: [],
         required: false
       }
@@ -775,6 +800,15 @@ const getProviderActivityLogs = async ({ providerId, limit = 25, offset = 0 }) =
         ]
       },
       {
+        model: ProviderUserRevision,
+        as: 'providerUserRevision',
+        required: false,
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: User, as: 'user' }
+        ]
+      },
+      {
         model: User,
         as: 'changedByUser'
       },
@@ -833,6 +867,10 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
         {
           revisionTable: 'provider_academic_year_revisions',
           '$providerAcademicYearRevision.provider_id$': providerId
+        },
+        {
+          revisionTable: 'provider_user_revisions',
+          '$providerUserRevision.provider_id$': providerId
         }
       ]
     },
@@ -871,6 +909,12 @@ const getProviderActivityTotalCount = async ({ providerId }) => {
       {
         model: ProviderAcademicYearRevision,
         as: 'providerAcademicYearRevision',
+        required: false,
+        attributes: ['providerId']
+      },
+      {
+        model: ProviderUserRevision,
+        as: 'providerUserRevision',
         required: false,
         attributes: ['providerId']
       }
@@ -939,6 +983,14 @@ const getUserActivityLogs = async ({ userId, revisionTable = null, limit = 25, o
         include: [
           { model: Provider, as: 'provider' },
           { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
+        model: ProviderUserRevision,
+        as: 'providerUserRevision',
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: User, as: 'user' }
         ]
       },
       {
@@ -1025,6 +1077,15 @@ const getUserActivityTotalCount = async ({ userId, revisionTable = null }) => {
         include: [
           { model: Provider, as: 'provider' },
           { model: AcademicYear, as: 'academicYear' }
+        ]
+      },
+      {
+        model: ProviderUserRevision,
+        as: 'providerUserRevision',
+        required: false,
+        include: [
+          { model: Provider, as: 'provider' },
+          { model: User, as: 'user' }
         ]
       },
       {
@@ -1349,6 +1410,29 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       break
     }
 
+    case 'provider_user_revisions': {
+      activity = `Provider user ${getActivityVerb(log.action)}`
+
+      const provider = revision.provider
+      const providerName = provider?.operatingName || provider?.legalName || 'Provider'
+      const { text: providerText, href: providerHref } = await buildProviderLink(revision.providerId, providerName)
+
+      const fallbackName =
+        [revision.user?.firstName, revision.user?.lastName].filter(Boolean).join(' ').trim() ||
+        revision.user?.email ||
+        'User'
+
+      const { text: userText, href: userHref } = await buildUserLink(revision.userId, fallbackName)
+
+      label = userText
+      href = userHref
+
+      fields.push({ key: 'Provider', value: providerText, href: providerHref ? `${providerHref}/users` : '' })
+      fields.push({ key: 'Role', value: revision.role === 'admin' ? 'Admin' : 'User' })
+      fields.push({ key: 'Active', value: revision.isActive ? 'Yes' : 'No' })
+      break
+    }
+
     case 'user_revisions': {
       activity = `User ${getActivityVerb(log.action)}`
 
@@ -1666,7 +1750,8 @@ const getProviderLastUpdated = async (providerId, opts = {}) => {
       accreditation: 'provider_accreditation',
       address: 'provider_address',
       contact: 'provider_contact',
-      partnership: 'provider_partnership'
+      partnership: 'provider_partnership',
+      providerUser: 'provider_user'
     }
   } = opts
 
@@ -1674,7 +1759,7 @@ const getProviderLastUpdated = async (providerId, opts = {}) => {
   const childWhere = (extra = {}) =>
     includeDeletedChildren ? extra : { ...extra, deletedAt: null }
 
-  const [accreditationRows, addressRows, contactRows] = await Promise.all([
+  const [accreditationRows, addressRows, contactRows, providerUserRows] = await Promise.all([
     ProviderAccreditation.findAll({
       attributes: ['id'],
       where: childWhere({ providerId }),
@@ -1689,12 +1774,18 @@ const getProviderLastUpdated = async (providerId, opts = {}) => {
       attributes: ['id'],
       where: childWhere({ providerId }),
       transaction
+    }),
+    ProviderUser.findAll({
+      attributes: ['id'],
+      where: childWhere({ providerId }),
+      transaction
     })
   ])
 
   const accreditationIds = accreditationRows.map(r => r.id)
   const addressIds = addressRows.map(r => r.id)
   const contactIds = contactRows.map(r => r.id)
+  const providerUserIds = providerUserRows.map(r => r.id)
 
   const partnershipRows = await ProviderPartnership.findAll({
     attributes: ['id'],
@@ -1753,6 +1844,16 @@ const getProviderLastUpdated = async (providerId, opts = {}) => {
     partnershipIds.length
       ? ActivityLog.findOne({
           where: { entityType: entityTypes.partnership, entityId: { [Op.in]: partnershipIds } },
+          include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
+          order: [['changedAt', 'DESC']],
+          transaction
+        })
+      : null,
+
+    // provider users
+    providerUserIds.length
+      ? ActivityLog.findOne({
+          where: { entityType: entityTypes.providerUser, entityId: { [Op.in]: providerUserIds } },
           include: [{ model: User, as: 'changedByUser', attributes: ['id', 'firstName', 'lastName', 'email'] }],
           order: [['changedAt', 'DESC']],
           transaction
