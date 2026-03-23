@@ -1417,19 +1417,28 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       const providerName = provider?.operatingName || provider?.legalName || 'Provider'
       const { text: providerText, href: providerHref } = await buildProviderLink(revision.providerId, providerName)
 
+      const userFirstName = revision.user?.firstName || ''
+      const userLastName = revision.user?.lastName || ''
+      const userEmail = revision.user?.email || ''
       const fallbackName =
-        [revision.user?.firstName, revision.user?.lastName].filter(Boolean).join(' ').trim() ||
-        revision.user?.email ||
+        [userFirstName, userLastName].filter(Boolean).join(' ').trim() ||
+        userEmail ||
         'User'
 
       const { text: userText, href: userHref } = await buildUserLink(revision.userId, fallbackName)
+      const providerUserHref = userHref && revision.providerId
+        ? `/support/providers/${revision.providerId}/users/${revision.userId}`
+        : ''
 
       label = userText
-      href = userHref
+      href = providerUserHref
 
       fields.push({ key: 'Provider', value: providerText, href: providerHref ? `${providerHref}/users` : '' })
+      fields.push({ key: 'First name', value: userFirstName })
+      fields.push({ key: 'Last name', value: userLastName })
+      fields.push({ key: 'Email address', value: userEmail })
       fields.push({ key: 'Role', value: revision.role === 'admin' ? 'Admin' : 'User' })
-      fields.push({ key: 'Active', value: revision.isActive ? 'Yes' : 'No' })
+      fields.push({ key: 'Is account active?', value: revision.isActive ? 'Yes' : 'No' })
       break
     }
 
@@ -1451,6 +1460,7 @@ const getRevisionSummary = async ({ revision, revisionTable, ...log }) => {
       fields.push({ key: 'First name', value: revision.firstName })
       fields.push({ key: 'Last name', value: revision.lastName })
       fields.push({ key: 'Email address', value: revision.email })
+      fields.push({ key: 'Is account active?', value: revision.isActive ? 'Yes' : 'No' })
       break
     }
 
