@@ -3,6 +3,10 @@
 {% set primaryNavId = "providers" %}
 {% set secondaryNavId = "users" %}
 
+{% block pageTitle -%}
+  View user - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
 {% set title = user.firstName + " " + user.lastName %}
 {% set caption = "User - " + provider.operatingName %}
 
