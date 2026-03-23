@@ -210,13 +210,14 @@ exports.newUserCheck_post = async (req, res) => {
   // Hash the default password for new users
   const hashedPassword = await bcrypt.hash('bat', 10)
   const isApiUser = parseBoolean(user.isApiUser)
+  const type = isApiUser ? 'api' : 'support'
 
   await User.create({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
     isActive: true,
-    isApiUser,
+    type,
     password: hashedPassword,
     createdById: req.user.id,
     updatedById: req.user.id
@@ -381,10 +382,11 @@ exports.editUserCheck_post = async (req, res) => {
   // Convert isActive string to boolean
   const isActive = user.isActive === 'true' || user.isActive === true
   const isApiUser = parseBoolean(user.isApiUser)
+  const type = isApiUser ? 'api' : (currentUser.type === 'provider' ? 'provider' : 'support')
 
   const updatePayload = {
     isActive: isActive,
-    isApiUser,
+    type,
     updatedById: req.user.id
   }
 
