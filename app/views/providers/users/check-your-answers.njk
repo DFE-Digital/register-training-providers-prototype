@@ -93,6 +93,23 @@
           },
           {
             key: {
+              text: "Role"
+            },
+            value: {
+              text: "Admin" if user.role === "admin" else "User"
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "role"
+                }
+              ]
+            }
+          },
+          {
+            key: {
               text: "Is the account active?"
             },
             value: {

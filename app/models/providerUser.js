@@ -42,6 +42,17 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: 'user_id'
       },
+      role: {
+        type: DataTypes.ENUM('user', 'admin'),
+        allowNull: false,
+        defaultValue: 'user'
+      },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+        field: 'is_active'
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -77,6 +88,19 @@ module.exports = (sequelize) => {
       tableName: 'provider_users',
       timestamps: true
     }
+  )
+
+  const revisionHook = require('../hooks/revisionHook')
+
+  ProviderUser.addHook('afterCreate', (instance, options) =>
+    revisionHook({ revisionModelName: 'ProviderUserRevision', modelKey: 'providerUser' })(instance, {
+      ...options,
+      hookName: 'afterCreate'
+    })
+  )
+
+  ProviderUser.addHook('afterUpdate',
+    revisionHook({ revisionModelName: 'ProviderUserRevision', modelKey: 'providerUser' })
   )
 
   return ProviderUser

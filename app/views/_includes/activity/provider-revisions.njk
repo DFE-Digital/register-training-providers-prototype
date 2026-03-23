@@ -22,15 +22,18 @@
   {% endif %}
   <div class="govuk-summary-card__content">
     <dl class="govuk-summary-list">
+      {% set omitProviderField = omitProviderName and item.revisionTable == "provider_user_revisions" %}
       {% for field in item.summary.fields %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            {{ field.key }}
-          </dt>
-          <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
-            {{ field.value if field.value else "Not entered" }}
-          </dd>
-        </div>
+        {% if not (omitProviderField and field.key == "Provider") %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              {{ field.key }}
+            </dt>
+            <dd class="govuk-summary-list__value {{- ' govuk-hint' if not field.value }}">
+              {{ field.value if field.value else "Not entered" }}
+            </dd>
+          </div>
+        {% endif %}
       {% endfor %}
     </dl>
   </div>

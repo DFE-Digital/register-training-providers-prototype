@@ -22,7 +22,7 @@
       {% if apiClientToken.status == "active" %}
         {{ govukTag({
           text: apiClientToken.status | capitalize,
-          classes: "govuk-tag--turquoise govuk-tag__heading"
+          classes: "govuk-tag--teal govuk-tag__heading"
         }) }}
       {% elif apiClientToken.status == "expired" %}
         {{ govukTag({

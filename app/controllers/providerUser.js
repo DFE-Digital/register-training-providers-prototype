@@ -8,6 +8,10 @@ const { Provider, ProviderUser, User, Sequelize } = require('../models')
 const { Op } = require('sequelize')
 
 const normalizeEmail = (value) => (value ? value.trim() : '')
+const hasBooleanChoice = (value) =>
+  value === 'true' ||
+  value === 'false' ||
+  typeof value === 'boolean'
 
 const findActiveUserByEmail = async (email) => {
   if (!email) return null
@@ -119,7 +123,11 @@ exports.providerUsersList = async (req, res) => {
     offset
   })
 
-  const users = providerUsers.map((providerUser) => providerUser.user)
+  const users = providerUsers.map((providerUser) => ({
+    ...providerUser.user.get({ plain: true }),
+    isActive: providerUser.isActive,
+    role: providerUser.role
+  }))
 
   const pagination = new Pagination(users, totalCount, page, limit)
 
@@ -146,7 +154,22 @@ exports.providerUserDetails = async (req, res) => {
   const { providerId, userId } = req.params
 
   const provider = await Provider.findByPk(providerId)
-  const user = await User.findOne({ where: { id: userId, deletedAt: null } })
+  const currentUser = await User.findOne({ where: { id: userId, deletedAt: null } })
+  const providerUser = await ProviderUser.findOne({
+    where: {
+      providerId,
+      userId,
+      deletedAt: null
+    }
+  })
+
+  const user = currentUser
+    ? {
+        ...currentUser.get({ plain: true }),
+        isActive: providerUser?.isActive,
+        role: providerUser?.role
+      }
+    : null
   const providerUsers = await ProviderUser.findAll({
     where: {
       userId,
@@ -202,7 +225,7 @@ exports.providerUserDetails = async (req, res) => {
 exports.newProviderUser_get = async (req, res) => {
   const { providerId } = req.params
   const provider = await Provider.findByPk(providerId)
-  const user = req.session.data.providerUser
+  const user = req.session.data.providerUser || {}
 
   res.render('providers/users/edit', {
     provider,
@@ -242,6 +265,15 @@ exports.newProviderUser_post = async (req, res) => {
     error.fieldName = 'lastName'
     error.href = '#lastName'
     error.text = 'Enter last name'
+    errors.push(error)
+  }
+
+  const allowedRoles = ['user', 'admin']
+  if (!allowedRoles.includes(user.role)) {
+    const error = {}
+    error.fieldName = 'role'
+    error.href = '#role'
+    error.text = 'Select role'
     errors.push(error)
   }
 
@@ -370,7 +402,7 @@ exports.newProviderUserCheck_post = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       isActive: true,
-      isApiUser: false,
+      type: 'provider',
       password: hashedPassword,
       createdById: req.user.id,
       updatedById: req.user.id
@@ -380,6 +412,8 @@ exports.newProviderUserCheck_post = async (req, res) => {
   await ProviderUser.create({
     providerId,
     userId: targetUser.id,
+    role: user.role,
+    isActive: true,
     createdById: req.user.id,
     updatedById: req.user.id
   })
@@ -398,12 +432,23 @@ exports.editProviderUser_get = async (req, res) => {
   const { providerId, userId } = req.params
   const provider = await Provider.findByPk(providerId)
   const currentUser = await User.findByPk(userId)
+  const providerUser = await ProviderUser.findOne({
+    where: {
+      providerId,
+      userId,
+      deletedAt: null
+    }
+  })
 
   let user
   if (req.session.data.providerUser) {
     user = req.session.data.providerUser
   } else {
-    user = currentUser
+    user = {
+      ...currentUser.get({ plain: true }),
+      isActive: providerUser?.isActive,
+      role: providerUser?.role
+    }
   }
 
   res.render('providers/users/edit', {
@@ -490,6 +535,23 @@ exports.editProviderUser_post = async (req, res) => {
     }
   }
 
+  const allowedRoles = ['user', 'admin']
+  if (!allowedRoles.includes(user.role)) {
+    const error = {}
+    error.fieldName = 'role'
+    error.href = '#role'
+    error.text = 'Select role'
+    errors.push(error)
+  }
+
+  if (!hasBooleanChoice(user.isActive)) {
+    const error = {}
+    error.fieldName = 'isActive'
+    error.href = '#isActive'
+    error.text = 'Select if the account is active'
+    errors.push(error)
+  }
+
   if (errors.length) {
     res.render('providers/users/edit', {
       provider,
@@ -533,22 +595,33 @@ exports.editProviderUserCheck_post = async (req, res) => {
   const user = req.session.data.providerUser
   const currentUser = await User.findByPk(userId)
   const hasSignedInBefore = Boolean(currentUser.lastSignedInAt)
+  const providerUser = await ProviderUser.findOne({
+    where: {
+      providerId,
+      userId,
+      deletedAt: null
+    }
+  })
 
   // Convert isActive string to boolean
   const isActive = user.isActive === 'true' || user.isActive === true
 
-  const updatePayload = {
-    isActive: isActive,
-    updatedById: req.user.id
+  if (providerUser) {
+    await providerUser.update({
+      isActive,
+      role: user.role,
+      updatedById: req.user.id
+    })
   }
 
   if (!hasSignedInBefore) {
-    updatePayload.firstName = user.firstName
-    updatePayload.lastName = user.lastName
-    updatePayload.email = user.email
+    await currentUser.update({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      updatedById: req.user.id
+    })
   }
-
-  currentUser.update(updatePayload)
 
   delete req.session.data.providerUser
 

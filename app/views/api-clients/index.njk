@@ -49,7 +49,7 @@
                 {% if apiClientToken.status == "active" %}
                   {{ govukTag({
                     text: apiClientToken.status | capitalize,
-                    classes: "govuk-tag--turquoise"
+                    classes: "govuk-tag--teal"
                   }) }}
                 {% elif apiClientToken.status == "expired" %}
                   {{ govukTag({

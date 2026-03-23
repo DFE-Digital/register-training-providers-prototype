@@ -54,7 +54,13 @@ module.exports = {
     'firstName',
     'lastName',
     'email',
-    'isApiUser',
+    'type',
+    'isActive',
+    'deletedAt',
+    'deletedById'
+  ],
+  providerUser: [
+    'role',
     'isActive',
     'deletedAt',
     'deletedById'

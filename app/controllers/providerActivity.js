@@ -37,6 +37,7 @@ exports.activityList = async (req, res) => {
     lastUpdate,
     activityItems: pagination.getData(),
     pagination,
+    omitProviderName: true,
     actions: {
 
     }

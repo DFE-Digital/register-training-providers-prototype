@@ -49,16 +49,21 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: 'bat'
       },
+      type: {
+        type: DataTypes.ENUM('support', 'provider', 'api'),
+        allowNull: false,
+        defaultValue: 'support'
+      },
+      isApiUser: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return this.getDataValue('type') === 'api'
+        }
+      },
       isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true
-      },
-      isApiUser: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-        field: 'is_api_user'
       },
       lastSignedInAt: {
         type: DataTypes.DATE,
