@@ -22,7 +22,7 @@ module.exports = {
           first_name: 'Anne',
           last_name: 'Wilson',
           email: 'test1@education.gov.uk',
-          is_api_user: false,
+          type: 'support',
           is_active: true
         },
         {
@@ -30,7 +30,7 @@ module.exports = {
           first_name: 'Colin',
           last_name: 'Chapman',
           email: 'test2@education.gov.uk',
-          is_api_user: false,
+          type: 'support',
           is_active: true
         },
         {
@@ -38,7 +38,7 @@ module.exports = {
           first_name: 'Hannah',
           last_name: 'Mills',
           email: 'test3@education.gov.uk',
-          is_api_user: true,
+          type: 'api',
           is_active: true
         },
         {
@@ -46,7 +46,7 @@ module.exports = {
           first_name: 'Mary',
           last_name: 'Lawson',
           email: 'test4@education.gov.uk',
-          is_api_user: false,
+          type: 'support',
           is_active: false
         }
       ]
@@ -59,7 +59,7 @@ module.exports = {
           email: user.email,
           password: 'bat', // Placeholder password for prototype
           is_active: user.is_active,
-          is_api_user: user.is_api_user,
+          type: user.type,
           created_by_id: systemUserId,
           created_at: createdAt,
           updated_by_id: systemUserId,
