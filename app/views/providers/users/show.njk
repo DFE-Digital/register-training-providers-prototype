@@ -1,0 +1,136 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "users" %}
+
+{% block pageTitle -%}
+  View user - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = user.firstName + " " + user.lastName %}
+{% set caption = "User - " + provider.operatingName %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set headingClasses = "govuk-!-margin-bottom-2" %}
+    {% include "_includes/page-heading.njk" %}
+
+    <p class="govuk-hint govuk-!-font-size-16">
+      {% if user.lastSignedInAt %}
+        Last signed in on {{ user.lastSignedInAt | govukDateTime }}
+      {% else %}
+        User has never signed in
+      {% endif %}
+    </p>
+
+    {% if showDeleteLink %}
+      <p class="govuk-body">
+        <a href="{{ actions.delete }}" class="govuk-link">Delete user</a>
+      </p>
+    {% endif %}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "First name"
+          },
+          value: {
+            text: user.firstName
+          },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "first name"
+              }
+            ]
+          } if showChangeLink
+        },
+        {
+          key: {
+            text: "Last name"
+          },
+          value: {
+            text: user.lastName
+          },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "last name"
+              }
+            ]
+          } if showChangeLink
+        },
+        {
+          key: {
+            text: "Email address"
+          },
+          value: {
+            text: user.email
+          },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "email"
+              }
+            ]
+          } if showChangeLink
+        },
+        {
+          key: {
+            text: "Is the account active?"
+          },
+          value: {
+            text: "Yes" if user.isActive else "No"
+          },
+          actions: {
+            items: [
+              {
+                href: actions.change,
+                text: "Change",
+                visuallyHiddenText: "account active status"
+              }
+            ]
+          } if showStatusChangeLink
+        }
+      ]
+    }) }}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Related providers</h2>
+
+    {% if relatedProviders.length %}
+      <ul class="govuk-list govuk-list--spaced">
+        {% for relatedProvider in relatedProviders %}
+          <li>
+            <a class="govuk-link" href="/support/providers/{{ relatedProvider.id }}/users/{{ user.id }}">
+              {{ relatedProvider.operatingName }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="govuk-body">There are no related providers for {{ user.firstName }} {{ user.lastName }}.</p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

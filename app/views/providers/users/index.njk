@@ -1,0 +1,96 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+{% set secondaryNavId = "users" %}
+
+{% set title = provider.operatingName %}
+{% set caption = "Provider" %}
+
+{% if pagination.totalCount %}
+  {% set subtitle = "Users (" + pagination.totalCount | numeral("0,0") + ")" %}
+{% else %}
+  {% set subtitle = "Users" %}
+{% endif %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/support/providers"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/notification-banner.njk" %}
+
+{% set headingClasses = "govuk-!-margin-bottom-2" %}
+{% include "../_page-heading.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include "../_secondary-navigation.njk" %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m">{{ subtitle }}</h2>
+
+    {% if not provider.archivedAt %}
+      {{ govukButton({
+        text: "Add user",
+        href: actions.new
+      }) }}
+    {% endif %}
+
+    {% if users.length %}
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
+            <th scope="col" class="govuk-table__header">Email</th>
+            <th scope="col" class="govuk-table__header">Status</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for user in users %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <a class="govuk-link" href="{{ actions.view }}/{{ user.id }}">
+                  {{ user.firstName }} {{ user.lastName }}
+                </a>
+              </td>
+              <td class="govuk-table__cell">
+                {{ user.email if user.email else "Not entered" }}
+              </td>
+              <td class="govuk-table__cell">
+                <div class="app-tag-list">
+                  {% if user.isActive %}
+                    {{ govukTag({
+                      text: "Active",
+                      classes: "govuk-tag--turquoise"
+                    }) }}
+                  {% else %}
+                    {{ govukTag({
+                      text: "Not active",
+                      classes: "govuk-tag--grey"
+                    }) }}
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include "_includes/pagination.njk" %}
+    {% else %}
+      <p class="govuk-body">
+        There are no users for {{ provider.operatingName if provider.operatingName else "this provider" }}.
+      </p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

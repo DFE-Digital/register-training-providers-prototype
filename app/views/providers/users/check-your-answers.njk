@@ -1,0 +1,133 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "providers" %}
+
+{% block pageTitle -%}
+  Change user - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = "Check your answers" %}
+
+{% if currentUser %}
+  {% set caption = currentUser.firstName + " " + currentUser.lastName + " - " + provider.operatingName %}
+{% else %}
+  {% set caption = "Add user - " + provider.operatingName %}
+{% endif %}
+{% set allowPersonalDetailChanges = (not currentUser) or (not (currentUser.lastSignedInAt)) %}
+{% set emailChanged = currentUser and (user.email !== currentUser.email) %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% if user.existingUserId %}
+        {{ govukInsetText({
+          text: "This user already exists and will be linked to this provider."
+        }) }}
+      {% endif %}
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "First name"
+            },
+            value: {
+              text: user.firstName
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "first name"
+                }
+              ]
+            } if allowPersonalDetailChanges
+          },
+          {
+            key: {
+              text: "Last name"
+            },
+            value: {
+              text: user.lastName
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "last name"
+                }
+              ]
+            } if allowPersonalDetailChanges
+          },
+          {
+            key: {
+              text: "Email address"
+            },
+            value: {
+              text: user.email
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "email"
+                }
+              ]
+            } if allowPersonalDetailChanges
+          },
+          {
+            key: {
+              text: "Is the account active?"
+            },
+            value: {
+              text: "Yes" if (user.isActive === true or user.isActive === "true") else "No"
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.change,
+                  text: "Change",
+                  visuallyHiddenText: "account active status"
+                }
+              ]
+            }
+          } if currentUser
+        ]
+      }) }}
+
+      {% if (not currentUser) or emailChanged %}
+        {{ govukWarningText({
+          text: "The user will be sent an email to tell them you’ve added them to " + provider.operatingName + "."
+        }) }}
+      {% endif %}
+
+      {{ govukButton({
+        text: "Save user"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

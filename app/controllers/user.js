@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const Pagination = require('../helpers/pagination')
 const { isValidEmail, isValidEducationEmail } = require('../helpers/validation')
-const { User } = require('../models')
+const { User, ProviderUser } = require('../models')
 
 const { Op } = require('sequelize')
 
@@ -20,12 +20,32 @@ exports.usersList = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 15
   const offset = (page - 1) * limit
 
+  const providerUserLinks = await ProviderUser.findAll({
+    where: {
+      deletedAt: null
+    },
+    attributes: ['userId'],
+    group: ['userId']
+  })
+
+  const providerUserIds = providerUserLinks.map((link) => link.userId)
+
+  const userWhereClause = {
+    deletedAt: null
+  }
+
+  if (providerUserIds.length) {
+    userWhereClause.id = {
+      [Op.notIn]: providerUserIds
+    }
+  }
+
   // Get the total number of providers for pagination metadata
-  const totalCount = await User.count({ where: { deletedAt: null } })
+  const totalCount = await User.count({ where: userWhereClause })
 
   // Only fetch ONE page of users
   const users = await User.findAll({
-    where: { 'deletedAt': null },
+    where: userWhereClause,
     order: [['firstName', 'ASC'],['lastName', 'ASC']],
     limit,
     offset
