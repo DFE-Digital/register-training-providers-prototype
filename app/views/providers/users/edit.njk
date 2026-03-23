@@ -122,8 +122,34 @@
         }) }}
       {% endif %}
 
+      {{ govukRadios({
+        idPrefix: "role",
+        name: "providerUser[role]",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Role",
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        errorMessage: errors | getErrorMessage("role"),
+        items: [
+          {
+            value: "user",
+            text: "User",
+            checked: user.role === "user"
+          },
+          {
+            value: "admin",
+            text: "Admin",
+            checked: user.role === "admin"
+          }
+        ]
+      }) }}
+
       {% if currentUser %}
         {{ govukRadios({
+          idPrefix: "isActive",
           name: "providerUser[isActive]",
           classes: "govuk-radios--inline",
           fieldset: {
