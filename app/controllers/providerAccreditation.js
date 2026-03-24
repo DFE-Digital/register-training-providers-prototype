@@ -6,6 +6,10 @@ const { isValidAccreditedProviderNumber } = require('../helpers/validation')
 const { Provider, ProviderAccreditation } = require('../models')
 const Pagination = require('../helpers/pagination')
 
+const getProviderBaseUrl = (req, res) => (
+  res.locals.providerBaseUrl || `/support/providers/${req.params.providerId}`
+)
+
 const formatDateForInput = (value) => {
   if (!value) return {}
   const date = new Date(value)
@@ -121,6 +125,7 @@ exports.providerAccreditationsList = async (req, res) => {
 
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   // get the current provider
   const provider = await Provider.findByPk(providerId)
@@ -166,9 +171,9 @@ exports.providerAccreditationsList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/support/providers/${providerId}/accreditations/new`,
-      change: `/support/providers/${providerId}/accreditations`,
-      delete: `/support/providers/${providerId}/accreditations`
+      new: `${baseUrl}/accreditations/new`,
+      change: `${baseUrl}/accreditations`,
+      delete: `${baseUrl}/accreditations`
     }
   })
 }
@@ -205,11 +210,12 @@ exports.newProviderAccreditation_get = async (req, res) => {
     endsOn: {}
   }
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
 
-  let back = `/support/providers/${providerId}`
+  let back = `${baseUrl}`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/accreditations/new/check`
+    back = `${baseUrl}/accreditations/new/check`
   }
 
   res.render('providers/accreditations/edit', {
@@ -219,8 +225,8 @@ exports.newProviderAccreditation_get = async (req, res) => {
     endsOn: normaliseDateValue(accreditation.endsOn),
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/accreditations`,
-      save: `/support/providers/${providerId}/accreditations/new`
+      cancel: `${baseUrl}/accreditations`,
+      save: `${baseUrl}/accreditations/new`
     }
   })
 }
@@ -232,6 +238,7 @@ exports.newProviderAccreditation_post = async (req, res) => {
     endsOn: {}
   }
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const errors = []
 
@@ -265,9 +272,9 @@ exports.newProviderAccreditation_post = async (req, res) => {
   errors.push(...dateErrors)
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}`
+    let back = `${baseUrl}`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/accreditations/new/check`
+      back = `${baseUrl}/accreditations/new/check`
     }
 
     res.render('providers/accreditations/edit', {
@@ -280,12 +287,12 @@ exports.newProviderAccreditation_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/accreditations`,
-        save: `/support/providers/${providerId}/accreditations/new`
+        cancel: `${baseUrl}/accreditations`,
+        save: `${baseUrl}/accreditations/new`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/accreditations/new/check`)
+    res.redirect(`${baseUrl}/accreditations/new/check`)
   }
 }
 
@@ -296,6 +303,7 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
     endsOn: {}
   }
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const accreditationDates = formatAccreditationDatesForSummary(accreditation)
   res.render('providers/accreditations/check-your-answers', {
@@ -303,10 +311,10 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
     accreditation,
     accreditationDates,
     actions: {
-      back: `/support/providers/${providerId}/accreditations/new`,
-      cancel: `/support/providers/${providerId}/accreditations`,
-      change: `/support/providers/${providerId}/accreditations/new`,
-      save: `/support/providers/${providerId}/accreditations/new/check`
+      back: `${baseUrl}/accreditations/new`,
+      cancel: `${baseUrl}/accreditations`,
+      change: `${baseUrl}/accreditations/new`,
+      save: `${baseUrl}/accreditations/new/check`
     }
   })
 }
@@ -314,6 +322,7 @@ exports.newProviderAccreditationCheck_get = async (req, res) => {
 exports.newProviderAccreditationCheck_post = async (req, res) => {
   const { accreditation } = req.session.data
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const userId = req.user?.id
 
   if (!userId) {
@@ -341,7 +350,7 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation added')
-  res.redirect(`/support/providers/${providerId}/accreditations`)
+  res.redirect(`${baseUrl}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -350,6 +359,7 @@ exports.newProviderAccreditationCheck_post = async (req, res) => {
 
 exports.editProviderAccreditation_get = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
 
@@ -360,9 +370,9 @@ exports.editProviderAccreditation_get = async (req, res) => {
     accreditation = await ProviderAccreditation.findByPk(accreditationId)
   }
 
-  let back = `/support/providers/${providerId}`
+  let back = `${baseUrl}`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`
+    back = `${baseUrl}/accreditations/${accreditationId}/edit/check`
   }
 
   const startsOn = normaliseDateValue(accreditation?.startsOn)
@@ -376,14 +386,15 @@ exports.editProviderAccreditation_get = async (req, res) => {
     endsOn,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/accreditations`,
-      save: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`
+      cancel: `${baseUrl}/accreditations`,
+      save: `${baseUrl}/accreditations/${accreditationId}/edit`
     }
   })
 }
 
 exports.editProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { accreditation } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
@@ -410,9 +421,9 @@ exports.editProviderAccreditation_post = async (req, res) => {
   errors.push(...dateErrors)
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}`
+    let back = `${baseUrl}`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`
+      back = `${baseUrl}/accreditations/${accreditationId}/edit/check`
     }
 
     res.render('providers/accreditations/edit', {
@@ -426,17 +437,18 @@ exports.editProviderAccreditation_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/accreditations`,
-        save: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`
+        cancel: `${baseUrl}/accreditations`,
+        save: `${baseUrl}/accreditations/${accreditationId}/edit`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`)
+    res.redirect(`${baseUrl}/accreditations/${accreditationId}/edit/check`)
   }
 }
 
 exports.editProviderAccreditationCheck_get = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { accreditation } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentAccreditation = await ProviderAccreditation.findByPk(accreditationId)
@@ -448,16 +460,17 @@ exports.editProviderAccreditationCheck_get = async (req, res) => {
     accreditation,
     accreditationDates,
     actions: {
-      back: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`,
-      cancel: `/support/providers/${providerId}/accreditations`,
-      change: `/support/providers/${providerId}/accreditations/${accreditationId}/edit`,
-      save: `/support/providers/${providerId}/accreditations/${accreditationId}/edit/check`
+      back: `${baseUrl}/accreditations/${accreditationId}/edit`,
+      cancel: `${baseUrl}/accreditations`,
+      change: `${baseUrl}/accreditations/${accreditationId}/edit`,
+      save: `${baseUrl}/accreditations/${accreditationId}/edit/check`
     }
   })
 }
 
 exports.editProviderAccreditationCheck_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { accreditation } = req.session.data
   const userId = req.user?.id
 
@@ -485,7 +498,7 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
   delete req.session.data.accreditation
 
   req.flash('success', 'Accreditation updated')
-  res.redirect(`/support/providers/${providerId}/accreditations`)
+  res.redirect(`${baseUrl}/accreditations`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -494,21 +507,23 @@ exports.editProviderAccreditationCheck_post = async (req, res) => {
 
 exports.deleteProviderAccreditation_get = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   res.render('providers/accreditations/delete', {
     provider,
     accreditation,
     actions: {
-      back: `/support/providers/${providerId}/accreditations`,
-      cancel: `/support/providers/${providerId}/accreditations`,
-      save: `/support/providers/${providerId}/accreditations/${accreditationId}/delete`
+      back: `${baseUrl}/accreditations`,
+      cancel: `${baseUrl}/accreditations`,
+      save: `${baseUrl}/accreditations/${accreditationId}/delete`
     }
   })
 }
 
 exports.deleteProviderAccreditation_post = async (req, res) => {
   const { accreditationId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const userId = req.user.id
   const accreditation = await ProviderAccreditation.findByPk(accreditationId)
   await accreditation.update({
@@ -518,5 +533,5 @@ exports.deleteProviderAccreditation_post = async (req, res) => {
   })
 
   req.flash('success', 'Accreditation deleted')
-  res.redirect(`/support/providers/${providerId}/accreditations`)
+  res.redirect(`${baseUrl}/accreditations`)
 }

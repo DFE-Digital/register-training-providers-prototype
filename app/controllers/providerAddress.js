@@ -7,6 +7,10 @@ const { parseOsPlacesData, parseForGovukRadios, parseAddressAsString } = require
 const { Provider, ProviderAddress } = require('../models')
 const Pagination = require('../helpers/pagination')
 
+const getProviderBaseUrl = (req, res) => (
+  res.locals.providerBaseUrl || `/support/providers/${req.params.providerId}`
+)
+
 /// ------------------------------------------------------------------------ ///
 /// List provider addresses
 /// ------------------------------------------------------------------------ ///
@@ -21,6 +25,7 @@ exports.providerAddressesList = async (req, res) => {
 
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   // get the current provider
   const provider = await Provider.findByPk(providerId)
@@ -66,9 +71,9 @@ exports.providerAddressesList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/support/providers/${providerId}/addresses/new`,
-      change: `/support/providers/${providerId}/addresses`,
-      delete: `/support/providers/${providerId}/addresses`
+      new: `${baseUrl}/addresses/new`,
+      change: `${baseUrl}/addresses`,
+      delete: `${baseUrl}/addresses`
     }
   })
 }
@@ -100,21 +105,23 @@ exports.providerAddressDetails = async (req, res) => {
 
 exports.newFindProviderAddress_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
 
   res.render('providers/addresses/find', {
     provider,
     find: req.session.data.find,
     actions: {
-      back: `/support/providers/${providerId}/addresses`,
-      cancel: `/support/providers/${providerId}/addresses`,
-      save: `/support/providers/${providerId}/addresses/new`
+      back: `${baseUrl}/addresses`,
+      cancel: `${baseUrl}/addresses`,
+      save: `${baseUrl}/addresses/new`
     }
   })
 }
 
 exports.newFindProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { find } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const errors = []
@@ -139,18 +146,19 @@ exports.newFindProviderAddress_post = async (req, res) => {
       find,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/addresses`,
-        cancel: `/support/providers/${providerId}/addresses`,
-        save: `/support/providers/${providerId}/addresses/new`
+        back: `${baseUrl}/addresses`,
+        cancel: `${baseUrl}/addresses`,
+        save: `${baseUrl}/addresses/new`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/addresses/new/select`)
+    res.redirect(`${baseUrl}/addresses/new/select`)
   }
 }
 
 exports.newSelectProviderAddress_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address, find } = req.session.data
   const provider = await Provider.findByPk(providerId)
 
@@ -164,9 +172,9 @@ exports.newSelectProviderAddress_get = async (req, res) => {
     addresses = await parseForGovukRadios(addresses)
   }
 
-  let back = `/support/providers/${providerId}/addresses/new`
+  let back = `${baseUrl}/addresses/new`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/addresses/new/check`
+    back = `${baseUrl}/addresses/new/check`
   }
 
   res.render('providers/addresses/select', {
@@ -176,16 +184,17 @@ exports.newSelectProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/addresses`,
-      change: `/support/providers/${providerId}/addresses/new`,
-      enter: `/support/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
-      save: `/support/providers/${providerId}/addresses/new/select`
+      cancel: `${baseUrl}/addresses`,
+      change: `${baseUrl}/addresses/new`,
+      enter: `${baseUrl}/addresses/new/enter?addressFinderIncomplete=`,
+      save: `${baseUrl}/addresses/new/select`
     }
   })
 }
 
 exports.newSelectProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address, find } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const errors = []
@@ -209,9 +218,9 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       addresses = await parseForGovukRadios(addresses)
     }
 
-    let back = `/support/providers/${providerId}/addresses/new`
+    let back = `${baseUrl}/addresses/new`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/addresses/new/check`
+      back = `${baseUrl}/addresses/new/check`
     }
 
     res.render('providers/addresses/select', {
@@ -222,19 +231,20 @@ exports.newSelectProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/addresses`,
-        change: `/support/providers/${providerId}/addresses/new`,
-        enter: `/support/providers/${providerId}/addresses/new/enter?addressFinderIncomplete=`,
-        save: `/support/providers/${providerId}/addresses/new/select`
+        cancel: `${baseUrl}/addresses`,
+        change: `${baseUrl}/addresses/new`,
+        enter: `${baseUrl}/addresses/new/enter?addressFinderIncomplete=`,
+        save: `${baseUrl}/addresses/new/select`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/addresses/new/check`)
+    res.redirect(`${baseUrl}/addresses/new/check`)
   }
 }
 
 exports.newEnterProviderAddress_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const showAddressFinderInset = !!req.session.data.addressFinderIncomplete
@@ -247,15 +257,16 @@ exports.newEnterProviderAddress_get = async (req, res) => {
     address,
     showAddressFinderInset,
     actions: {
-      back: `/support/providers/${providerId}/addresses/new/select`,
-      cancel: `/support/providers/${providerId}/addresses`,
-      save: `/support/providers/${providerId}/addresses/new/enter`
+      back: `${baseUrl}/addresses/new/select`,
+      cancel: `${baseUrl}/addresses`,
+      save: `${baseUrl}/addresses/new/enter`
     }
   })
 }
 
 exports.newEnterProviderAddress_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const showAddressFinderInset = !!req.session.data.addressFinderIncomplete
@@ -298,18 +309,19 @@ exports.newEnterProviderAddress_post = async (req, res) => {
       showAddressFinderInset,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/addresses/new/select`,
-        cancel: `/support/providers/${providerId}/addresses`,
-        save: `/support/providers/${providerId}/addresses/new/enter`
+        back: `${baseUrl}/addresses/new/select`,
+        cancel: `${baseUrl}/addresses`,
+        save: `${baseUrl}/addresses/new/enter`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/addresses/new/check`)
+    res.redirect(`${baseUrl}/addresses/new/check`)
   }
 }
 
 exports.newProviderAddressCheck_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const { find } = req.session.data
   let { address } = req.session.data
@@ -324,7 +336,7 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     if (!address.line1?.trim() || !address.town?.trim() || !address.postcode?.trim()) {
       req.session.data.address = address
       req.session.data.addressFinderIncomplete = true
-      return res.redirect(`/support/providers/${providerId}/addresses/new/enter`)
+      return res.redirect(`${baseUrl}/addresses/new/enter`)
     }
   }
   // Geocode the address data if we don't already have coordinates
@@ -337,9 +349,9 @@ exports.newProviderAddressCheck_get = async (req, res) => {
   // put address into the session data for use later
   req.session.data.address = address
 
-  let back = `/support/providers/${providerId}/addresses/new/select`
+  let back = `${baseUrl}/addresses/new/select`
   if (!req.session.data.find.uprn) {
-    back = `/support/providers/${providerId}/addresses/new/enter`
+    back = `${baseUrl}/addresses/new/enter`
   }
 
   res.render('providers/addresses/check-your-answers', {
@@ -347,15 +359,16 @@ exports.newProviderAddressCheck_get = async (req, res) => {
     address: req.session.data.address,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/addresses`,
+      cancel: `${baseUrl}/addresses`,
       change: back,
-      save: `/support/providers/${providerId}/addresses/new/check`
+      save: `${baseUrl}/addresses/new/check`
     }
   })
 }
 
 exports.newProviderAddressCheck_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address } = req.session.data
   const userId = req.user.id
 
@@ -380,7 +393,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
   delete req.session.data.addressFinderIncomplete
 
   req.flash('success', 'Address added')
-  res.redirect(`/support/providers/${providerId}/addresses`)
+  res.redirect(`${baseUrl}/addresses`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -389,6 +402,7 @@ exports.newProviderAddressCheck_post = async (req, res) => {
 
 exports.editProviderAddress_get = async (req, res) => {
   const { addressId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const currentAddress = await ProviderAddress.findByPk(addressId)
 
@@ -399,9 +413,9 @@ exports.editProviderAddress_get = async (req, res) => {
     address = await ProviderAddress.findByPk(addressId)
   }
 
-  let back = `/support/providers/${providerId}/addresses`
+  let back = `${baseUrl}/addresses`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/addresses/${addressId}/edit/check`
+    back = `${baseUrl}/addresses/${addressId}/edit/check`
   }
 
   res.render('providers/addresses/edit', {
@@ -410,14 +424,15 @@ exports.editProviderAddress_get = async (req, res) => {
     address,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/addresses`,
-      save: `/support/providers/${providerId}/addresses/${addressId}/edit`
+      cancel: `${baseUrl}/addresses`,
+      save: `${baseUrl}/addresses/${addressId}/edit`
     }
   })
 }
 
 exports.editProviderAddress_post = async (req, res) => {
   const { addressId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentAddress = await ProviderAddress.findByPk(addressId)
@@ -454,9 +469,9 @@ exports.editProviderAddress_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}/addresses`
+    let back = `${baseUrl}/addresses`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/addresses/${addressId}/edit/check`
+      back = `${baseUrl}/addresses/${addressId}/edit/check`
     }
 
     res.render('providers/addresses/edit', {
@@ -466,17 +481,18 @@ exports.editProviderAddress_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/addresses`,
-        save: `/support/providers/${providerId}/addresses/${addressId}/edit`
+        cancel: `${baseUrl}/addresses`,
+        save: `${baseUrl}/addresses/${addressId}/edit`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/addresses/${addressId}/edit/check`)
+    res.redirect(`${baseUrl}/addresses/${addressId}/edit/check`)
   }
 }
 
 exports.editProviderAddressCheck_get = async (req, res) => {
   const { addressId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   let { address } = req.session.data
 
   const provider = await Provider.findByPk(providerId)
@@ -497,16 +513,17 @@ exports.editProviderAddressCheck_get = async (req, res) => {
     currentAddress,
     address: req.session.data.address,
     actions: {
-      back: `/support/providers/${providerId}/addresses/${addressId}/edit`,
-      cancel: `/support/providers/${providerId}/addresses`,
-      change: `/support/providers/${providerId}/addresses/${addressId}/edit`,
-      save: `/support/providers/${providerId}/addresses/${addressId}/edit/check`
+      back: `${baseUrl}/addresses/${addressId}/edit`,
+      cancel: `${baseUrl}/addresses`,
+      change: `${baseUrl}/addresses/${addressId}/edit`,
+      save: `${baseUrl}/addresses/${addressId}/edit/check`
     }
   })
 }
 
 exports.editProviderAddressCheck_post = async (req, res) => {
   const { addressId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { address } = req.session.data
   const userId = req.user.id
 
@@ -529,7 +546,7 @@ exports.editProviderAddressCheck_post = async (req, res) => {
   delete req.session.data.address
 
   req.flash('success', 'Address updated')
-  res.redirect(`/support/providers/${providerId}/addresses`)
+  res.redirect(`${baseUrl}/addresses`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -538,6 +555,7 @@ exports.editProviderAddressCheck_post = async (req, res) => {
 
 exports.deleteProviderAddress_get = async (req, res) => {
   const { addressId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const address = await ProviderAddress.findByPk(addressId)
 
@@ -545,15 +563,16 @@ exports.deleteProviderAddress_get = async (req, res) => {
     provider,
     address,
     actions: {
-      back: `/support/providers/${providerId}`,
-      cancel: `/support/providers/${providerId}/addresses`,
-      save: `/support/providers/${providerId}/addresses/${addressId}/delete`
+      back: `${baseUrl}`,
+      cancel: `${baseUrl}/addresses`,
+      save: `${baseUrl}/addresses/${addressId}/delete`
     }
   })
 }
 
 exports.deleteProviderAddress_post = async (req, res) => {
   const { addressId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const userId = req.user.id
   const address = await ProviderAddress.findByPk(addressId)
   await address.update({
@@ -563,5 +582,5 @@ exports.deleteProviderAddress_post = async (req, res) => {
   })
 
   req.flash('success', 'Address deleted')
-  res.redirect(`/support/providers/${providerId}/addresses`)
+  res.redirect(`${baseUrl}/addresses`)
 }

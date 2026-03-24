@@ -71,6 +71,7 @@ exports.providerUsersList = async (req, res) => {
   delete req.session.data.providerUser
 
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `${baseUrl}`
 
   // variables for use in pagination
   const page = parseInt(req.query.page, 10) || 1
@@ -138,8 +139,8 @@ exports.providerUsersList = async (req, res) => {
     users: pagination.getData(),
     pagination,
     actions: {
-      new: `/support/providers/${providerId}/users/new`,
-      view: `/support/providers/${providerId}/users`
+      new: `${baseUrl}/users/new`,
+      view: `${baseUrl}/users`
     }
   })
 }
@@ -152,6 +153,7 @@ exports.providerUserDetails = async (req, res) => {
   delete req.session.data.providerUser
 
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `${baseUrl}`
 
   const provider = await Provider.findByPk(providerId)
   const currentUser = await User.findOne({ where: { id: userId, deletedAt: null } })
@@ -211,9 +213,9 @@ exports.providerUserDetails = async (req, res) => {
     showChangeLink,
     showStatusChangeLink,
     actions: {
-      back: `/support/providers/${providerId}/users`,
-      change: `/support/providers/${providerId}/users/${user.id}/edit`,
-      delete: `/support/providers/${providerId}/users/${user.id}/delete`
+      back: `${baseUrl}/users`,
+      change: `${baseUrl}/users/${user.id}/edit`,
+      delete: `${baseUrl}/users/${user.id}/delete`
     }
   })
 }
@@ -224,6 +226,7 @@ exports.providerUserDetails = async (req, res) => {
 
 exports.newProviderUser_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
   const user = req.session.data.providerUser || {}
 
@@ -233,15 +236,16 @@ exports.newProviderUser_get = async (req, res) => {
     // Explicitly null to avoid clashing with the signed-in user injected into res.locals
     currentUser: null,
     actions: {
-      back: `/support/providers/${providerId}/users`,
-      cancel: `/support/providers/${providerId}/users`,
-      save: `/support/providers/${providerId}/users/new`
+      back: `${baseUrl}/users`,
+      cancel: `${baseUrl}/users`,
+      save: `${baseUrl}/users/new`
     }
   })
 }
 
 exports.newProviderUser_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
   req.session.data = req.session.data || {}
   req.session.data.providerUser = req.session.data.providerUser || {}
@@ -308,9 +312,9 @@ exports.newProviderUser_post = async (req, res) => {
       errors,
       currentUser: null,
       actions: {
-        back: `/support/providers/${providerId}/users`,
-        cancel: `/support/providers/${providerId}/users`,
-        save: `/support/providers/${providerId}/users/new`
+        back: `${baseUrl}/users`,
+        cancel: `${baseUrl}/users`,
+        save: `${baseUrl}/users/new`
       }
     })
   } else {
@@ -321,12 +325,13 @@ exports.newProviderUser_post = async (req, res) => {
     } else {
       delete user.existingUserId
     }
-    res.redirect(`/support/providers/${providerId}/users/new/check`)
+    res.redirect(`${baseUrl}/users/new/check`)
   }
 }
 
 exports.newProviderUserCheck_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
   const user = req.session.data.providerUser
 
@@ -335,16 +340,17 @@ exports.newProviderUserCheck_get = async (req, res) => {
     user,
     currentUser: null,
     actions: {
-      back: `/support/providers/${providerId}/users/new`,
-      cancel: `/support/providers/${providerId}/users`,
-      change: `/support/providers/${providerId}/users/new`,
-      save: `/support/providers/${providerId}/users/new/check`
+      back: `${baseUrl}/users/new`,
+      cancel: `${baseUrl}/users`,
+      change: `${baseUrl}/users/new`,
+      save: `${baseUrl}/users/new/check`
     }
   })
 }
 
 exports.newProviderUserCheck_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const user = req.session.data.providerUser
 
   let targetUser = null
@@ -385,9 +391,9 @@ exports.newProviderUserCheck_post = async (req, res) => {
         errors,
         currentUser: null,
         actions: {
-          back: `/support/providers/${providerId}/users`,
-          cancel: `/support/providers/${providerId}/users`,
-          save: `/support/providers/${providerId}/users/new`
+          back: `${baseUrl}/users`,
+          cancel: `${baseUrl}/users`,
+          save: `${baseUrl}/users/new`
         }
       })
     }
@@ -421,7 +427,7 @@ exports.newProviderUserCheck_post = async (req, res) => {
   delete req.session.data.providerUser
 
   req.flash('success', 'User added')
-  res.redirect(`/support/providers/${providerId}/users`)
+  res.redirect(`${baseUrl}/users`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -430,6 +436,7 @@ exports.newProviderUserCheck_post = async (req, res) => {
 
 exports.editProviderUser_get = async (req, res) => {
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
   const currentUser = await User.findByPk(userId)
   const providerUser = await ProviderUser.findOne({
@@ -456,15 +463,16 @@ exports.editProviderUser_get = async (req, res) => {
     currentUser,
     user,
     actions: {
-      back: `/support/providers/${providerId}/users/${userId}`,
-      cancel: `/support/providers/${providerId}/users/${userId}`,
-      save: `/support/providers/${providerId}/users/${userId}/edit`
+      back: `${baseUrl}/users/${userId}`,
+      cancel: `${baseUrl}/users/${userId}`,
+      save: `${baseUrl}/users/${userId}/edit`
     }
   })
 }
 
 exports.editProviderUser_post = async (req, res) => {
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
 
   req.session.data = req.session.data || {}
@@ -559,18 +567,19 @@ exports.editProviderUser_post = async (req, res) => {
       user,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/users/${userId}`,
-        cancel: `/support/providers/${providerId}/users/${userId}`,
-        save: `/support/providers/${providerId}/users/${userId}/edit`
+        back: `${baseUrl}/users/${userId}`,
+        cancel: `${baseUrl}/users/${userId}`,
+        save: `${baseUrl}/users/${userId}/edit`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/users/${userId}/edit/check`)
+    res.redirect(`${baseUrl}/users/${userId}/edit/check`)
   }
 }
 
 exports.editProviderUserCheck_get = async (req, res) => {
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
   const user = req.session.data.providerUser
   const currentUser = await User.findByPk(userId)
@@ -580,16 +589,17 @@ exports.editProviderUserCheck_get = async (req, res) => {
     currentUser,
     user,
     actions: {
-      back: `/support/providers/${providerId}/users/${userId}/edit`,
-      cancel: `/support/providers/${providerId}/users/${userId}`,
-      change: `/support/providers/${providerId}/users/${userId}/edit`,
-      save: `/support/providers/${providerId}/users/${userId}/edit/check`
+      back: `${baseUrl}/users/${userId}/edit`,
+      cancel: `${baseUrl}/users/${userId}`,
+      change: `${baseUrl}/users/${userId}/edit`,
+      save: `${baseUrl}/users/${userId}/edit/check`
     }
   })
 }
 
 exports.editProviderUserCheck_post = async (req, res) => {
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   req.session.data = req.session.data || {}
   req.session.data.providerUser = req.session.data.providerUser || {}
   const user = req.session.data.providerUser
@@ -626,7 +636,7 @@ exports.editProviderUserCheck_post = async (req, res) => {
   delete req.session.data.providerUser
 
   req.flash('success', 'User updated')
-  res.redirect(`/support/providers/${providerId}/users/${userId}`)
+  res.redirect(`${baseUrl}/users/${userId}`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -635,6 +645,7 @@ exports.editProviderUserCheck_post = async (req, res) => {
 
 exports.deleteProviderUser_get = async (req, res) => {
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const provider = await Provider.findByPk(providerId)
   const user = await User.findByPk(userId)
 
@@ -642,15 +653,16 @@ exports.deleteProviderUser_get = async (req, res) => {
     provider,
     user,
     actions: {
-      back: `/support/providers/${providerId}/users/${userId}`,
-      cancel: `/support/providers/${providerId}/users/${userId}`,
-      delete: `/support/providers/${providerId}/users/${userId}/delete`
+      back: `${baseUrl}/users/${userId}`,
+      cancel: `${baseUrl}/users/${userId}`,
+      delete: `${baseUrl}/users/${userId}/delete`
     }
   })
 }
 
 exports.deleteProviderUser_post = async (req, res) => {
   const { providerId, userId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const user = await User.findByPk(userId)
   const providerUser = await ProviderUser.findOne({
     where: {
@@ -685,5 +697,5 @@ exports.deleteProviderUser_post = async (req, res) => {
   }
 
   req.flash('success', 'User deleted')
-  res.redirect(`/support/providers/${providerId}/users`)
+  res.redirect(`${baseUrl}/users`)
 }

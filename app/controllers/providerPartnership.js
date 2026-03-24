@@ -11,6 +11,10 @@ const { AcademicYear, Provider, ProviderPartnership, ProviderPartnershipAcademic
 const { saveAcademicYearPartnerships } = require('../services/partnerships')
 const Pagination = require('../helpers/pagination')
 
+const getProviderBaseUrl = (req, res) => (
+  res.locals.providerBaseUrl || `/support/providers/${req.params.providerId}`
+)
+
 const formatProviderItems = (providers) => {
   return providers
     .map(provider => ({
@@ -298,6 +302,7 @@ exports.providerPartnershipsList = async (req, res) => {
   const offset = (page - 1) * limit
 
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
 
   // Run in parallel: accreditation flag + last update (by providerId)
@@ -433,9 +438,9 @@ exports.providerPartnershipsList = async (req, res) => {
     partnerships: pagination.getData(),
     pagination,
     actions: {
-      new: `/support/providers/${providerId}/partnerships/new`,
-      delete: `/support/providers/${providerId}/partnerships`,
-      change: `/support/providers/${providerId}/partnerships`
+      new: `${baseUrl}/partnerships/new`,
+      delete: `${baseUrl}/partnerships`,
+      change: `${baseUrl}/partnerships`
     }
   })
 }
@@ -477,9 +482,9 @@ exports.providerPartnershipsList = async (req, res) => {
 //     partnership,
 //     isAccredited,
 //     actions: {
-//       back: `/support/providers/${providerId}`,
-//       cancel: `/support/providers/${providerId}/partnerships`,
-//       delete: `/support/providers/${providerId}/partnerships`
+//       back: `${baseUrl}`,
+//       cancel: `${baseUrl}/partnerships`,
+//       delete: `${baseUrl}/partnerships`
 //     }
 //   })
 // }
@@ -491,6 +496,7 @@ exports.providerPartnershipsList = async (req, res) => {
 exports.newProviderPartnership_get = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   // get the current provider
   const provider = await Provider.findByPk(providerId)
@@ -508,9 +514,9 @@ exports.newProviderPartnership_get = async (req, res) => {
   //   delete req.session.data.provider.id
   // }
 
-  let back = `/support/providers/${providerId}/partnerships`
+  let back = `${baseUrl}/partnerships`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/partnerships/new/check`
+    back = `${baseUrl}/partnerships/new/check`
   }
 
   res.render('providers/partnerships/find', {
@@ -518,8 +524,8 @@ exports.newProviderPartnership_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/new`
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/new`
     }
   })
 }
@@ -527,6 +533,7 @@ exports.newProviderPartnership_get = async (req, res) => {
 exports.newProviderPartnership_post = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   // get the current provider
   const provider = await Provider.findByPk(providerId)
@@ -549,9 +556,9 @@ exports.newProviderPartnership_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}/partnerships`
+    let back = `${baseUrl}/partnerships`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/partnerships/new/check`
+      back = `${baseUrl}/partnerships/new/check`
     }
 
     res.render('providers/partnerships/find', {
@@ -560,24 +567,25 @@ exports.newProviderPartnership_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/partnerships`,
-        save: `/support/providers/${providerId}/partnerships/new`
+        cancel: `${baseUrl}/partnerships`,
+        save: `${baseUrl}/partnerships/new`
       }
     })
   } else {
     const selectedProviderId = req.session.data?.provider?.id
 
     if (!selectedProviderId) {
-      return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
+      return res.redirect(`${baseUrl}/partnerships/new/choose`)
     }
 
-    res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
+    res.redirect(`${baseUrl}/partnerships/new/dates`)
   }
 }
 
 exports.newProviderPartnershipDuplicate_get = async (req, res) => {
   // get the provider and partnership IDs from the request
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
 
   const partner = await Provider.findByPk(req.session.data.provider.id)
@@ -586,15 +594,16 @@ exports.newProviderPartnershipDuplicate_get = async (req, res) => {
     provider,
     partner,
     actions: {
-      back: `/support/providers/${providerId}/partnerships/new/dates`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      change: `/support/providers/${providerId}/partnerships/new/dates`
+      back: `${baseUrl}/partnerships/new/dates`,
+      cancel: `${baseUrl}/partnerships`,
+      change: `${baseUrl}/partnerships/new/dates`
     }
   })
 }
 
 exports.newProviderPartnershipChoose_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const isAccredited = await isAccreditedProvider({ providerId })
 
@@ -609,15 +618,16 @@ exports.newProviderPartnershipChoose_get = async (req, res) => {
     providerCount: providers.length,
     searchTerm: query,
     actions: {
-      back: `/support/providers/${providerId}/partnerships/new`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/new/choose`
+      back: `${baseUrl}/partnerships/new`,
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/new/choose`
     }
   })
 }
 
 exports.newProviderPartnershipChoose_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const isAccredited = await isAccreditedProvider({ providerId })
 
@@ -647,9 +657,9 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
       searchTerm: query,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/partnerships/new`,
-        cancel: `/support/providers/${providerId}/partnerships`,
-        save: `/support/providers/${providerId}/partnerships/new/choose`
+        back: `${baseUrl}/partnerships/new`,
+        cancel: `${baseUrl}/partnerships`,
+        save: `${baseUrl}/partnerships/new/choose`
       }
     })
   } else {
@@ -657,18 +667,19 @@ exports.newProviderPartnershipChoose_post = async (req, res) => {
     delete req.session.data.endsOn
     delete req.session.data.partnershipDates
     delete req.session.data.academicYears
-    res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
+    res.redirect(`${baseUrl}/partnerships/new/dates`)
   }
 }
 
 exports.newProviderPartnershipDates_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   req.session.data = req.session.data || {}
   const isAccredited = await isAccreditedProvider({ providerId })
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
+    return res.redirect(`${baseUrl}/partnerships/new/choose`)
   }
 
   const providers = isAccredited
@@ -689,11 +700,11 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
 
   const fromCheck = req.query.referrer === 'check'
   const back = fromCheck
-    ? `/support/providers/${providerId}/partnerships/new/check`
-    : `/support/providers/${providerId}/partnerships/new`
+    ? `${baseUrl}/partnerships/new/check`
+    : `${baseUrl}/partnerships/new`
   const save = fromCheck
-    ? `/support/providers/${providerId}/partnerships/new/dates?referrer=check`
-    : `/support/providers/${providerId}/partnerships/new/dates`
+    ? `${baseUrl}/partnerships/new/dates?referrer=check`
+    : `${baseUrl}/partnerships/new/dates`
 
   res.render('providers/partnerships/dates', {
     accreditedProvider,
@@ -703,7 +714,7 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
     endsOn,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/partnerships`,
+      cancel: `${baseUrl}/partnerships`,
       save
     }
   })
@@ -711,13 +722,14 @@ exports.newProviderPartnershipDates_get = async (req, res) => {
 
 exports.newProviderPartnershipDates_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   req.session.data = req.session.data || {}
   const isAccredited = await isAccreditedProvider({ providerId })
 
   const selectedProviderId = req.session.data?.provider?.id
 
   if (!selectedProviderId) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
+    return res.redirect(`${baseUrl}/partnerships/new/choose`)
   }
 
   const providers = isAccredited
@@ -756,9 +768,9 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
       endsOnFieldErrors,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/partnerships/new`,
-        cancel: `/support/providers/${providerId}/partnerships`,
-        save: `/support/providers/${providerId}/partnerships/new/dates`
+        back: `${baseUrl}/partnerships/new`,
+        cancel: `${baseUrl}/partnerships`,
+        save: `${baseUrl}/partnerships/new/dates`
       }
     })
   } else {
@@ -777,25 +789,26 @@ exports.newProviderPartnershipDates_post = async (req, res) => {
     )
 
     if (hasOverlappingPartnership) {
-      res.redirect(`/support/providers/${providerId}/partnerships/new/duplicate`)
+      res.redirect(`${baseUrl}/partnerships/new/duplicate`)
     } else {
-      res.redirect(`/support/providers/${providerId}/partnerships/new/academic-years`)
+      res.redirect(`${baseUrl}/partnerships/new/academic-years`)
     }
   }
 }
 
 exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   req.session.data = req.session.data || {}
   const isAccredited = await isAccreditedProvider({ providerId })
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`${baseUrl}/partnerships/new/dates`)
   }
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new`)
+    return res.redirect(`${baseUrl}/partnerships/new`)
   }
 
   const providers = isAccredited
@@ -821,25 +834,26 @@ exports.newProviderPartnershipAcademicYears_get = async (req, res) => {
     academicYearItems,
     selectedAcademicYears,
     actions: {
-      back: `/support/providers/${providerId}/partnerships/new/dates`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/new/academic-years`
+      back: `${baseUrl}/partnerships/new/dates`,
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/new/academic-years`
     }
   })
 }
 
 exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   req.session.data = req.session.data || {}
   const isAccredited = await isAccreditedProvider({ providerId })
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`${baseUrl}/partnerships/new/dates`)
   }
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new`)
+    return res.redirect(`${baseUrl}/partnerships/new`)
   }
 
   const providers = isAccredited
@@ -877,28 +891,29 @@ exports.newProviderPartnershipAcademicYears_post = async (req, res) => {
       selectedAcademicYears,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/partnerships/new/dates`,
-        cancel: `/support/providers/${providerId}/partnerships`,
-        save: `/support/providers/${providerId}/partnerships/new/academic-years`
+        back: `${baseUrl}/partnerships/new/dates`,
+        cancel: `${baseUrl}/partnerships`,
+        save: `${baseUrl}/partnerships/new/academic-years`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/partnerships/new/check`)
+    res.redirect(`${baseUrl}/partnerships/new/check`)
   }
 }
 
 exports.newProviderPartnershipCheck_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const isAccredited = await isAccreditedProvider({ providerId })
 
   const selectedProviderId = req.session.data?.provider?.id
   if (!selectedProviderId) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/choose`)
+    return res.redirect(`${baseUrl}/partnerships/new/choose`)
   }
   req.session.data = req.session.data || {}
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`${baseUrl}/partnerships/new/dates`)
   }
 
   const providers = isAccredited
@@ -926,10 +941,10 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
     academicYearItems,
     partnershipDates,
     actions: {
-      back: `/support/providers/${providerId}/partnerships/new/academic-years?referrer=check`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      change: `/support/providers/${providerId}/partnerships/new`,
-      save: `/support/providers/${providerId}/partnerships/new/check`
+      back: `${baseUrl}/partnerships/new/academic-years?referrer=check`,
+      cancel: `${baseUrl}/partnerships`,
+      change: `${baseUrl}/partnerships/new`,
+      save: `${baseUrl}/partnerships/new/check`
     }
   })
 }
@@ -937,6 +952,7 @@ exports.newProviderPartnershipCheck_get = async (req, res) => {
 exports.newProviderPartnershipCheck_post = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   req.session.data = req.session.data || {}
   // get the provider from the session data
@@ -949,11 +965,11 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   const isAccredited = await isAccreditedProvider({ providerId })
 
   if (!req.session.data.partnershipDates?.startsOnIso) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/dates`)
+    return res.redirect(`${baseUrl}/partnerships/new/dates`)
   }
 
   if (!provider?.id) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new`)
+    return res.redirect(`${baseUrl}/partnerships/new`)
   }
 
   const accreditedProviderId = isAccredited ? providerId : provider.id
@@ -974,7 +990,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   )
 
   if (partnershipExists) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/new/duplicate`)
+    return res.redirect(`${baseUrl}/partnerships/new/duplicate`)
   }
 
   // save the partnership and get the partnershipId
@@ -1003,7 +1019,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
   delete req.session.data.partnershipDates
 
   req.flash('success', 'Partnership added')
-  res.redirect(`/support/providers/${providerId}/partnerships`)
+  res.redirect(`${baseUrl}/partnerships`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1012,6 +1028,7 @@ exports.newProviderPartnershipCheck_post = async (req, res) => {
 
 exports.editProviderPartnershipDates_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   req.session.data = req.session.data || {}
 
   const [currentProvider, partnership] = await Promise.all([
@@ -1038,15 +1055,16 @@ exports.editProviderPartnershipDates_get = async (req, res) => {
     startsOn: req.session.data.startsOn || formatDateForInput(partnership.startsOn),
     endsOn: req.session.data.endsOn || formatDateForInput(partnership.endsOn),
     actions: {
-      back: `/support/providers/${providerId}/partnerships`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/${partnershipId}/dates`
+      back: `${baseUrl}/partnerships`,
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/${partnershipId}/dates`
     }
   })
 }
 
 exports.editProviderPartnershipDates_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   req.session.data = req.session.data || {}
   req.session.data.startsOn = req.session.data.startsOn || {}
   req.session.data.endsOn = req.session.data.endsOn || {}
@@ -1090,9 +1108,9 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
       endsOnFieldErrors,
       errors,
       actions: {
-        back: `/support/providers/${providerId}/partnerships`,
-        cancel: `/support/providers/${providerId}/partnerships`,
-        save: `/support/providers/${providerId}/partnerships/${partnershipId}/dates`
+        back: `${baseUrl}/partnerships`,
+        cancel: `${baseUrl}/partnerships`,
+        save: `${baseUrl}/partnerships/${partnershipId}/dates`
       }
     })
   }
@@ -1105,11 +1123,12 @@ exports.editProviderPartnershipDates_post = async (req, res) => {
     endsOnIso
   }
 
-  res.redirect(`/support/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
+  res.redirect(`${baseUrl}/partnerships/${partnershipId}/academic-years`)
 }
 
 exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const currentProvider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
@@ -1170,16 +1189,17 @@ exports.editProviderPartnershipAcademicYears_get = async (req, res) => {
     selectedAcademicYears,
     actions: {
       back: cameFromCheck
-        ? `/support/providers/${providerId}/partnerships/${partnershipId}/check`
-        : `/support/providers/${providerId}/partnerships/${partnershipId}/dates`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
+        ? `${baseUrl}/partnerships/${partnershipId}/check`
+        : `${baseUrl}/partnerships/${partnershipId}/dates`,
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/${partnershipId}/academic-years${saveSuffix}`
     }
   })
 }
 
 exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const currentProvider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
@@ -1226,22 +1246,23 @@ exports.editProviderPartnershipAcademicYears_post = async (req, res) => {
       errors,
       actions: {
         back: cameFromCheck
-          ? `/support/providers/${providerId}/partnerships/${partnershipId}/check`
-          : `/support/providers/${providerId}/partnerships/${partnershipId}/dates`,
-        cancel: `/support/providers/${providerId}/partnerships`,
-        save: `/support/providers/${providerId}/partnerships/${partnershipId}/academic-years${saveSuffix}`
+          ? `${baseUrl}/partnerships/${partnershipId}/check`
+          : `${baseUrl}/partnerships/${partnershipId}/dates`,
+        cancel: `${baseUrl}/partnerships`,
+        save: `${baseUrl}/partnerships/${partnershipId}/academic-years${saveSuffix}`
       }
     })
   } else {
     req.session.data.academicYears = selectedAcademicYears
     req.session.data.partnershipEdit = req.session.data.partnershipEdit || { partnershipId }
     req.session.data.partnershipEdit.academicYears = selectedAcademicYears
-    res.redirect(`/support/providers/${providerId}/partnerships/${partnershipId}/check`)
+    res.redirect(`${baseUrl}/partnerships/${partnershipId}/check`)
   }
 }
 
 exports.editProviderPartnershipCheck_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const currentProvider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
     include: [
@@ -1289,16 +1310,17 @@ exports.editProviderPartnershipCheck_get = async (req, res) => {
     academicYearItems,
     partnershipDates,
     actions: {
-      back: `/support/providers/${providerId}/partnerships/${partnershipId}/academic-years?referrer=check`,
-      change: `/support/providers/${providerId}/partnerships/${partnershipId}`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/${partnershipId}/check`
+      back: `${baseUrl}/partnerships/${partnershipId}/academic-years?referrer=check`,
+      change: `${baseUrl}/partnerships/${partnershipId}`,
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/${partnershipId}/check`
     }
   })
 }
 
 exports.editProviderPartnershipCheck_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const userId = req.user.id
   const partnership = await ProviderPartnership.findByPk(partnershipId)
 
@@ -1311,7 +1333,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
 
   const selectedAcademicYears = normaliseAcademicYearSelection(req.session.data.academicYears)
   if (!selectedAcademicYears.length) {
-    return res.redirect(`/support/providers/${providerId}/partnerships/${partnershipId}/academic-years`)
+    return res.redirect(`${baseUrl}/partnerships/${partnershipId}/academic-years`)
   }
 
   const now = new Date()
@@ -1363,7 +1385,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
   clearPartnershipEditSession(req)
 
   req.flash('success', 'Partnership updated')
-  res.redirect(`/support/providers/${providerId}/partnerships`)
+  res.redirect(`${baseUrl}/partnerships`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -1372,6 +1394,7 @@ exports.editProviderPartnershipCheck_post = async (req, res) => {
 
 exports.deleteProviderPartnership_get = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   const provider = await Provider.findByPk(providerId)
   const partnership = await ProviderPartnership.findByPk(partnershipId, {
@@ -1412,16 +1435,17 @@ exports.deleteProviderPartnership_get = async (req, res) => {
     titlePartnerName,
     captionProviderName,
     actions: {
-      back: `/support/providers/${providerId}/partnerships`,
-      cancel: `/support/providers/${providerId}/partnerships`,
-      save: `/support/providers/${providerId}/partnerships/${partnershipId}/delete`,
-      change: `/support/providers/${providerId}/partnerships/${partnershipId}/dates`
+      back: `${baseUrl}/partnerships`,
+      cancel: `${baseUrl}/partnerships`,
+      save: `${baseUrl}/partnerships/${partnershipId}/delete`,
+      change: `${baseUrl}/partnerships/${partnershipId}/dates`
     }
   })
 }
 
 exports.deleteProviderPartnership_post = async (req, res) => {
   const { providerId, partnershipId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const userId = req.user.id
   const sequelize = require('../models').sequelize
   const t = await sequelize.transaction()
@@ -1465,7 +1489,7 @@ exports.deleteProviderPartnership_post = async (req, res) => {
 
     await t.commit()
     req.flash('success', 'Partnership deleted')
-    res.redirect(`/support/providers/${providerId}/partnerships`)
+    res.redirect(`${baseUrl}/partnerships`)
   } catch (err) {
     await t.rollback()
     console.error('[delete partnership]', err)

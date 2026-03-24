@@ -29,17 +29,28 @@ const getPersonaItems = async () => {
 }
 
 const resolveRedirectPath = (user, requestedPath = null) => {
-  const defaultPath = user?.isApiUser ? '/support/api-clients' : '/support/providers'
+  if (!user) return '/auth/sign-in'
 
-  if (!user?.isApiUser) {
-    return requestedPath || defaultPath
+  if (user.isApiUser) {
+    const defaultPath = '/support/api-clients'
+    const allowedPrefixes = ['/support/api-clients', '/account']
+    const isAllowed = requestedPath &&
+      allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
+    return isAllowed ? requestedPath : defaultPath
   }
 
-  // API users can only access API client and account pages
-  const allowedPrefixes = ['/support/api-clients', '/account']
+  if (user.type === 'provider') {
+    const defaultPath = '/providers'
+    const allowedPrefixes = ['/providers', '/account']
+    const isAllowed = requestedPath &&
+      allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
+    return isAllowed ? requestedPath : defaultPath
+  }
+
+  const defaultPath = '/support/providers'
+  const allowedPrefixes = ['/support', '/account']
   const isAllowed = requestedPath &&
     allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
-
   return isAllowed ? requestedPath : defaultPath
 }
 

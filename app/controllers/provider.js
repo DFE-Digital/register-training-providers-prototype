@@ -1609,6 +1609,7 @@ exports.newProviderCheck_post = async (req, res) => {
 exports.editProvider_get = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
 
   // Fetch the current provider
   const currentProvider = await Provider.findByPk(providerId)
@@ -1624,9 +1625,9 @@ exports.editProvider_get = async (req, res) => {
     provider = currentProvider
   }
 
-  let back = `/support/providers/${providerId}`
+  let back = `${baseUrl}`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/edit/check`
+    back = `${baseUrl}/edit/check`
   }
 
   res.render('providers/edit', {
@@ -1635,8 +1636,8 @@ exports.editProvider_get = async (req, res) => {
     isAccredited,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}`,
-      save: `/support/providers/${providerId}/edit`
+      cancel: `${baseUrl}`,
+      save: `${baseUrl}/edit`
     }
   })
 }
@@ -1644,6 +1645,7 @@ exports.editProvider_get = async (req, res) => {
 exports.editProvider_post = async (req, res) => {
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
 
   // Fetch the current provider
   const currentProvider = await Provider.findByPk(providerId)
@@ -1701,9 +1703,9 @@ exports.editProvider_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}`
+    let back = `${baseUrl}`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/edit/check`
+      back = `${baseUrl}/edit/check`
     }
 
     res.render('providers/edit', {
@@ -1713,17 +1715,18 @@ exports.editProvider_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}`,
-        save: `/support/providers/${providerId}/edit`
+        cancel: `${baseUrl}`,
+        save: `${baseUrl}/edit`
       }
     })
   } else {
-    res.redirect(`/support/providers/${req.params.providerId}/edit/check`)
+    res.redirect(`${baseUrl}/edit/check`)
   }
 }
 
 exports.editProviderCheck_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const currentProvider = await Provider.findByPk(providerId)
   const isAccredited = await isAccreditedProvider({ providerId })
   const provider = {...currentProvider.dataValues, ...req.session.data.provider}
@@ -1733,15 +1736,16 @@ exports.editProviderCheck_get = async (req, res) => {
     provider,
     isAccredited,
     actions: {
-      back: `/support/providers/${providerId}/edit`,
-      cancel: `/support/providers/${providerId}`,
-      save: `/support/providers/${providerId}/edit/check`
+      back: `${baseUrl}/edit`,
+      cancel: `${baseUrl}`,
+      save: `${baseUrl}/edit/check`
     }
   })
 }
 
 exports.editProviderCheck_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = res.locals.providerBaseUrl || `/support/providers/${providerId}`
   const { provider } = req.session.data
   const userId = req.user.id
   const currentProvider = await Provider.findByPk(providerId)
@@ -1758,7 +1762,7 @@ exports.editProviderCheck_post = async (req, res) => {
   delete req.session.data.provider
 
   req.flash('success', 'Provider updated')
-  res.redirect(`/support/providers/${providerId}`)
+  res.redirect(`${baseUrl}`)
 }
 
 /// ------------------------------------------------------------------------ ///

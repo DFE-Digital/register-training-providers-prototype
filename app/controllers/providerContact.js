@@ -5,6 +5,10 @@ const { nullIfEmpty } = require('../helpers/string')
 const { Provider, ProviderContact, ProviderContactType } = require('../models')
 const Pagination = require('../helpers/pagination')
 
+const getProviderBaseUrl = (req, res) => (
+  res.locals.providerBaseUrl || `/support/providers/${req.params.providerId}`
+)
+
 const getContactTypes = async () => {
   return ProviderContactType.findAll({
     where: {
@@ -59,6 +63,7 @@ exports.providerContactsList = async (req, res) => {
 
   // get the providerId from the request for use in subsequent queries
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
 
   // get the current provider
   const provider = await Provider.findByPk(providerId)
@@ -110,9 +115,9 @@ exports.providerContactsList = async (req, res) => {
     // The pagination metadata (pageItems, nextPage, etc.)
     pagination,
     actions: {
-      new: `/support/providers/${providerId}/contacts/new`,
-      change: `/support/providers/${providerId}/contacts`,
-      delete: `/support/providers/${providerId}/contacts`
+      new: `${baseUrl}/contacts/new`,
+      change: `${baseUrl}/contacts`,
+      delete: `${baseUrl}/contacts`
     }
   })
 }
@@ -144,13 +149,14 @@ exports.providerContactDetails = async (req, res) => {
 
 exports.newProviderContact_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const contactTypes = await getContactTypes()
 
-  let back = `/support/providers/${providerId}/contacts`
+  let back = `${baseUrl}/contacts`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/contacts/new/check`
+    back = `${baseUrl}/contacts/new/check`
   }
 
   res.render('providers/contacts/edit', {
@@ -159,14 +165,15 @@ exports.newProviderContact_get = async (req, res) => {
     contactTypes,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/contacts`,
-      save: `/support/providers/${providerId}/contacts/new`
+      cancel: `${baseUrl}/contacts`,
+      save: `${baseUrl}/contacts/new`
     }
   })
 }
 
 exports.newProviderContact_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const contactTypes = await getContactTypes()
@@ -228,9 +235,9 @@ exports.newProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}/contacts`
+    let back = `${baseUrl}/contacts`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/contacts/new/check`
+      back = `${baseUrl}/contacts/new/check`
     }
 
     res.render('providers/contacts/edit', {
@@ -240,17 +247,18 @@ exports.newProviderContact_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/contacts`,
-        save: `/support/providers/${providerId}/contacts/new`
+        cancel: `${baseUrl}/contacts`,
+        save: `${baseUrl}/contacts/new`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/contacts/new/check`)
+    res.redirect(`${baseUrl}/contacts/new/check`)
   }
 }
 
 exports.newProviderContactCheck_get = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const contactTypes = await getContactTypes()
@@ -259,16 +267,17 @@ exports.newProviderContactCheck_get = async (req, res) => {
     contact,
     contactTypeLabel: getContactTypeLabel(contactTypes, contact),
     actions: {
-      back: `/support/providers/${providerId}/contacts/new`,
-      cancel: `/support/providers/${providerId}/contacts`,
-      change: `/support/providers/${providerId}/contacts/new`,
-      save: `/support/providers/${providerId}/contacts/new/check`
+      back: `${baseUrl}/contacts/new`,
+      cancel: `${baseUrl}/contacts`,
+      change: `${baseUrl}/contacts/new`,
+      save: `${baseUrl}/contacts/new/check`
     }
   })
 }
 
 exports.newProviderContactCheck_post = async (req, res) => {
   const { providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { contact } = req.session.data
   const userId = req.user.id
   const contactTypeOther = await getContactTypeOtherValue(contact.contactTypeId, contact.contactTypeOther)
@@ -288,7 +297,7 @@ exports.newProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact added')
-  res.redirect(`/support/providers/${req.params.providerId}/contacts`)
+  res.redirect(`${baseUrl}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -297,6 +306,7 @@ exports.newProviderContactCheck_post = async (req, res) => {
 
 exports.editProviderContact_get = async (req, res) => {
   const { contactId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const currentContact = await ProviderContact.findByPk(contactId)
   const contactTypes = await getContactTypes()
@@ -308,9 +318,9 @@ exports.editProviderContact_get = async (req, res) => {
     contact = await ProviderContact.findByPk(contactId)
   }
 
-  let back = `/support/providers/${providerId}/contacts`
+  let back = `${baseUrl}/contacts`
   if (req.query.referrer === 'check') {
-    back = `/support/providers/${providerId}/contacts/${contactId}/edit/check`
+    back = `${baseUrl}/contacts/${contactId}/edit/check`
   }
 
   res.render('providers/contacts/edit', {
@@ -320,14 +330,15 @@ exports.editProviderContact_get = async (req, res) => {
     contactTypes,
     actions: {
       back,
-      cancel: `/support/providers/${providerId}/contacts`,
-      save: `/support/providers/${providerId}/contacts/${contactId}/edit`
+      cancel: `${baseUrl}/contacts`,
+      save: `${baseUrl}/contacts/${contactId}/edit`
     }
   })
 }
 
 exports.editProviderContact_post = async (req, res) => {
   const { contactId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentContact = await ProviderContact.findByPk(contactId)
@@ -391,9 +402,9 @@ exports.editProviderContact_post = async (req, res) => {
   }
 
   if (errors.length) {
-    let back = `/support/providers/${providerId}/contacts`
+    let back = `${baseUrl}/contacts`
     if (req.query.referrer === 'check') {
-      back = `/support/providers/${providerId}/contacts/${contactId}/edit/check`
+      back = `${baseUrl}/contacts/${contactId}/edit/check`
     }
 
     res.render('providers/contacts/edit', {
@@ -404,17 +415,18 @@ exports.editProviderContact_post = async (req, res) => {
       errors,
       actions: {
         back,
-        cancel: `/support/providers/${providerId}/contacts`,
-        save: `/support/providers/${providerId}/contacts/${contactId}/edit`
+        cancel: `${baseUrl}/contacts`,
+        save: `${baseUrl}/contacts/${contactId}/edit`
       }
     })
   } else {
-    res.redirect(`/support/providers/${providerId}/contacts/${contactId}/edit/check`)
+    res.redirect(`${baseUrl}/contacts/${contactId}/edit/check`)
   }
 }
 
 exports.editProviderContactCheck_get = async (req, res) => {
   const { contactId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const { contact } = req.session.data
   const provider = await Provider.findByPk(providerId)
   const currentContact = await ProviderContact.findByPk(contactId)
@@ -426,16 +438,17 @@ exports.editProviderContactCheck_get = async (req, res) => {
     contact,
     contactTypeLabel: getContactTypeLabel(contactTypes, contact),
     actions: {
-      back: `/support/providers/${providerId}/contacts/${contactId}/edit`,
-      cancel: `/support/providers/${providerId}/contacts`,
-      change: `/support/providers/${providerId}/contacts/${contactId}/edit`,
-      save: `/support/providers/${providerId}/contacts/${contactId}/edit/check`
+      back: `${baseUrl}/contacts/${contactId}/edit`,
+      cancel: `${baseUrl}/contacts`,
+      change: `${baseUrl}/contacts/${contactId}/edit`,
+      save: `${baseUrl}/contacts/${contactId}/edit/check`
     }
   })
 }
 
 exports.editProviderContactCheck_post = async (req, res) => {
   const { contactId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const contact = await ProviderContact.findByPk(contactId)
   const contactTypeOther = await getContactTypeOtherValue(
     req.session.data.contact.contactTypeId,
@@ -454,7 +467,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
   delete req.session.data.contact
 
   req.flash('success', 'Contact updated')
-  res.redirect(`/support/providers/${providerId}/contacts`)
+  res.redirect(`${baseUrl}/contacts`)
 }
 
 /// ------------------------------------------------------------------------ ///
@@ -463,6 +476,7 @@ exports.editProviderContactCheck_post = async (req, res) => {
 
 exports.deleteProviderContact_get = async (req, res) => {
   const { contactId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const provider = await Provider.findByPk(providerId)
   const contact = await ProviderContact.findByPk(contactId)
 
@@ -470,15 +484,16 @@ exports.deleteProviderContact_get = async (req, res) => {
     provider,
     contact,
     actions: {
-      back: `/support/providers/${providerId}/contacts`,
-      cancel: `/support/providers/${providerId}/contacts`,
-      save: `/support/providers/${providerId}/contacts/${contactId}/delete`
+      back: `${baseUrl}/contacts`,
+      cancel: `${baseUrl}/contacts`,
+      save: `${baseUrl}/contacts/${contactId}/delete`
     }
   })
 }
 
 exports.deleteProviderContact_post = async (req, res) => {
   const { contactId, providerId } = req.params
+  const baseUrl = getProviderBaseUrl(req, res)
   const userId = req.user.id
   const contact = await ProviderContact.findByPk(contactId)
   await contact.update({
@@ -488,5 +503,5 @@ exports.deleteProviderContact_post = async (req, res) => {
   })
 
   req.flash('success', 'Contact deleted')
-  res.redirect(`/support/providers/${providerId}/contacts`)
+  res.redirect(`${baseUrl}/contacts`)
 }
