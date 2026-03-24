@@ -24,8 +24,10 @@
   }) }}
 
   {% set isApiUser = currentUser and currentUser.isApiUser %}
+  {% set isSupportUser = currentUser and currentUser.type == "support" %}
+  {% set isProviderUser = currentUser and currentUser.type == "provider" %}
 
-  {% set navigationEndHtml %}
+  {% set supportNavigationEndHtml %}
     <li class="govuk-service-navigation__item {{- ' govuk-service-navigation__item--active' if primaryNavId == 'account' }} app-service-navigation__align-right">
       <a class="govuk-service-navigation__link" href="/account" {{- ' aria-current="true"' if primaryNavId == "account" }}>Your account</a>
     </li>
@@ -34,37 +36,109 @@
     </li>
   {% endset %}
 
+  {% set providerNavigationEndHtml %}
+    <li class="govuk-service-navigation__item {{- ' govuk-service-navigation__item--active' if primaryNavId == 'account' }} app-service-navigation__align-right">
+      <a class="govuk-service-navigation__link" href="/account" {{- ' aria-current="true"' if primaryNavId == "account" }}>My account</a>
+    </li>
+    <li class="govuk-service-navigation__item">
+      <a class="govuk-service-navigation__link" href="/sign-out">Sign out</a>
+    </li>
+  {% endset %}
+
   {% if not hidePrimaryNavigation %}
-    {{ govukServiceNavigation({
-      navigationId: "primaryNavigation",
-      serviceName: serviceName,
-      serviceUrl: "/",
-      navigation: [
-        {
-          text: "Providers",
-          href: "/support/providers",
-          active: primaryNavId == "providers"
-        } if not isApiUser,
-        {
-          text: "Users",
-          href: "/support/users",
-          active: primaryNavId == "users"
-        } if not isApiUser,
-        {
-          text: "API clients",
-          href: "/support/api-clients",
-          active: primaryNavId == "apiClients"
-        },
-        {
-          text: "Activity log",
-          href: "/support/activity",
-          active: primaryNavId == "activity"
-        } if not isApiUser
-      ],
-      slots: {
-        navigationEnd: navigationEndHtml
-      }
-    }) }}
+    {% if isProviderUser and providerBaseUrl %}
+      {% if hasMultipleProviders and currentProvider %}
+        {{ appOrganisationActions({
+          text: currentProvider.operatingName,
+          actions: {
+            items: [
+              {
+                text: "Change provider",
+                href: providerListUrl
+              }
+            ]
+          },
+          classes: "govuk-width-container"
+        }) }}
+      {% endif %}
+
+      {{ govukServiceNavigation({
+        navigationId: "primaryNavigation",
+        serviceName: serviceName,
+        serviceUrl: providerListUrl,
+        navigation: [
+          {
+            text: "Home",
+            href: providerBaseUrl,
+            active: secondaryNavId == "details"
+          },
+          {
+            text: "Accreditations",
+            href: providerBaseUrl + "/accreditations",
+            active: secondaryNavId == "accreditations"
+          },
+          {
+            text: "Addresses",
+            href: providerBaseUrl + "/addresses",
+            active: secondaryNavId == "addresses"
+          },
+          {
+            text: "Contacts",
+            href: providerBaseUrl + "/contacts",
+            active: secondaryNavId == "contacts"
+          },
+          {
+            text: "Partnerships",
+            href: providerBaseUrl + "/partnerships",
+            active: secondaryNavId == "partnerships"
+          },
+          {
+            text: "Users",
+            href: providerBaseUrl + "/users",
+            active: secondaryNavId == "users"
+          } if providerUserRole == "admin",
+          {
+            text: "Activity",
+            href: providerBaseUrl + "/activity",
+            active: secondaryNavId == "activity"
+          } if providerUserRole == "admin"
+        ],
+        slots: {
+          navigationEnd: providerNavigationEndHtml
+        }
+      }) }}
+    {% else %}
+      {{ govukServiceNavigation({
+        navigationId: "primaryNavigation",
+        serviceName: serviceName,
+        serviceUrl: "/",
+        navigation: [
+          {
+            text: "Providers",
+            href: "/support/providers",
+            active: primaryNavId == "providers"
+          } if not isApiUser,
+          {
+            text: "Users",
+            href: "/support/users",
+            active: primaryNavId == "users"
+          } if not isApiUser,
+          {
+            text: "API clients",
+            href: "/support/api-clients",
+            active: primaryNavId == "apiClients"
+          },
+          {
+            text: "Activity log",
+            href: "/support/activity",
+            active: primaryNavId == "activity"
+          } if not isApiUser
+        ],
+        slots: {
+          navigationEnd: supportNavigationEndHtml
+        }
+      }) }}
+    {% endif %}
   {% endif %}
 
   {% include "_includes/phase-banner.njk" %}
