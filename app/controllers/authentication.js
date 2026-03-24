@@ -18,22 +18,22 @@ const getPersonaItems = async () => {
     'marta.garcia@example.com': 'single training partner, user'
   }
 
-  const buildItem = (persona) => {
+  const buildItem = (persona, { isProvider } = {}) => {
     const fullName = `${persona.firstName} ${persona.lastName}`
     const flags = []
     if (persona.isApiUser) flags.push('API user')
     if (!persona.isActive) flags.push('not active')
     const suffix = flags.length ? ` - ${flags.join(', ')}` : ''
     const providerDescription = providerDescriptions[persona.email] || null
-    const hintText = providerDescription
-      ? `${persona.email} - ${providerDescription}`
-      : persona.email
+    const hasProviderHint = Boolean(isProvider && providerDescription)
 
     return {
       value: persona.id,
       text: `${fullName}${suffix}`,
       hint: {
-        text: hintText
+        ...(hasProviderHint
+          ? { html: `${persona.email}<br aria-hidden="true">${providerDescription}` }
+          : { text: persona.email })
       }
     }
   }
@@ -42,11 +42,10 @@ const getPersonaItems = async () => {
   const providerItems = []
 
   for (const persona of personas) {
-    const item = buildItem(persona)
     if (persona.type === 'provider') {
-      providerItems.push(item)
+      providerItems.push(buildItem(persona, { isProvider: true }))
     } else {
-      supportItems.push(item)
+      supportItems.push(buildItem(persona))
     }
   }
 
