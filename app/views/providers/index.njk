@@ -94,8 +94,8 @@
         {% if provider.code.length or provider.ukprn.length or provider.urn.length %}
         <p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">
           {% if provider.code.length %}<b>Provider code:</b> {{ provider.code }}{% endif %}
-          {% if provider.ukprn.length %}<b>UKPRN:</b> {{ provider.ukprn }}{% endif %}
-          {% if provider.urn.length %}<b>URN:</b> {{ provider.urn }}{% endif %}
+          {% if provider.ukprn.length %}<b><abbr title="UK provider reference number">UKPRN</abbr>:</b> {{ provider.ukprn }}{% endif %}
+          {% if provider.urn.length %}<b><abbr title="unique reference number">URN</abbr>:</b> {{ provider.urn }}{% endif %}
         </p>
         {% endif %}
       {% endset %}
