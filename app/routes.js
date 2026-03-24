@@ -61,6 +61,7 @@ const providerContactController = require('./controllers/providerContact')
 const providerUserController = require('./controllers/providerUser')
 const providerController = require('./controllers/provider')
 const providerPartnershipController = require('./controllers/providerPartnership')
+const providerPortalController = require('./controllers/providerPortal')
 const userController = require('./controllers/user')
 const apiProvidersController = require('./controllers/api/providers')
 const apiDocsController = require('./controllers/api/docs')
@@ -69,9 +70,11 @@ const apiDocsController = require('./controllers/api/docs')
 /// Middleware
 /// ------------------------------------------------------------------------ ///
 const apiAuth = require('./middleware/apiAuth')
-const { checkIsAuthenticated, checkIsSupportUser } = require('./middleware/auth')
+const { checkIsAuthenticated, checkIsSupportUser, checkIsProviderUser, checkProviderAccess, checkProviderAdmin } = require('./middleware/auth')
 
 const supportOnly = [checkIsAuthenticated, checkIsSupportUser]
+const providerOnly = [checkIsAuthenticated, checkIsProviderUser]
+const providerScoped = [checkIsAuthenticated, checkIsProviderUser, checkProviderAccess]
 
 /// ------------------------------------------------------------------------ ///
 /// ALL ROUTES
@@ -344,6 +347,95 @@ router.get('/support/providers/:providerId', ...supportOnly, providerController.
 router.get('/support/providers', ...supportOnly, providerController.providersList)
 
 /// ------------------------------------------------------------------------ ///
+/// PROVIDER PORTAL ROUTES
+/// ------------------------------------------------------------------------ ///
+
+router.get('/providers', ...providerOnly, providerPortalController.providersList)
+
+router.get('/providers/:providerId', ...providerScoped, providerController.providerDetails)
+router.get('/providers/:providerId/edit', ...providerScoped, checkProviderAdmin, providerController.editProvider_get)
+router.post('/providers/:providerId/edit', ...providerScoped, checkProviderAdmin, providerController.editProvider_post)
+router.get('/providers/:providerId/edit/check', ...providerScoped, checkProviderAdmin, providerController.editProviderCheck_get)
+router.post('/providers/:providerId/edit/check', ...providerScoped, checkProviderAdmin, providerController.editProviderCheck_post)
+
+router.get('/providers/:providerId/accreditations', ...providerScoped, providerAccreditationController.providerAccreditationsList)
+router.get('/providers/:providerId/accreditations/new', ...providerScoped, providerAccreditationController.newProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/new', ...providerScoped, providerAccreditationController.newProviderAccreditation_post)
+router.get('/providers/:providerId/accreditations/new/check', ...providerScoped, providerAccreditationController.newProviderAccreditationCheck_get)
+router.post('/providers/:providerId/accreditations/new/check', ...providerScoped, providerAccreditationController.newProviderAccreditationCheck_post)
+router.get('/providers/:providerId/accreditations/:accreditationId/edit', ...providerScoped, providerAccreditationController.editProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/edit', ...providerScoped, providerAccreditationController.editProviderAccreditation_post)
+router.get('/providers/:providerId/accreditations/:accreditationId/edit/check', ...providerScoped, providerAccreditationController.editProviderAccreditationCheck_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/edit/check', ...providerScoped, providerAccreditationController.editProviderAccreditationCheck_post)
+router.get('/providers/:providerId/accreditations/:accreditationId/delete', ...providerScoped, providerAccreditationController.deleteProviderAccreditation_get)
+router.post('/providers/:providerId/accreditations/:accreditationId/delete', ...providerScoped, providerAccreditationController.deleteProviderAccreditation_post)
+router.get('/providers/:providerId/accreditations/:accreditationId', ...providerScoped, providerAccreditationController.providerAccreditationDetails)
+
+router.get('/providers/:providerId/contacts', ...providerScoped, providerContactController.providerContactsList)
+router.get('/providers/:providerId/contacts/new', ...providerScoped, providerContactController.newProviderContact_get)
+router.post('/providers/:providerId/contacts/new', ...providerScoped, providerContactController.newProviderContact_post)
+router.get('/providers/:providerId/contacts/new/check', ...providerScoped, providerContactController.newProviderContactCheck_get)
+router.post('/providers/:providerId/contacts/new/check', ...providerScoped, providerContactController.newProviderContactCheck_post)
+router.get('/providers/:providerId/contacts/:contactId/edit', ...providerScoped, providerContactController.editProviderContact_get)
+router.post('/providers/:providerId/contacts/:contactId/edit', ...providerScoped, providerContactController.editProviderContact_post)
+router.get('/providers/:providerId/contacts/:contactId/edit/check', ...providerScoped, providerContactController.editProviderContactCheck_get)
+router.post('/providers/:providerId/contacts/:contactId/edit/check', ...providerScoped, providerContactController.editProviderContactCheck_post)
+router.get('/providers/:providerId/contacts/:contactId/delete', ...providerScoped, providerContactController.deleteProviderContact_get)
+router.post('/providers/:providerId/contacts/:contactId/delete', ...providerScoped, providerContactController.deleteProviderContact_post)
+router.get('/providers/:providerId/contacts/:contactId', ...providerScoped, providerContactController.providerContactDetails)
+
+router.get('/providers/:providerId/addresses', ...providerScoped, providerAddressController.providerAddressesList)
+router.get('/providers/:providerId/addresses/new', ...providerScoped, providerAddressController.newFindProviderAddress_get)
+router.post('/providers/:providerId/addresses/new', ...providerScoped, providerAddressController.newFindProviderAddress_post)
+router.get('/providers/:providerId/addresses/new/select', ...providerScoped, providerAddressController.newSelectProviderAddress_get)
+router.post('/providers/:providerId/addresses/new/select', ...providerScoped, providerAddressController.newSelectProviderAddress_post)
+router.get('/providers/:providerId/addresses/new/enter', ...providerScoped, providerAddressController.newEnterProviderAddress_get)
+router.post('/providers/:providerId/addresses/new/enter', ...providerScoped, providerAddressController.newEnterProviderAddress_post)
+router.get('/providers/:providerId/addresses/new/check', ...providerScoped, providerAddressController.newProviderAddressCheck_get)
+router.post('/providers/:providerId/addresses/new/check', ...providerScoped, providerAddressController.newProviderAddressCheck_post)
+router.get('/providers/:providerId/addresses/:addressId/edit', ...providerScoped, providerAddressController.editProviderAddress_get)
+router.post('/providers/:providerId/addresses/:addressId/edit', ...providerScoped, providerAddressController.editProviderAddress_post)
+router.get('/providers/:providerId/addresses/:addressId/edit/check', ...providerScoped, providerAddressController.editProviderAddressCheck_get)
+router.post('/providers/:providerId/addresses/:addressId/edit/check', ...providerScoped, providerAddressController.editProviderAddressCheck_post)
+router.get('/providers/:providerId/addresses/:addressId/delete', ...providerScoped, providerAddressController.deleteProviderAddress_get)
+router.post('/providers/:providerId/addresses/:addressId/delete', ...providerScoped, providerAddressController.deleteProviderAddress_post)
+router.get('/providers/:providerId/addresses/:addressId', ...providerScoped, providerAddressController.providerAddressDetails)
+
+router.get('/providers/:providerId/partnerships', ...providerScoped, providerPartnershipController.providerPartnershipsList)
+router.get('/providers/:providerId/partnerships/new', ...providerScoped, providerPartnershipController.newProviderPartnership_get)
+router.post('/providers/:providerId/partnerships/new', ...providerScoped, providerPartnershipController.newProviderPartnership_post)
+router.get('/providers/:providerId/partnerships/new/duplicate', ...providerScoped, providerPartnershipController.newProviderPartnershipDuplicate_get)
+router.get('/providers/:providerId/partnerships/new/choose', ...providerScoped, providerPartnershipController.newProviderPartnershipChoose_get)
+router.post('/providers/:providerId/partnerships/new/choose', ...providerScoped, providerPartnershipController.newProviderPartnershipChoose_post)
+router.get('/providers/:providerId/partnerships/new/dates', ...providerScoped, providerPartnershipController.newProviderPartnershipDates_get)
+router.post('/providers/:providerId/partnerships/new/dates', ...providerScoped, providerPartnershipController.newProviderPartnershipDates_post)
+router.get('/providers/:providerId/partnerships/new/academic-years', ...providerScoped, providerPartnershipController.newProviderPartnershipAcademicYears_get)
+router.post('/providers/:providerId/partnerships/new/academic-years', ...providerScoped, providerPartnershipController.newProviderPartnershipAcademicYears_post)
+router.get('/providers/:providerId/partnerships/new/check', ...providerScoped, providerPartnershipController.newProviderPartnershipCheck_get)
+router.post('/providers/:providerId/partnerships/new/check', ...providerScoped, providerPartnershipController.newProviderPartnershipCheck_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/dates', ...providerScoped, providerPartnershipController.editProviderPartnershipDates_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/dates', ...providerScoped, providerPartnershipController.editProviderPartnershipDates_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/academic-years', ...providerScoped, providerPartnershipController.editProviderPartnershipAcademicYears_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/academic-years', ...providerScoped, providerPartnershipController.editProviderPartnershipAcademicYears_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/check', ...providerScoped, providerPartnershipController.editProviderPartnershipCheck_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/check', ...providerScoped, providerPartnershipController.editProviderPartnershipCheck_post)
+router.get('/providers/:providerId/partnerships/:partnershipId/delete', ...providerScoped, providerPartnershipController.deleteProviderPartnership_get)
+router.post('/providers/:providerId/partnerships/:partnershipId/delete', ...providerScoped, providerPartnershipController.deleteProviderPartnership_post)
+
+router.get('/providers/:providerId/users', ...providerScoped, checkProviderAdmin, providerUserController.providerUsersList)
+router.get('/providers/:providerId/users/:userId', ...providerScoped, checkProviderAdmin, providerUserController.providerUserDetails)
+router.get('/providers/:providerId/users/new', ...providerScoped, checkProviderAdmin, providerUserController.newProviderUser_get)
+router.post('/providers/:providerId/users/new', ...providerScoped, checkProviderAdmin, providerUserController.newProviderUser_post)
+router.get('/providers/:providerId/users/new/check', ...providerScoped, checkProviderAdmin, providerUserController.newProviderUserCheck_get)
+router.post('/providers/:providerId/users/new/check', ...providerScoped, checkProviderAdmin, providerUserController.newProviderUserCheck_post)
+router.get('/providers/:providerId/users/:userId/edit', ...providerScoped, checkProviderAdmin, providerUserController.editProviderUser_get)
+router.post('/providers/:providerId/users/:userId/edit', ...providerScoped, checkProviderAdmin, providerUserController.editProviderUser_post)
+router.get('/providers/:providerId/users/:userId/edit/check', ...providerScoped, checkProviderAdmin, providerUserController.editProviderUserCheck_get)
+router.post('/providers/:providerId/users/:userId/edit/check', ...providerScoped, checkProviderAdmin, providerUserController.editProviderUserCheck_post)
+router.get('/providers/:providerId/users/:userId/delete', ...providerScoped, checkProviderAdmin, providerUserController.deleteProviderUser_get)
+router.post('/providers/:providerId/users/:userId/delete', ...providerScoped, checkProviderAdmin, providerUserController.deleteProviderUser_post)
+
+/// ------------------------------------------------------------------------ ///
 /// MY ACCOUNT ROUTES
 /// ------------------------------------------------------------------------ ///
 
@@ -356,6 +448,7 @@ router.get('/account', checkIsAuthenticated, accountController.userAccount)
 router.get('/support/activity', ...supportOnly, activityController.activityList)
 
 router.get('/support/providers/:providerId/activity', ...supportOnly, providerActivityController.activityList)
+router.get('/providers/:providerId/activity', ...providerScoped, providerActivityController.activityList)
 
 /// ------------------------------------------------------------------------ ///
 /// API CLIENT ROUTES
