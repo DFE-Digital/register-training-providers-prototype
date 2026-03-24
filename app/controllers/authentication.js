@@ -11,21 +11,49 @@ const getPersonaItems = async () => {
     ]
   })
 
-  return personas.map((persona) => {
+  const providerDescriptions = {
+    'john.barnard@example.com': 'multi-provider, admin',
+    'laura.mueller@example.com': 'single accredited provider, admin',
+    'ella.lombardi@example.com': 'single accredited provider, user',
+    'marta.garcia@example.com': 'single training partner, user'
+  }
+
+  const buildItem = (persona) => {
     const fullName = `${persona.firstName} ${persona.lastName}`
     const flags = []
     if (persona.isApiUser) flags.push('API user')
     if (!persona.isActive) flags.push('not active')
     const suffix = flags.length ? ` - ${flags.join(', ')}` : ''
+    const providerDescription = providerDescriptions[persona.email] || null
+    const hintText = providerDescription
+      ? `${persona.email} - ${providerDescription}`
+      : persona.email
 
     return {
       value: persona.id,
       text: `${fullName}${suffix}`,
       hint: {
-        text: persona.email
+        text: hintText
       }
     }
-  })
+  }
+
+  const supportItems = []
+  const providerItems = []
+
+  for (const persona of personas) {
+    const item = buildItem(persona)
+    if (persona.type === 'provider') {
+      providerItems.push(item)
+    } else {
+      supportItems.push(item)
+    }
+  }
+
+  return {
+    supportItems,
+    providerItems
+  }
 }
 
 const resolveRedirectPath = (user, requestedPath = null) => {
@@ -238,7 +266,8 @@ exports.persona_get = async (req, res, next) => {
     const personaItems = await getPersonaItems()
 
     res.render('authentication/persona', {
-      personas: personaItems,
+      supportPersonas: personaItems.supportItems,
+      providerPersonas: personaItems.providerItems,
       actions: {
         save: '/auth/persona',
         cancel: '/'
@@ -268,7 +297,8 @@ exports.persona_post = async (req, res, next) => {
       const personaItems = await getPersonaItems()
 
       return res.render('authentication/persona', {
-        personas: personaItems,
+        supportPersonas: personaItems.supportItems,
+        providerPersonas: personaItems.providerItems,
         errors,
         actions: {
           save: '/auth/persona',

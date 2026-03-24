@@ -21,17 +21,39 @@
 
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
-      {{ govukRadios({
-        name: "persona",
-        fieldset: {
-          legend: {
-            text: "Who do you want to sign in as?",
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        errorMessage: errors | getErrorMessage("persona"),
-        items: personas
-      }) }}
+      {% if supportPersonas | length %}
+        <h2 class="govuk-heading-m">Support users</h2>
+
+        {{ govukRadios({
+          idPrefix: "support-persona",
+          name: "persona",
+          fieldset: {
+            legend: {
+              text: "Support users",
+              classes: "govuk-visually-hidden"
+            }
+          },
+          errorMessage: errors | getErrorMessage("persona"),
+          items: supportPersonas
+        }) }}
+      {% endif %}
+
+      {% if providerPersonas | length %}
+        <h2 class="govuk-heading-m">Provider users</h2>
+
+        {{ govukRadios({
+          idPrefix: "provider-persona",
+          name: "persona",
+          fieldset: {
+            legend: {
+              text: "Provider users",
+              classes: "govuk-visually-hidden"
+            }
+          },
+          errorMessage: errors | getErrorMessage("persona"),
+          items: providerPersonas
+        }) }}
+      {% endif %}
 
       {{ govukButton({
         text: "Sign in"
