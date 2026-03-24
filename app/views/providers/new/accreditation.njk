@@ -5,9 +5,13 @@
 {% set title = "Accreditation details" %}
 
 {% if currentProvider %}
-  {% set caption = currentProvider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = currentProvider.operatingName %}
+  {% endif %}
 {% else %}
-  {% set caption = "Add provider" %}
+  {% if isSupportUser %}
+    {% set caption = "Add provider" %}
+  {% endif %}
 {% endif %}
 
 {% block pageTitle %}

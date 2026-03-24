@@ -3,14 +3,23 @@
 {% set primaryNavId = "providers" %}
 {% set secondaryNavId = "details" %}
 
-{% set title = provider.operatingName %}
-{% set caption = "Provider" %}
+{% if isProviderUser %}
+  {% set title = "Provider details" %}
+  {% set showLastUpdated = true %}
+{% else %}
+  {% set title = provider.operatingName %}
+  {% set caption = "Provider" %}
+{% endif %}
+
+{% set canManageProviderDetails = isSupportUser or (isProviderUser and providerUserRole == "admin") %}
 
 {% block beforeContent %}
-{{ govukBackLink({
-  text: "Back",
-  href: "/support/providers"
-}) }}
+{% if not isProviderUser %}
+  {{ govukBackLink({
+    text: "Back",
+    href: providerListUrl
+  }) }}
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -29,24 +38,28 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h2 class="govuk-heading-m">Provider details</h2>
-
-    <div class="govuk-button-group">
-    {% if not provider.archivedAt %}
-      {{ govukButton({
-        text: "Archive provider",
-        href: actions.archive
-      }) }}
-    {% else %}
-      {{ govukButton({
-        text: "Restore provider",
-        href: actions.restore
-      }) }}
-      {% if not provider.deletedAt %}
-        <a href="{{ actions.delete }}" class="govuk-link">Delete provider</a>
-      {% endif %}
+    {% if not isProviderUser %}
+      <h2 class="govuk-heading-m">Provider details</h2>
     {% endif %}
-    </div>
+
+    {% if isSupportUser %}
+      <div class="govuk-button-group">
+      {% if not provider.archivedAt %}
+        {{ govukButton({
+          text: "Archive provider",
+          href: actions.archive
+        }) }}
+      {% else %}
+        {{ govukButton({
+          text: "Restore provider",
+          href: actions.restore
+        }) }}
+        {% if not provider.deletedAt %}
+          <a href="{{ actions.delete }}" class="govuk-link">Delete provider</a>
+        {% endif %}
+      {% endif %}
+      </div>
+    {% endif %}
 
     {% set academicYearsHtml %}
       {% if provider.academicYearItems and provider.academicYearItems.length %}
@@ -79,7 +92,7 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/edit",
+                href: providerBaseUrl + "/edit",
                 text: "Change",
                 visuallyHiddenText: "type"
               }
@@ -104,12 +117,12 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/edit",
+                href: providerBaseUrl + "/edit",
                 text: "Change",
                 visuallyHiddenText: "operating name"
               }
             ]
-          } if not provider.archivedAt
+          } if canManageProviderDetails and not provider.archivedAt
         },
         {
           key: {
@@ -122,12 +135,12 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/edit",
+                href: providerBaseUrl + "/edit",
                 text: "Change",
                 visuallyHiddenText: "legal name"
               }
             ]
-          } if not provider.archivedAt
+          } if canManageProviderDetails and not provider.archivedAt
         },
         {
           key: {
@@ -139,12 +152,12 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/edit",
+                href: providerBaseUrl + "/edit",
                 text: "Change",
                 visuallyHiddenText: "UK provider reference number (UKPRN)"
               }
             ]
-          } if not provider.archivedAt
+          } if canManageProviderDetails and not provider.archivedAt
         },
         {
           key: {
@@ -157,12 +170,12 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/edit",
+                href: providerBaseUrl + "/edit",
                 text: "Change",
                 visuallyHiddenText: "Unique reference number (URN)"
               }
             ]
-          } if not provider.archivedAt
+          } if canManageProviderDetails and not provider.archivedAt
         },
         {
           key: {
@@ -174,12 +187,12 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/edit",
+                href: providerBaseUrl + "/edit",
                 text: "Change",
                 visuallyHiddenText: "provider code"
               }
             ]
-          } if not provider.archivedAt
+          } if canManageProviderDetails and not provider.archivedAt
         },
         {
           key: {
@@ -191,12 +204,12 @@
           actions: {
             items: [
               {
-                href: "/support/providers/" + provider.id + "/academic-years",
+                href: providerBaseUrl + "/academic-years",
                 text: "Change",
                 visuallyHiddenText: "academic years"
               }
             ]
-          } if not provider.archivedAt
+          } if isSupportUser and not provider.archivedAt
         }
       ]
     }) }}

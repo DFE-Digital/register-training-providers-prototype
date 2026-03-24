@@ -3,20 +3,26 @@
 {% set primaryNavId = "providers" %}
 {% set secondaryNavId = "addresses" %}
 
-{% set title = provider.operatingName %}
-{% set caption = "Provider" %}
-
 {% if pagination.totalCount %}
   {% set subtitle = "Addresses (" + pagination.totalCount | numeral("0,0") + ")" %}
 {% else %}
   {% set subtitle = "Addresses" %}
 {% endif %}
 
+{% if isProviderUser %}
+  {% set title = subtitle %}
+{% else %}
+  {% set title = provider.operatingName %}
+  {% set caption = "Provider" %}
+{% endif %}
+
 {% block beforeContent %}
-{{ govukBackLink({
-  text: "Back",
-  href: "/support/providers"
-}) }}
+{% if not isProviderUser %}
+  {{ govukBackLink({
+    text: "Back",
+    href: providerListUrl
+  }) }}
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -35,9 +41,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h2 class="govuk-heading-m">{{ subtitle }}</h2>
+    {% if subtitle and not isProviderUser %}
+      <h2 class="govuk-heading-m">{{ subtitle }}</h2>
+    {% endif %}
 
-    {% if not provider.archivedAt %}
+    {% if (isSupportUser or isProviderUser) and not provider.archivedAt %}
       {{ govukButton({
         text: "Add address",
         href: actions.new
@@ -111,7 +119,7 @@
                   visuallyHiddenText: "address " + loop.index
                 }
               ]
-            } if not provider.archivedAt
+            } if (isSupportUser or isProviderUser) and not provider.archivedAt
           },
           rows: [
             {

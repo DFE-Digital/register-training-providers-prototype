@@ -8,7 +8,11 @@
 {%- endblock %}
 
 {% set title = user.firstName + " " + user.lastName %}
-{% set caption = "User - " + provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = "User - " + provider.operatingName %}
+{% else %}
+  {% set caption = "User" %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({
@@ -35,7 +39,9 @@
       {% endif %}
     </p>
 
-    {% if showDeleteLink %}
+    {% set canManageUsers = isSupportUser or (isProviderUser and providerUserRole == "admin") %}
+
+    {% if canManageUsers and showDeleteLink %}
       <p class="govuk-body">
         <a href="{{ actions.delete }}" class="govuk-link">Delete user</a>
       </p>
@@ -58,7 +64,7 @@
                 visuallyHiddenText: "first name"
               }
             ]
-          } if showChangeLink
+          } if canManageUsers and showChangeLink
         },
         {
           key: {
@@ -75,7 +81,7 @@
                 visuallyHiddenText: "last name"
               }
             ]
-          } if showChangeLink
+          } if canManageUsers and showChangeLink
         },
         {
           key: {
@@ -92,7 +98,7 @@
                 visuallyHiddenText: "email"
               }
             ]
-          } if showChangeLink
+          } if canManageUsers and showChangeLink
         },
         {
           key: {
@@ -109,7 +115,7 @@
                 visuallyHiddenText: "role"
               }
             ]
-          } if showStatusChangeLink
+          } if canManageUsers and showStatusChangeLink
         },
         {
           key: {
@@ -126,25 +132,27 @@
                 visuallyHiddenText: "account active status"
               }
             ]
-          } if showStatusChangeLink
+          } if canManageUsers and showStatusChangeLink
         }
       ]
     }) }}
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-7">Related providers</h2>
+    {% if isSupportUser %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-7">Related providers</h2>
 
-    {% if relatedProviders.length %}
-      <ul class="govuk-list govuk-list--spaced">
-        {% for relatedProvider in relatedProviders %}
-          <li>
-            <a class="govuk-link" href="/support/providers/{{ relatedProvider.id }}/users/{{ user.id }}">
-              {{ relatedProvider.operatingName }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="govuk-body">There are no related providers for {{ user.firstName }} {{ user.lastName }}.</p>
+      {% if relatedProviders.length %}
+        <ul class="govuk-list govuk-list--spaced">
+          {% for relatedProvider in relatedProviders %}
+            <li>
+              <a class="govuk-link" href="{{ providerListUrl }}/{{ relatedProvider.id }}/users/{{ user.id }}">
+                {{ relatedProvider.operatingName }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="govuk-body">There are no related providers for {{ user.firstName }} {{ user.lastName }}.</p>
+      {% endif %}
     {% endif %}
 
   </div>

@@ -3,7 +3,9 @@
 {% set primaryNavId = "providers" %}
 
 {% set title = "Check your answers" %}
-{% set caption = provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = provider.operatingName %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

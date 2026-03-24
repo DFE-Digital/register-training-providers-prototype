@@ -1,9 +1,12 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "details" %}
 
 {% set title = "Check your answers" %}
-{% set caption = currentProvider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = currentProvider.operatingName %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

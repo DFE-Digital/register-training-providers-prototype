@@ -1,6 +1,7 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "contacts" %}
 
 {% block pageTitle -%}
 {{ "Error: " if errors.length -}}
@@ -9,15 +10,23 @@
 {%- else -%}
   Add contact details
 {%- endif %}
- - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+{% if isSupportUser %} - {{ provider.operatingName }}{% endif %} - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = "Contact details" %}
 
 {% if currentContact %}
-  {% set caption = currentContact.firstName + " " + currentContact.lastName + " - " + provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = currentContact.firstName + " " + currentContact.lastName + " - " + provider.operatingName %}
+  {% else %}
+    {% set caption = currentContact.firstName + " " + currentContact.lastName %}
+  {% endif %}
 {% else %}
-  {% set caption = "Add contact - " + provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = "Add contact - " + provider.operatingName %}
+  {% else %}
+    {% set caption = "Add contact" %}
+  {% endif %}
 {% endif %}
 
 {% block beforeContent %}

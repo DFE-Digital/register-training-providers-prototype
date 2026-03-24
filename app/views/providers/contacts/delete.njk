@@ -1,13 +1,18 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "contacts" %}
 
 {% block pageTitle -%}
-  Confirm you want to delete provider contact - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+  Confirm you want to delete provider contact{% if isSupportUser %} - {{ provider.operatingName }}{% endif %} - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = "Confirm you want to delete " + contact.firstName + " " + contact.lastName %}
-{% set caption = "Delete contact - " + provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = "Delete contact - " + provider.operatingName %}
+{% else %}
+  {% set caption = "Delete contact" %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

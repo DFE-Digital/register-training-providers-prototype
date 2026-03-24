@@ -9,9 +9,17 @@
 {% set title = "Check your answers" %}
 
 {% if currentUser %}
-  {% set caption = currentUser.firstName + " " + currentUser.lastName + " - " + provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = currentUser.firstName + " " + currentUser.lastName + " - " + provider.operatingName %}
+  {% else %}
+    {% set caption = currentUser.firstName + " " + currentUser.lastName %}
+  {% endif %}
 {% else %}
-  {% set caption = "Add user - " + provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = "Add user - " + provider.operatingName %}
+  {% else %}
+    {% set caption = "Add user" %}
+  {% endif %}
 {% endif %}
 {% set allowPersonalDetailChanges = (not currentUser) or (not (currentUser.lastSignedInAt)) %}
 {% set emailChanged = currentUser and (user.email !== currentUser.email) %}
