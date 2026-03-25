@@ -19,7 +19,7 @@
   {% if isSupportUser %}
     {% set caption = currentContact.firstName + " " + currentContact.lastName + " - " + provider.operatingName %}
   {% else %}
-    {% set caption = currentContact.firstName + " " + currentContact.lastName %}
+    {% set caption = "Change contact" %}
   {% endif %}
 {% else %}
   {% if isSupportUser %}
