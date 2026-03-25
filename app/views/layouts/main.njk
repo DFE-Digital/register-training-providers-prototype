@@ -27,18 +27,9 @@
   {% set isSupportUser = currentUser and currentUser.type == "support" %}
   {% set isProviderUser = currentUser and currentUser.type == "provider" %}
 
-  {% set supportNavigationEndHtml %}
+  {% set navigationEndHtml %}
     <li class="govuk-service-navigation__item {{- ' govuk-service-navigation__item--active' if primaryNavId == 'account' }} app-service-navigation__align-right">
       <a class="govuk-service-navigation__link" href="/account" {{- ' aria-current="true"' if primaryNavId == "account" }}>Your account</a>
-    </li>
-    <li class="govuk-service-navigation__item">
-      <a class="govuk-service-navigation__link" href="/sign-out">Sign out</a>
-    </li>
-  {% endset %}
-
-  {% set providerNavigationEndHtml %}
-    <li class="govuk-service-navigation__item {{- ' govuk-service-navigation__item--active' if primaryNavId == 'account' }} app-service-navigation__align-right">
-      <a class="govuk-service-navigation__link" href="/account" {{- ' aria-current="true"' if primaryNavId == "account" }}>My account</a>
     </li>
     <li class="govuk-service-navigation__item">
       <a class="govuk-service-navigation__link" href="/sign-out">Sign out</a>
@@ -104,7 +95,7 @@
           } if providerUserRole == "admin"
         ],
         slots: {
-          navigationEnd: providerNavigationEndHtml
+          navigationEnd: navigationEndHtml
         }
       }) }}
     {% else %}
@@ -135,7 +126,7 @@
           } if not isApiUser
         ],
         slots: {
-          navigationEnd: supportNavigationEndHtml
+          navigationEnd: navigationEndHtml
         }
       }) }}
     {% endif %}
