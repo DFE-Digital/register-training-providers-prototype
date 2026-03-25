@@ -48,6 +48,7 @@ router.use(passport.session())
 /// Controller modules
 /// ------------------------------------------------------------------------ ///
 const accountController = require('./controllers/account')
+const accountNotificationsController = require('./controllers/accountNotifications')
 const activityController = require('./controllers/activity')
 const apiClientController = require('./controllers/apiClient')
 const authenticationController = require('./controllers/authentication')
@@ -440,6 +441,12 @@ router.post('/providers/:providerId/users/:userId/delete', ...providerScoped, ch
 /// ------------------------------------------------------------------------ ///
 
 router.get('/account', checkIsAuthenticated, accountController.userAccount)
+router.get('/account/notifications', checkIsAuthenticated, accountNotificationsController.notificationsFrequency_get)
+router.post('/account/notifications', checkIsAuthenticated, accountNotificationsController.notificationsFrequency_post)
+router.get('/account/notifications/changes', checkIsAuthenticated, accountNotificationsController.notificationsChanges_get)
+router.post('/account/notifications/changes', checkIsAuthenticated, accountNotificationsController.notificationsChanges_post)
+router.get('/account/notifications/check', checkIsAuthenticated, accountNotificationsController.notificationsCheck_get)
+router.post('/account/notifications/check', checkIsAuthenticated, accountNotificationsController.notificationsCheck_post)
 
 /// ------------------------------------------------------------------------ ///
 /// ACTIVITY ROUTES

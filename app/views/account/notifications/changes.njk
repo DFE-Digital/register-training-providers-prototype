@@ -1,0 +1,61 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "account" %}
+
+{% block pageTitle -%}
+{{ "Error: " if errors.length -}}
+What changes do you want to be notified about? - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = "What changes do you want to be notified about?" %}
+{% set caption = "Email notifications" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: "<span class='govuk-caption-l'>" + caption + "</span>" + title,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+        <p class="govuk-body">Select all that apply</p>
+
+        {{ govukCheckboxes({
+          idPrefix: "changes",
+          name: "accountNotifications[changes]",
+          errorMessage: errors | getErrorMessage("changes"),
+          items: changeItems
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "account" %}
+
+{% block pageTitle -%}
+Check your answers - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = "Check your answers" %}
+{% set caption = "Email notifications" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ caption }}</span>
+      {{ title }}
+    </h1>
+
+    {% set changeListHtml %}
+      {% if changeLabels.length %}
+        <ul class="govuk-list govuk-list--bullet">
+          {% for changeLabel in changeLabels %}
+            <li>{{ changeLabel }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        None
+      {% endif %}
+    {% endset %}
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "How often do you want to get emails?"
+            },
+            value: {
+              text: notificationFrequencyLabel
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.changeFrequency,
+                  text: "Change",
+                  visuallyHiddenText: "how often you want to get emails"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "What changes do you want to be notified about?"
+            },
+            value: {
+              html: changeListHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: actions.changeChanges,
+                  text: "Change",
+                  visuallyHiddenText: "what changes you want to be notified about"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Save email notifications"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
