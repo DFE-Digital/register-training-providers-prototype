@@ -74,6 +74,17 @@
             {% endif %}
           {% endset %}
 
+          {% set changeActions = [] %}
+          {% if notificationSummary.changeLabels.length %}
+            {% set changeActions = [
+              {
+                href: "/account/notifications/changes",
+                text: "Change",
+                visuallyHiddenText: "what changes you want to be notified about"
+              }
+            ] %}
+          {% endif %}
+
           {{ govukSummaryList({
             rows: [
               {
@@ -101,14 +112,8 @@
                   html: changeListHtml
                 },
                 actions: {
-                  items: [
-                    {
-                      href: "/account/notifications/changes",
-                      text: "Change",
-                      visuallyHiddenText: "what changes you want to be notified about"
-                    }
-                  ]
-                }
+                  items: changeActions
+                } if changeActions.length
               }
             ]
           }) }}

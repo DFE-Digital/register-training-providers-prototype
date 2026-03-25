@@ -38,6 +38,17 @@ Check your answers - {{ serviceName }} - GOV.UK
       {% endif %}
     {% endset %}
 
+    {% set changeActions = [] %}
+    {% if changeLabels.length %}
+      {% set changeActions = [
+        {
+          href: actions.changeChanges,
+          text: "Change",
+          visuallyHiddenText: "what changes you want to be notified about"
+        }
+      ] %}
+    {% endif %}
+
     <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
 
       {{ govukSummaryList({
@@ -67,14 +78,8 @@ Check your answers - {{ serviceName }} - GOV.UK
               html: changeListHtml
             },
             actions: {
-              items: [
-                {
-                  href: actions.changeChanges,
-                  text: "Change",
-                  visuallyHiddenText: "what changes you want to be notified about"
-                }
-              ]
-            }
+              items: changeActions
+            } if changeActions.length
           }
         ]
       }) }}

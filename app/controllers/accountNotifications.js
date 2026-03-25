@@ -124,10 +124,11 @@ exports.notificationsFrequency_post = async (req, res) => {
 
   if (sessionData.notificationFrequency === 'never') {
     sessionData.changes = []
+    return res.redirect('/account/notifications/check')
   }
 
   if (referrer) {
-    return res.redirect('/account/notifications/check')
+    return res.redirect('/account/notifications/changes?referrer=check')
   }
 
   res.redirect('/account/notifications/changes')
@@ -141,6 +142,10 @@ exports.notificationsChanges_get = async (req, res) => {
 
   if (!sessionData.notificationFrequency) {
     return res.redirect('/account/notifications')
+  }
+
+  if (sessionData.notificationFrequency === 'never') {
+    return res.redirect('/account/notifications/check')
   }
 
   const selectedChanges = normaliseSelection(sessionData.changes)
