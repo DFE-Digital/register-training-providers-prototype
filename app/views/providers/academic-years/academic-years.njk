@@ -4,7 +4,9 @@
 {% set secondaryNavId = "details" %}
 
 {% set title = "Academic years" %}
-{% set caption = caption if caption else provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = caption if caption else provider.operatingName %}
+{% endif %}
 
 {% block pageTitle %}
   {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK

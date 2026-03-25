@@ -1,40 +1,42 @@
-{{ appSecondaryNavigation({
-  label: "Provider navigation",
-  items: [
-    {
-      href: supportBaseUrl,
-      text: "Provider details",
-      active: secondaryNavId == "details"
-    },
-    {
-      href: supportBaseUrl + "/accreditations",
-      text: "Accreditations",
-      active: secondaryNavId == "accreditations"
-    },
-    {
-      href: supportBaseUrl + "/addresses",
-      text: "Addresses",
-      active: secondaryNavId == "addresses"
-    },
-    {
-      href: supportBaseUrl + "/contacts",
-      text: "Contacts",
-      active: secondaryNavId == "contacts"
-    },
-    {
-      href: supportBaseUrl + "/partnerships",
-      text: "Partnerships",
-      active: secondaryNavId == "partnerships"
-    },
-    {
-      href: supportBaseUrl + "/users",
-      text: "Users",
-      active: secondaryNavId == "users"
-    },
-    {
-      href: supportBaseUrl + "/activity",
-      text: "Activity log",
-      active: secondaryNavId == "activity"
-    }
-  ]
-}) }}
+{% if isSupportUser %}
+  {{ appSecondaryNavigation({
+    label: "Provider navigation",
+    items: [
+      {
+        href: providerBaseUrl,
+        text: "Provider details",
+        active: secondaryNavId == "details"
+      },
+      {
+        href: providerBaseUrl + "/accreditations",
+        text: "Accreditations",
+        active: secondaryNavId == "accreditations"
+      },
+      {
+        href: providerBaseUrl + "/addresses",
+        text: "Addresses",
+        active: secondaryNavId == "addresses"
+      },
+      {
+        href: providerBaseUrl + "/contacts",
+        text: "Contacts",
+        active: secondaryNavId == "contacts"
+      },
+      {
+        href: providerBaseUrl + "/partnerships",
+        text: "Partnerships",
+        active: secondaryNavId == "partnerships"
+      },
+      {
+        href: providerBaseUrl + "/users",
+        text: "Users",
+        active: secondaryNavId == "users"
+      },
+      {
+        href: providerBaseUrl + "/activity",
+        text: "Activity log",
+        active: secondaryNavId == "activity"
+      }
+    ]
+  }) }}
+{% endif %}

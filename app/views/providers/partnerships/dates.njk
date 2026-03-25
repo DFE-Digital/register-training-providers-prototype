@@ -1,7 +1,7 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
-{% set secondaryNavId = "details" %}
+{% set secondaryNavId = "partnerships" %}
 
 {% if isAccredited %}
   {% set providerName = accreditedProvider.operatingName %}
@@ -12,9 +12,17 @@
 {% set title = "Partnership dates" %}
 
 {% if currentProvider %}
-  {% set caption = providerName %}
+  {% if isSupportUser %}
+    {% set caption = providerName %}
+  {% else %}
+    {% set caption = "Change partnership" %}
+  {% endif %}
 {% else %}
-  {% set caption = "Add partnership - " + providerName %}
+  {% if isSupportUser %}
+    {% set caption = "Add partnership - " + providerName %}
+  {% else %}
+    {% set caption = "Add partnership" %}
+  {% endif %}
 {% endif %}
 
 {% block pageTitle %}

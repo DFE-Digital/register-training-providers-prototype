@@ -1,9 +1,14 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "partnerships" %}
 
 {% set title = "Confirm you want to delete the partnership with " + titlePartnerName %}
-{% set caption = "Delete partnership - " + captionProviderName %}
+{% if isSupportUser %}
+  {% set caption = "Delete partnership - " + captionProviderName %}
+{% else %}
+  {% set caption = "Delete partnership" %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

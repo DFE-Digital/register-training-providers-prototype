@@ -48,6 +48,38 @@ module.exports = {
           email: 'test4@education.gov.uk',
           type: 'support',
           is_active: false
+        },
+        {
+          id: '8c1e5a61-1a3a-4d0f-bf2d-8c078d3a5450',
+          first_name: 'John',
+          last_name: 'Barnard',
+          email: 'john.barnard@example.com',
+          type: 'provider',
+          is_active: true
+        },
+        {
+          id: '93ed24a3-61e8-4d75-8466-8f71f0930c88',
+          first_name: 'Laura',
+          last_name: 'Mueller',
+          email: 'laura.mueller@example.com',
+          type: 'provider',
+          is_active: true
+        },
+        {
+          id: 'b0ad7c0e-5fc6-4dd7-8a85-44b4d80d3af1',
+          first_name: 'Ella',
+          last_name: 'Lombardi',
+          email: 'ella.lombardi@example.com',
+          type: 'provider',
+          is_active: true
+        },
+        {
+          id: '0ccff9c3-64dc-4b5a-b9a0-241f3c50dfb1',
+          first_name: 'Marta',
+          last_name: 'Garcia',
+          email: 'marta.garcia@example.com',
+          type: 'provider',
+          is_active: true
         }
       ]
 

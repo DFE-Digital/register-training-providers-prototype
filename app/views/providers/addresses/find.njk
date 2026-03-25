@@ -1,9 +1,14 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "addresses" %}
 
 {% set title = "Find address" %}
-{% set caption = "Add address - " + provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = "Add address - " + provider.operatingName %}
+{% else %}
+  {% set caption = "Add address" %}
+{% endif %}
 
 {% block pageTitle %}
   {{ "Error: " if errors.length }}{{ title + " - " if title }}{{ caption + " - " if caption }}{{ serviceName }} - GOV.UK

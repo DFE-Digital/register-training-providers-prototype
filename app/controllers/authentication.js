@@ -11,35 +11,73 @@ const getPersonaItems = async () => {
     ]
   })
 
-  return personas.map((persona) => {
+  const providerDescriptions = {
+    'john.barnard@example.com': 'multi-provider, admin',
+    'laura.mueller@example.com': 'single accredited provider, admin',
+    'ella.lombardi@example.com': 'single accredited provider, user',
+    'marta.garcia@example.com': 'single training partner, user'
+  }
+
+  const buildItem = (persona, { isProvider } = {}) => {
     const fullName = `${persona.firstName} ${persona.lastName}`
     const flags = []
     if (persona.isApiUser) flags.push('API user')
     if (!persona.isActive) flags.push('not active')
     const suffix = flags.length ? ` - ${flags.join(', ')}` : ''
+    const providerDescription = providerDescriptions[persona.email] || null
+    const hasProviderHint = Boolean(isProvider && providerDescription)
 
     return {
       value: persona.id,
       text: `${fullName}${suffix}`,
       hint: {
-        text: persona.email
+        ...(hasProviderHint
+          ? { html: `${persona.email}<br aria-hidden="true">${providerDescription}` }
+          : { text: persona.email })
       }
     }
-  })
+  }
+
+  const supportItems = []
+  const providerItems = []
+
+  for (const persona of personas) {
+    if (persona.type === 'provider') {
+      providerItems.push(buildItem(persona, { isProvider: true }))
+    } else {
+      supportItems.push(buildItem(persona))
+    }
+  }
+
+  return {
+    supportItems,
+    providerItems
+  }
 }
 
 const resolveRedirectPath = (user, requestedPath = null) => {
-  const defaultPath = user?.isApiUser ? '/support/api-clients' : '/support/providers'
+  if (!user) return '/auth/sign-in'
 
-  if (!user?.isApiUser) {
-    return requestedPath || defaultPath
+  if (user.isApiUser) {
+    const defaultPath = '/support/api-clients'
+    const allowedPrefixes = ['/support/api-clients', '/account']
+    const isAllowed = requestedPath &&
+      allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
+    return isAllowed ? requestedPath : defaultPath
   }
 
-  // API users can only access API client and account pages
-  const allowedPrefixes = ['/support/api-clients', '/account']
+  if (user.type === 'provider') {
+    const defaultPath = '/providers'
+    const allowedPrefixes = ['/providers', '/account']
+    const isAllowed = requestedPath &&
+      allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
+    return isAllowed ? requestedPath : defaultPath
+  }
+
+  const defaultPath = '/support/providers'
+  const allowedPrefixes = ['/support', '/account']
   const isAllowed = requestedPath &&
     allowedPrefixes.some(prefix => requestedPath.startsWith(prefix))
-
   return isAllowed ? requestedPath : defaultPath
 }
 
@@ -227,7 +265,8 @@ exports.persona_get = async (req, res, next) => {
     const personaItems = await getPersonaItems()
 
     res.render('authentication/persona', {
-      personas: personaItems,
+      supportPersonas: personaItems.supportItems,
+      providerPersonas: personaItems.providerItems,
       actions: {
         save: '/auth/persona',
         cancel: '/'
@@ -257,7 +296,8 @@ exports.persona_post = async (req, res, next) => {
       const personaItems = await getPersonaItems()
 
       return res.render('authentication/persona', {
-        personas: personaItems,
+        supportPersonas: personaItems.supportItems,
+        providerPersonas: personaItems.providerItems,
         errors,
         actions: {
           save: '/auth/persona',

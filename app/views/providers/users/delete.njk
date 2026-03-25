@@ -3,11 +3,15 @@
 {% set primaryNavId = "providers" %}
 
 {% block pageTitle -%}
-  Confirm you want to delete provider user - {{ provider.operatingName }} - {{ serviceName }} - GOV.UK
+  Confirm you want to delete provider user{% if isSupportUser %} - {{ provider.operatingName }}{% endif %} - {{ serviceName }} - GOV.UK
 {%- endblock %}
 
 {% set title = "Confirm you want to delete " + user.firstName + " " + user.lastName %}
-{% set caption = "Delete user - " + provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = "Delete user - " + provider.operatingName %}
+{% else %}
+  {% set caption = "Delete user" %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

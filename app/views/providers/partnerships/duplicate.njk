@@ -1,9 +1,14 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "partnerships" %}
 
 {% set title = "You cannot add the partnership" %}
-{% set caption = "Add partnership - " + provider.operatingName %}
+{% if isSupportUser %}
+  {% set caption = "Add partnership - " + provider.operatingName %}
+{% else %}
+  {% set caption = "Add partnership" %}
+{% endif %}
 
 {% block beforeContent %}
 {{ govukBackLink({

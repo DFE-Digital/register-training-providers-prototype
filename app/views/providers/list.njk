@@ -1,0 +1,30 @@
+{% extends "layouts/main.njk" %}
+
+{% set title = "Providers" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "_includes/page-heading.njk" %}
+
+    <p class="govuk-body">Select the provider you want to view.</p>
+
+    <ul class="govuk-list govuk-list--spaced">
+      {% for provider in providers %}
+        <li>
+          <a class="govuk-link" href="/providers/{{ provider.id }}">
+            {{ provider.operatingName }}
+          </a>
+          {% if provider.role == "admin" %}
+            <span class="govuk-hint govuk-!-margin-left-1">(Admin)</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+  </div>
+</div>
+
+{% endblock %}

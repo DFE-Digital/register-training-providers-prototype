@@ -1,13 +1,22 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "contacts" %}
 
 {% set title = "Check your answers" %}
 
 {% if currentContact %}
-  {% set caption = provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = provider.operatingName %}
+  {% else %}
+    {% set caption = "Change contact" %}
+  {% endif %}
 {% else %}
-  {% set caption = "Add contact - " + provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = "Add contact - " + provider.operatingName %}
+  {% else %}
+    {% set caption = "Add contact" %}
+  {% endif %}
 {% endif %}
 
 {% block beforeContent %}

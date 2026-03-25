@@ -1,6 +1,7 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "partnerships" %}
 
 {% set title = "Check your answers" %}
 
@@ -11,10 +12,18 @@
 {% endif %}
 
 {% if currentProvider %}
-  {% set caption = providerName %}
+  {% if isSupportUser %}
+    {% set caption = providerName %}
+  {% else %}
+    {% set caption = "Change partnership" %}
+  {% endif %}
   {% set showChangeLinks = false %}
 {% else %}
-  {% set caption = "Add partnership - " + providerName %}
+  {% if isSupportUser %}
+    {% set caption = "Add partnership - " + providerName %}
+  {% else %}
+    {% set caption = "Add partnership" %}
+  {% endif %}
   {% set showChangeLinks = true %}
 {% endif %}
 

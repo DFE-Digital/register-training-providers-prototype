@@ -1,13 +1,22 @@
 {% extends "layouts/main.njk" %}
 
 {% set primaryNavId = "providers" %}
+{% set secondaryNavId = "accreditations" %}
 
 {% set title = "Check your answers" %}
 
 {% if currentAccreditation %}
-  {% set caption = provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = provider.operatingName %}
+  {% else %}
+    {% set caption = "Change accreditation" %}
+  {% endif %}
 {% else %}
-  {% set caption = "Add accreditation - " + provider.operatingName %}
+  {% if isSupportUser %}
+    {% set caption = "Add accreditation - " + provider.operatingName %}
+  {% else %}
+    {% set caption = "Add accreditation" %}
+  {% endif %}
 {% endif %}
 
 {% block beforeContent %}
