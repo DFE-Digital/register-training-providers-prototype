@@ -1,5 +1,5 @@
-{#- If an id 'prefix' is not passed, fall back to using the name attribute -#}
-{%- set idPrefix = params.idPrefix if params.idPrefix else params.name -%}
+{#- If an id is not passed, fall back to using the name attribute -#}
+{%- set idPrefix = params.id if params.id else params.name -%}
 
 <div id="{{ idPrefix }}" class="app-checkbox-filter {{- ' ' + params.classes if params.classes }}" {%- for attribute, value in params.attributes %} {{ attribute }}="{{ value }}"{% endfor %}>
 
@@ -8,7 +8,7 @@
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend {{ params.legend.classes | default('govuk-fieldset__legend--s') }}">
         <h1 class="govuk-fieldset__heading">
-          {{ params.fieldset.legend.html if params.fieldset.legend.html else params.fieldset.legend.text }}
+          {{ params.fieldset.legend.html | safe if params.fieldset.legend.html else params.fieldset.legend.text }}
         </h1>
       </legend>
 

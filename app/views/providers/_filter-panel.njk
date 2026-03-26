@@ -65,7 +65,7 @@
   ]
 }) }}
 
-{% if academicYearFilterItems | length %}
+{# {% if academicYearFilterItems | length %}
 {{ govukCheckboxes({
   id: "filters-academic-year",
   name: "filters[academicYear]",
@@ -83,6 +83,44 @@
   values: data.filters.academicYear,
   items: academicYearFilterItems
 }) }}
+{% endif %} #}
+
+{% if academicYearFilterItems.length %}
+  {% if academicYearFilterItems.length > 5 %}
+    {{ appCheckboxFilter({
+      id: "filters-academic-year",
+      name: "filters[academicYear]",
+      fieldset: {
+        legend: {
+          html: 'Academic year<span class="govuk-visually-hidden"> filter</span>',
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      values: data.filters.academicYear,
+      items: academicYearFilterItems,
+      showSelectedTags: false,
+      classes: "govuk-!-margin-bottom-7"
+    }) }}
+  {% else %}
+    {{ govukCheckboxes({
+      id: "filters-academic-year",
+      name: "filters[academicYear]",
+      fieldset: {
+        legend: {
+          html: 'Academic year<span class="govuk-visually-hidden"> filter</span>',
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      formGroup: {
+        classes: "app-filter__group"
+      },
+      classes: "govuk-checkboxes--small",
+      values: data.filters.academicYear,
+      items: academicYearFilterItems
+    }) }}
+  {% endif %}
 {% endif %}
 
 {{ govukCheckboxes({

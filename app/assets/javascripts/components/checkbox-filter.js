@@ -1,35 +1,52 @@
-/* global $ */
 export const CheckboxFilter = class {
   constructor (options) {
     this.options = options
-    this.container = $(options.container)
-    this.container.addClass('app-checkbox-filter--enhanced')
-    this.checkboxes = this.container.find("input[type='checkbox']")
-    this.checkboxesContainer = this.container.find('.app-checkbox-filter__container')
-    this.checkboxesInnerContainer = this.checkboxesContainer.children('.app-checkbox-filter__container-inner')
-    this.legend = this.container.find('legend')
-    this.legend.addClass('govuk-visually-hidden')
+    this.container = options.container instanceof HTMLElement
+      ? options.container
+      : document.querySelector(options.container)
+
+    if (!this.container) return
+
+    this.container.classList.add('app-checkbox-filter--enhanced')
+    this.checkboxes = this.container.querySelectorAll("input[type='checkbox']")
+    this.checkboxesContainer = this.container.querySelector('.app-checkbox-filter__container')
+    this.checkboxesInnerContainer = this.checkboxesContainer
+      ? this.checkboxesContainer.querySelector('.app-checkbox-filter__container-inner')
+      : null
+    this.legend = this.container.querySelector('legend')
+    if (this.legend) {
+      this.legend.classList.add('govuk-visually-hidden')
+    }
   }
 
   setupHeading () {
-    this.heading = $('<p class="app-checkbox-filter__title" aria-hidden="true">' + this.legend.text() + '</p>')
+    if (!this.legend) return
+
+    this.heading = document.createElement('p')
+    this.heading.className = 'app-checkbox-filter__title'
+    this.heading.setAttribute('aria-hidden', 'true')
+    this.heading.textContent = this.legend.textContent
     this.container.prepend(this.heading)
   }
 
   setupTextBox () {
-    var tagContainer = this.container.find('.app-checkbox-filter__selected')
-    if(tagContainer[0]) {
-      tagContainer.after(this.getTextBoxHtml())
+    var tagContainer = this.container.querySelector('.app-checkbox-filter__selected')
+    if (tagContainer) {
+      tagContainer.insertAdjacentHTML('afterend', this.getTextBoxHtml())
+    } else if (this.heading) {
+      this.heading.insertAdjacentHTML('afterend', this.getTextBoxHtml())
     } else {
-      this.heading.after(this.getTextBoxHtml())
+      this.container.insertAdjacentHTML('afterbegin', this.getTextBoxHtml())
     }
 
-    this.textBox = this.container.find('.app-checkbox-filter__filter-input')
-    this.textBox.on('keyup', $.proxy(this, 'onTextBoxKeyUp'))
+    this.textBox = this.container.querySelector('.app-checkbox-filter__filter-input')
+    if (this.textBox) {
+      this.textBox.addEventListener('keyup', this.onTextBoxKeyUp.bind(this))
+    }
   }
 
   getTextBoxHtml () {
-    var id = this.container[0].id
+    var id = this.container.id
     var html = ''
     html += '<label for="' + id + '-checkbox-filter__filter-input" class="govuk-label govuk-visually-hidden">' + this.options.textBox.label + '</label>'
     html += '<input id="' + id + '-checkbox-filter__filter-input" class="app-checkbox-filter__filter-input govuk-input" type="text" aria-describedby="' + id + '-checkboxes-status" aria-controls="' + id + '-checkboxes" autocomplete="off" spellcheck="false">'
@@ -37,7 +54,10 @@ export const CheckboxFilter = class {
   }
 
   setupStatusBox () {
-    this.statusBox = $('<div class="govuk-visually-hidden" role="status" id="' + this.container[0].id + '-checkboxes-status"></div>')
+    this.statusBox = document.createElement('div')
+    this.statusBox.className = 'govuk-visually-hidden'
+    this.statusBox.setAttribute('role', 'status')
+    this.statusBox.id = this.container.id + '-checkboxes-status'
     this.updateStatusBox({
       foundCount: this.getAllVisibleCheckboxes().length,
       checkedCount: this.getAllVisibleCheckedCheckboxes().length
@@ -49,7 +69,7 @@ export const CheckboxFilter = class {
     var status = '%found% options found, %selected% selected'
     status = status.replace(/%found%/, params.foundCount)
     status = status.replace(/%selected%/, params.checkedCount)
-    this.statusBox.html(status)
+    this.statusBox.textContent = status
   }
 
   onTextBoxKeyUp (e) {
@@ -69,16 +89,19 @@ export const CheckboxFilter = class {
   }
 
   filterCheckboxes () {
-    var textValue = this.cleanString(this.textBox.val())
+    var textValue = this.cleanString(this.textBox.value)
 
     var allCheckboxes = this.getAllCheckboxes()
     // hide all checkboxes
-    allCheckboxes.hide()
+    allCheckboxes.forEach((checkbox) => {
+      checkbox.style.display = 'none'
+    })
 
-    for(var i = 0; i < allCheckboxes.length; i++ ) {
-      var labelValue = this.cleanString($(allCheckboxes[i]).find('.govuk-checkboxes__label').text())
-      if(labelValue.search(textValue) !== -1) {
-        $(allCheckboxes[i]).show()
+    for (var i = 0; i < allCheckboxes.length; i++) {
+      var label = allCheckboxes[i].querySelector('.govuk-checkboxes__label')
+      var labelValue = this.cleanString(label ? label.textContent : '')
+      if (labelValue.search(textValue) !== -1) {
+        allCheckboxes[i].style.display = ''
       }
     }
 
@@ -89,49 +112,52 @@ export const CheckboxFilter = class {
   }
 
   getAllCheckboxes () {
-    return this.checkboxesContainer.find('.govuk-checkboxes__item')
+    if (!this.checkboxesContainer) return []
+    return Array.from(this.checkboxesContainer.querySelectorAll('.govuk-checkboxes__item'))
   }
 
   getAllVisibleCheckboxes () {
-    return this.getAllCheckboxes().filter(function(i, el) {
-      return $(el).css('display') == 'block'
+    return this.getAllCheckboxes().filter(function (el) {
+      return window.getComputedStyle(el).display !== 'none'
     })
   }
 
   getAllVisibleCheckedCheckboxes () {
-    return this.getAllVisibleCheckboxes().filter(function(i, el) {
-      return $(el).find('.govuk-checkboxes__input')[0].checked
+    return this.getAllVisibleCheckboxes().filter(function (el) {
+      var input = el.querySelector('.govuk-checkboxes__input')
+      return input ? input.checked : false
     })
   }
 
   setContainerHeight (height) {
-    this.checkboxesContainer.css({
-      height: height
-    })
+    if (!this.checkboxesContainer) return
+    this.checkboxesContainer.style.height = typeof height === 'number' ? height + 'px' : height
   }
 
   isCheckboxInView (index, option) {
-    var $checkbox = $(option)
-    var initialOptionContainerHeight = this.checkboxesContainer.height()
-    var optionListOffsetTop = this.checkboxesInnerContainer.offset().top
-    var distanceFromTopOfContainer = $checkbox.offset().top - optionListOffsetTop
+    var checkbox = option
+    var initialOptionContainerHeight = this.checkboxesContainer.offsetHeight
+    var optionListOffsetTop = this.checkboxesInnerContainer.getBoundingClientRect().top
+    var distanceFromTopOfContainer = checkbox.getBoundingClientRect().top - optionListOffsetTop
     return distanceFromTopOfContainer < initialOptionContainerHeight
   }
 
   getVisibleCheckboxes () {
-    var visibleCheckboxes = this.checkboxes.filter(this.isCheckboxInView.bind(this))
+    var visibleCheckboxes = Array.from(this.checkboxes).filter(this.isCheckboxInView.bind(this))
     // add an extra checkbox, if the label of the first is too long it collapses onto itself
-    visibleCheckboxes = visibleCheckboxes.add(this.checkboxes[visibleCheckboxes.length])
+    if (this.checkboxes[visibleCheckboxes.length]) {
+      visibleCheckboxes.push(this.checkboxes[visibleCheckboxes.length])
+    }
     return visibleCheckboxes
   }
 
   setupHeight () {
-    var initialOptionContainerHeight = this.checkboxesContainer.height()
-    var height = this.checkboxesInnerContainer.outerHeight(true)
+    var initialOptionContainerHeight = this.checkboxesContainer.offsetHeight
+    var height = this.outerHeightWithMargin(this.checkboxesInnerContainer)
 
     // check whether this is hidden by progressive disclosure,
     // because height calculations won't work
-    if (this.checkboxesContainer[0].offsetParent === null) {
+    if (this.checkboxesContainer.offsetParent === null) {
       initialOptionContainerHeight = 200
       height = 200
     }
@@ -143,15 +169,26 @@ export const CheckboxFilter = class {
     }
 
     // Resize to cut last item cleanly in half
-    var lastVisibleCheckbox = this.getVisibleCheckboxes().last()
-    var position = lastVisibleCheckbox.parent()[0].offsetTop // parent element is relative
-    this.setContainerHeight(position + (lastVisibleCheckbox.height() / 1.5))
+    var lastVisibleCheckbox = this.getVisibleCheckboxes().slice(-1)[0]
+    if (!lastVisibleCheckbox) return
+    var position = lastVisibleCheckbox.parentElement.offsetTop // parent element is relative
+    this.setContainerHeight(position + (lastVisibleCheckbox.offsetHeight / 1.5))
   }
 
   init () {
+    if (!this.container || !this.checkboxesContainer || !this.checkboxesInnerContainer) return
     this.setupStatusBox()
     this.setupHeading()
     this.setupTextBox()
     this.setupHeight()
+  }
+
+  outerHeightWithMargin (element) {
+    if (!element) return 0
+    var rect = element.getBoundingClientRect()
+    var style = window.getComputedStyle(element)
+    var marginTop = parseFloat(style.marginTop) || 0
+    var marginBottom = parseFloat(style.marginBottom) || 0
+    return rect.height + marginTop + marginBottom
   }
 }
