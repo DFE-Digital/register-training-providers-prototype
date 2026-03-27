@@ -27,6 +27,8 @@
         Last signed in on {{ user.lastSignedInAt | govukDateTime }}
       </p>
 
+      <h2 class="govuk-heading-m">Personal details</h2>
+
       {{ govukSummaryList({
         rows: [
           {
@@ -55,6 +57,72 @@
           }
         ]
       }) }}
+
+      {% if user.type == "support" %}
+        <h2 class="govuk-heading-m">Email notifications</h2>
+
+        {% if notificationSummary %}
+          {% set changeListHtml %}
+            {% if notificationSummary.changeLabels.length %}
+              <ul class="govuk-list govuk-list--bullet">
+                {% for changeLabel in notificationSummary.changeLabels %}
+                  <li>{{ changeLabel }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              None
+            {% endif %}
+          {% endset %}
+
+          {% set changeActions = [] %}
+          {% if notificationSummary.changeLabels.length %}
+            {% set changeActions = [
+              {
+                href: "/account/notifications/changes",
+                text: "Change",
+                visuallyHiddenText: "what changes you want to be notified about"
+              }
+            ] %}
+          {% endif %}
+
+          {{ govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: "How often do you want to get emails?"
+                },
+                value: {
+                  text: notificationSummary.frequencyLabel
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/account/notifications",
+                      text: "Change",
+                      visuallyHiddenText: "how often you want to get emails"
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: "What changes do you want to be notified about?"
+                },
+                value: {
+                  html: changeListHtml
+                },
+                actions: {
+                  items: changeActions
+                } if changeActions.length
+              }
+            ]
+          }) }}
+        {% else %}
+          <p class="govuk-body">
+            <a class="govuk-link" href="/account/notifications">Set up email notifications</a>
+          </p>
+        {% endif %}
+      {% endif %}
 
     </div>
   </div>

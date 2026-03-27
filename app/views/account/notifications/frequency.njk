@@ -1,0 +1,80 @@
+{% extends "layouts/main.njk" %}
+
+{% set primaryNavId = "account" %}
+
+{% block pageTitle -%}
+{{ "Error: " if errors.length -}}
+How often do you want to get emails? - {{ serviceName }} - GOV.UK
+{%- endblock %}
+
+{% set title = "How often do you want to get emails?" %}
+{% set caption = "Email notifications" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: actions.back
+}) }}
+{% endblock %}
+
+{% block content %}
+
+{% include "_includes/error-summary.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{ actions.save }}" method="post" accept-charset="utf-8" novalidate>
+
+      {% call govukFieldset({
+        legend: {
+          html: "<span class='govuk-caption-l'>" + caption + "</span>" + title,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+        {{ govukRadios({
+          idPrefix: "notificationFrequency",
+          name: "accountNotifications[notificationFrequency]",
+          errorMessage: errors | getErrorMessage("notificationFrequency"),
+          value: notificationFrequency,
+          items: [
+            {
+              value: "daily",
+              text: "Once a day"
+            },
+            {
+              value: "weekly",
+              text: "Once a week"
+            },
+            {
+              value: "immediate",
+              text: "Each time a provider is updated (you may get more than one email a day)"
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "never",
+              text: "I do not want to receive emails"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      {% endcall %}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ actions.cancel }}">Cancel</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
