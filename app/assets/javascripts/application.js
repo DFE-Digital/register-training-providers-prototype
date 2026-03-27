@@ -4,6 +4,7 @@
 //
 import { FilterToggleButton } from '/public/javascripts/components/filter-toggle-button.js'
 import { ButtonMenu } from '/public/javascripts/components/button-menu.js'
+import { CheckboxFilter } from '/public/javascripts/components/checkbox-filter.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   document.querySelectorAll('[data-module="app-button-menu"]').forEach((module) => {
@@ -35,5 +36,14 @@ window.GOVUKPrototypeKit.documentReady(() => {
       }
     })
     filterToggleButton.init()
+  }
+
+  const academicYearContainer = document.querySelector('#filters-academic-year')
+  if (academicYearContainer) {
+    const checkboxFilterAcademicYear = new CheckboxFilter({
+      container: academicYearContainer,
+      textBox: { label: 'Search for academic year' }
+    })
+    checkboxFilterAcademicYear.init()
   }
 })

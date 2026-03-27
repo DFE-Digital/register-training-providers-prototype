@@ -322,6 +322,11 @@ exports.providersList = async (req, res) => {
     }
   })
 
+  const academicYearMap = new Map(academicYearFilterItems.map((item) => [item.value, item.text]))
+  const selectedAcademicYearNames = (academicYears || [])
+    .map((academicYearId) => academicYearMap.get(academicYearId))
+    .filter(Boolean)
+
   const hasFilters = !!((providerTypes?.length > 0)
    || (accreditationTypes?.length > 0)
    || (showArchivedProviders?.length > 0)
@@ -466,6 +471,7 @@ exports.providersList = async (req, res) => {
     // the selected filters
     selectedFilters,
     academicYearFilterItems,
+    selectedAcademicYearNames,
     // the search terms
     keywords,
     //

@@ -102,11 +102,63 @@
 
       {% set academicYearsHtml %}
         {% if provider.academicYears and provider.academicYears.length %}
-          <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYears.length > 1 }}">
+          {% if selectedAcademicYearNames.length %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for academicYear in provider.academicYears %}
+                {% if academicYear in selectedAcademicYearNames %}
+                  <li>{{ academicYear }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            {% set hasUnmatchedYears = false %}
             {% for academicYear in provider.academicYears %}
-              <li>{{ academicYear }}</li>
+              {% if academicYear not in selectedAcademicYearNames %}
+                {% set hasUnmatchedYears = true %}
+              {% endif %}
             {% endfor %}
-          </ul>
+            {% if hasUnmatchedYears %}
+              {% set moreAcademicYearsHtml %}
+                <ul class="govuk-list govuk-list--bullet">
+                  {% for academicYear in provider.academicYears %}
+                    {% if academicYear not in selectedAcademicYearNames %}
+                      <li>{{ academicYear }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endset %}
+              {{ govukDetails({
+                summaryText: "More academic years",
+                html: moreAcademicYearsHtml
+              }) }}
+            {% endif %}
+          {% elseif provider.academicYears.length > 3 %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for academicYear in provider.academicYears %}
+                {% if loop.index <= 3 %}
+                  <li>{{ academicYear }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            {% set moreAcademicYearsHtml %}
+              <ul class="govuk-list govuk-list--bullet">
+                {% for academicYear in provider.academicYears %}
+                  {% if loop.index > 3 %}
+                    <li>{{ academicYear }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            {% endset %}
+            {{ govukDetails({
+              summaryText: "More academic years",
+              html: moreAcademicYearsHtml
+            }) }}
+          {% else %}
+            <ul class="govuk-list {{- ' govuk-list--bullet' if provider.academicYears.length > 1 }}">
+              {% for academicYear in provider.academicYears %}
+                <li>{{ academicYear }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         {% else %}
           <p class="govuk-hint">Not entered</p>
         {% endif %}
