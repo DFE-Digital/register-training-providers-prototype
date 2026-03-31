@@ -18,7 +18,7 @@ You can read more about this register on the [design history website](https://be
 ## Requirements
 
 - Node.js 22.x
-- npm (compatible with Node 22)
+- npm 11.x
 
 ## Quick start
 
@@ -27,6 +27,13 @@ git clone <repository-url>
 cd register-training-providers-prototype
 npm install          # installs deps and builds the dev SQLite DB
 npm run dev          # start with live reload
+```
+
+### Other run modes
+
+```bash
+npm run serve        # production-like mode with file watching
+npm run start        # production mode
 ```
 
 ## Generating data

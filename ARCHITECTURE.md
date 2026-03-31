@@ -7,21 +7,27 @@ The Register of training providers prototype is a server-rendered Node.js web ap
 ## Technology Stack
 
 - **Runtime:** Node.js 22.x
-- **Framework:** GOV.UK Prototype Kit 13.18.1
+- **Framework:** GOV.UK Prototype Kit 13.19.1
 - **Web Server:** Express.js (via Prototype Kit)
-- **Database:** SQLite3 5.1.7 (all environments)
-- **ORM:** Sequelize 6.37.7
+- **Database:** SQLite3 6.0.1 (all environments)
+- **ORM:** Sequelize 6.37.8
 - **Template Engine:** Nunjucks
-- **Markdown:** Marked with GFM Heading ID
-- **Frontend:** GOV.UK Frontend 5.13.0
-- **Auth:** Passport (local strategy) with server-side sessions
+- **Markdown:** Marked 17.0.5 with GFM Heading ID 4.1.3
+- **Frontend:** GOV.UK Frontend 6.1.0
+- **Auth:** Passport 0.7.0 (local strategy) with server-side sessions
 
 ## Directory Structure
 
 ```
 register-training-providers-prototype/
 ├── app/
+│   ├── assets/              # Frontend assets (styles, JS)
+│   ├── config/              # Auth and database config
+│   ├── config.json          # Prototype Kit config
+│   ├── constants/           # Shared constants and enums
+│   ├── content/             # Markdown content pages
 │   ├── controllers/         # Request handlers
+│   ├── data/                # Source CSVs + data scripts
 │   ├── models/              # Sequelize models
 │   ├── views/               # Nunjucks templates
 │   ├── helpers/             # Business logic utilities
@@ -30,9 +36,9 @@ register-training-providers-prototype/
 │   ├── migrations/          # Database migrations
 │   ├── seeders/             # Database seed data
 │   ├── middleware/          # Express middleware (auth, API auth)
+│   ├── utils/               # Low-level utilities
 │   ├── filters.js           # Nunjucks template filters
 │   ├── routes.js            # Route definitions
-│   ├── config/              # Configuration files
 │   └── database/            # SQLite database files
 ├── package.json
 └── .env                     # Environment variables (gitignored)
@@ -46,12 +52,12 @@ register-training-providers-prototype/
 
 - **Template Engine:** Nunjucks
 - **Components:** GOV.UK Design System components
-- **Structure:**
-  - `layouts/` - Page layouts and base templates
-  - `_includes/` - Reusable template partials
-  - `providers/` - Provider-related views
-  - `content/` - Static content pages
-  - `errors/` - Error pages
+Structure:
+- `layouts/` - Page layouts and base templates
+- `_includes/` - Reusable template partials
+- `providers/` - Provider-related views
+- `content/` - Static content pages
+- `errors/` - Error pages
 
 **Key Features:**
 - Server-side rendering
@@ -66,7 +72,7 @@ register-training-providers-prototype/
 
 **Key Controllers:**
 - `provider.js` - Provider CRUD operations
-- `providerPartnership.js` - Partnership management (971 lines)
+- `providerPartnership.js` - Partnership management
 - `providerAccreditation.js` - Accreditation management
 - `providerAddress.js` - Address management
 - `providerContact.js` - Contact management
@@ -162,7 +168,7 @@ ApiClientToken
 **Location:** `/app/helpers/`
 
 **Key helpers:**
-- `activityLog.js` - Activity log queries and formatting (1,217 lines)
+- `activityLog.js` - Activity log queries and formatting
 - `accreditation.js` - Accreditation business logic
 - `partnership.js` - Partnership business logic
 - `validation.js` - Input validation functions
@@ -243,11 +249,10 @@ ApiClientToken
 
 ## Cross-cutting concerns
 
-- **Authentication:** Passport local strategy backed by server sessions; login updates `lastSignedInAt`.
 - **Authentication:** Passport local strategy backed by server sessions; login updates `lastSignedInAt`. Route protection lives in `app/middleware/auth.js` (`checkIsAuthenticated`, `checkIsSupportUser`) and API bearer token validation in `app/middleware/apiAuth.js`.
 - **Audit trail:** `revisionHook` snapshots tracked fields into revision tables; `activityHook` creates `ActivityLog` rows for each revision.
 - **Data lifecycle:** Soft deletes (`deletedAt`/`deletedById`) preserve history and feed the audit trail.
-- **Config:** `app/config/config.json` uses SQLite for all environments; override via env vars if deploying elsewhere.
+- **Config:** `app/config/config.json` uses SQLite for all environments; `app/config.json` holds Prototype Kit runtime settings.
 - **Data seeding:** `db:seed` populates personas, providers, partnerships, provider academic years, and reference data for demos. Seed data is generated from `app/data/dist` by running `npm run data:regen-seeds`, which refreshes the JSON in `app/seeders/data` and updates timestamped seeder filenames.
 
 ## Key design patterns

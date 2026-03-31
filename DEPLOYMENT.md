@@ -5,7 +5,7 @@
 Before deploying the Register of Training Providers prototype, ensure you have:
 
 - **Node.js:** Version 22.x (specified in `package.json`)
-- **npm:** Latest version compatible with Node 22
+- **npm:** Version 11.x (specified in `package.json`)
 - **Git:** For version control and deployment
 - **Database:** SQLite3 (default for all environments; persisted as a file)
 - **Port:** Default 3000 (set `PORT` to override)
@@ -27,7 +27,7 @@ npm install
 
 This will:
 - Install all Node.js dependencies
-- Run the `postinstall` script (builds database with migrations + seeds)
+- Run the `postinstall` script (builds the database with migrations + seeds)
 
 ### 3. Configure environment variables
 
@@ -44,7 +44,7 @@ ORDNANCE_SURVEY_API_SECRET=your_os_api_secret_here
 # Session Secret (generate a strong random string)
 SESSION_SECRET=generate_a_random_32_character_string
 
-# API client token signing
+# API client token signing (required for token validation)
 API_CLIENT_TOKEN_SECRET=generate_a_random_64_character_string
 
 # Express / prototype
@@ -70,7 +70,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ### Development (SQLite)
 
-The database is automatically set up during `npm install` via the `postinstall` script. Ensure `API_CLIENT_TOKEN_SECRET` is set before creating API client tokens so hashes can be generated.
+The database is automatically set up during `npm install` via the `postinstall` script. Ensure `API_CLIENT_TOKEN_SECRET` is set before creating or validating API client tokens so hashes can be generated.
 
 Manual setup:
 
@@ -121,6 +121,9 @@ Sequelize is configured in `app/config/config.json`. Override the `production` b
 ```bash
 # Development with live reload
 npm run dev
+
+# Production-like mode with file watching
+npm run serve
 
 # Production mode
 NODE_ENV=production npm run start
