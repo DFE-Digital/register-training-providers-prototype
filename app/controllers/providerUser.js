@@ -272,15 +272,6 @@ exports.newProviderUser_post = async (req, res) => {
     errors.push(error)
   }
 
-  const allowedRoles = ['user', 'admin']
-  if (!allowedRoles.includes(user.role)) {
-    const error = {}
-    error.fieldName = 'role'
-    error.href = '#role'
-    error.text = 'Select role'
-    errors.push(error)
-  }
-
   const isValidEmailAddress = !!(isValidEmail(user.email))
   const existingUser = await findActiveUserByEmail(user.email)
   const existingProviderUser = await findProviderUserByEmail(providerId, user.email)
@@ -302,6 +293,15 @@ exports.newProviderUser_post = async (req, res) => {
     error.fieldName = 'email'
     error.href = '#email'
     error.text = 'User already added to this provider'
+    errors.push(error)
+  }
+
+  const allowedRoles = ['user', 'admin']
+  if (!allowedRoles.includes(user.role)) {
+    const error = {}
+    error.fieldName = 'role'
+    error.href = '#role'
+    error.text = 'Select role'
     errors.push(error)
   }
 
