@@ -138,7 +138,7 @@
 
       {% if (not currentUser) or emailChanged %}
         {{ govukWarningText({
-          text: "The user will be sent an email to tell them you’ve added them to " + provider.operatingName + "."
+          text: "The user will receive an email letting them know you’ve added them to " + provider.operatingName + "."
         }) }}
       {% endif %}
 
