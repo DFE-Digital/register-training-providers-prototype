@@ -1,0 +1,96 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Are you sure you want to remove this address?" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/addresses"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Provider</span>
+
+    <h1 class="govuk-heading-l">
+      Are you sure you want to remove this address?
+    </h1>
+
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ address.addressLine1 }}<br>
+
+          {% if address.addressLine2 %}
+            {{ address.addressLine2 }}<br>
+          {% endif %}
+
+          {{ address.town }}<br>
+
+          {% if address.county %}
+            {{ address.county }}<br>
+          {% endif %}
+
+          {{ address.postcode }}<br>
+          {{ address.country }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ typeText }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if address.current %}
+            Current
+          {% else %}
+            Historic
+          {% endif %}
+        </dd>
+      </div>
+
+    </dl>
+
+    {{ govukWarningText({
+      text: "Removing an address is permanent and cannot be undone.",
+      iconFallbackText: "Warning"
+    }) }}
+
+    <form action="/addresses/remove-confirm" method="post">
+
+      <div class="govuk-button-group">
+
+        {{ govukButton({
+          text: "Remove address",
+          classes: "govuk-button--warning"
+        }) }}
+
+        <a class="govuk-link" href="/addresses">
+          Cancel
+        </a>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

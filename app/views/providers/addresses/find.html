@@ -1,0 +1,188 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Find an address" %}
+
+{% block govukServiceNavigation %}
+  {{ govukServiceNavigation({
+    serviceName: "Register of training providers",
+    serviceUrl: "#",
+    navigation: [
+      {
+        href: "#",
+        text: "Providers",
+        current: true
+      },
+      {
+        href: "#",
+        text: "Users"
+      },
+      {
+        href: "#",
+        text: "API clients"
+      },
+      {
+        href: "#",
+        text: "Account"
+      },
+      {
+        href: "#",
+        text: "Sign out"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block headerEnd %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "Prototype"
+    },
+    html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/addresses"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+{% set postcodeErrorText = null %}
+
+{% if data["postcodeError"] %}
+  {% set postcodeErrorText = "Enter a postcode" %}
+{% elif data["invalidPostcodeError"] %}
+  {% set postcodeErrorText = "Enter a valid postcode" %}
+{% endif %}
+
+{% if postcodeErrorText %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem",
+    errorList: [
+      {
+        text: postcodeErrorText,
+        href: "#postcode"
+      }
+    ]
+  }) }}
+{% endif %}
+
+<span class="govuk-caption-l">Provider</span>
+
+<h1 class="govuk-heading-l">
+  Find an address
+</h1>
+{% if data["noResults"] %}
+
+  <h2 class="govuk-heading-m">
+    No addresses found
+  </h2>
+
+  <p class="govuk-body">
+    We could not find any addresses for
+    <strong>{{ data["postcode"] }}</strong>
+    {% if data["building"] %}
+      and <strong>{{ data["building"] }}</strong>
+    {% endif %}.
+  </p>
+
+  <p class="govuk-body">
+    Check the details below and search again, or
+    <a class="govuk-link" href="/addresses/manual">
+      enter the address manually
+    </a>.
+  </p>
+
+{% endif %}
+
+
+{% if data["lookupError"] %}
+
+  {{ govukNotificationBanner({
+    html: '
+      <h2 class="govuk-notification-banner__heading">
+         The address lookup service is temporarily unavailable
+      </h2>
+      <p class="govuk-body">
+        You can try again or enter the address manually.
+      </p>
+    '
+  }) }}
+
+{% endif %}
+    <form action="/addresses/select" method="post" novalidate
+      onsubmit="
+        const button = this.querySelector('button');
+        button.disabled = true;
+        button.setAttribute('aria-disabled', 'true');
+        button.textContent = 'Finding address…';
+      ">
+
+{% set postcodeErrorText = null %}
+
+{% if data["postcodeError"] %}
+  {% set postcodeErrorText = "Enter a postcode" %}
+{% elif data["invalidPostcodeError"] %}
+  {% set postcodeErrorText = "Enter a valid postcode" %}
+{% endif %}
+
+    {{ govukInput({
+  label: {
+    text: "Postcode"
+  },
+  hint: {
+    text: "For example, SW1A 2AA."
+  },
+  errorMessage: {
+  text: postcodeErrorText
+} if postcodeErrorText else null,
+  id: "postcode",
+  name: "postcode",
+  classes: "govuk-input--width-10",
+  autocomplete: "postal-code",
+  spellcheck: false,
+  value: data["postcode"]
+}) }}
+
+      {{ govukInput({
+        label: {
+          text: "Building name or number (optional)"
+        },
+        hint: {
+          text: "For example, Flat 2, The Mill, 116 or Flat 15a"
+        },
+        id: "building",
+        name: "building",
+        classes: "govuk-input--width-20",
+        value: data["building"]
+      }) }}
+
+     {{ govukButton({
+  text: "Find address",
+  preventDoubleClick: true
+}) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/addresses/manual">
+  Enter address manually
+</a>
+    </p>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/addresses">
+        Cancel
+      </a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
