@@ -1,0 +1,360 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Addresses" %}
+
+{% block govukServiceNavigation %}
+  {{ govukServiceNavigation({
+    serviceName: "Register of training providers",
+    serviceUrl: "#",
+    navigation: [
+      {
+        href: "#",
+        text: "Providers",
+        current: true
+      },
+      {
+        href: "#",
+        text: "Users"
+      },
+      {
+        href: "#",
+        text: "API clients"
+      },
+      {
+        href: "#",
+        text: "Account"
+      },
+      {
+        href: "#",
+        text: "Sign out"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block headerEnd %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "Prototype"
+    },
+    html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+{% endblock %}
+
+{% block content %}
+{% set addresses = data["addresses"] or [] %}
+{% set hasCurrentRegistered = false %}
+{% set hasCurrentTrading = false %}
+{% for address in addresses %}
+  {% if address.current %}
+    {% if "registered" in address.types %}
+      {% set hasCurrentRegistered = true %}
+    {% endif %}
+
+    {% if "trading" in address.types %}
+      {% set hasCurrentTrading = true %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+
+    <span class="govuk-caption-l">Provider</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">
+      Camden ITT Partnership
+    </h1>
+
+    <nav class="provider-navigation govuk-!-margin-bottom-7" aria-label="Provider sections">
+  <ul class="provider-navigation__list">
+    <li class="provider-navigation__item">
+      <a class="govuk-link provider-navigation__link" href="#">
+        Provider details
+      </a>
+    </li>
+
+    <li class="provider-navigation__item">
+      <a class="govuk-link provider-navigation__link" href="#">
+        Accreditations
+      </a>
+    </li>
+
+    <li class="provider-navigation__item provider-navigation__item--active">
+      <a
+        class="govuk-link provider-navigation__link"
+        href="/addresses"
+        aria-current="page">
+        Addresses
+      </a>
+    </li>
+
+    <li class="provider-navigation__item">
+      <a class="govuk-link provider-navigation__link" href="#">
+        Contacts
+      </a>
+    </li>
+
+    <li class="provider-navigation__item">
+      <a class="govuk-link provider-navigation__link" href="#">
+        Partnerships
+      </a>
+    </li>
+  </ul>
+</nav>
+
+{% if not hasCurrentRegistered or not hasCurrentTrading %}
+
+  {% if not hasCurrentRegistered and not hasCurrentTrading %}
+    {{ govukWarningText({
+      text: "This provider does not have a current Registered or Trading address.",
+      iconFallbackText: "Warning"
+    }) }}
+
+  {% elif not hasCurrentRegistered %}
+    {{ govukWarningText({
+      text: "This provider does not have a current Registered address.",
+      iconFallbackText: "Warning"
+    }) }}
+
+  {% elif not hasCurrentTrading %}
+    {{ govukWarningText({
+      text: "This provider does not have a current Trading address.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
+
+{% endif %}
+
+{% if successMessage %}
+
+  {% set successHtml %}
+    <h3 class="govuk-notification-banner__heading">
+    {{ successMessage }}
+    </h3>
+  {% endset %}
+
+  {{ govukNotificationBanner({
+    type: "success",
+    html: successHtml
+  }) }}
+
+{% endif %}
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-7">
+
+    <h2 class="govuk-heading-l">
+      Addresses
+    </h2>
+
+    {{ govukButton({
+  text: "Add address",
+  href: "/addresses/new"
+}) }}
+
+    <h3 class="govuk-heading-m govuk-!-margin-top-6">
+      Current addresses
+    </h3>
+
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-4">
+    {% if data["newAddress"] and data["newAddress"]["current"] %}
+
+<div class="govuk-!-margin-bottom-6">
+
+<p class="govuk-body-s govuk-!-margin-bottom-2">
+  {% set types = data["newAddress"]["types"] %}
+
+  {% if "registered" in types and "trading" in types and "location" in types %}
+    Registered, Trading and Location address
+  {% elif "registered" in types and "trading" in types %}
+    Registered and Trading address
+  {% elif "registered" in types and "location" in types %}
+    Registered and Location address
+  {% elif "trading" in types and "location" in types %}
+    Trading and Location address
+  {% elif "registered" in types %}
+    Registered address
+  {% elif "trading" in types %}
+    Trading address
+  {% elif "location" in types %}
+    Location address
+  {% endif %}
+</p>
+
+  <p class="govuk-body govuk-!-margin-bottom-2">
+    {{ data["newAddress"]["addressLine1"] }}<br>
+
+    {% if data["newAddress"]["addressLine2"] %}
+      {{ data["newAddress"]["addressLine2"] }}<br>
+    {% endif %}
+
+    {{ data["newAddress"]["town"] }}<br>
+
+    {% if data["newAddress"]["county"] %}
+      {{ data["newAddress"]["county"] }}<br>
+    {% endif %}
+
+    {{ data["newAddress"]["postcode"] }}<br>
+    {{ data["newAddress"]["country"] }}
+  </p>
+
+  <p class="govuk-body-s govuk-!-margin-bottom-4">
+    Current from 11 August 2026
+  </p>
+
+  <p class="govuk-body">
+    <a class="govuk-link govuk-!-margin-right-4" href="#">
+      Change
+    </a>
+
+    <a class="govuk-link" href="#">
+      Remove
+    </a>
+  </p>
+
+</div>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-4">
+
+{% endif %}
+
+  {% for address in addresses %}
+  {% if address.current %}
+
+    <div class="govuk-summary-card govuk-!-margin-bottom-6">
+
+      <div class="govuk-summary-card__title-wrapper">
+
+        <h2 class="govuk-summary-card__title">
+
+        {% set types = address.types %}
+
+{% if "registered" in types and "trading" in types and "location" in types %}
+  Registered, Trading and Location address
+{% elif "registered" in types and "trading" in types %}
+  Registered and Trading address
+{% elif "registered" in types and "location" in types %}
+  Registered and Location address
+{% elif "trading" in types and "location" in types %}
+  Trading and Location address
+{% elif "registered" in types %}
+  Registered address
+{% elif "trading" in types %}
+  Trading address
+{% elif "location" in types %}
+  Location address
+{% endif %}
+
+        </h2>
+
+        <ul class="govuk-summary-card__actions">
+
+          <li class="govuk-summary-card__action">
+            <a
+              class="govuk-link"
+              href="/addresses/edit/{{ address.id }}">
+              Change
+              <span class="govuk-visually-hidden">
+                address
+              </span>
+            </a>
+          </li>
+
+          <li class="govuk-summary-card__action">
+            <a
+              class="govuk-link"
+              href="/addresses/remove/{{ address.id }}">
+              Remove
+              <span class="govuk-visually-hidden">
+                address
+              </span>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+
+      <div class="govuk-summary-card__content">
+
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Address
+            </dt>
+
+            <dd class="govuk-summary-list__value">
+              {{ address.addressLine1 }}<br>
+
+              {% if address.addressLine2 %}
+                {{ address.addressLine2 }}<br>
+              {% endif %}
+
+              {{ address.town }}<br>
+
+              {% if address.county %}
+                {{ address.county }}<br>
+              {% endif %}
+
+              {{ address.postcode }}<br>
+              {{ address.country }}
+            </dd>
+          </div>
+
+<div class="govuk-summary-list__row">
+  <dt class="govuk-summary-list__key">
+    Coordinates
+  </dt>
+
+  <dd class="govuk-summary-list__value">
+    51.6544, -0.0367<br>
+    <a class="govuk-link" href="#">
+      Open in Google Maps (opens in new tab)
+    </a><br>
+    <span class="govuk-hint govuk-!-margin-bottom-0">
+      Geocoded 8 July 2026
+    </span>
+  </dd>
+</div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Current from
+            </dt>
+
+            <dd class="govuk-summary-list__value">
+              {{ address.startDate }}
+            </dd>
+          </div>
+
+        </dl>
+
+      </div>
+
+    </div>
+
+  {% endif %}
+{% endfor %}
+{% set existingCurrentAddresses = addresses | selectattr('current') | list %}
+
+{% if not (data["newAddress"] and data["newAddress"]["current"]) and existingCurrentAddresses.length == 0 %}
+  <p class="govuk-body">
+    There are no current addresses.
+  </p>
+{% endif %}
+{% set historicAddresses = addresses | rejectattr('current') | list %}
+
+
+  <p class="govuk-body">
+    <a class="govuk-link" href="/addresses/history">
+      View historic addresses ({{ historicAddresses.length }})
+    </a>
+  </p>
+
+
+ 
+
+  </div>
+</div>
+
+{% endblock %}
