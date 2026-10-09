@@ -1,0 +1,240 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Enter address manually" %}
+
+{% block govukServiceNavigation %}
+  {{ govukServiceNavigation({
+    serviceName: "Register of training providers",
+    serviceUrl: "#",
+    navigation: [
+      { href: "#", text: "Providers", current: true },
+      { href: "#", text: "Users" },
+      { href: "#", text: "API clients" },
+      { href: "#", text: "Account" },
+      { href: "#", text: "Sign out" }
+    ]
+  }) }}
+{% endblock %}
+
+{% block headerEnd %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "Prototype"
+    },
+    html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/addresses/find"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+  {% if data["addressLine1Error"]
+   or data["townError"]
+   or data["confirmPostcodeError"]
+   or data["confirmPostcodeInvalidError"]
+   or data["countryError"] %}
+
+<div class="govuk-error-summary"
+     data-module="govuk-error-summary"
+     role="alert"
+     tabindex="-1">
+
+  <h2 class="govuk-error-summary__title">
+    There is a problem
+  </h2>
+
+  <div class="govuk-error-summary__body">
+    <ul class="govuk-list govuk-error-summary__list">
+
+      {% if data["addressLine1Error"] %}
+        <li>
+          <a href="#address-line-1">Enter address line 1</a>
+        </li>
+      {% endif %}
+
+      {% if data["townError"] %}
+        <li>
+          <a href="#town">Enter a town or city</a>
+        </li>
+      {% endif %}
+
+      {% if data["confirmPostcodeError"] %}
+        <li>
+          <a href="#confirm-postcode">Enter a postcode</a>
+        </li>
+      {% endif %}
+
+      {% if data["confirmPostcodeInvalidError"] %}
+        <li>
+          <a href="#confirm-postcode">Enter a valid postcode</a>
+        </li>
+      {% endif %}
+
+{% if data["countryError"] %}
+  <li>
+    <a href="#country">Select a country</a>
+  </li>
+{% endif %}
+
+      {% if data["confirmError"] %}
+        <li>
+          <a href="#address-type">Select at least one address type</a>
+        </li>
+      {% endif %}
+
+      {% if data["makeCurrentError"] %}
+        <li>
+          <a href="#current-address-question">
+            Select whether to make this the current address
+          </a>
+        </li>
+      {% endif %}
+
+    </ul>
+  </div>
+</div>
+
+{% endif %}
+
+    <span class="govuk-caption-l">Provider</span>
+
+   <h1 class="govuk-heading-l">
+  Enter address manually
+</h1>
+
+   <form action="/addresses/manual" method="post" novalidate>
+
+  {{ govukInput({
+  label: {
+    text: "Address line 1"
+  },
+  errorMessage: {
+    text: "Enter address line 1"
+  } if data["addressLine1Error"] else null,
+  id: "address-line-1",
+  name: "addressLine1",
+  autocomplete: "address-line1",
+  value: data["addressLine1"]
+}) }}
+
+      {{ govukInput({
+        label: {
+          text: "Address line 2 (optional)"
+        },
+        id: "address-line-2",
+        name: "addressLine2",
+        autocomplete: "address-line2",
+        value: data["addressLine2"]
+      }) }}
+
+{{ govukInput({
+  label: {
+    text: "Town or city"
+  },
+  errorMessage: {
+    text: "Enter a town or city"
+  } if data["townError"] else null,
+  id: "town",
+  name: "town",
+  autocomplete: "address-level2",
+  classes: "govuk-input--width-20",
+  value: data["town"]
+}) }}
+
+      {{ govukInput({
+        label: {
+          text: "County (optional)"
+        },
+        id: "county",
+        name: "county",
+        autocomplete: "address-level1",
+        classes: "govuk-input--width-20",
+        value: data["county"]
+      }) }}
+
+      {% set confirmPostcodeErrorText = null %}
+
+{% if data["confirmPostcodeError"] %}
+  {% set confirmPostcodeErrorText = "Enter a postcode" %}
+{% elif data["confirmPostcodeInvalidError"] %}
+  {% set confirmPostcodeErrorText = "Enter a valid postcode" %}
+{% endif %}
+
+{{ govukInput({
+  label: {
+    text: "Postcode"
+  },
+  errorMessage: {
+    text: confirmPostcodeErrorText
+  } if confirmPostcodeErrorText else null,
+  id: "confirm-postcode",
+  name: "confirmPostcode",
+  autocomplete: "postal-code",
+  classes: "govuk-input--width-10",
+  value: data["confirmPostcode"]
+}) }}
+
+      {{ govukSelect({
+        id: "country",
+        name: "country",
+        label: {
+          text: "Country"
+        },
+        errorMessage: {
+  text: "Select a country"
+} if data["countryError"] else null,
+
+        items: [
+          {
+            value: "",
+            text: "Select a country",
+            selected: not data["country"]
+          },
+          {
+            value: "England",
+            text: "England",
+selected: data["country"] == "England"          },
+          {
+            value: "Scotland",
+            text: "Scotland",
+            selected: data["country"] == "Scotland"
+          },
+          {
+            value: "Wales",
+            text: "Wales",
+            selected: data["country"] == "Wales"
+          },
+          {
+            value: "Northern Ireland",
+            text: "Northern Ireland",
+            selected: data["country"] == "Northern Ireland"
+          }
+        ]
+      }) }}
+
+      
+      <div class="govuk-button-group">
+  {{ govukButton({
+    text: "Save and continue"
+  }) }}
+
+  <a class="govuk-link" href="/addresses">
+    Cancel
+  </a>
+</div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
