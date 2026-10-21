@@ -1,0 +1,147 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Select an address" %}
+
+{% block govukServiceNavigation %}
+  {{ govukServiceNavigation({
+    serviceName: "Register of training providers",
+    serviceUrl: "#",
+    navigation: [
+      {
+        href: "#",
+        text: "Providers",
+        current: true
+      },
+      {
+        href: "#",
+        text: "Users"
+      },
+      {
+        href: "#",
+        text: "API clients"
+      },
+      {
+        href: "#",
+        text: "Account"
+      },
+      {
+        href: "#",
+        text: "Sign out"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block headerEnd %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "Prototype"
+    },
+    html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/addresses/find"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data["selectError"] %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: "Select an address",
+            href: "#selected-address"
+          }
+        ]
+      }) }}
+    {% endif %}
+
+    <span class="govuk-caption-l">Provider</span>
+
+    <h1 class="govuk-heading-l">
+      Select an address
+    </h1>
+
+    <div class="govuk-inset-text">
+      <p class="govuk-body govuk-!-margin-bottom-2">
+        4 addresses found for
+        <strong>{{ data["postcode"] or "SW1A 2AA" }}</strong>
+        {% if data["building"] %}
+          and <strong>{{ data["building"] }}</strong>
+        {% endif %}
+      </p>
+
+      <a class="govuk-link" href="/addresses/find">
+        Change search
+      </a>
+    </div>
+
+    <form action="/addresses/confirm" method="post" novalidate>
+
+      {{ govukRadios({
+        name: "selectedAddress",
+        idPrefix: "selected-address",
+        fieldset: {
+          legend: {
+            text: "Select an address",
+            classes: "govuk-visually-hidden"
+          }
+        },
+        errorMessage: {
+          text: "Select an address"
+        } if data["selectError"] else null,
+        items: [
+          {
+            value: "1",
+            text: "1 Postcode Street, Anytown, AB1 2CD",
+            checked: data["selectedAddress"] == "1"
+          },
+          {
+            value: "2",
+            text: "2 Postcode Street, Edinburgh, EH1 1YZ",
+            checked: data["selectedAddress"] == "2"
+          },
+          {
+            value: "3",
+            text: "1A Postcode Street, Cardiff, CF10 1EP",
+            checked: data["selectedAddress"] == "3"
+          },
+          {
+            value: "4",
+            text: "Flat 1, Postcode House, Belfast, BT1 1AA",
+            checked: data["selectedAddress"] == "4"
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/addresses/manual">
+        Enter address manually
+      </a>
+    </p>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="/addresses">
+        Cancel
+      </a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}
