@@ -1,0 +1,174 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Historic addresses" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to addresses",
+    href: "/addresses"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Provider — Camden ITT Partnership</span>
+
+    <h1 class="govuk-heading-l">
+    Historic addresses
+    </h1>
+
+    <p class="govuk-body">
+      {{ historicAddresses.length }} historic addresses
+    </p>
+
+   <h2 class="govuk-heading-s govuk-!-margin-bottom-1">
+  Search historic addresses
+</h2>
+
+    <p class="govuk-hint">
+      Street, town or postcode
+    </p>
+
+  <form method="get" action="/addresses/history" class="govuk-!-margin-bottom-6">
+  <div style="display: flex; gap: 8px; align-items: flex-start;">
+    <input
+      class="govuk-input"
+      id="history-search"
+      name="q"
+      type="search"
+      style="flex: 1;">
+
+    <button
+      class="govuk-button govuk-!-margin-bottom-0"
+      type="submit"
+      style="height: 40px;">
+      Search
+    </button>
+  </div>
+</form>
+
+    {% for address in historicAddresses %}
+
+      <div class="govuk-summary-card govuk-!-margin-bottom-6">
+
+        <div class="govuk-summary-card__title-wrapper">
+
+          <h2 class="govuk-summary-card__title">
+
+            {% set types = address.types %}
+
+{% if "registered" in types and "trading" in types and "location" in types %}
+  Registered, Trading and Location address
+{% elif "registered" in types and "trading" in types %}
+  Registered and Trading address
+{% elif "registered" in types and "location" in types %}
+  Registered and Location address
+{% elif "trading" in types and "location" in types %}
+  Trading and Location address
+{% elif "registered" in types %}
+  Registered address
+{% elif "trading" in types %}
+  Trading address
+{% elif "location" in types %}
+  Location address
+{% endif %}
+
+          </h2>
+
+          <ul class="govuk-summary-card__actions">
+
+            <li class="govuk-summary-card__action">
+              <a class="govuk-link" href="/addresses/edit/{{ address.id }}">
+                Change
+              </a>
+            </li>
+
+            <li class="govuk-summary-card__action">
+              <a class="govuk-link" href="/addresses/set-current/{{ address.id }}">
+                Set as current
+              </a>
+            </li>
+
+            <li class="govuk-summary-card__action">
+              <a class="govuk-link" href="/addresses/remove/{{ address.id }}">
+                Remove
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+        <div class="govuk-summary-card__content">
+
+          <dl class="govuk-summary-list">
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Address
+              </dt>
+
+              <dd class="govuk-summary-list__value">
+                {{ address.addressLine1 }}<br>
+
+                {% if address.addressLine2 %}
+                  {{ address.addressLine2 }}<br>
+                {% endif %}
+
+                {{ address.town }}<br>
+
+                {% if address.county %}
+                  {{ address.county }}<br>
+                {% endif %}
+
+                {{ address.postcode }}<br>
+                {{ address.country }}
+              </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Coordinates
+              </dt>
+
+              <dd class="govuk-summary-list__value">
+                51.5258, -0.0876<br>
+                <a class="govuk-link" href="#">
+Open in Google Maps (opens in new tab)                </a>
+              </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Effective from
+              </dt>
+
+              <dd class="govuk-summary-list__value">
+                {{ address.startDate }}
+              </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Effective to
+              </dt>
+
+              <dd class="govuk-summary-list__value">
+                {{ address.endDate }}
+              </dd>
+            </div>
+
+          </dl>
+
+        </div>
+      </div>
+
+    {% endfor %}
+
+  </div>
+</div>
+
+{% endblock %}i
