@@ -1,0 +1,126 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "Confirm change of current address" %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/addresses/confirm"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Provider</span>
+
+    <h1 class="govuk-heading-l">
+      Confirm change of current address
+    </h1>
+
+    <h2 class="govuk-heading-m">
+      New current address
+    </h2>
+
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ targetAddress.addressLine1 }}<br>
+
+          {% if targetAddress.addressLine2 %}
+            {{ targetAddress.addressLine2 }}<br>
+          {% endif %}
+
+          {{ targetAddress.town }}<br>
+
+          {% if targetAddress.county %}
+            {{ targetAddress.county }}<br>
+          {% endif %}
+
+          {{ targetAddress.postcode }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ targetTypeText }}
+        </dd>
+      </div>
+
+    </dl>
+
+    {% if affectedAddresses.length > 0 %}
+
+      <h2 class="govuk-heading-m">
+        Addresses that will become historic
+      </h2>
+
+      {% for address in affectedAddresses %}
+
+        <dl class="govuk-summary-list">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{ address.addressLine1 }}<br>
+
+              {% if address.addressLine2 %}
+                {{ address.addressLine2 }}<br>
+              {% endif %}
+
+              {{ address.town }}<br>
+
+              {% if address.county %}
+                {{ address.county }}<br>
+              {% endif %}
+
+              {{ address.postcode }}
+            </dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Type
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{ address.typeText }}
+            </dd>
+          </div>
+
+        </dl>
+
+      {% endfor %}
+
+    <div class="govuk-inset-text">
+  Once you confirm this change, the addresses above will become historic. You can still view them under Historic addresses.
+</div>
+
+    {% endif %}
+
+    <form action="/addresses/set-current-confirm" method="post">
+
+     <div class="govuk-button-group">
+  {{ govukButton({
+text: "Continue"
+  }) }}
+
+  <a class="govuk-link" href="/addresses">Cancel</a>
+</div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

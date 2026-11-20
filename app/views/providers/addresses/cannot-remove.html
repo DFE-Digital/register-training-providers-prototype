@@ -1,0 +1,102 @@
+{% extends "layouts/main.html" %}
+
+{% set pageName = "You cannot remove this address" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/addresses"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Provider</span>
+
+    <h1 class="govuk-heading-l">
+      You cannot remove this address
+    </h1>
+
+    {% if "registered" in blockingTypes and "trading" in blockingTypes %}
+      {{ govukWarningText({
+        text: "You must have at least one current registered address and one current trading address.",
+        iconFallbackText: "Warning"
+      }) }}
+    {% elif "registered" in blockingTypes %}
+      {{ govukWarningText({
+        text: "You must have at least one current registered address.",
+        iconFallbackText: "Warning"
+      }) }}
+    {% elif "trading" in blockingTypes %}
+      {{ govukWarningText({
+        text: "You must have at least one current trading address.",
+        iconFallbackText: "Warning"
+      }) }}
+    {% endif %}
+
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ address.addressLine1 }}<br>
+
+          {% if address.addressLine2 %}
+            {{ address.addressLine2 }}<br>
+          {% endif %}
+
+          {{ address.town }}<br>
+
+          {% if address.county %}
+            {{ address.county }}<br>
+          {% endif %}
+
+          {{ address.postcode }}<br>
+          {{ address.country }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ typeText }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Current
+        </dd>
+      </div>
+
+    </dl>
+
+  <p class="govuk-body">
+  Add a replacement {{ blockingTypes[0] }} address before removing this address.
+</p>
+
+<div class="govuk-button-group">
+  {{ govukButton({
+    text: "Add a replacement address",
+    href: "/addresses/find"
+  }) }}
+
+  <a class="govuk-link" href="/addresses">
+    Back to addresses
+  </a>
+</div>
+
+  </div>
+</div>
+
+{% endblock %}
